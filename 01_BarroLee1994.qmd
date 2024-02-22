@@ -1,0 +1,406 @@
+---
+description: An illustration with @BARRO19941
+output-file: barrolee1994.html
+title: Using gingado to understand economic growth
+author: Douglas K. G. Araujo
+code-fold: show
+code-tools: true
+jupyter: python3
+warning: false
+---
+
+This notebook showcases one possible use of `gingado` by estimating economic growth across countries, using the dataset studied by @BARRO19941. You can run this notebook interactively, by clicking on the appropriate link above.
+
+This dataset has been widely studied in economics. @belloni2011inference and @giannone2021illusion are two studies of this dataset that are most related to machine learning.
+
+This notebook will use `gingado` to compare quickly setup a well-performing machine learning model and use its results as evidence to support the conditional convergence hypothesis; compare different classes of models (and their combination in a single model), and use and document the best performing alternative. 
+
+Because the notebook is for pedagogical purposes only, please bear in mind some aspects of the machine learning workflow (such as carefully thinking about the cross-validation strategy) are glossed over in this notebook. Also, only the key academic references are cited; more references can be found in the papers mentioned in this example.
+
+For a more thorough description of `gingado`, please refer to the package's [website](https://dkgaraujo.github.io/gingado) and to the academic [material](https://www.github.com/dkgaraujo/gingado_comms) about it.
+
+## Setting the stage
+
+We will import packages as the work progresses. This will help highlight the specific steps in the workflow that `gingado` can be helpful with.
+
+```{python}
+
+import pandas as pd
+```
+
+The data is available in the [online annex](https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA17842) to @giannone2021illusion. In that paper, this dataset corresponds to what the authors call "macro2". The original data, along with more information on the variables, can be found in [this NBER website](http://www2.nber.org/pub/barro.lee/). A very helpful codebook is found [in this repo](https://github.com/bizmaercq/Do-Poor-Countries-Grow-Faster-than-Rich-Countries/blob/master/data/Codebook.txt).
+
+```{python}
+
+from gingado.datasets import load_BarroLee_1994
+
+X, y = load_BarroLee_1994()
+```
+
+The dataset contains explanatory variables representing per-capita growth between 1960 and 1985, for 90 countries.
+
+```{python}
+
+X.columns
+```
+
+```{python}
+
+X.head().T
+```
+
+The outcome variable is represented here:
+
+```{python}
+
+y.plot.hist(bins=90, title='GDP growth')
+```
+
+## Establishing a benchmark model
+
+Generally speaking, it is a good idea to establish a benchmark model at the first stages of development of the machine learning model. `gingado` offers a class of automatic benchmarks that can be used off-the-shelf depending on the task at hand: `RegressionBenchmark` and `ClassificationBenchmark`. It is also good to keep in mind that more advanced users can create their own benchmark on top of a base class provided by `gingado`: `ggdBenchmark`.
+
+For this application, since we are interested in running a regression task, we will use `RegressionBenchmark`:
+
+```{python}
+
+from gingado.benchmark import RegressionBenchmark
+```
+
+What this object does is the following:
+
+* it creates a random forest
+
+* three different versions of the random forest are trained on the user data
+
+* the version that performs better is chosen as the benchmark
+
+* right after it is trained, the benchmark is documented using `gingado`'s `ModelCard` documenter.
+
+The user can easily change the parameters above. For example, instead of a random forest the user might prefer a neural network as the benchmark. Or, in lieu of the default parameters provided by `gingado`, users might have their own idea of what could be a reasonable parameter space to search.
+
+Random forests are chosen as the go-to benchmark algorithm because of their reasonably good performance in a wide variety of settings, the fact that they don't require much data transformation (ie, normalising the data to have zero mean and one standard deviation), and by virtue of their relatively transparency about the importance of each regressor.
+
+The first step is to initialise the benchmark object. At this time, we pass some arguments about how we want it to behave. In this case, we set the verbosity level to produce output related to each alternative considered. Then we fit it to the data.
+
+```{python}
+
+#####
+#####
+from sklearn.ensemble import RandomForestRegressor
+rfr = RandomForestRegressor()
+rfr.fit(X, y)
+```
+
+```{python}
+
+benchmark = RegressionBenchmark(verbose_grid=2)
+benchmark.fit(X, y)
+```
+
+As we can see above, with a few lines we have trained a random forest on the dataset. In this case, the benchmark was the better of six versions of the random forest, according to the default hyperparameters: 100 and 250 estimators were alternated with models for which the maximum number of regressors analysed by individual trees changesd fom the maximum, a square root and a log of the number of regressors. They were each trained using a 5-fold cross-validation. 
+
+Let's see which one was the best performing in this case, and hence our benchmark model:
+
+```{python}
+
+pd.DataFrame(benchmark.benchmark.cv_results_).T
+```
+
+The values above are calculated with $R^2$, the default scoring function for a random forest from the `scikit-learn` package. Suppose that instead we would like a benchmark model that is optimised on the maximum error, ie a benchmark that minimises the worst deviation from prediction to ground truth for all the sample. These are the steps that we would take. Note that a more complete list of ready-made scoring parameters and how to create your own function can be found [here](https://scikit-learn.org/stable/modules/model_evaluation.html#).
+
+```{python}
+
+benchmark_lower_worsterror = RegressionBenchmark(scoring='max_error', verbose_grid=2)
+benchmark_lower_worsterror.fit(X, y)
+```
+
+```{python}
+
+pd.DataFrame(benchmark_lower_worsterror.benchmark.cv_results_).T
+```
+
+Now we even have two benchmark models.
+
+We could further tweak and adjust them, but one of the ideas behind having a benchmark is that it is simple and easy to set up. 
+
+Let's retain only the first benchmark, for simplicity, and now look at the predictions, comparing them to the original growth values.
+
+```{python}
+
+y_pred = benchmark.predict(X)
+
+pd.DataFrame({
+    'y': y,
+    'y_pred': y_pred
+    }).plot.scatter(
+        x='y', y='y_pred',
+         grid=True, 
+         title='Actual and predicted outcome',
+         xlabel='actual GDP growth',
+         ylabel='predicted GDP growth')
+```
+
+And now a histogram of the benchmark's errors:
+
+```{python}
+
+pd.DataFrame(y - y_pred).plot.hist(bins=30, title='Residual')
+```
+
+Since the benchmark is a random forest model, we can see what are the most important regressors, measured as the average reduction in impurity across the trees in the random forest that actually use that particular regressor. They are scaled so that the sum for all features is one. Higher importance amounts indicate that that particular regressor is a more important contributor to the final prediction.
+
+```{python}
+
+regressor_importance = pd.DataFrame(
+    benchmark.benchmark.best_estimator_.feature_importances_, 
+    index=X.columns, 
+    columns=["Importance"]
+    )
+
+regressor_importance.sort_values(by="Importance", ascending=False) \
+    .plot.bar(figsize=(20, 8), title='Regressor importance')
+```
+
+From the graph above, we can see that the regressor `bmp1l` (black-market premium on foreign exchange) predominates. Interestingly, @belloni2011inference using squared-root lasso also find this regressor to be important.
+
+## Testing the conditional converge hypothesis
+
+Now we can leverage our automatic benchmark model to test the conditional converge hypothesis - ie, the preposition that countries with lower starting GDP tend to grow faster than other *comparable* countries. In other words, this hypothesis predicts that when GDP growth is regressed on the level of past GDP and on an adequate set of covariates $X$, the coefficient on past GDP levels are negative.
+
+Since we have the results for the importance of each regressor in separating countries by their growth result, we can compare the estimated coefficient for GDP levels in regressions that include different regressors in the vector $X$. To maintain this example a simple exercise, the following three models are estimated:
+
+* $X$ contains the five most important regressors, as estimated by the benchmark model (see the graph above)
+* $X$ contains the five *least* important regressors, from the same estimation as above
+* $X$ is the empty set - in other words, this is a simple equation on GDP growth on GDP levels
+
+A result that would be consistent with the *conditionality* of the conditional convergence hypothesis is the first equation resulting in a negative coefficient for starting GDP, while the following two equations may not necessarily be successful in identifying a negative coefficient. This is because the least important regressors are not likely to have sufficient predictive power to separate countries into comparable groups.
+
+The five more and less important regressors are:
+
+```{python}
+
+top_five = regressor_importance.sort_values(by="Importance", ascending=False).head(5)
+bottom_five = regressor_importance.sort_values(by="Importance", ascending=True).head(5)
+
+top_five, bottom_five
+```
+
+```{python}
+
+import statsmodels.api as sm
+```
+
+```{python}
+
+gdp_level = 'gdpsh465'
+```
+
+```{python}
+
+X_topfive = X[[gdp_level] + list(top_five.index)]
+X_topfive = sm.add_constant(X_topfive)
+X_topfive.head()
+```
+
+```{python}
+
+X_bottomfive = X[[gdp_level] + list(bottom_five.index)]
+X_bottomfive = sm.add_constant(X_bottomfive)
+X_bottomfive.head()
+```
+
+```{python}
+
+X_onlyGDPlevel = sm.add_constant(X[gdp_level])
+X_onlyGDPlevel.head()
+```
+
+```{python}
+
+models = dict(
+    topfive = sm.OLS(y, X_topfive).fit(),
+    bottomfive = sm.OLS(y, X_bottomfive).fit(),
+    onlyGDPlevel = sm.OLS(y, X_onlyGDPlevel).fit()
+)
+```
+
+```{python}
+
+coefs = pd.DataFrame({name: model.conf_int().loc[gdp_level] for name, model in models.items()})
+coefs.loc[0.5] = [model.params[gdp_level] for _, model in models.items()]
+coefs = coefs.sort_index().reset_index(drop=True)
+coefs.index = ['[0.025', 'coef on GDP levels', '0.975]']
+coefs
+```
+
+The equation using the top five regressors in explanatory power yielded a coefficient that is statistically speaking negative under the usual confidence interval levels. In contrast, the regression using the bottom five regressors failed to maintain that level of statistical significance (although the coefficient point estimate was still negative). And finally the regression on GDP level solely resulted, as in the past literature, on a point estimate that is also statistically not different than zero.
+
+These results above offer a different way to add evidence to the conditional convergence hypothesis. In particular, with the help of `gingado`'s `RegressionBenchmark` model, it is possible to identify which covariates can meaningfully serve as covariates in a growth equation from those that cannot. This is important because if the covariate selection for some reason included only variables with little explanatory power instead of the most relevant ones, an economist might erroneously reach a different conclusion.
+
+## Model documentation
+
+Importantly for model documentation, the benchmark already has some baseline documentation set up. If the user wishes, they can use that as a basis to document their model. Note that the output is in a raw format that is suitable for machine reading and writing. Intermediary and advanced users may wish to use that format to construct personalised forms, documents, etc.
+
+```{python}
+
+benchmark.model_documentation.show_json()
+```
+
+Since there is some information in the model documentation that was automatically added, we might want to concentrate on the fields in the model card that are yet to be answered. Actually, this is the purpose of `gingado`'s automatic documentation: to afford users more time so they can invest, if they want, on model documentation.
+
+```{python}
+
+benchmark.model_documentation.open_questions()
+```
+
+Let's fill some information:
+
+```{python}
+
+benchmark.model_documentation.fill_info({
+    'intended_use': {
+        'primary_uses': 'This model is trained for pedagogical uses only.',
+        'primary_users': 'Everyone is welcome to follow the description showing the development of this benchmark.'
+    }
+})
+```
+
+Note the format, based on a Python dictionary. In particular, the `open_questions` method results include keys divided by double underscores. As seen above, these should be interpreted as different levels of the documentation template, leading to a nested dictionary. 
+
+Now when we confirm that the questions answered above are no longer "open questions":
+
+```{python}
+
+benchmark.model_documentation.open_questions()
+```
+
+If we want, at any time we can save the documentation to a local JSON file, as well as read another document.
+
+## Trying out model alternatives
+
+The benchmark model may be enough for some analyses, or maybe the user is interested in using the benchmark to explore the data and have an understanding of the importance of each regressor, to concentrate their work on data that can be meaningful for their purposes. But oftentimes a user will want to seek a machine learning model that performs as well as possible.
+
+For users that want to manually create other models, `gingado` allows the possibility of comparing them with the benchmark. If the user model is better, it becomes the new benchmark!
+
+For the following analyses, we will use K-fold as cross-validation, with 5 splits of the sample.
+
+### First candidate: a gradient boosting tree
+
+```{python}
+
+import numpy as np
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import GradientBoostingRegressor
+```
+
+```{python}
+
+param_grid = {
+    'learning_rate': [0.01, 0.1, 0.25],
+    'max_depth': [3, 6, 9]
+}
+
+reg_gradbooster = GradientBoostingRegressor()
+
+gradboosterg_grid = GridSearchCV(
+    reg_gradbooster,
+    param_grid,
+    n_jobs=-1,
+    verbose=2
+).fit(X, y)
+```
+
+```{python}
+
+y_pred = gradboosterg_grid.predict(X)
+pd.DataFrame({
+    'y': y,
+    'y_pred': y_pred
+    }).plot.scatter(x='y', y='y_pred', grid=True)
+```
+
+```{python}
+
+pd.DataFrame(y - y_pred).plot.hist(bins=30)
+```
+
+### Second candidate: lasso
+
+```{python}
+
+from sklearn.linear_model import Lasso
+```
+
+```{python}
+
+param_grid = {
+    'alpha': [0.5, 1, 1.25],
+}
+
+reg_lasso = Lasso(fit_intercept=True)
+
+lasso_grid = GridSearchCV(
+    reg_lasso,
+    param_grid,
+    n_jobs=-1,
+    verbose=2
+).fit(X, y)
+```
+
+```{python}
+
+y_pred = lasso_grid.predict(X)
+pd.DataFrame({
+    'y': y,
+    'y_pred': y_pred
+    }).plot.scatter(x='y', y='y_pred', grid=True)
+```
+
+```{python}
+
+pd.DataFrame(y - y_pred).plot.hist(bins=30)
+```
+
+## Comparing the models with the benchmark
+
+`gingado` allows users to compare different candidate models with the existing benchmark in a very simple way: using the `compare` method.
+
+```{python}
+
+candidates = [gradboosterg_grid, lasso_grid]
+benchmark.compare(X, y, candidates)
+```
+
+The output above clearly indicates that after evaluating the models - and their ensemble together with the existing benchmark - at least one of them was better than the current benchmark. Therefore, it will now be the new benchmark.
+
+```{python}
+
+y_pred = benchmark.predict(X)
+pd.DataFrame({
+    'y': y,
+    'y_pred': y_pred
+    }).plot.scatter(x='y', y='y_pred', grid=True)
+```
+
+```{python}
+
+pd.DataFrame(y - y_pred).plot.hist(bins=30)
+```
+
+## Model documentation
+
+After this process, we can now see how the model documentation was updated automatically:
+
+```{python}
+
+benchmark.model_documentation.show_json()
+```
+
+And as before, any remaining open questions can be viewed and answered using the same methods as above.
+
+## References
+
+::: {#refs}
+:::
+

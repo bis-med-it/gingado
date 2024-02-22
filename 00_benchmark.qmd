@@ -1,0 +1,262 @@
+---
+description: 'Functions to create a relevant, fast and reasonably well-performing benchmark'
+output-file: benchmark.html
+title: Automatic benchmark model
+jupyter: python3
+warning: false
+---
+
+```{python}
+#| echo: false
+#| output: false
+%load_ext autoreload
+%autoreload 2
+```
+
+```{python}
+#| echo: false
+#| output: false
+from __future__ import annotations
+import numpy as np
+import pandas as pd
+import pandasdmx as sdmx
+from utils import show_doc
+from gingado.benchmark import ggdBenchmark, ClassificationBenchmark, RegressionBenchmark, TimeSeriesSplit, ShuffleSplit
+
+# Code below included to ensure compatibility with scikit-learn v1.1.x
+from sklearn import set_config
+set_config(display='text')
+```
+
+
+A Benchmark object has a similar API to a `sciki-learn` estimator: you build an instance with the desired arguments, and fit it to the data at a later moment. Benchmarks is a convenience wrapper for reading the training data, passing it through a simplified pipeline consisting of data imputation and a standard scalar, and then the benchmark function calibrated with a grid search.
+
+A `gingado` Benchmark object seeks to automatise a significant part of creating a benchmark model. Importantly, the Benchmark object also has a `compare` method that helps users evaluate if candidate models are better than the benchmark, and if one of them is, it becomes the new benchmark. This `compare` method takes as argument another fitted estimator (which could be itself a solo estimator or a whole pipeline) or a list of fitted estimators. 
+
+Benchmarks start with default values that should perform reasonably well in most settings, but the user is also free to choose any of the benchmark's components by passing as arguments the data split, pipeline, and/or a dictionary of parameters for the hyperparameter tuning.
+
+# Base class
+
+`gingado` has a `ggdBenchmark` base class that contains the basic functionalities for Benchmark objects. It is not meant to be used by itself, but only as a hyperclass for Benchmark objects. `gingado` ships with two of these objects that subclass `ggdBenchmark`: `ClassificationBenchmark` and `RegressionBenchmark`. They are both described below in their respective sections.
+
+Users are encouraged to submit a PR with their own benchmark models subclassing `ggdBenchmark`.
+
+
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdBenchmark)
+```
+```{python}
+#| output: asis
+#| echo: false
+```
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdBenchmark.compare, name="compare", title_level=4)
+```
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdBenchmark.compare_fitted_candidates, name="compare_fitted_candidates", title_level=4)
+```
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdBenchmark.document, name="document", title_level=4)
+```
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdBenchmark.predict, name="predict", title_level=4)
+```
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdBenchmark.fit_predict, name="fit_predict", title_level=4)
+```
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdBenchmark.predict_proba, name="predict_proba", title_level=4)
+```
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdBenchmark.predict_log_proba, name="predict_log_proba", title_level=4)
+```
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdBenchmark.decision_function, name="decision_function", title_level=4)
+```
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdBenchmark.score, name="score", title_level=4)
+```
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdBenchmark.score_samples, name="score_samples", title_level=4)
+```
+
+
+# Classification tasks
+
+The default benchmark for classification tasks is a [`RandomForestClassifier`](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html) object. Its parameters are fine-tuned in each case according to the user's data.
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ClassificationBenchmark)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ClassificationBenchmark.fit, name="fit", title_level=4)
+```
+
+```{python}
+from sklearn.datasets import make_classification
+```
+
+```{python}
+# some mock up data
+X, y = make_classification()
+
+# the gingado benchmark
+bm = ClassificationBenchmark(verbose_grid=2).fit(X, y)
+
+# note that now the `bm` object can be used as an estimator
+assert bm.predict(X).shape == y.shape
+```
+
+Importantly, `gingado` automatically provides some information to help the user documentat the benchmark model. More specifically, `ggdBenchmark` objects collect model information and pass it to a dictionary with key `info` in a field called `model_details`. 
+
+```{python}
+bm.model_documentation.show_json()
+```
+
+It is also simple to define as benchmark a model that you already fitted and still benefit from the other functionalities provided by `Benchmark` class. This can also be done in case you are using a saved version of a fitted model (eg, the model you are using in production) and want to have that as the benchmark.
+
+```{python}
+from sklearn.ensemble import RandomForestClassifier
+```
+
+```{python}
+forest = RandomForestClassifier().fit(X, y)
+
+bm.set_benchmark(estimator=forest)
+
+assert forest == bm.benchmark
+assert hasattr(bm.benchmark, "predict")
+assert bm.predict(X).shape == y.shape
+```
+
+# Regression tasks
+
+The default benchmark for regression tasks is a [`RandomForestRegressor`](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html) object.  Its parameters are fine-tuned in each case according to the user's data.
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(RegressionBenchmark)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(RegressionBenchmark.fit, name="fit", title_level=4)
+```
+
+```{python}
+
+from sklearn.datasets import make_regression
+from sklearn.ensemble import AdaBoostRegressor
+```
+
+```{python}
+
+# some mock up data
+X, y = make_regression()
+
+# the gingado benchmark
+bm = RegressionBenchmark().fit(X, y)
+
+# note that now the `bm` object can be used as an estimator
+assert bm.predict(X).shape == y.shape
+
+# the user might also like to set another model as the benchmark
+adaboost = AdaBoostRegressor().fit(X, y)
+bm.set_benchmark(estimator=adaboost)
+
+assert adaboost == bm.benchmark
+assert hasattr(bm.benchmark, "predict")
+assert bm.predict(X).shape == y.shape
+```
+
+Below we compare the benchmark (set above manually to be the adaboost algorithm) with two other candidate models: a Gaussian process and a linear Support Vector Machine (SVM).
+
+```{python}
+
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.svm import LinearSVR
+```
+
+```{python}
+
+gauss_reg = GaussianProcessRegressor().fit(X, y)
+svm_reg = LinearSVR().fit(X, y)
+
+bm.compare(X, y, candidates=[gauss_reg, svm_reg])
+```
+
+Note that when the benchmark object finds a model that performs better than it does, the user is informed that the benchmark is updated and the new benchmark model is shown. This only happens when the argument `update_benchmark` is set to True (as default).
+
+Below we can see by how much it outperformed the other candidates, including the previous benchmark model and an ensemble of the previous benchmark and all the candidates. It is also a good opportunity to see how stable the performance of each model was, as judged by the standard deviation of the scores across the validation folds.
+
+```{python}
+
+pd.DataFrame(bm.benchmark.cv_results_)[['params', 'mean_test_score', 'std_test_score', 'rank_test_score']]
+```
+
+# General comments on benchmarks
+
+## Scoring
+
+`ClassificationBenchmark` and `RegressionBenchmark` use the default scoring method for comparing model alternatives, both during estimation of the benchmark model and when comparing this benchmark with candidate models. Users are encouraged to consider if another scoring method is more suitable for their use case. More information on available scoring methods that are compatible with `gingado` Benchmark objects can be found [here](https://scikit-learn.org/stable/modules/model_evaluation.html).
+
+## Data split
+
+`gingado` benchmarks rely on hyperparameter tuning to discover the benchmark specification that is most likely to perform better with the user data. This tuning in turn depends on a data splitting strategy for the cross-validation. By default, `gingado` uses `StratifiedShuffleSplit` (in classification problems) or `ShuffleSplit` (in regression problems) if the data is not time series and `TimeSeriesSplit` otherwise.
+
+The user may overrun these defaults either by directly setting the parameter `cv` or `default_cv` when instanciating the `gingado` benchmark class. The difference is that `default_cv` is only used after `gingado` checks that the data is not a time series (if a time dimension exists, then `TimeSeriesSplit` is used).
+
+```{python}
+
+X, y = make_classification()
+bm_cls = ClassificationBenchmark(cv=TimeSeriesSplit(n_splits=3)).fit(X, y)
+assert bm_cls.benchmark.n_splits_ == 3
+
+X, y = make_regression()
+bm_reg = RegressionBenchmark(default_cv=ShuffleSplit(n_splits=7)).fit(X, y)
+assert bm_reg.benchmark.n_splits_ == 7
+```
+
+Please refer to [this page](https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection) for more information on the different `Splitter` classes available on `scikit-learn`, and [this page](https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_indices.html#sphx-glr-auto-examples-model-selection-plot-cv-indices-py) for practical advice on how to choose a splitter for data that are not time series. Any one of these objects (or a custom splitter that is compatible with them) can be passed to a `Benchmark` object.
+
+Users that wish to use specific parameters should include the actual `Splitter` object as the parameter, as done with the `n_splits` parameter in the chunk above.
+
+## Custom benchmarks
+
+`gingado` provides users with two `Benchmark` objects out of the box: `ClassificationBenchmark` and `RegressionBenchmark`, to be used depending on the task at hand. Both classes derive from a base class `ggdBenchmark`, which implements methods that facilitate model comparison. Users that want to create a customised benchmark model for themselves have two options:
+
+* the simpler possibility is to train the estimator as usual, and then assign the fitted estimator to a `Benchmark` object. 
+
+* if the user wants more control over the fitting process of estimating the benchmark, they can create a class that subclasses from `ggdBenchmark` and either implements custom `fit`, `predict` and `score` methods, or also subclasses from [`scikit-learn`'s `BaseEstimator`](https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html). 
+  * In any case, if the user wants the benchmark to automatically detect if the data is a time series and also to document the model right after fitting, the `fit` method should call `self._fit` on the data. Otherwise, the user can simply implement any consistent logic in fit as the user sees fit (pun intended).
+

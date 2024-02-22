@@ -1,0 +1,301 @@
+---
+description: Machine learning-based estimators of economic models
+output-file: estimators.html
+title: Estimators
+jupyter: python3
+warning: false
+---
+
+```{python}
+#| echo: false
+#| output: false
+%load_ext autoreload
+%autoreload 2
+```
+
+
+```{python}
+#| echo: false
+#| output: false
+from utils import show_doc
+from __future__ import annotations
+import pandas as pd
+
+from gingado.benchmark import ggdBenchmark, RegressionBenchmark
+from gingado.model_documentation import ggdModelDocumentation, ModelCard
+from sklearn.base import check_is_fitted, clone
+from sklearn.cluster import AffinityPropagation
+from sklearn.pipeline import Pipeline
+from sklearn.manifold import TSNE
+from sklearn.metrics import mean_squared_error
+from scipy.spatial.distance import pdist, squareform
+
+from gingado.estimators import FindCluster, MachineControl
+```
+
+In many instances, economists are interested in using machine learning models for specific purposes that go beyond their ability to predict variables to a good accuracy. For example:
+
+- understanding the relationship between covariates and the outcome, usually to demonstrate that a non-trivial effect of one variable on another exists;
+
+- identifying which covariates are related or not to a certain outcome, often to demonstrate the relevance of a certain theory;
+
+- estimating a certain measure with certain desirable statistical and econometric properties, such as causal inference, where the object of interest is the predicted outcome of an adapted algorithm; and
+
+- process non-traditional data (eg, text) for inclusion in a traditional econometrics regression, especially useful in settings where measurable quantitative data is complemented with this other type of data.
+
+The `gingado.estimators` module contains machine learning algorithms adapted to enable the types of analyses described above. More estimators can be expected over time.
+
+For more academic discussions of machine learning methods in economics covering a broad range of topics, see @doi:10.1146/annurev-economics-080217-053433.
+
+# Covariate selection
+
+## Clustering
+
+The clustering algorithms used below are not themselves adapted from the general use methods. Rather, the functions offer convenience functionalities to find and retain the other variables in the same cluster. 
+
+These variables are usually entities (individuals, countries, stocks, etc) in a larger population.
+
+The `gingado` clustering routines are designed to allow users standalone usage, or a seamless integration as part of a pipeline.
+
+There are three levels of sophistication that users can choose from:
+
+- using the off-the-shelf clustering routines provided by `gingado`, which were selected to be applied cross various use cases;
+
+- selecting an existing clustering routine from the [`scikit-learn.cluster`](https://scikit-learn.org/stable/modules/clustering.html) module; or
+
+- designing their own clustering algorithm.
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(FindCluster)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(FindCluster.fit, name="fit", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(FindCluster.transform, name="transform", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(FindCluster.fit_transform, name="fit_transform", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(FindCluster.document, name="document", title_level=4)
+```
+
+#### Example: finding similar countries
+
+The @BARRO19941 dataset is used to illustrate the use of `FindCluster`. It is a country-level dataset. Let's use it to answer the following question: for some specific country, what other countries are the closest to it considering the data available?
+
+First, we import the data:
+
+```{python}
+
+from gingado.datasets import load_BarroLee_1994
+```
+
+The data is organized by rows: each row is a different country, and the variables are organised in columns. 
+
+The dataset is originally organised for a regression of GDP growth (here denoted `y`) on the covariates (`X`). This is not what we want to do in this case. So instead of keeping GDP as a separate variable, the next step is to include it in the `X` DataFrame.
+
+```{python}
+
+X, y = load_BarroLee_1994()
+X['gdp'] = y
+X.head()
+```
+
+Now we remove the first column (an identifier) and transpose the DataFrame, so that countries are organized in columns.
+
+Each country is identified by a number: 0, 1, ...
+
+```{python}
+
+X = X.iloc[:, 1:]
+countries = X.T
+countries.columns = ['country_' + str(c) for c in countries.columns]
+countries.head()
+```
+
+Suppose we are interested in country No 13. What other countries are similar to it?
+
+First, country No 13 needs to be carved out of the DataFrame with the other countries.
+
+Second, we can now pass the larger DataFrame and country 13's data separately to an instance of `FindCluster`.
+
+```{python}
+
+country_of_interest = countries.pop('country_13')
+```
+
+```{python}
+
+similar = FindCluster(AffinityPropagation(convergence_iter=5000))
+similar
+```
+
+```{python}
+
+same_cluster = similar.fit_transform(X=countries, y=country_of_interest)
+
+assert same_cluster.equals(similar.fit(X=countries, y=country_of_interest).transform(X=countries))
+
+same_cluster
+```
+
+The default clustering algorithm used by `FindCluster` is affinity propagation [@frey2007clustering]. It is the algorithm of choice because of it combines several desireable characteristics, in particular:
+- the number of clusters is data-driven instad of set by the user,
+- the number of entities in each cluster is also chosen by the model, 
+- all entities are part of a cluster, and
+- each cluster might have a different number of entities.
+
+However, we may want to try different clustering algorithms. Let's compare the result above with the same analyses using DBSCAN [@ester1996density].
+
+```{python}
+
+from sklearn.cluster import DBSCAN
+```
+
+```{python}
+
+similar_dbscan = FindCluster(cluster_alg=DBSCAN())
+similar_dbscan
+```
+
+```{python}
+
+same_cluster_dbscan = similar_dbscan.fit_transform(X=countries, y=country_of_interest)
+
+assert same_cluster_dbscan.equals(similar_dbscan.fit(X=countries, y=country_of_interest).transform(X=countries))
+
+same_cluster_dbscan
+```
+
+As illustrated above, the results can be quite different. In this case, affinity propagation converged to more tightly defined clusters, while DBSCAN selected a cluster that contains almost all other countries (therefore, not useful in this particular case).
+
+Note that model documentation is already jumpstarted when the cluster is fit. A glimpse of the current template, including the questions in the documentation template that have been automatically filled, are shown below.
+
+```{python}
+
+similar.model_documentation.show_json()
+```
+
+`FindCluster` can also be used as part of a [`pipeline`](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline). In this case, only the entities in the same cluster as the entity of interest will continue on to the next steps of the estimation.
+
+```{python}
+
+from gingado.benchmark import RegressionBenchmark
+from sklearn.pipeline import Pipeline
+```
+
+```{python}
+
+pipe = Pipeline([
+    ('cluster', FindCluster(AffinityPropagation(convergence_iter=5000))),
+    ('rf', RegressionBenchmark())
+])
+```
+
+```{python}
+
+pipe.fit(X=countries, y=country_of_interest)
+```
+
+# Causal inference
+
+## Comparative case studies
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(MachineControl)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(MachineControl.fit, name="fit", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(MachineControl.predict, name="predict", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(MachineControl.get_controls, name="get_controls", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(MachineControl.document, name="document", title_level=4)
+```
+
+#### Brief econometric description
+
+The goal of `MachineControl` is to estimate:
+
+$$
+\tau_t = Y_{1, t}^{I} - Y_{1, t}^{N}, t > T0
+$$
+
+where:
+
+- $\tau$ is the effect on entity $i=1$ of the intervention of interest
+
+- without loss of generality, $i=1$ is an entity that has undergone the intervention of interest, amongst $N$ total entities
+
+- time period $T0$ is a date in which the intervention occurred
+
+- superscript $I$ in an outcome variable denotes the occurence of the intervention, whereas superscript $N$ is absence of intervention
+
+- for $t > T0$, $Y_{i, t}^{I}$ is observed while $Y_{i, t}^{N}$ must be estimated because it is a counterfacual.
+
+$Y_{i, t}^{N}$ is calculated from the values of the other entities, $i \neq 1$. Collect this data in a vector $\mathbb{Y}_{-1, t}^{N}$. Then, following @doudchenko2016balancing:
+
+$$
+\hat{Y}_{i, t}^{N} = f^*(\mathbb{Y}_{-1, t}^{N}),
+$$
+
+with the star ($*$) superscript on the function $f(\cdot)$ representing that it was trained only with data up until the intervention date. The exact form of $f(\cdot)$ depends on the argument `estimator`. A general use estimator is the random forest [@breiman2001random].
+
+The panel data itself might be the whole population in the data, or a subset when using the whole population might be too cumbersome to run analyses (eg, if the data contains too many entities). One way to select this subsample of control units without including subjective judgment in the data is quantitatilve. The control units are selected through a clustering algorithm (argument `cluster_arg`). One cluster algorithm that can be used is affinity propagation [@frey2007clustering].
+
+To finalise, the quality of the synthetic control can be assessed in many ways. One fully data-driven way to achieve this is by using manifold learning: lower-dimensional embeddings of a higher-dimensional data.  A preferred manifold learning algorithm is t-SNE [@van2008visualizing]. 
+
+The relative distance between embeddings and the target centre, as well as the control and the target, represent the chance that a better feasible control (either from real or combined) will materialise. The intuition behind this test is:
+
+- let $d_{i,j}$ be the Euclidean distance between the embeddings (2d points) of entities $i$ and $j$
+
+- if only a very small percentage of $d_{1, j \in (2, ..., N)}$ are lower than $d_{1, \text{Synthetic control}}$, than the synthetic control produced with $f(\cdot)$ is indeed a formula that provides one of the best alternative.
+
+**Main references:**
+
+- @abadie2003economic
+- @abadie2010synthetic
+- @abadie2015comparative
+- @doudchenko2016balancing
+- @abadie2021using
+
+#### Example: impact of labour reform on productivity
+
+See [Machine controls: Synthetic controls with machine learning](machine_controls.html).
+
+# References
+

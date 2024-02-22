@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Araujo
+    given-names: Douglas
+    orcid: https://orcid.org/0000-0001-8070-6828
+title: "gingado: a machine learning library for economics and finance"
+version: 0.0.3
+date-released: 2022-09-21
+preferred-citation:
+  type: report
+  authors:
+  - family-names: Araujo
+    given-names: Douglas
+    orcid: https://orcid.org/0000-0001-8070-6828
+  journal: "BIS Working Paper"
+  month: 9
+  title: "gingado: a machine learning library for economics and finance"
+  issue: 1122
+  year: 2023

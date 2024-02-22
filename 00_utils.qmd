@@ -1,0 +1,216 @@
+---
+description: Functions to support the use of `gingado`
+output-file: utils.html
+title: Utils
+jupyter: python3
+warning: false
+---
+
+## Support for model documentation
+
+
+```{python}
+#| echo: false
+#| output: false
+%load_ext autoreload
+%autoreload 2
+```
+
+```{python}
+#| echo: false
+#| output: false
+from utils import show_doc
+from __future__ import annotations
+import datetime
+import os
+import numpy as np
+import pandas as pd
+from gingado.utils import get_datetime, load_SDMX_data, read_attr, Lag, list_SDMX_sources, list_all_dataflows
+
+# Code below included to ensure compatibility with scikit-learn v1.1.x
+from sklearn import set_config
+set_config(display='text')
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(get_datetime)
+```
+
+```{python}
+
+d = get_datetime()
+assert isinstance(d, str)
+assert len(d) > 0
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(read_attr)
+```
+
+Function `read_attr` helps gingado Documenters to read the object behind the scenes.
+
+It collects the type of estimator, and any attributes resulting from fitting an object (in ie, those that end in "_" without being double underscores).
+
+For example, the attributes of an untrained and a trained random forest are, in sequence:
+
+```{python}
+
+from sklearn.ensemble import RandomForestRegressor
+```
+
+```{python}
+
+rf_unfit = RandomForestRegressor(n_estimators=3)
+rf_fit = RandomForestRegressor(n_estimators=3)\
+    .fit([[1, 0], [0, 1]], [[0.5], [0.5]]) # random numbers
+list(read_attr(rf_unfit)), list(read_attr(rf_fit))
+```
+
+## Support for time series
+
+Objects of the class `Lag` are similar to `scikit-learn`'s transformers.
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(Lag)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(Lag.fit)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(Lag.transform)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(Lag.fit_transform)
+```
+
+The code below demonstrates how `Lag` works in practice. Note in particular that, because `Lag` is a transformer, it can be used as part of a `scikit-learn`'s `Pipeline`. 
+
+```{python}
+
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+```
+
+```{python}
+
+randomX = np.random.rand(15, 2)
+randomY = np.random.rand(15)
+
+lags = 3
+jump = 2
+
+pipe = Pipeline([
+    ('scaler', StandardScaler()),
+    ('lagger', Lag(lags=lags, jump=jump, keep_contemporaneous_X=False))
+]).fit_transform(randomX, randomY)
+```
+
+Below we confirm that the lagger removes the correct number of rows corresponding to the lagged observations:
+
+```{python}
+
+assert randomX.shape[0] - lags - jump == pipe.shape[0]
+```
+
+And because `Lag` is a transformer, its parameters (`lags` and `jump`) can be calibrated using hyperparameter tuning to achieve the best performance for a model.
+
+## Support for data augmentation with SDMX
+
+:::{.callout-note}
+
+please note that working with SDMX may take some minutes depending on the amount of information you are downloading.
+
+:::
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(list_SDMX_sources)
+```
+
+```{python}
+
+sources = list_SDMX_sources()
+print(sources)
+
+assert len(sources) > 0
+# all elements are of type 'str'
+assert sum([isinstance(src, str) for src in sources]) == len(sources)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(list_all_dataflows)
+```
+
+```{python}
+
+dflows = list_all_dataflows(return_pandas=False)
+
+assert isinstance(dflows, dict)
+all_sources = list_SDMX_sources()
+assert len([s for s in dflows.keys() if s in all_sources]) == len(dflows.keys())
+```
+
+`list_all_dataflows` returns by default a pandas Series, facilitating data discovery by users like so:
+
+```{python}
+
+dflows = list_all_dataflows(return_pandas=True)
+assert type(dflows) == pd.core.series.Series
+
+dflows
+```
+
+This format allows for more easily searching `dflows` by source:
+
+```{python}
+
+list_all_dataflows(codes_only=True, return_pandas=True)
+```
+
+```{python}
+
+dflows['BIS']
+```
+
+Or the user can search dataflows by their human-readable name instead of their code. For example, this is one way to see if any dataflow has information on interest rates:
+
+```{python}
+
+dflows[dflows.str.contains('Interest rates', case=False)]
+```
+
+The function `load_SDMX_data` is a convenience function that downloads data from SDMX sources (and any specific dataflows passed as arguments) if they match the key and parameters set by the user.
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(load_SDMX_data)
+```
+
+```{python}
+
+df = load_SDMX_data(sources={'ECB': 'CISS', 'BIS': 'WS_CBPOL_D'}, keys={'FREQ': 'D'}, params={'startPeriod': 2003})
+
+assert type(df) == pd.DataFrame
+assert df.shape[0] > 0
+assert df.shape[1] > 0
+```
+

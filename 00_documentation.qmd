@@ -1,0 +1,431 @@
+---
+description: Functions to jumpstart and facilitate model documentation
+output-file: documentation.html
+title: Model documentation
+jupyter: python3
+warning: false
+---
+
+```{python}
+#| echo: false
+#| output: false
+%load_ext autoreload
+%autoreload 2
+```
+
+
+```{python}
+#| echo: false
+#| output: false
+from utils import show_doc
+from __future__ import annotations
+from gingado.model_documentation import ggdModelDocumentation, ModelCard, ForecastCard
+```
+
+Each user has a specific documentation need, ranging from simply logging the model training to a more complex description of the model pipeline with a discusson of the model outcomes. `gingado` addresses this variety of needs by offering a class of objects, "Documenters", that facilitate model documentation. A base class facilitates the creation of  generic ways to document models, and `gingado` includes two specific model documentation templates off-the-shelf as described below. 
+
+The model documentation is performed by Documenters, objects that subclass from the base class `ggdModelDocumentation`. This base class offers code that can be used by any Documenter to read the model in question, format the information according to a template and save the resulting documentation in a JSON format. Documenters save the underlying information using the JSON format. With the JSON documentation file at hand, the user can then deploy existing third-party libraries to transform the information stored in JSON into a variety of formats (eg, HTML, PDF) as needed.
+
+One current area of development is the automatic filing of some fields related to the model. The objective is to automatise documentation of the information that can be fetched automatically from the model, leaving time for the analyst to concentrate on other tasks, such as considering the ethical implications of the machine learning model being trained.
+
+# Base class
+
+`gingado` has a `ggdModelDocumentation` base class that contains the basic functionalities for Documenters. It is not meant to be used by itself, but only as a hyperclass for Documenters objects. `gingado` ships with two such objects that subclass `ggdModelDocumentation`: `ModelCard` and `ForecastCard`. They are both described below in their respective sections.
+
+Users are encouraged to submit a PR with their own Documenter models subclassing `ggdModelDocumentation`; see @sec-custom for more information.
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdModelDocumentation)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdModelDocumentation.setup_template, name="setup_template", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdModelDocumentation.show_template, name="show_template", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdModelDocumentation.documentation_path, name="documentation_path", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdModelDocumentation.save_json, name="save_json", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdModelDocumentation.read_json, name="read_json", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdModelDocumentation.show_json, name="show_json", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdModelDocumentation.read_model, name="read_model", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdModelDocumentation.open_questions, name="open_questions", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdModelDocumentation.fill_model_info, name="fill_model_info", title_level=4)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ggdModelDocumentation.fill_info, name="fill_info", title_level=4)
+```
+
+# Documenters
+
+## ModelCard
+
+`ModelCard` - the model documentation template inspired by the work of @ModelCards already comes with `gingado`. Its template can be used by users as is, or tweaked according to each need. The `ModelCard` template can also serve as inspiration for any custom documentation needs. Users with documentation needs beyond the out-of-the-box solutions provided by `gingado` can create their own class of Documenters (more information on that below), and compatibility with these custom documentation routines with the rest of the code is ensured. Users are encouraged to submit a pull request with their own documentation models subclassing `ggdModelDocumentation` if these custom templates can also benefit other users.
+
+Like all `gingado` Documenters, a `ModelCard` is can be easily created on a standalone basis as shown below, or as part of a `gingado.ggdBenchmark` object.
+
+```{python}
+
+model_doc = ModelCard()
+```
+
+By default, it autofills the template with the current date and time. Users can add other information to be automatically added by a customised Documenter object.
+
+```{python}
+
+model_doc_with_autofill = ModelCard(autofill=True)
+model_doc_no_autofill = ModelCard(autofill=False)
+```
+
+Below is a comparison of the `model_details` section of the model document, with and without the autofill.
+
+```{python}
+
+model_doc_with_autofill.show_json()['model_details']
+```
+
+```{python}
+
+model_doc_no_autofill.show_json()['model_details']
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ModelCard)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ModelCard.autofill_template, name="autofill_template", title_level=4)
+```
+
+## ForecastCard
+
+`ForecastCard` is a model documentation template inspired by @ModelCards, but with fields that are more specifically targeted towards forecasting or nowcasting use cases.
+
+Because a `ForecastCard` Documenter object is targeted to forecasting and nowcasting models, it contains some specialised fields, as illustrated below.
+
+```{python}
+
+model_doc = ForecastCard()
+
+model_doc.show_template()
+```
+
+```{python}
+
+model_doc.show_json()
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ForecastCard)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(ForecastCard.autofill_template, name="autofill_template", title_level=4)
+```
+
+# Basic functioning of model documentation
+
+After a Documenter object, such as `ModelCard` or `ForecastCard` is instanciated, the user can see the underlying template with the module `show_template`, as below:
+
+```{python}
+
+model_doc = ModelCard(autofill=False)
+assert model_doc.show_template(indent=False) == ModelCard.template
+
+model_doc.show_template()
+```
+
+The method `show_json` prints the Documenter's documentation template, where the unfilled information retains the descriptions from the original template:
+
+```{python}
+
+model_doc = ModelCard(autofill=True)
+model_doc.show_json()
+```
+
+The template is protected from editing once a Documenter has been created. This way, even if a user unwarrantedly changes the template, this does not interfere with the Documenter functionality.
+
+```{python}
+
+model_doc.template = None
+model_doc.show_template()
+
+assert model_doc.show_template(indent=False) == ModelCard.template
+```
+
+Users can find which fields in their templates are still open by using the module `open_questions`. The levels of the template are reflected in the resulting dictionary, with double underscores separating the different dictionary levels in the underlying template.
+
+Below we see that after inputting information for the item `caveats` in the section `caveats_recommendations`, this item does not appear in the results of the `open_questions` method.
+
+```{python}
+
+model_doc.fill_info({'caveats_recommendations': {'caveats': 'This is another test'}})
+assert model_doc.json_doc['caveats_recommendations']['caveats'] == "This is another test"
+
+# note that caveats_recommendations__caveats is no longer considered an open question
+# after being filled in through `fill_info`.
+print([oq for oq in model_doc.open_questions() if oq.startswith('caveats')])
+```
+
+And now the complete result of the `open_questions` method:
+
+```{python}
+
+model_doc.open_questions()
+```
+
+If the user wants to fill in an empty field such as the ones identified above by the method `open_questions`, the user simply needs to pass to the module `fill_info` a dictionary with the corresponding information. Depending on the template, the dictionary may be nested. 
+
+:::{.callout-note}
+
+it is technically possible to attribute the element directly to the attribute `json_doc`, but this should be avoided in favour of using the method `fill_info`. The latter tests whether the new information is valid according to the documentation template and also enables filling of more than one question at the same time. In addition, attributing information directly to `json_doc` is not logged, and may unwarrantedly create new entries that are not part of the template (eg, if a new dictionary key is created due to typos).
+
+:::
+
+The template serves to provide specific instances of the Documenter object with a form-like structure, indicating which fields are open and thus require some answers or information. Consequently, the template does not change when the actual document object changes after information is added by `fill_info`.
+
+```{python}
+
+new_info = {
+    'metrics': {'performance_measures': "This is a test"},
+    'caveats_recommendations': {'caveats': "This is another test"}
+    }
+
+model_doc.fill_info(new_info)
+print([model_doc.json_doc['metrics'], ModelCard.template['metrics']])
+
+assert model_doc.show_template(indent=False) == ModelCard.template
+```
+
+# Reading information from models
+
+`gingado`'s `ggdModelDocumentation` base class is able to extract information from machine learning models from a number of widely used libraries and make it available to the Documenter objects. This is done through the method `read_model`, which recognises whether the model is a `gingado` object or any of `scikit-learn`, `keras`, or `fastai` models and read the model characteristics appropriately. For filing out information from other models (eg, `pytorch` or even models coded from scratch, machine learning or not), the user can benefit from the module `fill_model_info` that every Documenter should have, as demonstrated below.
+
+In the case of `ModelCard`, these informations are included under `model_details`, item `info`. But the model information could be saved in another area of a custom Documenter.
+
+:::{.callout-note}
+
+the model-specific information saved is different depending on the model's original library.
+
+:::
+
+## Preliminaries
+
+The mock dataset below is used to construct models using different libraries, to demonstrate how they are read by Documenters.
+
+```{python}
+
+from sklearn.datasets import make_classification
+```
+
+```{python}
+
+# some mock up data
+X, y = make_classification()
+
+X.shape, y.shape
+```
+
+## gingado Benchmark
+
+```{python}
+
+from gingado.benchmark import ClassificationBenchmark
+```
+
+```{python}
+
+# the gingado benchmark
+gingado_clf = ClassificationBenchmark(verbose_grid=1).fit(X, y)
+```
+
+```{python}
+
+# a new instance of ModelCard is created and used to document the model
+model_doc_gingado = ModelCard()
+model_doc_gingado.read_model(gingado_clf.benchmark)
+print(model_doc_gingado.show_json()['model_details']['info'])
+
+# but given that gingado Benchmark objects already document the best model at every fit, we can check that they are equal:
+assert model_doc_gingado.show_json()['model_details']['info'] == gingado_clf.model_documentation.show_json()['model_details']['info']
+```
+
+## scikit-learn
+
+```{python}
+
+from sklearn.ensemble import RandomForestClassifier
+```
+
+```{python}
+
+sklearn_clf = RandomForestClassifier().fit(X, y)
+```
+
+```{python}
+
+model_doc_sklearn = ModelCard()
+model_doc_sklearn.read_model(sklearn_clf)
+print(model_doc_sklearn.show_json()['model_details']['info'])
+```
+
+## Keras
+
+```{python}
+
+from tensorflow import keras
+```
+
+```{python}
+
+keras_clf = keras.Sequential()
+keras_clf.add(keras.layers.Dense(16, activation='relu', input_shape=(20,)))
+keras_clf.add(keras.layers.Dense(8, activation='relu'))
+keras_clf.add(keras.layers.Dense(1, activation='sigmoid'))
+keras_clf.compile(optimizer='sgd', loss='binary_crossentropy')
+keras_clf.fit(X, y, batch_size=10, epochs=10)
+```
+
+```{python}
+
+model_doc_keras = ModelCard()
+model_doc_keras.read_model(keras_clf)
+model_doc_keras.show_json()['model_details']['info']
+```
+
+## Other models
+
+Native support for automatic documentation of other model types, such as from `fastai`, `pytorch` is expected to be available in future versions. Until then, any models coded form scratch by the user as well as any other model can be documented by passing the information as an argument to the Documenter's `fill_model_info` method. This can be done with a string or dictionary. For example:
+
+```{python}
+
+import numpy as np
+import torch
+import torch.nn.functional as F
+```
+
+```{python}
+
+class MockDataset(torch.utils.data.Dataset):
+    def __init__(self, X, y):
+        self.X = torch.from_numpy(X.astype(np.float32))
+        self.y = torch.from_numpy(y.astype(np.float32))
+        self.len = self.X.shape[0]
+
+    def __len__(self):
+        return self.len
+
+    def __getitem__(self, idx):
+        return self.X[idx], self.y[idx]
+
+class PytorchNet(torch.nn.Module):
+    def __init__(self):
+        super(PytorchNet, self).__init__()
+        self.layer1 = torch.nn.Linear(20, 16)
+        self.layer2 = torch.nn.Linear(16, 8)
+        self.layer3 = torch.nn.Linear(8, 1)
+
+    def forward(self, x):
+        x = torch.relu(self.layer1(x))
+        x = torch.relu(self.layer2(x))
+        x = torch.sigmoid(self.layer3(x))
+        return x
+
+pytorch_clf = PytorchNet()
+
+dataloader = MockDataset(X, y)
+
+
+loss_func = torch.nn.BCELoss()
+optimizer = torch.optim.SGD(pytorch_clf.parameters(), lr=0.001, momentum=0.9)
+
+for epoch in range(10):
+    running_loss = 0.0
+    for i, data in enumerate(dataloader, 0):
+        _X, _y = data
+        optimizer.zero_grad()
+        y_pred_epoch = pytorch_clf(_X)
+        loss = loss_func(y_pred_epoch, _y.reshape(1))
+        loss.backward()
+        optimizer.step()
+```
+
+```{python}
+
+model_doc_pytorch = ModelCard()
+model_doc_pytorch.fill_model_info("This model is a neural network consisting of two fully connected layers and ending in a linear layer with a sigmoid activation")
+model_doc_pytorch.show_json()['model_details']['info']
+```
+
+# Creating a custom Documenter {#sec-custom}
+
+`gingado` users can easily transform their model documentation needs into a Documenter object. The main advantages of doing this are: 
+
+- the documentation template becomes a "recyclable" object that can be saved, loaded, and used in other models or code routines; and
+- model documentation can be more closely aligned with model creation and training, thus decreasing the probability that the model and its documentation diverge during the process of model development.
+
+A `gingado` Documenter must:
+
+- subclass `ggdModelDocumentation` (or implement all its methods if the user does not want to keep a dependency to `gingado`),
+- include the actual template for the documentation as a dictionary (with at most two levels of keys) in a class attribute called `template`,
+- ensure that `template` complies with [JSON specifications](https://www.json.org/json-en.html),
+- have `file_path`, `autofill` and `indent_level` as arguments in `__init__`,
+- follow the `scikit-learn` convention of storing the `__init__` parameters in `self` attributes with the same name, and
+- implement the `autofill_template` method using the `fill_info` method to set the automatically filled information fields.
+
+# References
+::: {#refs}
+:::
+

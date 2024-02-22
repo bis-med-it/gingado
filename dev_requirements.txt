@@ -1,0 +1,6 @@
+tensorflow
+torch
+statsmodels
+nbformat
+nbclient
+pre-commit

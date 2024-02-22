@@ -1,0 +1,6 @@
+include LICENSE
+include CONTRIBUTING.md
+include README.md
+include data/dataset_BarroLee_1994.csv
+include GrowthData.mat
+recursive-exclude * __pycache__

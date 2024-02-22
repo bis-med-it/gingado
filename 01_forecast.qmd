@@ -1,0 +1,411 @@
+---
+title: Using gingado to forecast financial series
+description: A beginning-to-end illustration with foreign exchange rates inspired by @rossi2013exchange
+output-file: forecast.html
+author: Douglas K. G. Araujo
+code-fold: show
+code-tools: true
+jupyter: python3
+warning: false
+---
+
+This notebook illustrates the use of `gingado` to build models for forecasting, using foreign exchange (FX) rate movements as an example. Please note that the results or the model should not be taken as investment advice.
+
+Forecasting exchange rates is notoriously difficult (@rossi2013exchange and references therein).
+
+This exercise will illustrate various functionalities provided by `gingado`:
+
+* how to use `gingado` utilities, such as an object to compare different lags of the model and a function that downloads specific SDMX data.
+
+* how to augment the original dataset of interest
+
+* how to quickly create a benchmark model, and use it compare different alternatives
+
+* how to document the model
+
+Unlike most scripts that concentrate the package imports at the beginning, this walkthrough will import as needed, to better highlight where each contribution of `gingado` is used in the workflow.
+
+First, we will use `gingado` to run a simple example with the following characteristics:
+
+* selected currency pairs will be downloaded from the European Central Bank (ECB) servers using the [SDMX](www.sdmx.org) protocol
+    * these pairs will form our dependent variables in the models
+
+* using `gingado`, this series will be augmented with a time series on central bank policy rates and the interaction of rate changes and FX rate movements
+
+* the regressors (including the FX rates themselves) are lagged up to 10 lags using the `gingado` utility `Lag`
+
+* a different benchmark model is created for each of the FX rates, using a random forest
+    * `gingado` will automatically search for the best specification for each currency pair from a default list of hyperparameters
+
+* throughout the example, `ModelCard` is used to document the models being trained
+
+## Downloading FX rates
+
+In this exercise, we will concentrate on the bilateral FX rates between the 🇺🇸 US Dollar (USD) and the 🇧🇷 Brazilian Real (BRL), 🇨🇦 Canadian Dollar (CAD), 🇨🇭 Swiss Franc (CHF), 🇪🇺 Euro (EUR), 🇬🇧 British Pound (GBP), 🇯🇵 Japanese Yen (JPY) and 🇲🇽 Mexican Peso (MXN). 
+
+The rates are standardised to measure the units in foreign currency bought by one USD. Therefore, positive returns represent USD is more valued compared to the other currency, and vice-versa.
+
+```{python}
+
+from gingado.utils import load_SDMX_data
+```
+
+```{python}
+
+df = load_SDMX_data(
+    sources={'BIS': 'WS_XRU_D'},
+    keys={
+        'FREQ': 'D', 
+        'CURRENCY': ['BRL', 'CAD', 'CHF', 'EUR', 'GBP', 'JPY', 'MXN'],
+        'REF_AREA': ['BR', 'CA', 'CH', 'XM', 'GB', 'JP', 'MX']
+        },
+    params={'startPeriod': 2003}
+)
+```
+
+The code below simplifies the column names by removing the identification of the SDMX sources, dataflows and keys and replacing it with the usual code for the bilateral exchange rates.
+
+```{python}
+
+print("Original column names:")
+print(df.columns)
+
+df.columns = ['USD' + col.split('_')[9] for col in df.columns]
+
+print("New column names:")
+print(df.columns)
+```
+
+The dataset looks like this so far (most recent 5 rows displayed only):
+
+```{python}
+
+df.tail()
+```
+
+We are interested in the percentage change from the previous day.
+
+```{python}
+
+FX_rate_changes = df.pct_change()
+FX_rate_changes.dropna(inplace=True)
+```
+
+```{python}
+
+FX_rate_changes.plot(subplots=True, layout=(4, 2), figsize=(15, 15), sharex=True, title='Selected daily FX rate changes')
+```
+
+## Augmenting the dataset
+
+We will complement the FX rates data with two other datasets:
+
+* daily central bank policy rates from the Bank for International Settlements (BIS) [-@BISstatQR2017], and
+
+* the daily Composite Indicator of Systemic Stress (CISS), created by @hollo2012ciss and updated by the European Central Bank (ECB).
+
+```{python}
+
+from gingado.augmentation import AugmentSDMX
+```
+
+```{python}
+
+X = AugmentSDMX(sources={'BIS': 'WS_CBPOL_D', 'ECB': 'CISS'}).fit_transform(FX_rate_changes)
+```
+
+:::{.callout-note}
+
+it is acceptable in `gingado` to pass the variable of interest (the "y", or in this case, `FX_rate_changes`) as the `X` argument in `fit_transform`. This is because this series will also be merged with the additional, augmented data and subsequently lagged along with it.
+
+:::
+
+You can see below that the column names for the newly added columns reflect the source (BIS or ECB), the dataflow (separated from the source by a double underline), and then the specific keys to the series, which are specific to each dataflow.
+
+```{python}
+
+X.columns
+```
+
+Before proceeding, we also include a differentiated version of the central bank policy data. It will be sparse, since these changes occur infrequently for most central banks, but it can help the model uncover how FX rate changes respond to central bank policy changes.
+
+```{python}
+
+import pandas as pd
+```
+
+```{python}
+
+X_diff = X.loc[:, X.columns.str.contains("BIS__WS_CBPOL_D", case=False)].diff()
+X_diff.columns = [col + "_diff" for col in X_diff.columns]
+X = pd.concat([X, X_diff], axis=1)
+```
+
+This is how the data looks like now. Note that the names of the added columns reflect the source, dataflow and keys, all separated by underlines (the source is separated from the dataflow by two underlines at all cases). For example, the last key is the jurisdiction of the central bank.
+
+We will keep all the newly added variables - even those that are from countries not in the currency list. This is because the model may uncover any relationship of interest between central bank policies from other countries and each particular currency pair.
+
+```{python}
+
+X.describe().transpose()
+```
+
+The policy rates for some central banks have less observations than the others, as seen above.
+
+Because some data are missing, we will impute data for the missing dates, by simply propagating the last valid observation, and when that is not possible, replacing the missing information with a "0".
+
+```{python}
+
+X.fillna(method='pad', inplace=True)
+X.fillna(value=0, inplace=True)
+```
+
+Now is a good time to start the model documentation. For this, we can use the standard model card that already comes with `gingado`.
+
+The goal is to facilitate economists who want to make model documentation a part of their normal workflow.
+
+```{python}
+
+from gingado.model_documentation import ModelCard
+```
+
+```{python}
+
+model_doc = ModelCard()
+model_doc.open_questions()
+```
+
+As an example, we can add the following information to the model:
+
+```{python}
+
+model_doc.fill_info({
+    'intended_use': {
+        'primary_uses': 'These models are simplified toy models made to illustrate the use of gingado',
+        'out_of_scope': 'These models were not constructed for decision-making and as such their use as predictors in real life decisions is strongly discouraged and out of scope.'
+    },
+    'metrics': {
+        'performance_measures': 'Consistent with most papers reviewed by Rossi (2013), these models were evaluated by their root mean squared error.'
+    },
+    'ethical_considerations': {
+        'sensitive_data': 'These models were not trained with sensitive data.',
+        'human_life': 'The models do not involve the collection or use of individual-level data, and have no foreseen impact on human life.'
+    },
+    
+})
+```
+
+## Lagging the regressors
+
+This model will not include any contemporaneous variable. Therefore, all regresors must be lagged.
+
+For illustration purposes, we use 5 lags in this exercise.
+
+```{python}
+
+from gingado.utils import Lag
+```
+
+```{python}
+
+n_lags = 5
+
+X_lagged = Lag(lags=n_lags).fit_transform(X)
+X_lagged
+
+y = FX_rate_changes[n_lags:]
+```
+
+Now is a good opportunity to check by how much we have increased our regressor space:
+
+```{python}
+
+pd.Series({
+    "FX rates only": y.shape[1],
+    "... with augmentation_": X.shape[1],
+    "... lagged": X_lagged.shape[1]
+})
+```
+
+## Training the models
+
+Our dataset is now complete. Before using it to train the models, we hold out the most recent data to serve as our testing dataset, so we can compare our models with real out-of-sample information.
+
+We can choose, say, 1st January 2022.
+
+```{python}
+
+cutoff = '2020-01-01'
+
+X_train, X_test = X_lagged[:cutoff], X_lagged[cutoff:]
+y_train, y_test = y[:cutoff], y[cutoff:]
+```
+
+```{python}
+
+model_doc.fill_info({
+    'training_data': 
+    {'training_data': 
+        """
+        The training data comprise time series obtained from official sources (BIS and ECB) on:
+        * foreign exchange rates
+        * central bank policy rates
+        * an estimated indicator for systemic stress
+        The training and evaluation datasets are the same time series, only different windows in time."""
+    }
+})
+```
+
+The current status of the documentation is:
+
+```{python}
+
+pd.Series(model_doc.show_json())
+```
+
+### Creating a random walk benchmark
+
+@rossi2013exchange highlights that few predictors beat the random walk without drift model. This is a good opportunity to showcase how we can use `gingado`'s in-built base class `ggdBenchmark` to build our customised benchmark model, in this case a random walk.
+
+The calculation of the random walk benchmark is very simple. Still, creating a `gingado` benchmark offers some advantages: it is easier to compare alternative models, and the model documentation is done more seamlessly.
+
+A custom benchmark model must implement the following steps:
+
+* sub-class `ggdBenchmark` (or alternatively implement its methods)
+
+* define an `estimator` that is compatible with `scikit-learn`'s API:
+    * at the very least, it has a `fit` method that returns `self`
+
+If the user is relying on a custom estimator - like in this case, a random walk estimator to align with the literature - then this custom estimator also has some requirements:
+
+* it should ideally subclass `scikit-learn`'s `BaseEstimator` (mostly for the `get_params` / `set_params` methods)
+
+* three methods are necessary:
+    * `fit`, which should at least create an attribute ending in an underline ("_"), so that `gingado` knows it is fitted
+    * `predict`
+    * `score`
+
+```{python}
+
+import numpy as np
+from gingado.benchmark import ggdBenchmark
+from sklearn.base import BaseEstimator
+from sklearn.ensemble import VotingRegressor
+from sklearn.model_selection import TimeSeriesSplit
+```
+
+```{python}
+
+class RandomWalkEstimator(BaseEstimator):
+    def __init__(self, scoring='neg_root_mean_squared_error'):
+        self.scoring = scoring
+    
+    def fit(self, X, y=None):
+        self.n_samples_ = X.shape[0]
+        return self
+
+    def predict(self, X):
+        return np.zeros(X.shape[0])
+
+    def score(self, X, y, sample_weight=None):
+        from sklearn.metrics import mean_squared_error
+        y_pred = self.predict(X)
+        return mean_squared_error(y, y_pred, sample_weight=sample_weight, squared=False)
+
+    def forecast(self, forecast_horizon=1):
+        self.forecast_horizon = forecast_horizon
+        return np.zeros(self.forecast_horizon)
+
+class RandomWalkBenchmark(ggdBenchmark):
+    def __init__(
+        self, 
+        estimator=RandomWalkEstimator(), 
+        auto_document=ModelCard,
+        cv=TimeSeriesSplit(n_splits=10, test_size=60), 
+        ensemble_method=VotingRegressor, 
+        verbose_grid=None):
+        self.estimator=estimator
+        self.auto_document=auto_document
+        self.cv=cv
+        self.ensemble_method=ensemble_method
+        self.verbose_grid=verbose_grid
+
+    def fit(self, X, y=None):
+        self.benchmark=self.estimator
+        self.benchmark.fit(X, y)
+        return self
+```
+
+### Training the candidate models
+
+Now that we have a benchmark, we can create candidate models that will try to beat it.
+
+In this simplified example, we will choose only two: a random forest, an AdaBoost regressor and a Lasso model. Their hyperparameters are not particularly important for the example, but of course they could be fine-tuned as well.
+
+In the language of @rossi2013exchange, the models below are one *"single-equation, lagged fundamental model"* for each currency.
+
+```{python}
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import AdaBoostRegressor
+from sklearn.linear_model import Lasso
+```
+
+```{python}
+
+forest = RandomForestRegressor(n_estimators=250, max_features='log2').fit(X_train, y_train['USDBRL'])
+adaboost = AdaBoostRegressor(n_estimators=150).fit(X_train, y_train['USDBRL'])
+lasso = Lasso(alpha=0.1).fit(X_train, y_train['USDBRL'])
+
+rw = RandomWalkBenchmark().fit(X_train, y_train['USDBRL'])
+```
+
+We can now compare the model results, using the test dataset we held out previously.
+
+Note that we must pass the criterion against which we are comparing the forecasts.
+
+```{python}
+
+from sklearn.metrics import mean_squared_error
+```
+
+```{python}
+
+results = rw.compare_fitted_candidates(
+    X_test, y_test['USDBRL'],
+    candidates=[forest, adaboost, lasso],
+    scoring_func=mean_squared_error)
+
+pd.Series(results)
+```
+
+As mentioned above, benchmarks can facilitate the model documentation. In addition to the broader documentation that is already ongoing, each benchmark object create their own where they store model information. We can use that for the broader documentation.
+
+In our case, the only parameter we created above during fit is the number of samples: not a particularly informative variable but it was included just for illustration purposes. In any case, the parameter appears in the "model_details" section, item "info", of the benchmark's `rw` documentation. Similarly, the parameters of more fully-fledged estimators also appear in that section.
+
+```{python}
+
+rw.document()
+
+rw.model_documentation.show_json()['model_details']['info']
+```
+
+```{python}
+
+model_doc.fill_info({
+    'model_details': {'info': rw.model_documentation.show_json()['model_details']['info']}
+})
+```
+
+```{python}
+
+model_doc.show_json()
+```
+
+We can save the documentation to disk in JSON format with `model_doc.save_json()`, or parse it to create other documents (eg, a PDF file) using third-party libraries.
+
+## References
+
+::: {#refs}
+:::
+

@@ -1,0 +1,302 @@
+---
+description: Functions to load real or simulated datasets that are relevant for economic and financial models
+output-file: datasets.html
+title: Datasets for economic research
+jupyter: python3
+warning: false
+---
+
+```{python}
+#| echo: false
+#| output: false
+%load_ext autoreload
+%autoreload 2
+```
+
+```{python}
+#| echo: false
+#| output: false
+import numpy as np
+from fastcore.test import test_fail
+import matplotlib.pyplot as plt
+import pandas as pd
+from utils import show_doc
+from gingado.datasets import load_BarroLee_1994
+```
+
+## Real datasets
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(load_BarroLee_1994)
+```
+
+Robert Barro and Jong-Wha Lee's [-@BARRO19941] dataset has been used over time by other economists, such as by @belloni2011inference and @giannone2021illusion. This function uses the version available in their [online annex](https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA17842). In that paper, this dataset corresponds to what the authors call "macro2".
+
+The original data, along with more information on the variables, can be found in [this NBER website](http://www2.nber.org/pub/barro.lee/). A very helpful codebook is found [in this repo](https://github.com/bizmaercq/Do-Poor-Countries-Grow-Faster-than-Rich-Countries/blob/master/data/Codebook.txt).
+
+```{python}
+
+X, y = load_BarroLee_1994()
+X.head()
+```
+
+```{python}
+
+y.plot.hist(title='GDP growth', bins=30)
+```
+
+## Simulated datasets
+
+:::{.callout-note}
+
+All of the functions creating simulated datasets have a parameter `random_state` that allow for reproducible random numbers.
+
+:::
+
+```{python}
+from gingado.datasets import make_causal_effect
+```
+
+```{python}
+#| echo: false
+#| output: asis
+show_doc(make_causal_effect)
+```
+
+`make_causal_effect` creates a dataset for when the question of interest is related to the causal effects of a treatment. For example, for a simulated dataset, we can check that $Y_i$ corresponds to the sum of the treatment effects plus the component that does not depend on the treatment:
+
+```{python}
+
+ causal_sim = make_causal_effect(
+    n_samples=2000,
+    n_features=100,
+    return_propensity=True,
+    return_treatment_effect=True, 
+    return_pretreatment_y=True, 
+    return_as_dict=True)
+
+ assert not np.any(np.round(causal_sim['y'] - causal_sim['pretreatment_y'] - causal_sim['treatment_effect'], decimals=13))
+```
+
+#### Pre-treatment outcome
+
+The pre-treatment outcome $Y_i|X_i$ (the part of the outcome variable that is not dependent on the treatment) might be defined by the user. This corresponds to the value of the outcome for any untreated observations. The function should always take at least two arguments: `X` and `bias`, even if one of them is unused; `bias` is the constant. The argument is zero by default but can be set by the user to be another value.
+
+```{python}
+
+causal_sim = make_causal_effect(
+    bias=0.123,
+    pretreatment_outcome=lambda X, bias: bias,
+    return_assignment=True,
+    return_as_dict=True
+)
+
+assert all(causal_sim['y'][causal_sim['treatment_assignment'] == 0] == 0.123)
+```
+
+If the outcome depends on specific columns of $X$, this can be implemented as shown below.
+
+```{python}
+
+causal_sim = make_causal_effect(
+    pretreatment_outcome=lambda X, bias: X[:, 1] + np.maximum(X[:,2], 0) + X[:,3] * X[:,4] + bias
+)
+```
+
+And of course, the outcome might also have a random component. 
+
+In these cases (and in other parts of this function), when the user wants to use the same random number generator as the other parts of the function, the function must have an argment `rng` for the NumPy random number generator used in other parts of the function.
+
+```{python}
+
+causal_sim_1 = make_causal_effect(
+    pretreatment_outcome=lambda X, bias, rng: X[:, 1] + np.maximum(X[:,2], 0) + X[:,3] * X[:,4] + bias + rng.standard_normal(size=X.shape[0]),
+    random_state=42,
+    return_pretreatment_y=True,
+    return_as_dict=True
+)
+
+causal_sim_2 = make_causal_effect(
+    pretreatment_outcome=lambda X, bias, rng: X[:, 1] + np.maximum(X[:,2], 0) + X[:,3] * X[:,4] + bias + rng.standard_normal(size=X.shape[0]),
+    random_state=42,
+    return_pretreatment_y=True,
+    return_as_dict=True
+)
+
+assert all(causal_sim_1['X'].reshape(-1, 1) == causal_sim_2['X'].reshape(-1, 1))
+assert all(causal_sim_1['y'] == causal_sim_2['y'])
+assert all(causal_sim_1['pretreatment_y'] == causal_sim_2['pretreatment_y'])
+```
+
+#### Treatment propensity
+
+The treatment propensity of observations may all be the same, in which case `treatment_propensity` is a floating number between 0 and 1.
+
+```{python}
+
+same_propensity_sim = make_causal_effect(
+    n_samples=485,
+    treatment_propensity=0.3,
+    return_propensity=True,
+    return_as_dict=True
+)
+
+assert np.unique(same_propensity_sim['propensity']) == 0.3
+assert len(same_propensity_sim['propensity']) == 485
+```
+
+Or it might depend on the observation's covariates, with the user passing a function with an argument 'X'.
+
+```{python}
+
+heterogenous_propensities_sim = make_causal_effect(
+    n_samples=1000,
+    treatment_propensity=lambda X: 0.3 + (X[:, 0] > 0) * 0.2,
+    return_propensity=True,
+    return_as_dict=True
+)
+
+plt.title("Heterogenously distributed propensities")
+plt.xlabel("Propensity")
+plt.ylabel("No of observations")
+plt.hist(heterogenous_propensities_sim['propensity'], bins=100)
+plt.show()
+```
+
+The propensity can also be randomly allocated, together with covariate dependence or not. Note that even if the propensity is completely random and does not depend on covariates, the function must still use the argument `X` to calculate a random vector with the appropriate size.
+
+```{python}
+
+random_propensities_sim = make_causal_effect(
+    n_samples=50000,
+    treatment_propensity=lambda X: np.random.uniform(size=X.shape[0]),
+    return_propensity=True,
+    return_as_dict=True
+)
+
+plt.title("Randomly distributed propensities")
+plt.xlabel("Propensity")
+plt.ylabel("No of observations")
+plt.hist(random_propensities_sim['propensity'], bins=100)
+plt.show()
+```
+
+#### Treatment assignment
+
+As seen above, every observation has a given treatment propensity - the chance that they are treated. Users can define how this propensity translates into actual treatment with the argument `treatment_assignment`. This argument takes a function, which must have an argument called `propensity`.
+
+The default value for this argument is a function returning 1s with probability `propensity` and 0s otherwise. Any other function should always return either 0s or 1s for the data simulator to work as expected.
+
+```{python}
+
+causal_sim = make_causal_effect(
+    treatment_assignment=lambda propensity: np.random.binomial(1, propensity)
+)
+```
+
+While the case above is likely to be the most useful in practice, this argument accepts more complex relationships between an observation's propensity and the actual treatment assignment.
+
+For example, if treatment is subject to rationing, then one could simulate data with 10 observations where only the samples with the highest (say, 3) propensity scores get treated, as below:
+
+```{python}
+
+rationed_treatment_sim = make_causal_effect(
+    n_samples=10,
+    treatment_propensity=lambda X: np.random.uniform(size=X.shape[0]),
+    treatment_assignment=lambda propensity: propensity >= propensity[np.argsort(propensity)][-3],
+    return_propensity=True,
+    return_assignment=True,
+    return_as_dict=True
+)
+```
+
+```{python}
+
+rationed_treatment = pd.DataFrame(
+    np.column_stack((rationed_treatment_sim['propensity'], rationed_treatment_sim['treatment_assignment'])),
+    columns = ['propensity', 'assignment']
+    )
+```
+
+```{python}
+
+rationed_treatment.sort_values('propensity')
+```
+
+#### Treatment value
+
+The `treatment` argument indicates the magnitude of the treatment for each observation assigned for treatment. Its value is always a function that must have an argument called `assignment`, as in the first example below.
+
+In the simplest case, the treatment is a binary variable indicating whether or not a variable was treated. In other words, the treatment is the same as the assignment, as in the default value.
+
+But users can also simulate data with heterogenous treatment, conditional on assignment. This is done by including a pararemeter `X` in the function, as shown in the second example below.
+
+```{python}
+
+binary_treatment_sim = make_causal_effect(
+    n_samples=15,
+    treatment=lambda assignment: assignment,
+    return_assignment=True,
+    return_treatment_value=True,
+    return_as_dict=True
+)
+
+assert sum(binary_treatment_sim['treatment_assignment'] - binary_treatment_sim['treatment_value'][0]) == 0
+```
+
+Heterogenous treatments may occur in settings where treatment intensity, conditional on assignment, varies across observations. Please note the following:
+
+* the heterogenous treatment amount may or may not depend on covariates, but either way, if treatment values are heterogenous, then `X` needs to be an argument of the function passed to `treatment`, if nothing else to make sure the shapes match; and
+
+* if treatments are heterogenous, then it is important to multiply the treatment value with the `assignment` argument to ensure that observations that are not assigned to be treated are indeed not treated (the function will return an `AssertionError` otherwise).
+
+```{python}
+
+hetereogenous_treatment_sim = make_causal_effect(
+    n_samples=15,
+    treatment=lambda assignment, X: assignment * np.random.uniform(size=X.shape[0]),
+    return_assignment=True,
+    return_treatment_value=True,
+    return_as_dict=True
+)
+```
+
+In contrast to the function above, in the chunk below the function `make_causal_effect` fails because a treatment value is also assigned to observations that were not assigned for treatment.
+
+```{python}
+
+test_fail(
+    make_causal_effect, 
+    kwargs=dict(treatment=lambda assignment, X: assignment + np.random.uniform(size=X.shape[0]))
+)
+```
+
+#### Treatment effect
+
+The treatment effect can be homogenous, ie, is doesn't depend on any other characteristic of the individual observations (in other words, does not depend on $X_i$), or heterogenous (where the treatment effect on $Y_i$ does depend on each observation's $X_i$). This can be done by specifying the causal relationship through a lambda function, as below:
+
+```{python}
+
+homogenous_effects_sim = make_causal_effect(
+        treatment_effect=lambda treatment_value: treatment_value,
+        return_treatment_value=True,
+        return_as_dict=True
+)
+
+assert (homogenous_effects_sim['treatment_effect'] == homogenous_effects_sim['treatment_value']).all()
+
+heterogenous_effects_sim = make_causal_effect(
+        treatment_effect=lambda treatment_value, X: np.maximum(X[:, 1], 0) * treatment_value,
+        return_treatment_value=True,
+        return_as_dict=True
+)
+
+assert (heterogenous_effects_sim['treatment_effect'] != heterogenous_effects_sim['treatment_value']).any()
+```
+
+## References
+::: {#refs}
+:::
+

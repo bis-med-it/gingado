@@ -1,0 +1,29 @@
+---
+description: This page documents the sources and transformations of actual datasets into a standardised format for distribution with `gingado`
+output-file: dataset_transformation.html
+title: Dataset transformation for uploading
+jupyter: python3
+warning: false
+---
+
+## Barro and Lee, 1994
+
+For more information on this data, consult the `datasets` page.
+
+```{python}
+import pandas as pd
+from scipy import io
+
+growth_data = io.loadmat('data/GrowthData.mat')
+colnames = [m[0].strip() for m in growth_data['Mnem'][0]]
+df = pd.DataFrame(growth_data['data'], columns=colnames)
+
+df.to_csv('gingado/dataset_BarroLee_1994.csv')
+```
+
+```{python}
+pd.set_option('display.max_rows', None)
+df.describe().T
+```
+
+

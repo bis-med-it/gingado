@@ -1,0 +1,55 @@
+project:
+  type: website
+  output-dir: docs
+
+format:
+  html:
+    theme:
+      light: cerulean
+      dark: cyborg
+    css: styles.css
+    toc: true
+    toc-depth: 4
+    number-sections: false
+    link-external-icon: true
+
+website:
+  title: gingado
+  twitter-card:
+    creator: "@DouglasKGAraujo"
+  open-graph: true
+  repo-actions: [issue]
+  reader-mode: true
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Examples"
+        menu:
+          - text: "Economic growth"
+            file: 01_BarroLee1994.qmd
+          - text: "Forecasting FX rates"
+            file: 01_forecast.qmd
+          - text: "Effects of labour reform"
+            file: 01_machine_controls.qmd
+      - text: "Reference"
+        menu:
+          - text: "gingado.augmentation"
+            file: 00_augmentation.qmd
+          - text: "gingado.datasets"
+            file: 00_datasets.qmd
+          - text: "gingado.benchmark"
+            file: 00_benchmark.qmd
+          - text: "gingado.estimators"
+            file: 00_estimators.qmd
+          - text: "gingado.model_documentation"
+            file: 00_documentation.qmd
+          - text: "gingado.utils"
+            file: 00_utils.qmd
+    right:
+      - icon: github
+        href: "https://github.com/dkgaraujo/gingado"
+      - icon: twitter
+        href: https://twitter.com/DouglasKGARaujo
+
+bibliography: gingado.bib

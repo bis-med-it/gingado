@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Functions to support the use of gingado">
+
+<title>gingado - Utils</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="gingado - Utils">
+<meta property="og:description" content="Functions to support the use of gingado">
+<meta property="og:site-name" content="gingado">
+<meta name="twitter:title" content="gingado - Utils">
+<meta name="twitter:description" content="Functions to support the use of gingado">
+<meta name="twitter:creator" content="@DouglasKGAraujo">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">gingado</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Examples</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-examples">    
+        <li>
+    <a class="dropdown-item" href="./barrolee1994.html" rel="" target="">
+ <span class="dropdown-text">Economic growth</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./forecast.html" rel="" target="">
+ <span class="dropdown-text">Forecasting FX rates</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./machine_controls.html" rel="" target="">
+ <span class="dropdown-text">Effects of labour reform</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Reference</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-reference">    
+        <li>
+    <a class="dropdown-item" href="./augmentation.html" rel="" target="">
+ <span class="dropdown-text">gingado.augmentation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./datasets.html" rel="" target="">
+ <span class="dropdown-text">gingado.datasets</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./benchmark.html" rel="" target="">
+ <span class="dropdown-text">gingado.benchmark</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./estimators.html" rel="" target="">
+ <span class="dropdown-text">gingado.estimators</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./documentation.html" rel="" target="">
+ <span class="dropdown-text">gingado.model_documentation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./utils.html" rel="" target="">
+ <span class="dropdown-text">gingado.utils</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/dkgaraujo/gingado" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/DouglasKGARaujo" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#support-for-model-documentation" id="toc-support-for-model-documentation" class="nav-link active" data-scroll-target="#support-for-model-documentation">Support for model documentation</a>
+  <ul>
+  <li><a href="#get_datetime" id="toc-get_datetime" class="nav-link" data-scroll-target="#get_datetime"></a><a id="get_datetime" class="nav-link" data-scroll-target="undefined">get_datetime</a></li>
+  <li><a href="#read_attr" id="toc-read_attr" class="nav-link" data-scroll-target="#read_attr"></a><a id="read_attr" class="nav-link" data-scroll-target="undefined">read_attr</a></li>
+  </ul></li>
+  <li><a href="#support-for-time-series" id="toc-support-for-time-series" class="nav-link" data-scroll-target="#support-for-time-series">Support for time series</a>
+  <ul>
+  <li><a href="#lag" id="toc-lag" class="nav-link" data-scroll-target="#lag"></a><a id="lag" class="nav-link" data-scroll-target="undefined">Lag</a></li>
+  <li><a href="#fit" id="toc-fit" class="nav-link" data-scroll-target="#fit"></a><a id="fit" class="nav-link" data-scroll-target="undefined">fit</a></li>
+  <li><a href="#transform" id="toc-transform" class="nav-link" data-scroll-target="#transform"></a><a id="transform" class="nav-link" data-scroll-target="undefined">transform</a></li>
+  <li><a href="#fit_transform" id="toc-fit_transform" class="nav-link" data-scroll-target="#fit_transform"></a><a id="fit_transform" class="nav-link" data-scroll-target="undefined">fit_transform</a></li>
+  </ul></li>
+  <li><a href="#support-for-data-augmentation-with-sdmx" id="toc-support-for-data-augmentation-with-sdmx" class="nav-link" data-scroll-target="#support-for-data-augmentation-with-sdmx">Support for data augmentation with SDMX</a>
+  <ul>
+  <li><a href="#list_sdmx_sources" id="toc-list_sdmx_sources" class="nav-link" data-scroll-target="#list_sdmx_sources"></a><a id="list_sdmx_sources" class="nav-link" data-scroll-target="undefined">list_SDMX_sources</a></li>
+  <li><a href="#list_all_dataflows" id="toc-list_all_dataflows" class="nav-link" data-scroll-target="#list_all_dataflows"></a><a id="list_all_dataflows" class="nav-link" data-scroll-target="undefined">list_all_dataflows</a></li>
+  <li><a href="#load_sdmx_data" id="toc-load_sdmx_data" class="nav-link" data-scroll-target="#load_sdmx_data"></a><a id="load_sdmx_data" class="nav-link" data-scroll-target="undefined">load_SDMX_data</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Utils</h1>
+</div>
+
+<div>
+  <div class="description">
+    Functions to support the use of <code>gingado</code>
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="support-for-model-documentation" class="level2">
+<h2 class="anchored" data-anchor-id="support-for-model-documentation">Support for model documentation</h2>
+<section id="get_datetime" class="level3">
+<h3 class="anchored" data-anchor-id="get_datetime"><a id="get_datetime">get_datetime</a></h3>
+<blockquote class="blockquote">
+<p>get_datetime <code>()</code></p>
+</blockquote>
+<pre>Returns the time now</pre>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> get_datetime()</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(d, <span class="bu">str</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(d) <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="read_attr" class="level3">
+<h3 class="anchored" data-anchor-id="read_attr"><a id="read_attr">read_attr</a></h3>
+<blockquote class="blockquote">
+<p>read_attr <code>(obj)</code></p>
+</blockquote>
+<pre>Reads and yields the type and values of fitted attributes from an object.
+
+Args:
+    obj: Object from which attributes will be read.</pre>
+<p>Function <code>read_attr</code> helps gingado Documenters to read the object behind the scenes.</p>
+<p>It collects the type of estimator, and any attributes resulting from fitting an object (in ie, those that end in “_” without being double underscores).</p>
+<p>For example, the attributes of an untrained and a trained random forest are, in sequence:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rf_unfit <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>rf_fit <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">3</span>)<span class="op">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    .fit([[<span class="dv">1</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">1</span>]], [[<span class="fl">0.5</span>], [<span class="fl">0.5</span>]]) <span class="co"># random numbers</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(read_attr(rf_unfit)), <span class="bu">list</span>(read_attr(rf_fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>([{'_estimator_type': 'regressor'}],
+ [{'_estimator_type': 'regressor'},
+  {'estimator_': DecisionTreeRegressor()},
+  {'estimators_': [DecisionTreeRegressor(max_features=1.0, random_state=2099199461),
+    DecisionTreeRegressor(max_features=1.0, random_state=520470076),
+    DecisionTreeRegressor(max_features=1.0, random_state=1821101536)]},
+  {'estimators_samples_': [array([1, 0]), array([1, 1]), array([1, 1])]},
+  {'feature_importances_': array([0., 0.])},
+  {'n_features_in_': 2},
+  {'n_outputs_': 1}])</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="support-for-time-series" class="level2">
+<h2 class="anchored" data-anchor-id="support-for-time-series">Support for time series</h2>
+<p>Objects of the class <code>Lag</code> are similar to <code>scikit-learn</code>’s transformers.</p>
+<section id="lag" class="level3">
+<h3 class="anchored" data-anchor-id="lag"><a id="lag">Lag</a></h3>
+<blockquote class="blockquote">
+<p>Lag <code>(lags=1, jump=0, keep_contemporaneous_X=False)</code></p>
+</blockquote>
+<pre>A transformer for lagging variables.
+
+Args:
+    lags (int): The number of lags to apply.
+    jump (int): The number of initial observations to skip before applying the lag.
+    keep_contemporaneous_X (bool): Whether to keep the contemporaneous values of X in the output.</pre>
+</section>
+<section id="fit" class="level3">
+<h3 class="anchored" data-anchor-id="fit"><a id="fit">fit</a></h3>
+<blockquote class="blockquote">
+<p>fit <code>(self, X: numpy.ndarray, y=None)</code></p>
+</blockquote>
+<pre>Fits the Lag transformer.
+
+Args:
+    X (np.ndarray): Array-like data of shape (n_samples, n_features).
+    y: Array-like data of shape (n_samples,) or (n_samples, n_targets) or None.
+    
+Returns:
+    self: A fitted version of the `Lag` instance.</pre>
+</section>
+<section id="transform" class="level3">
+<h3 class="anchored" data-anchor-id="transform"><a id="transform">transform</a></h3>
+<blockquote class="blockquote">
+<p>transform <code>(self, X: numpy.ndarray)</code></p>
+</blockquote>
+<pre>Applies the lag transformation to the dataset `X`.
+
+Args:
+    X (np.ndarray): Array-like data of shape (n_samples, n_features).
+    
+Returns:
+    A lagged version of `X`.</pre>
+</section>
+<section id="fit_transform" class="level3">
+<h3 class="anchored" data-anchor-id="fit_transform"><a id="fit_transform">fit_transform</a></h3>
+<blockquote class="blockquote">
+<p>fit_transform <code>(self, X, y=None, **fit_params)</code></p>
+</blockquote>
+<pre>Fit to data, then transform it.
+
+Fits transformer to `X` and `y` with optional parameters `fit_params`
+and returns a transformed version of `X`.
+
+Parameters
+----------
+X : array-like of shape (n_samples, n_features)
+    Input samples.
+
+y :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+    Target values (None for unsupervised transformations).
+
+**fit_params : dict
+    Additional fit parameters.
+
+Returns
+-------
+X_new : ndarray array of shape (n_samples, n_features_new)
+    Transformed array.</pre>
+<p>The code below demonstrates how <code>Lag</code> works in practice. Note in particular that, because <code>Lag</code> is a transformer, it can be used as part of a <code>scikit-learn</code>’s <code>Pipeline</code>.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>randomX <span class="op">=</span> np.random.rand(<span class="dv">15</span>, <span class="dv">2</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>randomY <span class="op">=</span> np.random.rand(<span class="dv">15</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>lags <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>jump <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> Pipeline([</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'scaler'</span>, StandardScaler()),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'lagger'</span>, Lag(lags<span class="op">=</span>lags, jump<span class="op">=</span>jump, keep_contemporaneous_X<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>]).fit_transform(randomX, randomY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Below we confirm that the lagger removes the correct number of rows corresponding to the lagged observations:</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> randomX.shape[<span class="dv">0</span>] <span class="op">-</span> lags <span class="op">-</span> jump <span class="op">==</span> pipe.shape[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And because <code>Lag</code> is a transformer, its parameters (<code>lags</code> and <code>jump</code>) can be calibrated using hyperparameter tuning to achieve the best performance for a model.</p>
+</section>
+</section>
+<section id="support-for-data-augmentation-with-sdmx" class="level2">
+<h2 class="anchored" data-anchor-id="support-for-data-augmentation-with-sdmx">Support for data augmentation with SDMX</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>please note that working with SDMX may take some minutes depending on the amount of information you are downloading.</p>
+</div>
+</div>
+<section id="list_sdmx_sources" class="level3">
+<h3 class="anchored" data-anchor-id="list_sdmx_sources"><a id="list_sdmx_sources">list_SDMX_sources</a></h3>
+<blockquote class="blockquote">
+<p>list_SDMX_sources <code>()</code></p>
+</blockquote>
+<pre>Fetches the list of SDMX sources.
+
+Returns:
+    The list of codes representing the SDMX sources available for data download.</pre>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sources <span class="op">=</span> list_SDMX_sources()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sources)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(sources) <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># all elements are of type 'str'</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>([<span class="bu">isinstance</span>(src, <span class="bu">str</span>) <span class="cf">for</span> src <span class="kw">in</span> sources]) <span class="op">==</span> <span class="bu">len</span>(sources)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['ABS', 'ABS_XML', 'BBK', 'BIS', 'CD2030', 'ECB', 'EC_COMP', 'EC_EMPL', 'EC_GROW', 'ESTAT', 'ILO', 'IMF', 'INEGI', 'INSEE', 'ISTAT', 'LSD', 'NB', 'NBB', 'OECD', 'SGR', 'SPC', 'STAT_EE', 'UNICEF', 'UNSD', 'WB', 'WB_WDI']</code></pre>
+</div>
+</div>
+</section>
+<section id="list_all_dataflows" class="level3">
+<h3 class="anchored" data-anchor-id="list_all_dataflows"><a id="list_all_dataflows">list_all_dataflows</a></h3>
+<blockquote class="blockquote">
+<p>list_all_dataflows <code>(codes_only: bool = False, return_pandas: bool = True)</code></p>
+</blockquote>
+<pre>Lists all SDMX dataflows. Note: When using as a parameter to an `AugmentSDMX` object
+or to the `load_SDMX_data` function, set `codes_only=True`"
+
+Args:
+    codes_only (bool): Whether to return only the dataflow codes.
+    return_pandas (bool): Whether to return the result in a pandas DataFrame format.
+    
+Returns:
+    All available dataflows for all SDMX sources.</pre>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(dflows, <span class="bu">dict</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>all_sources <span class="op">=</span> list_SDMX_sources()</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>([s <span class="cf">for</span> s <span class="kw">in</span> dflows.keys() <span class="cf">if</span> s <span class="kw">in</span> all_sources]) <span class="op">==</span> <span class="bu">len</span>(dflows.keys())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>list_all_dataflows</code> returns by default a pandas Series, facilitating data discovery by users like so:</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(dflows) <span class="op">==</span> pd.core.series.Series</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>dflows</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>ABS_XML  ABORIGINAL_POP_PROJ                 Projected population, Aboriginal and Torres St...
+         ABORIGINAL_POP_PROJ_REMOTE          Projected population, Aboriginal and Torres St...
+         ABS_ABORIGINAL_POPPROJ_INDREGION    Projected population, Aboriginal and Torres St...
+         ABS_ACLD_LFSTATUS                   Australian Census Longitudinal Dataset (ACLD):...
+         ABS_ACLD_TENURE                     Australian Census Longitudinal Dataset (ACLD):...
+                                                                   ...                        
+UNSD     DF_UNData_UNFCC                                                       SDMX_GHG_UNDATA
+WB       DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAINS Tariff Data
+         DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
+         DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
+         DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
+Name: dataflow, Length: 2960, dtype: object</code></pre>
+</div>
+</div>
+<p>This format allows for more easily searching <code>dflows</code> by source:</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>list_all_dataflows(codes_only<span class="op">=</span><span class="va">True</span>, return_pandas<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>ABS_XML  0                 ABORIGINAL_POP_PROJ
+         1          ABORIGINAL_POP_PROJ_REMOTE
+         2    ABS_ABORIGINAL_POPPROJ_INDREGION
+         3                   ABS_ACLD_LFSTATUS
+         4                     ABS_ACLD_TENURE
+                            ...               
+UNSD     3                     DF_UNData_UNFCC
+WB       0               DF_WITS_Tariff_TRAINS
+         1      DF_WITS_TradeStats_Development
+         2           DF_WITS_TradeStats_Tariff
+         3            DF_WITS_TradeStats_Trade
+Name: dataflow, Length: 10580, dtype: object</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dflows[<span class="st">'BIS'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>WS_CBPOL_D                                    Policy rates daily
+WS_CBPOL_M                                  Policy rates monthly
+WS_CBS_PUB                              BIS consolidated banking
+WS_CPMI_CASHLESS                   CPMI cashless payments (T5-6)
+WS_CPMI_CT1                       CPMI comparative tables type 1
+WS_CPMI_CT2                       CPMI comparative tables type 2
+WS_CPMI_DEVICES                             CPMI payment devices
+WS_CPMI_INSTITUTIONS                           CPMI institutions
+WS_CPMI_MACRO                                         CPMI Macro
+WS_CPMI_PARTICIPANTS                           CPMI participants
+WS_CPMI_SYSTEMS         CPMI systems (T8-9-11-13-14-16-17-18-19)
+WS_CPP                                Commercial property prices
+WS_CREDIT_GAP                             BIS credit-to-GDP gaps
+WS_DEBT_SEC2_PUB                             BIS debt securities
+WS_DER_OTC_TOV                          OTC derivatives turnover
+WS_DPP                      Detailed residential property prices
+WS_DSR                                    BIS debt service ratio
+WS_EER_D                      BIS effective exchange rates daily
+WS_EER_M                    BIS effective exchange rates monthly
+WS_GLI                               Global liquidity indicators
+WS_LBS_D_PUB                              BIS locational banking
+WS_LONG_CPI                             BIS long consumer prices
+WS_NA_SEC_DSS                         Debt securities statistics
+WS_OTC_DERIV2                        OTC derivatives outstanding
+WS_SPP                      BIS property prices: selected series
+WS_TC                            BIS long series on total credit
+WS_XRU                           US dollar exchange rates, m,q,a
+WS_XRU_D                         US dollar exchange rates, daily
+WS_XTD_DERIV                         Exchange traded derivatives
+Name: dataflow, dtype: object</code></pre>
+</div>
+</div>
+<p>Or the user can search dataflows by their human-readable name instead of their code. For example, this is one way to see if any dataflow has information on interest rates:</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'Interest rates'</span>, case<span class="op">=</span><span class="va">False</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>BBK  BBSDI    Discount interest rates pursuant to section 25...
+     BBSEI    Expectation of inflation rate and expected rea...
+ECB  RIR                                  Retail Interest Rates
+Name: dataflow, dtype: object</code></pre>
+</div>
+</div>
+<p>The function <code>load_SDMX_data</code> is a convenience function that downloads data from SDMX sources (and any specific dataflows passed as arguments) if they match the key and parameters set by the user.</p>
+</section>
+<section id="load_sdmx_data" class="level3">
+<h3 class="anchored" data-anchor-id="load_sdmx_data"><a id="load_sdmx_data">load_SDMX_data</a></h3>
+<blockquote class="blockquote">
+<p>load_SDMX_data <code>(sources: dict, keys: dict, params: dict, verbose: bool = True)</code></p>
+</blockquote>
+<pre>Loads datasets from SDMX.
+
+Args:
+    sources (dict): A dictionary with the sources and dataflows per source.
+    keys (dict): The keys to be used in the SDMX query.
+    params (dict): The parameters to be used in the SDMX query.
+    verbose (bool): Whether to communicate download steps to the user.
+    
+Returns:
+    A pandas DataFrame with data from SDMX or None if no data matches the sources, keys, and parameters.</pre>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> load_SDMX_data(sources<span class="op">=</span>{<span class="st">'ECB'</span>: <span class="st">'CISS'</span>, <span class="st">'BIS'</span>: <span class="st">'WS_CBPOL_D'</span>}, keys<span class="op">=</span>{<span class="st">'FREQ'</span>: <span class="st">'D'</span>}, params<span class="op">=</span>{<span class="st">'startPeriod'</span>: <span class="dv">2003</span>})</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(df) <span class="op">==</span> pd.DataFrame</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> df.shape[<span class="dv">0</span>] <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> df.shape[<span class="dv">1</span>] <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
+Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

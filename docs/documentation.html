@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Functions to jumpstart and facilitate model documentation">
+
+<title>gingado - Model documentation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="gingado - Model documentation">
+<meta property="og:description" content="Functions to jumpstart and facilitate model documentation">
+<meta property="og:site-name" content="gingado">
+<meta name="twitter:title" content="gingado - Model documentation">
+<meta name="twitter:description" content="Functions to jumpstart and facilitate model documentation">
+<meta name="twitter:creator" content="@DouglasKGAraujo">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">gingado</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Examples</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-examples">    
+        <li>
+    <a class="dropdown-item" href="./barrolee1994.html" rel="" target="">
+ <span class="dropdown-text">Economic growth</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./forecast.html" rel="" target="">
+ <span class="dropdown-text">Forecasting FX rates</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./machine_controls.html" rel="" target="">
+ <span class="dropdown-text">Effects of labour reform</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Reference</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-reference">    
+        <li>
+    <a class="dropdown-item" href="./augmentation.html" rel="" target="">
+ <span class="dropdown-text">gingado.augmentation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./datasets.html" rel="" target="">
+ <span class="dropdown-text">gingado.datasets</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./benchmark.html" rel="" target="">
+ <span class="dropdown-text">gingado.benchmark</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./estimators.html" rel="" target="">
+ <span class="dropdown-text">gingado.estimators</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./documentation.html" rel="" target="">
+ <span class="dropdown-text">gingado.model_documentation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./utils.html" rel="" target="">
+ <span class="dropdown-text">gingado.utils</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/dkgaraujo/gingado" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/DouglasKGARaujo" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#base-class" id="toc-base-class" class="nav-link active" data-scroll-target="#base-class">Base class</a>
+  <ul>
+  <li><a href="#ggdmodeldocumentation" id="toc-ggdmodeldocumentation" class="nav-link" data-scroll-target="#ggdmodeldocumentation"></a><a id="ggdmodeldocumentation" class="nav-link" data-scroll-target="undefined">ggdModelDocumentation</a>
+  <ul class="collapse">
+  <li><a href="#setup_template" id="toc-setup_template" class="nav-link" data-scroll-target="#setup_template"></a><a id="setup_template" class="nav-link" data-scroll-target="undefined">setup_template</a></li>
+  <li><a href="#show_template" id="toc-show_template" class="nav-link" data-scroll-target="#show_template"></a><a id="show_template" class="nav-link" data-scroll-target="undefined">show_template</a></li>
+  <li><a href="#documentation_path" id="toc-documentation_path" class="nav-link" data-scroll-target="#documentation_path"></a><a id="documentation_path" class="nav-link" data-scroll-target="undefined">documentation_path</a></li>
+  <li><a href="#save_json" id="toc-save_json" class="nav-link" data-scroll-target="#save_json"></a><a id="save_json" class="nav-link" data-scroll-target="undefined">save_json</a></li>
+  <li><a href="#read_json" id="toc-read_json" class="nav-link" data-scroll-target="#read_json"></a><a id="read_json" class="nav-link" data-scroll-target="undefined">read_json</a></li>
+  <li><a href="#show_json" id="toc-show_json" class="nav-link" data-scroll-target="#show_json"></a><a id="show_json" class="nav-link" data-scroll-target="undefined">show_json</a></li>
+  <li><a href="#read_model" id="toc-read_model" class="nav-link" data-scroll-target="#read_model"></a><a id="read_model" class="nav-link" data-scroll-target="undefined">read_model</a></li>
+  <li><a href="#open_questions" id="toc-open_questions" class="nav-link" data-scroll-target="#open_questions"></a><a id="open_questions" class="nav-link" data-scroll-target="undefined">open_questions</a></li>
+  <li><a href="#fill_model_info" id="toc-fill_model_info" class="nav-link" data-scroll-target="#fill_model_info"></a><a id="fill_model_info" class="nav-link" data-scroll-target="undefined">fill_model_info</a></li>
+  <li><a href="#fill_info" id="toc-fill_info" class="nav-link" data-scroll-target="#fill_info"></a><a id="fill_info" class="nav-link" data-scroll-target="undefined">fill_info</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#documenters" id="toc-documenters" class="nav-link" data-scroll-target="#documenters">Documenters</a>
+  <ul>
+  <li><a href="#modelcard" id="toc-modelcard" class="nav-link" data-scroll-target="#modelcard">ModelCard</a>
+  <ul class="collapse">
+  <li><a href="#modelcard-1" id="toc-modelcard-1" class="nav-link" data-scroll-target="#modelcard-1"></a><a id="modelcard" class="nav-link" data-scroll-target="undefined">ModelCard</a>
+  <ul class="collapse">
+  <li><a href="#autofill_template" id="toc-autofill_template" class="nav-link" data-scroll-target="#autofill_template"></a><a id="autofill_template" class="nav-link" data-scroll-target="undefined">autofill_template</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#forecastcard" id="toc-forecastcard" class="nav-link" data-scroll-target="#forecastcard">ForecastCard</a>
+  <ul class="collapse">
+  <li><a href="#forecastcard-1" id="toc-forecastcard-1" class="nav-link" data-scroll-target="#forecastcard-1"></a><a id="forecastcard" class="nav-link" data-scroll-target="undefined">ForecastCard</a>
+  <ul class="collapse">
+  <li><a href="#autofill_template-1" id="toc-autofill_template-1" class="nav-link" data-scroll-target="#autofill_template-1"></a><a id="autofill_template" class="nav-link" data-scroll-target="undefined">autofill_template</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#basic-functioning-of-model-documentation" id="toc-basic-functioning-of-model-documentation" class="nav-link" data-scroll-target="#basic-functioning-of-model-documentation">Basic functioning of model documentation</a></li>
+  <li><a href="#reading-information-from-models" id="toc-reading-information-from-models" class="nav-link" data-scroll-target="#reading-information-from-models">Reading information from models</a>
+  <ul>
+  <li><a href="#preliminaries" id="toc-preliminaries" class="nav-link" data-scroll-target="#preliminaries">Preliminaries</a></li>
+  <li><a href="#gingado-benchmark" id="toc-gingado-benchmark" class="nav-link" data-scroll-target="#gingado-benchmark">gingado Benchmark</a></li>
+  <li><a href="#scikit-learn" id="toc-scikit-learn" class="nav-link" data-scroll-target="#scikit-learn">scikit-learn</a></li>
+  <li><a href="#keras" id="toc-keras" class="nav-link" data-scroll-target="#keras">Keras</a></li>
+  <li><a href="#other-models" id="toc-other-models" class="nav-link" data-scroll-target="#other-models">Other models</a></li>
+  </ul></li>
+  <li><a href="#sec-custom" id="toc-sec-custom" class="nav-link" data-scroll-target="#sec-custom">Creating a custom Documenter</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Model documentation</h1>
+</div>
+
+<div>
+  <div class="description">
+    Functions to jumpstart and facilitate model documentation
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Each user has a specific documentation need, ranging from simply logging the model training to a more complex description of the model pipeline with a discusson of the model outcomes. <code>gingado</code> addresses this variety of needs by offering a class of objects, “Documenters”, that facilitate model documentation. A base class facilitates the creation of generic ways to document models, and <code>gingado</code> includes two specific model documentation templates off-the-shelf as described below.</p>
+<p>The model documentation is performed by Documenters, objects that subclass from the base class <code>ggdModelDocumentation</code>. This base class offers code that can be used by any Documenter to read the model in question, format the information according to a template and save the resulting documentation in a JSON format. Documenters save the underlying information using the JSON format. With the JSON documentation file at hand, the user can then deploy existing third-party libraries to transform the information stored in JSON into a variety of formats (eg, HTML, PDF) as needed.</p>
+<p>One current area of development is the automatic filing of some fields related to the model. The objective is to automatise documentation of the information that can be fetched automatically from the model, leaving time for the analyst to concentrate on other tasks, such as considering the ethical implications of the machine learning model being trained.</p>
+<section id="base-class" class="level1">
+<h1>Base class</h1>
+<p><code>gingado</code> has a <code>ggdModelDocumentation</code> base class that contains the basic functionalities for Documenters. It is not meant to be used by itself, but only as a hyperclass for Documenters objects. <code>gingado</code> ships with two such objects that subclass <code>ggdModelDocumentation</code>: <code>ModelCard</code> and <code>ForecastCard</code>. They are both described below in their respective sections.</p>
+<p>Users are encouraged to submit a PR with their own Documenter models subclassing <code>ggdModelDocumentation</code>; see <a href="#sec-custom">Section&nbsp;5</a> for more information.</p>
+<section id="ggdmodeldocumentation" class="level3">
+<h3 class="anchored" data-anchor-id="ggdmodeldocumentation"><a id="ggdmodeldocumentation">ggdModelDocumentation</a></h3>
+<blockquote class="blockquote">
+<p>ggdModelDocumentation <code>()</code></p>
+</blockquote>
+<pre>Base class for gingado Documenters</pre>
+<section id="setup_template" class="level4">
+<h4 class="anchored" data-anchor-id="setup_template"><a id="setup_template">setup_template</a></h4>
+<blockquote class="blockquote">
+<p>setup_template <code>(self)</code></p>
+</blockquote>
+<pre>Set up the template from the JSON documentation</pre>
+</section>
+<section id="show_template" class="level4">
+<h4 class="anchored" data-anchor-id="show_template"><a id="show_template">show_template</a></h4>
+<blockquote class="blockquote">
+<p>show_template <code>(self, indent: 'bool' = True)</code></p>
+</blockquote>
+<pre>Show documentation template in JSON format.
+
+Args:
+    indent (bool): Whether to print JSON documentation template with indentation for easier human reading.</pre>
+</section>
+<section id="documentation_path" class="level4">
+<h4 class="anchored" data-anchor-id="documentation_path"><a id="documentation_path">documentation_path</a></h4>
+<blockquote class="blockquote">
+<p>documentation_path <code>(self)</code></p>
+</blockquote>
+<pre>Show path to documentation</pre>
+</section>
+<section id="save_json" class="level4">
+<h4 class="anchored" data-anchor-id="save_json"><a id="save_json">save_json</a></h4>
+<blockquote class="blockquote">
+<p>save_json <code>(self, file_path: 'str')</code></p>
+</blockquote>
+<pre>Save the documentation in JSON format in the specified file.
+
+Args:
+    file_path (str): Path to save JSON file.</pre>
+</section>
+<section id="read_json" class="level4">
+<h4 class="anchored" data-anchor-id="read_json"><a id="read_json">read_json</a></h4>
+<blockquote class="blockquote">
+<p>read_json <code>(self, file_path: 'str')</code></p>
+</blockquote>
+<pre>Load documentation JSON from path.
+
+Args:
+    file_path (str): Path to JSON file or path defined in `file_path` if None.</pre>
+</section>
+<section id="show_json" class="level4">
+<h4 class="anchored" data-anchor-id="show_json"><a id="show_json">show_json</a></h4>
+<blockquote class="blockquote">
+<p>show_json <code>(self)</code></p>
+</blockquote>
+<pre>Show documentation in JSON format</pre>
+</section>
+<section id="read_model" class="level4">
+<h4 class="anchored" data-anchor-id="read_model"><a id="read_model">read_model</a></h4>
+<blockquote class="blockquote">
+<p>read_model <code>(self, model)</code></p>
+</blockquote>
+<pre>Read automatically information from the model and add to documentation.
+
+Args:
+    model: The model to be documented.</pre>
+</section>
+<section id="open_questions" class="level4">
+<h4 class="anchored" data-anchor-id="open_questions"><a id="open_questions">open_questions</a></h4>
+<blockquote class="blockquote">
+<p>open_questions <code>(self)</code></p>
+</blockquote>
+<pre>List open fields in the documentation</pre>
+</section>
+<section id="fill_model_info" class="level4">
+<h4 class="anchored" data-anchor-id="fill_model_info"><a id="fill_model_info">fill_model_info</a></h4>
+<blockquote class="blockquote">
+<p>fill_model_info <code>(self, model_info: 'str | dict', model_info_keyname: 'str' = 'model_details')</code></p>
+</blockquote>
+<pre>Called automatically, or by the user, to add model information to the documentation according to its template.
+
+Args:
+    model_info (str | dict): Information about the model to be added in the documentation.
+    model_info_keyname (str): Dictionary key in the Documenter template to which this information should be linked.</pre>
+</section>
+<section id="fill_info" class="level4">
+<h4 class="anchored" data-anchor-id="fill_info"><a id="fill_info">fill_info</a></h4>
+<blockquote class="blockquote">
+<p>fill_info <code>(self, new_info: 'dict')</code></p>
+</blockquote>
+<pre>Include information in model documentation.
+
+Args:
+    new_info (dict): Dictionary with information to be added to the model documentation.</pre>
+</section>
+</section>
+</section>
+<section id="documenters" class="level1">
+<h1>Documenters</h1>
+<section id="modelcard" class="level2">
+<h2 class="anchored" data-anchor-id="modelcard">ModelCard</h2>
+<p><code>ModelCard</code> - the model documentation template inspired by the work of <span class="citation" data-cites="ModelCards">Mitchell et al. (<a href="#ref-ModelCards" role="doc-biblioref">2018</a>)</span> already comes with <code>gingado</code>. Its template can be used by users as is, or tweaked according to each need. The <code>ModelCard</code> template can also serve as inspiration for any custom documentation needs. Users with documentation needs beyond the out-of-the-box solutions provided by <code>gingado</code> can create their own class of Documenters (more information on that below), and compatibility with these custom documentation routines with the rest of the code is ensured. Users are encouraged to submit a pull request with their own documentation models subclassing <code>ggdModelDocumentation</code> if these custom templates can also benefit other users.</p>
+<p>Like all <code>gingado</code> Documenters, a <code>ModelCard</code> is can be easily created on a standalone basis as shown below, or as part of a <code>gingado.ggdBenchmark</code> object.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>model_doc <span class="op">=</span> ModelCard()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>By default, it autofills the template with the current date and time. Users can add other information to be automatically added by a customised Documenter object.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model_doc_with_autofill <span class="op">=</span> ModelCard(autofill<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>model_doc_no_autofill <span class="op">=</span> ModelCard(autofill<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Below is a comparison of the <code>model_details</code> section of the model document, with and without the autofill.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model_doc_with_autofill.show_json()[<span class="st">'model_details'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>{'developer': 'Person or organisation developing the model',
+ 'datetime': '2024-02-22 14:53:19 ',
+ 'version': 'Model version',
+ 'type': 'Model type',
+ 'info': 'Information about training algorithms, parameters, fairness constraints or other applied approaches, and features',
+ 'paper': 'Paper or other resource for more information',
+ 'citation': 'Citation details',
+ 'license': 'License',
+ 'contact': 'Where to send questions or comments about the model'}</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model_doc_no_autofill.show_json()[<span class="st">'model_details'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>{'developer': 'Person or organisation developing the model',
+ 'datetime': 'Model date',
+ 'version': 'Model version',
+ 'type': 'Model type',
+ 'info': 'Information about training algorithms, parameters, fairness constraints or other applied approaches, and features',
+ 'paper': 'Paper or other resource for more information',
+ 'citation': 'Citation details',
+ 'license': 'License',
+ 'contact': 'Where to send questions or comments about the model'}</code></pre>
+</div>
+</div>
+<section id="modelcard-1" class="level3">
+<h3 class="anchored" data-anchor-id="modelcard-1"><a id="modelcard">ModelCard</a></h3>
+<blockquote class="blockquote">
+<p>ModelCard <code>(file_path: 'str' = '', autofill: 'bool' = True, indent_level: 'int | None' = 2)</code></p>
+</blockquote>
+<pre>A gingado Documenter based on @ModelCards</pre>
+<section id="autofill_template" class="level4">
+<h4 class="anchored" data-anchor-id="autofill_template"><a id="autofill_template">autofill_template</a></h4>
+<blockquote class="blockquote">
+<p>autofill_template <code>(self)</code></p>
+</blockquote>
+<pre>Create an empty model card template, then fills it with information that is automatically obtained from the system</pre>
+</section>
+</section>
+</section>
+<section id="forecastcard" class="level2">
+<h2 class="anchored" data-anchor-id="forecastcard">ForecastCard</h2>
+<p><code>ForecastCard</code> is a model documentation template inspired by <span class="citation" data-cites="ModelCards">Mitchell et al. (<a href="#ref-ModelCards" role="doc-biblioref">2018</a>)</span>, but with fields that are more specifically targeted towards forecasting or nowcasting use cases.</p>
+<p>Because a <code>ForecastCard</code> Documenter object is targeted to forecasting and nowcasting models, it contains some specialised fields, as illustrated below.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model_doc <span class="op">=</span> ForecastCard()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>model_doc.show_template()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{
+  "model_details": {
+    "field_description": "Basic information about the model",
+    "variable": "Variable(s) being forecasted or nowcasted",
+    "jurisdiction": "Jurisdiction(s) of the variable being forecasted or nowcasted",
+    "developer": "Person or organisation developing the model",
+    "datetime": "Model date",
+    "version": "Model version",
+    "type": "Model type",
+    "pipeline": "Description of the pipeline steps being used",
+    "info": "Information about training algorithms, parameters, fairness constraints or other applied approaches, and features",
+    "econometric_model": "Information about the econometric model or technique",
+    "paper": "Paper or other resource for more information",
+    "citation": "Citation details",
+    "license": "License",
+    "contact": "Where to send questions or comments about the model"
+  },
+  "intended_use": {
+    "field_description": "Use cases that were envisioned during development",
+    "primary_uses": "Primary intended uses",
+    "primary_users": "Primary intended users",
+    "out_of_scope": "Out-of-scope use cases"
+  },
+  "factors": {
+    "field_description": "Factors could include demographic or phenotypic groups, environmental conditions, technical attributes, or others",
+    "relevant": "Relevant factors",
+    "evaluation": "Evaluation factors"
+  },
+  "metrics": {
+    "field_description": "Metrics should be chosen to reflect potential real world impacts of the model",
+    "performance_measures": "Model performance measures",
+    "estimation_approaches": "How are the evaluation metrics calculated? Include information on the cross-validation approach, if used"
+  },
+  "data": {
+    "field_description": "Details on the dataset(s) used for the training and evaluation of the model",
+    "datasets": "Datasets",
+    "preprocessing": "Preprocessing",
+    "cutoff_date": "Cut-off date that separates training from evaluation data"
+  },
+  "ethical_considerations": {
+    "field_description": "Ethical considerations that went into model development, surfacing ethical challenges and solutions to stakeholders. Ethical analysis does not always lead to precise solutions, but the process of ethical contemplation is worthwhile to inform on responsible practices and next steps in future work.",
+    "sensitive_data": "Does the model use any sensitive data (e.g., protected classes)?",
+    "risks_and_harms": "What risks may be present in model usage? Try to identify the potential recipients, likelihood, and magnitude of harms. If these cannot be determined, note that they were considered but remain unknown",
+    "use_cases": "Are there any known model use cases that are especially fraught?",
+    "additional_information": "If possible, this section should also include any additional ethical considerations that went into model development, for example, review by an external board, or testing with a specific community."
+  },
+  "caveats_recommendations": {
+    "field_description": "Additional concerns that were not covered in the previous sections",
+    "caveats": "For example, did the results suggest any further testing? Were there any relevant groups that were not represented in the evaluation dataset?",
+    "recommendations": "Are there additional recommendations for model use? What are the ideal characteristics of an evaluation dataset for this model?"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model_doc.show_json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>{'model_details': {'variable': 'Variable(s) being forecasted or nowcasted',
+  'jurisdiction': 'Jurisdiction(s) of the variable being forecasted or nowcasted',
+  'developer': 'Person or organisation developing the model',
+  'datetime': '2024-02-22 14:53:20 ',
+  'version': 'Model version',
+  'type': 'Model type',
+  'pipeline': 'Description of the pipeline steps being used',
+  'info': 'Information about training algorithms, parameters, fairness constraints or other applied approaches, and features',
+  'econometric_model': 'Information about the econometric model or technique',
+  'paper': 'Paper or other resource for more information',
+  'citation': 'Citation details',
+  'license': 'License',
+  'contact': 'Where to send questions or comments about the model'},
+ 'intended_use': {'primary_uses': 'Primary intended uses',
+  'primary_users': 'Primary intended users',
+  'out_of_scope': 'Out-of-scope use cases'},
+ 'factors': {'relevant': 'Relevant factors',
+  'evaluation': 'Evaluation factors'},
+ 'metrics': {'performance_measures': 'Model performance measures',
+  'estimation_approaches': 'How are the evaluation metrics calculated? Include information on the cross-validation approach, if used'},
+ 'data': {'datasets': 'Datasets',
+  'preprocessing': 'Preprocessing',
+  'cutoff_date': 'Cut-off date that separates training from evaluation data'},
+ 'ethical_considerations': {'sensitive_data': 'Does the model use any sensitive data (e.g., protected classes)?',
+  'risks_and_harms': 'What risks may be present in model usage? Try to identify the potential recipients, likelihood, and magnitude of harms. If these cannot be determined, note that they were considered but remain unknown',
+  'use_cases': 'Are there any known model use cases that are especially fraught?',
+  'additional_information': 'If possible, this section should also include any additional ethical considerations that went into model development, for example, review by an external board, or testing with a specific community.'},
+ 'caveats_recommendations': {'caveats': 'For example, did the results suggest any further testing? Were there any relevant groups that were not represented in the evaluation dataset?',
+  'recommendations': 'Are there additional recommendations for model use? What are the ideal characteristics of an evaluation dataset for this model?'}}</code></pre>
+</div>
+</div>
+<section id="forecastcard-1" class="level3">
+<h3 class="anchored" data-anchor-id="forecastcard-1"><a id="forecastcard">ForecastCard</a></h3>
+<blockquote class="blockquote">
+<p>ForecastCard <code>(file_path: 'str' = '', autofill: 'bool' = True, indent_level: 'int | None' = 2)</code></p>
+</blockquote>
+<pre>A gingado Documenter for forecasting or nowcasting use cases</pre>
+<section id="autofill_template-1" class="level4">
+<h4 class="anchored" data-anchor-id="autofill_template-1"><a id="autofill_template">autofill_template</a></h4>
+<blockquote class="blockquote">
+<p>autofill_template <code>(self)</code></p>
+</blockquote>
+<pre>Create an empty model card template, then fills it with information that is automatically obtained from the system</pre>
+</section>
+</section>
+</section>
+</section>
+<section id="basic-functioning-of-model-documentation" class="level1">
+<h1>Basic functioning of model documentation</h1>
+<p>After a Documenter object, such as <code>ModelCard</code> or <code>ForecastCard</code> is instanciated, the user can see the underlying template with the module <code>show_template</code>, as below:</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model_doc <span class="op">=</span> ModelCard(autofill<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> model_doc.show_template(indent<span class="op">=</span><span class="va">False</span>) <span class="op">==</span> ModelCard.template</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>model_doc.show_template()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{
+  "model_details": {
+    "field_description": "Basic information about the model",
+    "developer": "Person or organisation developing the model",
+    "datetime": "Model date",
+    "version": "Model version",
+    "type": "Model type",
+    "info": "Information about training algorithms, parameters, fairness constraints or other applied approaches, and features",
+    "paper": "Paper or other resource for more information",
+    "citation": "Citation details",
+    "license": "License",
+    "contact": "Where to send questions or comments about the model"
+  },
+  "intended_use": {
+    "field_description": "Use cases that were envisioned during development",
+    "primary_uses": "Primary intended uses",
+    "primary_users": "Primary intended users",
+    "out_of_scope": "Out-of-scope use cases"
+  },
+  "factors": {
+    "field_description": "Factors could include demographic or phenotypic groups, environmental conditions, technical attributes, or others",
+    "relevant": "Relevant factors",
+    "evaluation": "Evaluation factors"
+  },
+  "metrics": {
+    "field_description": "Metrics should be chosen to reflect potential real world impacts of the model",
+    "performance_measures": "Model performance measures",
+    "thresholds": "Decision thresholds",
+    "variation_approaches": "Variation approaches"
+  },
+  "evaluation_data": {
+    "field_description": "Details on the dataset(s) used for the quantitative analyses in the documentation",
+    "datasets": "Datasets",
+    "motivation": "Motivation",
+    "preprocessing": "Preprocessing"
+  },
+  "training_data": {
+    "field_description": "May not be possible to provide in practice. When possible, this section should mirror 'Evaluation Data'. If such detail is not possible, minimal allowable information should be provided here, such as details of the distribution over various factors in the training datasets.",
+    "training_data": "Information on training data"
+  },
+  "quant_analyses": {
+    "field_description": "Quantitative Analyses",
+    "unitary": "Unitary results",
+    "intersectional": "Intersectional results"
+  },
+  "ethical_considerations": {
+    "field_description": "Ethical considerations that went into model development, surfacing ethical challenges and solutions to stakeholders. Ethical analysis does not always lead to precise solutions, but the process of ethical contemplation is worthwhile to inform on responsible practices and next steps in future work.",
+    "sensitive_data": "Does the model use any sensitive data (e.g., protected classes)?",
+    "human_life": "Is the model intended to inform decisions about matters central to human life or flourishing - e.g., health or safety? Or could it be used in such a way?",
+    "mitigations": "What risk mitigation strategies were used during model development?",
+    "risks_and_harms": "What risks may be present in model usage? Try to identify the potential recipients,likelihood, and magnitude of harms. If these cannot be determined, note that they were considered but remain unknown",
+    "use_cases": "Are there any known model use cases that are especially fraught?",
+    "additional_information": "If possible, this section should also include any additional ethical considerations that went into model development, for example, review by an external board, or testing with a specific community."
+  },
+  "caveats_recommendations": {
+    "field_description": "Additional concerns that were not covered in the previous sections",
+    "caveats": "For example, did the results suggest any further testing? Were there any relevant groups that were not represented in the evaluation dataset?",
+    "recommendations": "Are there additional recommendations for model use? What are the ideal characteristics of an evaluation dataset for this model?"
+  }
+}</code></pre>
+</div>
+</div>
+<p>The method <code>show_json</code> prints the Documenter’s documentation template, where the unfilled information retains the descriptions from the original template:</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model_doc <span class="op">=</span> ModelCard(autofill<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>model_doc.show_json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>{'model_details': {'developer': 'Person or organisation developing the model',
+  'datetime': '2024-02-22 14:53:21 ',
+  'version': 'Model version',
+  'type': 'Model type',
+  'info': 'Information about training algorithms, parameters, fairness constraints or other applied approaches, and features',
+  'paper': 'Paper or other resource for more information',
+  'citation': 'Citation details',
+  'license': 'License',
+  'contact': 'Where to send questions or comments about the model'},
+ 'intended_use': {'primary_uses': 'Primary intended uses',
+  'primary_users': 'Primary intended users',
+  'out_of_scope': 'Out-of-scope use cases'},
+ 'factors': {'relevant': 'Relevant factors',
+  'evaluation': 'Evaluation factors'},
+ 'metrics': {'performance_measures': 'Model performance measures',
+  'thresholds': 'Decision thresholds',
+  'variation_approaches': 'Variation approaches'},
+ 'evaluation_data': {'datasets': 'Datasets',
+  'motivation': 'Motivation',
+  'preprocessing': 'Preprocessing'},
+ 'training_data': {'training_data': 'Information on training data'},
+ 'quant_analyses': {'unitary': 'Unitary results',
+  'intersectional': 'Intersectional results'},
+ 'ethical_considerations': {'sensitive_data': 'Does the model use any sensitive data (e.g., protected classes)?',
+  'human_life': 'Is the model intended to inform decisions about matters central to human life or flourishing - e.g., health or safety? Or could it be used in such a way?',
+  'mitigations': 'What risk mitigation strategies were used during model development?',
+  'risks_and_harms': 'What risks may be present in model usage? Try to identify the potential recipients,likelihood, and magnitude of harms. If these cannot be determined, note that they were considered but remain unknown',
+  'use_cases': 'Are there any known model use cases that are especially fraught?',
+  'additional_information': 'If possible, this section should also include any additional ethical considerations that went into model development, for example, review by an external board, or testing with a specific community.'},
+ 'caveats_recommendations': {'caveats': 'For example, did the results suggest any further testing? Were there any relevant groups that were not represented in the evaluation dataset?',
+  'recommendations': 'Are there additional recommendations for model use? What are the ideal characteristics of an evaluation dataset for this model?'}}</code></pre>
+</div>
+</div>
+<p>The template is protected from editing once a Documenter has been created. This way, even if a user unwarrantedly changes the template, this does not interfere with the Documenter functionality.</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model_doc.template <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>model_doc.show_template()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> model_doc.show_template(indent<span class="op">=</span><span class="va">False</span>) <span class="op">==</span> ModelCard.template</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{
+  "model_details": {
+    "field_description": "Basic information about the model",
+    "developer": "Person or organisation developing the model",
+    "datetime": "Model date",
+    "version": "Model version",
+    "type": "Model type",
+    "info": "Information about training algorithms, parameters, fairness constraints or other applied approaches, and features",
+    "paper": "Paper or other resource for more information",
+    "citation": "Citation details",
+    "license": "License",
+    "contact": "Where to send questions or comments about the model"
+  },
+  "intended_use": {
+    "field_description": "Use cases that were envisioned during development",
+    "primary_uses": "Primary intended uses",
+    "primary_users": "Primary intended users",
+    "out_of_scope": "Out-of-scope use cases"
+  },
+  "factors": {
+    "field_description": "Factors could include demographic or phenotypic groups, environmental conditions, technical attributes, or others",
+    "relevant": "Relevant factors",
+    "evaluation": "Evaluation factors"
+  },
+  "metrics": {
+    "field_description": "Metrics should be chosen to reflect potential real world impacts of the model",
+    "performance_measures": "Model performance measures",
+    "thresholds": "Decision thresholds",
+    "variation_approaches": "Variation approaches"
+  },
+  "evaluation_data": {
+    "field_description": "Details on the dataset(s) used for the quantitative analyses in the documentation",
+    "datasets": "Datasets",
+    "motivation": "Motivation",
+    "preprocessing": "Preprocessing"
+  },
+  "training_data": {
+    "field_description": "May not be possible to provide in practice. When possible, this section should mirror 'Evaluation Data'. If such detail is not possible, minimal allowable information should be provided here, such as details of the distribution over various factors in the training datasets.",
+    "training_data": "Information on training data"
+  },
+  "quant_analyses": {
+    "field_description": "Quantitative Analyses",
+    "unitary": "Unitary results",
+    "intersectional": "Intersectional results"
+  },
+  "ethical_considerations": {
+    "field_description": "Ethical considerations that went into model development, surfacing ethical challenges and solutions to stakeholders. Ethical analysis does not always lead to precise solutions, but the process of ethical contemplation is worthwhile to inform on responsible practices and next steps in future work.",
+    "sensitive_data": "Does the model use any sensitive data (e.g., protected classes)?",
+    "human_life": "Is the model intended to inform decisions about matters central to human life or flourishing - e.g., health or safety? Or could it be used in such a way?",
+    "mitigations": "What risk mitigation strategies were used during model development?",
+    "risks_and_harms": "What risks may be present in model usage? Try to identify the potential recipients,likelihood, and magnitude of harms. If these cannot be determined, note that they were considered but remain unknown",
+    "use_cases": "Are there any known model use cases that are especially fraught?",
+    "additional_information": "If possible, this section should also include any additional ethical considerations that went into model development, for example, review by an external board, or testing with a specific community."
+  },
+  "caveats_recommendations": {
+    "field_description": "Additional concerns that were not covered in the previous sections",
+    "caveats": "For example, did the results suggest any further testing? Were there any relevant groups that were not represented in the evaluation dataset?",
+    "recommendations": "Are there additional recommendations for model use? What are the ideal characteristics of an evaluation dataset for this model?"
+  }
+}</code></pre>
+</div>
+</div>
+<p>Users can find which fields in their templates are still open by using the module <code>open_questions</code>. The levels of the template are reflected in the resulting dictionary, with double underscores separating the different dictionary levels in the underlying template.</p>
+<p>Below we see that after inputting information for the item <code>caveats</code> in the section <code>caveats_recommendations</code>, this item does not appear in the results of the <code>open_questions</code> method.</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>model_doc.fill_info({<span class="st">'caveats_recommendations'</span>: {<span class="st">'caveats'</span>: <span class="st">'This is another test'</span>}})</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> model_doc.json_doc[<span class="st">'caveats_recommendations'</span>][<span class="st">'caveats'</span>] <span class="op">==</span> <span class="st">"This is another test"</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># note that caveats_recommendations__caveats is no longer considered an open question</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># after being filled in through `fill_info`.</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([oq <span class="cf">for</span> oq <span class="kw">in</span> model_doc.open_questions() <span class="cf">if</span> oq.startswith(<span class="st">'caveats'</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['caveats_recommendations__recommendations']</code></pre>
+</div>
+</div>
+<p>And now the complete result of the <code>open_questions</code> method:</p>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>model_doc.open_questions()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>['model_details__developer',
+ 'model_details__version',
+ 'model_details__type',
+ 'model_details__info',
+ 'model_details__paper',
+ 'model_details__citation',
+ 'model_details__license',
+ 'model_details__contact',
+ 'intended_use__primary_uses',
+ 'intended_use__primary_users',
+ 'intended_use__out_of_scope',
+ 'factors__relevant',
+ 'factors__evaluation',
+ 'metrics__performance_measures',
+ 'metrics__thresholds',
+ 'metrics__variation_approaches',
+ 'evaluation_data__datasets',
+ 'evaluation_data__motivation',
+ 'evaluation_data__preprocessing',
+ 'training_data__training_data',
+ 'quant_analyses__unitary',
+ 'quant_analyses__intersectional',
+ 'ethical_considerations__sensitive_data',
+ 'ethical_considerations__human_life',
+ 'ethical_considerations__mitigations',
+ 'ethical_considerations__risks_and_harms',
+ 'ethical_considerations__use_cases',
+ 'ethical_considerations__additional_information',
+ 'caveats_recommendations__recommendations']</code></pre>
+</div>
+</div>
+<p>If the user wants to fill in an empty field such as the ones identified above by the method <code>open_questions</code>, the user simply needs to pass to the module <code>fill_info</code> a dictionary with the corresponding information. Depending on the template, the dictionary may be nested.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>it is technically possible to attribute the element directly to the attribute <code>json_doc</code>, but this should be avoided in favour of using the method <code>fill_info</code>. The latter tests whether the new information is valid according to the documentation template and also enables filling of more than one question at the same time. In addition, attributing information directly to <code>json_doc</code> is not logged, and may unwarrantedly create new entries that are not part of the template (eg, if a new dictionary key is created due to typos).</p>
+</div>
+</div>
+<p>The template serves to provide specific instances of the Documenter object with a form-like structure, indicating which fields are open and thus require some answers or information. Consequently, the template does not change when the actual document object changes after information is added by <code>fill_info</code>.</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>new_info <span class="op">=</span> {</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'metrics'</span>: {<span class="st">'performance_measures'</span>: <span class="st">"This is a test"</span>},</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'caveats_recommendations'</span>: {<span class="st">'caveats'</span>: <span class="st">"This is another test"</span>}</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>model_doc.fill_info(new_info)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([model_doc.json_doc[<span class="st">'metrics'</span>], ModelCard.template[<span class="st">'metrics'</span>]])</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> model_doc.show_template(indent<span class="op">=</span><span class="va">False</span>) <span class="op">==</span> ModelCard.template</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[{'performance_measures': 'This is a test', 'thresholds': 'Decision thresholds', 'variation_approaches': 'Variation approaches'}, {'field_description': 'Metrics should be chosen to reflect potential real world impacts of the model', 'performance_measures': 'Model performance measures', 'thresholds': 'Decision thresholds', 'variation_approaches': 'Variation approaches'}]</code></pre>
+</div>
+</div>
+</section>
+<section id="reading-information-from-models" class="level1">
+<h1>Reading information from models</h1>
+<p><code>gingado</code>’s <code>ggdModelDocumentation</code> base class is able to extract information from machine learning models from a number of widely used libraries and make it available to the Documenter objects. This is done through the method <code>read_model</code>, which recognises whether the model is a <code>gingado</code> object or any of <code>scikit-learn</code>, <code>keras</code>, or <code>fastai</code> models and read the model characteristics appropriately. For filing out information from other models (eg, <code>pytorch</code> or even models coded from scratch, machine learning or not), the user can benefit from the module <code>fill_model_info</code> that every Documenter should have, as demonstrated below.</p>
+<p>In the case of <code>ModelCard</code>, these informations are included under <code>model_details</code>, item <code>info</code>. But the model information could be saved in another area of a custom Documenter.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>the model-specific information saved is different depending on the model’s original library.</p>
+</div>
+</div>
+<section id="preliminaries" class="level2">
+<h2 class="anchored" data-anchor-id="preliminaries">Preliminaries</h2>
+<p>The mock dataset below is used to construct models using different libraries, to demonstrate how they are read by Documenters.</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_classification</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># some mock up data</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_classification()</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>X.shape, y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>((100, 20), (100,))</code></pre>
+</div>
+</div>
+</section>
+<section id="gingado-benchmark" class="level2">
+<h2 class="anchored" data-anchor-id="gingado-benchmark">gingado Benchmark</h2>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.benchmark <span class="im">import</span> ClassificationBenchmark</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the gingado benchmark</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>gingado_clf <span class="op">=</span> ClassificationBenchmark(verbose_grid<span class="op">=</span><span class="dv">1</span>).fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fitting 10 folds for each of 6 candidates, totalling 60 fits</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a new instance of ModelCard is created and used to document the model</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>model_doc_gingado <span class="op">=</span> ModelCard()</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>model_doc_gingado.read_model(gingado_clf.benchmark)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model_doc_gingado.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>])</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># but given that gingado Benchmark objects already document the best model at every fit, we can check that they are equal:</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> model_doc_gingado.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>] <span class="op">==</span> gingado_clf.model_documentation.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'_estimator_type': 'classifier', 'best_estimator_': RandomForestClassifier(n_estimators=250, oob_score=True), 'best_index_': 1, 'best_params_': {'max_features': 'sqrt', 'n_estimators': 250}, 'best_score_': 0.8800000000000001, 'classes_': array([0, 1]), 'cv_results_': {'mean_fit_time': array([0.1762069 , 0.45980067, 0.17040405, 0.45701041, 0.19690371,
+       0.49231734]), 'std_fit_time': array([0.0101552 , 0.05892754, 0.01201183, 0.06162824, 0.01183725,
+       0.03546673]), 'mean_score_time': array([0.00539758, 0.01099873, 0.0051007 , 0.01120093, 0.00460131,
+       0.01079695]), 'std_score_time': array([0.00080164, 0.00141299, 0.00083226, 0.00124878, 0.00049118,
+       0.00098192]), 'param_max_features': masked_array(data=['sqrt', 'sqrt', 'log2', 'log2', None, None],
+             mask=[False, False, False, False, False, False],
+       fill_value='?',
+            dtype=object), 'param_n_estimators': masked_array(data=[100, 250, 100, 250, 100, 250],
+             mask=[False, False, False, False, False, False],
+       fill_value='?',
+            dtype=object), 'params': [{'max_features': 'sqrt', 'n_estimators': 100}, {'max_features': 'sqrt', 'n_estimators': 250}, {'max_features': 'log2', 'n_estimators': 100}, {'max_features': 'log2', 'n_estimators': 250}, {'max_features': None, 'n_estimators': 100}, {'max_features': None, 'n_estimators': 250}], 'split0_test_score': array([0.8, 0.8, 0.8, 0.8, 0.7, 0.7]), 'split1_test_score': array([0.9, 0.9, 0.9, 0.9, 0.8, 0.8]), 'split2_test_score': array([0.8, 0.8, 0.8, 0.8, 0.8, 0.8]), 'split3_test_score': array([1. , 1. , 1. , 1. , 1. , 0.9]), 'split4_test_score': array([0.7, 0.7, 0.7, 0.7, 0.8, 0.8]), 'split5_test_score': array([0.9, 0.9, 0.9, 0.9, 0.8, 0.8]), 'split6_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]), 'split7_test_score': array([1., 1., 1., 1., 1., 1.]), 'split8_test_score': array([1., 1., 1., 1., 1., 1.]), 'split9_test_score': array([0.6, 0.8, 0.8, 0.8, 0.8, 0.8]), 'mean_test_score': array([0.86, 0.88, 0.88, 0.88, 0.86, 0.85]), 'std_test_score': array([0.12806248, 0.09797959, 0.09797959, 0.09797959, 0.10198039,
+       0.09219544]), 'rank_test_score': array([4, 1, 1, 1, 4, 6])}, 'multimetric_': False, 'n_features_in_': 20, 'n_splits_': 10, 'refit_time_': 0.4230809211730957, 'scorer_': &lt;sklearn.metrics._scorer._PassthroughScorer object at 0x0000027D4E9FA0A0&gt;}</code></pre>
+</div>
+</div>
+</section>
+<section id="scikit-learn" class="level2">
+<h2 class="anchored" data-anchor-id="scikit-learn">scikit-learn</h2>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>sklearn_clf <span class="op">=</span> RandomForestClassifier().fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>model_doc_sklearn <span class="op">=</span> ModelCard()</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>model_doc_sklearn.read_model(sklearn_clf)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model_doc_sklearn.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'_estimator_type': 'classifier', 'classes_': array([0, 1]), 'estimator_': DecisionTreeClassifier(), 'estimators_': [DecisionTreeClassifier(max_features='sqrt', random_state=1350714431), DecisionTreeClassifier(max_features='sqrt', random_state=430634535), DecisionTreeClassifier(max_features='sqrt', random_state=218166437), DecisionTreeClassifier(max_features='sqrt', random_state=540713047), DecisionTreeClassifier(max_features='sqrt', random_state=53370647), DecisionTreeClassifier(max_features='sqrt', random_state=1852074463), DecisionTreeClassifier(max_features='sqrt', random_state=1194035741), DecisionTreeClassifier(max_features='sqrt', random_state=797143155), DecisionTreeClassifier(max_features='sqrt', random_state=1027054987), DecisionTreeClassifier(max_features='sqrt', random_state=387811444), DecisionTreeClassifier(max_features='sqrt', random_state=442134494), DecisionTreeClassifier(max_features='sqrt', random_state=1475863423), DecisionTreeClassifier(max_features='sqrt', random_state=1542578600), DecisionTreeClassifier(max_features='sqrt', random_state=1197421293), DecisionTreeClassifier(max_features='sqrt', random_state=1001422141), DecisionTreeClassifier(max_features='sqrt', random_state=1702896346), DecisionTreeClassifier(max_features='sqrt', random_state=1955008506), DecisionTreeClassifier(max_features='sqrt', random_state=1344891007), DecisionTreeClassifier(max_features='sqrt', random_state=1395141149), DecisionTreeClassifier(max_features='sqrt', random_state=608696580), DecisionTreeClassifier(max_features='sqrt', random_state=531608306), DecisionTreeClassifier(max_features='sqrt', random_state=632982477), DecisionTreeClassifier(max_features='sqrt', random_state=1261998838), DecisionTreeClassifier(max_features='sqrt', random_state=42040129), DecisionTreeClassifier(max_features='sqrt', random_state=1982656340), DecisionTreeClassifier(max_features='sqrt', random_state=491494913), DecisionTreeClassifier(max_features='sqrt', random_state=1486351631), DecisionTreeClassifier(max_features='sqrt', random_state=325585563), DecisionTreeClassifier(max_features='sqrt', random_state=506355410), DecisionTreeClassifier(max_features='sqrt', random_state=92514021), DecisionTreeClassifier(max_features='sqrt', random_state=625653897), DecisionTreeClassifier(max_features='sqrt', random_state=428604530), DecisionTreeClassifier(max_features='sqrt', random_state=1111046695), DecisionTreeClassifier(max_features='sqrt', random_state=1683254466), DecisionTreeClassifier(max_features='sqrt', random_state=832647221), DecisionTreeClassifier(max_features='sqrt', random_state=1583536151), DecisionTreeClassifier(max_features='sqrt', random_state=2040969429), DecisionTreeClassifier(max_features='sqrt', random_state=461687375), DecisionTreeClassifier(max_features='sqrt', random_state=490417382), DecisionTreeClassifier(max_features='sqrt', random_state=702218285), DecisionTreeClassifier(max_features='sqrt', random_state=140450015), DecisionTreeClassifier(max_features='sqrt', random_state=1321567040), DecisionTreeClassifier(max_features='sqrt', random_state=215491519), DecisionTreeClassifier(max_features='sqrt', random_state=306551002), DecisionTreeClassifier(max_features='sqrt', random_state=194820889), DecisionTreeClassifier(max_features='sqrt', random_state=1044948431), DecisionTreeClassifier(max_features='sqrt', random_state=531787375), DecisionTreeClassifier(max_features='sqrt', random_state=443115688), DecisionTreeClassifier(max_features='sqrt', random_state=2025577590), DecisionTreeClassifier(max_features='sqrt', random_state=1647089852), DecisionTreeClassifier(max_features='sqrt', random_state=1790579057), DecisionTreeClassifier(max_features='sqrt', random_state=566150597), DecisionTreeClassifier(max_features='sqrt', random_state=493270713), DecisionTreeClassifier(max_features='sqrt', random_state=777097755), DecisionTreeClassifier(max_features='sqrt', random_state=899388107), DecisionTreeClassifier(max_features='sqrt', random_state=1890234104), DecisionTreeClassifier(max_features='sqrt', random_state=1635335653), DecisionTreeClassifier(max_features='sqrt', random_state=1758086609), DecisionTreeClassifier(max_features='sqrt', random_state=1988566232), DecisionTreeClassifier(max_features='sqrt', random_state=1553688749), DecisionTreeClassifier(max_features='sqrt', random_state=1326489971), DecisionTreeClassifier(max_features='sqrt', random_state=468168296), DecisionTreeClassifier(max_features='sqrt', random_state=1083515976), DecisionTreeClassifier(max_features='sqrt', random_state=1463215127), DecisionTreeClassifier(max_features='sqrt', random_state=1187864021), DecisionTreeClassifier(max_features='sqrt', random_state=1171176170), DecisionTreeClassifier(max_features='sqrt', random_state=528795425), DecisionTreeClassifier(max_features='sqrt', random_state=526385551), DecisionTreeClassifier(max_features='sqrt', random_state=691817660), DecisionTreeClassifier(max_features='sqrt', random_state=620780009), DecisionTreeClassifier(max_features='sqrt', random_state=284065499), DecisionTreeClassifier(max_features='sqrt', random_state=642749492), DecisionTreeClassifier(max_features='sqrt', random_state=1203645187), DecisionTreeClassifier(max_features='sqrt', random_state=95781576), DecisionTreeClassifier(max_features='sqrt', random_state=1030647338), DecisionTreeClassifier(max_features='sqrt', random_state=1631535816), DecisionTreeClassifier(max_features='sqrt', random_state=889047269), DecisionTreeClassifier(max_features='sqrt', random_state=1921064597), DecisionTreeClassifier(max_features='sqrt', random_state=67383526), DecisionTreeClassifier(max_features='sqrt', random_state=537753925), DecisionTreeClassifier(max_features='sqrt', random_state=308262463), DecisionTreeClassifier(max_features='sqrt', random_state=304684572), DecisionTreeClassifier(max_features='sqrt', random_state=1351918324), DecisionTreeClassifier(max_features='sqrt', random_state=12640671), DecisionTreeClassifier(max_features='sqrt', random_state=1055065058), DecisionTreeClassifier(max_features='sqrt', random_state=1368763873), DecisionTreeClassifier(max_features='sqrt', random_state=153628578), DecisionTreeClassifier(max_features='sqrt', random_state=2116721383), DecisionTreeClassifier(max_features='sqrt', random_state=1412204620), DecisionTreeClassifier(max_features='sqrt', random_state=1495111840), DecisionTreeClassifier(max_features='sqrt', random_state=185444011), DecisionTreeClassifier(max_features='sqrt', random_state=1914958364), DecisionTreeClassifier(max_features='sqrt', random_state=153694605), DecisionTreeClassifier(max_features='sqrt', random_state=1675736732), DecisionTreeClassifier(max_features='sqrt', random_state=1513251194), DecisionTreeClassifier(max_features='sqrt', random_state=239765532), DecisionTreeClassifier(max_features='sqrt', random_state=34407827), DecisionTreeClassifier(max_features='sqrt', random_state=781986240), DecisionTreeClassifier(max_features='sqrt', random_state=1248372015), DecisionTreeClassifier(max_features='sqrt', random_state=1805870535)], 'estimators_samples_': [array([13, 42, 25,  4, 29, 56, 95, 40, 84, 98, 46, 35, 93, 63, 29,  6, 46,
+       27, 49, 79, 14,  0, 53,  9, 75, 64, 14, 61, 83, 33, 71, 10, 54, 14,
+       86, 69, 38, 62, 35, 96,  5, 61, 87, 44, 55, 83, 30, 81, 51,  3, 68,
+       54, 13, 36, 53, 81, 82, 82, 96, 48, 69,  4, 53,  3, 50, 85, 63, 75,
+       88, 44,  4, 78, 18,  4, 74,  9, 85, 44, 86, 68, 74, 40, 10, 12, 66,
+        6, 21, 23, 89, 80, 18, 39, 30,  8, 93, 84, 40, 67, 68, 57]), array([79, 76, 64,  4, 60, 97, 97, 47, 33, 88, 34, 28, 96, 17, 99, 70, 36,
+       79, 80, 19, 47, 59, 15,  3, 47, 87, 83, 72, 93,  2, 79, 19, 76, 38,
+       35,  5, 54,  3, 50, 93, 88, 25, 65, 35, 55, 95, 19, 76, 86, 46, 23,
+       88, 19, 16, 36, 64,  7, 80, 57,  8, 64, 42,  3, 80, 76,  6, 92, 92,
+        1, 45,  5, 75, 47, 77, 41, 73, 37, 95, 76, 73, 22, 83, 46, 93, 94,
+       76, 84, 39, 65, 92, 21, 82, 81,  8, 72, 43, 32, 80, 71, 73]), array([ 1, 31, 32, 64, 75, 97, 13, 36, 41, 21, 29,  9, 52, 49,  1,  7, 81,
+       91, 98, 70,  0, 75, 64, 99, 66, 38, 86, 48, 12, 40,  2, 64, 86, 70,
+       78,  3, 71, 84, 89, 27, 24, 42, 84, 74, 93, 38, 50, 77, 50, 68, 68,
+       67, 15, 69, 65, 78, 42, 21, 29, 78, 31, 45, 94, 31, 32, 23, 29, 59,
+       61, 55, 87,  3, 40, 74, 86, 68, 68, 75, 84, 80, 10,  9, 54, 74, 47,
+       82, 94, 48, 88, 61, 41, 53, 19, 92, 64, 29, 94, 27, 50, 88]), array([41, 98, 95,  6, 24, 38, 73, 32, 59, 21, 93, 31, 89,  0, 64, 77, 26,
+       57, 88, 23, 42, 33, 13, 67,  9, 82,  5, 53, 81, 79, 85, 19, 99, 90,
+       34, 65, 31, 89, 56,  9, 84, 70, 41, 18, 28, 37, 93, 38, 42, 54, 28,
+        2, 37, 44, 52, 40, 20, 19, 27, 91, 46, 34, 90, 72, 86, 87, 65, 65,
+       73, 50, 83, 64, 66, 56, 95, 10, 76, 81, 37, 93, 40,  3, 80, 79, 12,
+       67, 66, 61, 22, 34, 99, 23, 18,  6, 20, 77, 56, 56, 50, 17]), array([50, 63,  8, 71, 81, 50, 99,  6,  7,  6, 11, 41, 22, 18, 31, 49, 13,
+       72, 99, 75, 62, 36, 72, 73, 35, 51, 78, 44,  4, 19, 88,  2, 50,  8,
+       96, 86, 59, 86,  6, 64, 73, 34, 96, 62, 55, 76, 21, 98, 22, 35, 87,
+        7, 74, 89, 45, 42, 53, 97, 94, 49, 99,  2, 96, 50, 53,  1, 17, 46,
+       13, 78, 16, 61, 49,  0, 69, 62, 89,  8, 60, 17, 65, 97,  1, 27, 68,
+       48,  0, 22, 82, 40, 52, 27, 65, 72, 67, 83, 70, 33, 74, 15]), array([79, 89, 21, 15, 20, 43, 83, 77, 50, 81, 65, 96, 32, 25, 27, 24, 92,
+       97, 63,  5,  4, 85, 25, 70, 49, 74, 90, 63, 23, 88, 95, 32, 73, 50,
+       56, 16, 27, 10, 25, 55, 20, 61, 64, 50, 99, 57, 16, 87, 38, 60, 46,
+       66, 75, 62, 34, 32, 64, 51, 70, 41, 39,  2, 76, 51, 24, 68, 39, 38,
+       37, 97, 75, 92, 68, 83, 33, 39,  2, 11, 79, 50, 92, 36,  3,  1,  3,
+       10, 46, 20, 23,  8, 28, 93, 18, 76, 79, 42, 28, 60,  4, 13]), array([75, 97, 83, 84, 38,  9, 14, 39, 11, 95, 99, 36, 39, 20, 27, 51, 99,
+       56, 45, 35, 47, 43, 95, 60, 96, 85, 45, 16, 32, 24, 96,  3, 56, 66,
+       43, 38,  1, 51, 72, 97, 72, 16, 51, 12, 34, 30, 12, 73, 11, 71, 93,
+       81, 33, 78, 49, 93, 77, 50, 25, 96, 60, 23, 94, 20, 23, 88, 36, 72,
+       85, 40, 16, 66, 28, 30,  5, 18, 67, 12, 92, 39, 71, 25, 10, 91,  8,
+       83, 12, 49, 20, 33, 48, 62, 49, 46, 10, 13, 76, 40, 28, 71]), array([18, 75, 37,  1, 29, 81, 93, 46, 51, 93,  2, 18, 60, 84, 78, 39, 41,
+       64, 84, 77, 96, 91, 96, 98, 64, 53, 82, 87, 16, 85, 74, 83, 48, 60,
+       46, 83, 47, 20, 32, 48, 31, 56, 25, 31, 40, 37, 27, 62, 80, 42, 55,
+       78, 51, 55, 95, 84, 87, 82, 92, 88, 80, 30, 75, 25, 49, 20, 87, 25,
+       55, 34,  8, 45, 91, 49, 94, 90, 70,  2, 42,  3, 11, 23, 82, 25, 29,
+       56, 48, 59, 20, 14, 79,  1, 22,  2, 50, 63, 70, 78, 40,  7]), array([53, 50, 60, 71, 67, 98, 94, 47, 37, 23, 83,  5,  2, 73, 33, 74,  0,
+       39, 46, 29, 14,  6, 26,  8, 77, 96, 48, 21, 41, 63,  9, 33, 46, 87,
+       88, 96, 66, 98, 33, 95, 60, 46, 93, 65, 75,  0, 16, 24, 21,  8, 21,
+       97, 22, 72, 38, 35,  0, 29,  0, 43, 91, 31, 74, 22, 83, 41, 41, 29,
+       85,  8, 99, 72, 65, 18, 51, 89, 80, 87, 82, 98, 40, 83, 71, 37,  8,
+       71, 69, 45, 80, 55, 68, 74, 47,  3, 60, 83, 35, 26, 13, 33]), array([88, 94, 66, 47, 31,  2, 49, 53, 48, 90, 83, 97, 84, 18, 60,  6, 59,
+       84, 33, 38, 28,  1, 72, 30, 58, 64, 83, 27, 17,  1, 88, 11, 12, 46,
+       65, 95, 61, 69, 12, 36, 59, 58, 78,  8, 81, 18, 19, 36, 33, 22, 56,
+       19, 13,  7, 74, 76, 95, 69, 54, 23, 99, 74, 84, 74, 44, 85, 11, 72,
+       24, 16, 86, 93, 84, 39, 14, 75, 75, 29, 28, 11, 68, 49, 33, 47, 58,
+       10, 24, 78, 61, 42, 32, 18, 17, 95, 23,  3, 80, 91, 41, 40]), array([23, 11, 37, 12, 22, 72, 14, 63, 47,  7, 81, 67, 19, 17, 14, 83, 51,
+       97, 49, 13, 96, 50, 26, 99, 32, 49, 80, 44, 67, 28, 76,  8,  5,  9,
+       84, 36, 52, 69, 84, 63, 59, 80, 38, 18, 18, 71, 31, 32, 62, 98, 76,
+        3, 27, 84, 65, 54, 53,  9, 56, 87, 74, 14, 98, 39,  6, 24, 98, 17,
+       63, 17, 25,  0, 87, 50, 82, 44, 42,  4, 64, 51, 67, 85, 11, 14, 38,
+       89, 50, 79, 68, 39, 70, 81, 65, 24, 62, 90, 30, 58, 96, 19]), array([83, 41, 69, 94, 72, 20, 93, 95,  6, 89,  2, 38, 75, 30, 66, 68, 76,
+       89, 89, 41, 57, 31, 61, 12, 66, 72, 12, 39, 18, 90, 39, 55, 37, 76,
+       72, 15, 25, 88, 70, 40, 42, 20, 20, 56, 96, 28, 29, 19, 21, 59, 35,
+       82, 75,  1, 62,  8, 52, 23, 99, 30, 99,  2, 60,  2, 14, 94, 33, 90,
+       74, 14, 92, 14, 15, 65, 38, 98, 69, 66, 46, 15, 50, 47, 91, 21, 61,
+       50, 90, 47, 96, 28,  0, 96, 36, 90,  2, 97, 72, 83, 84, 80]), array([ 4, 21, 98, 84, 87, 21, 93, 38, 85,  5, 98, 79, 79, 37, 57, 28, 46,
+       30, 55, 72,  2, 62,  8, 18,  7, 21, 54, 50, 41, 17, 40, 54, 10, 69,
+       94, 80, 53, 68, 64, 14, 14, 62, 88, 99, 81, 77,  4, 63, 92, 78, 18,
+       26, 77,  3, 59, 63, 19, 61,  6, 80, 37, 29, 16, 78,  9, 47, 72, 15,
+       38, 85,  4, 15, 92, 21,  1, 69, 79, 99, 59, 94, 50, 78, 80, 56, 76,
+       35, 98, 61, 49, 21, 76, 22, 94, 18, 11, 83, 15, 37, 65, 81]), array([27, 22, 54, 18, 79,  2, 31, 19, 63, 90, 14, 29, 21, 61, 14, 25, 19,
+       99, 91, 49, 20, 21, 61, 47, 81, 36, 43, 27, 76, 32, 47, 78, 59, 64,
+       36, 58, 31, 21, 19, 79, 87, 68, 36, 90,  6, 39,  6, 57, 26, 86, 31,
+       51, 34, 30, 56, 91, 13, 25, 32, 53, 54, 63,  8,  9, 72, 41, 52, 69,
+       39, 41, 83,  4, 34,  2, 46, 28, 17, 77, 60, 43, 94, 46, 82, 80,  3,
+       52, 78, 53, 34, 18, 61,  4,  7,  8, 42, 43, 52,  5, 66, 48]), array([48,  0, 26, 92, 84, 41, 24, 67, 83, 58, 65, 63, 40, 34, 81, 35, 58,
+       10, 76,  7, 99, 11, 61, 97, 74, 50, 61, 53, 72, 38, 80, 72, 37, 81,
+       24, 39, 80, 38,  9, 75, 11, 61, 46, 38, 38, 15, 24,  6, 98,  4, 65,
+       18, 39,  5, 54,  3, 36, 19, 26, 65, 16, 16, 60,  0, 50,  0, 43, 64,
+       64, 50, 33, 84,  5, 90, 43, 22, 92, 92, 38, 19, 19, 67, 76, 29,  5,
+       93, 21,  2, 66, 27, 60, 12, 13, 16, 32,  7, 32, 49, 18, 62]), array([94,  4, 71, 87, 68, 58, 17, 97, 44,  5, 37,  5, 10, 80, 64, 88,  9,
+        8, 87, 58, 20, 77, 23, 83, 66, 50, 54, 46, 30, 22, 60, 71, 98, 68,
+       26, 80, 79, 48,  4, 94, 76, 70, 99, 67, 56, 91, 11, 39, 21, 52, 48,
+        0, 91, 90, 18, 36, 84, 79, 59, 63, 97,  9, 63, 70, 94, 93, 97, 26,
+       28, 87,  1, 62, 41, 62,  9, 76, 27, 42, 98, 58, 57, 74, 65, 82, 71,
+       54, 11, 70, 95,  7, 81, 91,  1, 81, 50, 40, 59, 85, 47, 95]), array([28, 47, 69, 76,  2, 58, 61,  2, 21, 97, 49, 43, 13, 11, 35, 83, 91,
+       65, 55, 64, 27, 84, 49, 25, 77,  8, 42, 98,  7,  3, 56, 16, 92, 65,
+       70,  3, 25, 57, 84, 30, 93,  4, 65, 78, 80, 92, 29, 51,  9, 30, 48,
+       30, 55, 63, 96,  4, 58, 81, 78, 87, 22, 83, 56, 21, 58, 55, 95,  1,
+       62, 12, 88, 46, 54, 56, 27, 37, 17, 23, 34, 83, 91, 80, 97, 37, 50,
+       93, 64, 19, 21, 47, 83, 76, 56,  0, 74, 27, 27,  6, 25, 51]), array([33, 15, 86, 25, 55, 35,  3, 52, 13, 29, 53, 48, 74, 45, 33, 41, 80,
+       75,  3, 75, 88, 94, 80,  8, 28, 10, 74, 59, 63, 49, 49, 11, 55, 11,
+       27, 61,  0, 39, 26, 18, 44, 28, 83, 64, 50, 79, 60, 41, 87, 29, 34,
+       41, 58, 61, 48, 66, 44, 56, 25, 87, 47, 39, 39,  6, 55,  4, 10,  3,
+       53, 12, 18, 50,  8, 40, 88, 77, 26, 47, 29, 71, 52, 77, 66, 83, 81,
+       64, 26, 81,  5, 58, 37, 23, 35, 47, 87, 33, 61, 85, 59, 32]), array([23, 74, 46,  6, 33, 35, 45, 73, 97, 97, 71, 27, 12, 28,  4, 87, 43,
+       86, 33, 96, 24, 90, 96,  7, 57, 80, 44, 99, 56, 65, 62, 84, 85, 27,
+        1, 15, 87, 36, 24, 11, 68, 88, 83, 60, 46, 80, 88, 64, 73, 64, 96,
+       43, 17, 90, 67, 99, 54,  4, 95, 57, 84, 99, 77, 79, 82, 69, 92, 48,
+       99, 43, 59, 28, 32, 55, 17, 37, 57, 66, 27, 70, 56, 71, 85, 92, 32,
+       20,  6, 39, 91, 90, 67, 50, 42,  9, 63, 76, 14, 73, 89, 21]), array([24, 53, 74, 59, 57, 91, 65, 76, 40, 38, 26, 83, 77, 22, 23, 99, 17,
+       92, 90, 11, 33, 45, 20,  7,  1, 80, 98,  2, 77, 13, 55, 35, 90, 11,
+       35, 44, 54, 25,  7, 81, 28, 11, 56, 17, 84, 15, 92, 61, 82, 14, 28,
+       73, 10, 16, 24, 42, 45, 50, 44, 75,  7, 55, 21, 59, 36, 96, 60, 18,
+       11, 77, 13, 49,  1, 49,  6, 33, 74, 76, 77, 27, 45, 72, 77, 51, 63,
+       21, 38, 75, 69, 15, 93,  9, 39, 61, 42, 81, 32,  9,  3, 93]), array([18, 46,  2, 58, 44, 16, 98, 99,  6, 51, 28, 52, 55, 80, 85, 28, 48,
+       60, 27, 91,  1, 33, 60, 26, 37,  8, 94, 51, 36,  5, 45, 44, 23, 58,
+       36, 16, 73, 73,  8, 15, 67, 91,  7, 18, 11, 13, 13, 27, 33, 28, 66,
+        7, 39, 76, 10, 43, 85, 41, 90, 47, 32, 86, 54,  7, 97, 49, 93, 97,
+       38, 11, 74, 65, 73, 94, 54, 23, 90, 24, 43, 43, 57, 90, 25, 34, 56,
+       62, 64, 24, 58, 12, 14, 29, 45, 54, 77,  1,  1, 87, 34, 59]), array([78, 93, 37, 92, 57, 35, 92, 25, 37, 35, 99, 80, 33, 35, 23, 46, 62,
+       53,  2, 33, 74, 75, 30, 26, 12, 24, 10, 45, 32, 93, 63, 13, 21, 71,
+       65, 71, 45, 44, 32, 29, 91, 11, 95, 94, 25,  0, 92, 96, 21, 94, 83,
+       34,  4, 41, 34, 39, 48, 24, 15,  8, 47, 70, 61, 13,  3, 85, 51, 21,
+       65, 76, 75, 47, 77,  6, 93, 70, 80,  7, 37, 64, 52,  3, 19, 45,  5,
+       96, 20, 40, 77, 38, 82, 24, 53, 30, 34, 51, 75, 39, 34, 18]), array([80, 63, 57, 16, 81, 86, 58, 79,  7, 64,  5, 43, 65, 59, 89, 62, 61,
+       48, 33,  4, 41, 85, 57, 23, 53, 18, 58, 67, 22, 31, 45, 93, 10, 49,
+       56, 98, 47, 14, 40, 44, 23, 64, 67,  6, 62, 29, 74, 49, 24, 60, 64,
+       50, 22, 80, 55, 89, 36, 65, 59, 40, 12, 57, 37, 16, 83, 33, 70, 59,
+       75, 62, 32, 48, 17, 29, 47,  6, 41, 66, 70, 46,  4,  4, 90, 69, 14,
+       47, 20, 44, 83, 24, 16, 33, 89, 54, 51, 58, 26, 12, 86, 35]), array([72, 70, 85, 83, 51, 35, 68,  9,  3, 90, 90, 69, 53, 22,  4, 30, 10,
+       48,  8, 95, 94, 60, 21, 25, 98, 72, 83,  1, 95, 65, 11, 43, 86, 77,
+       98, 10,  3, 72, 64, 16, 25, 16,  4, 15, 38, 15, 85, 98, 54, 94, 87,
+       23, 44, 20, 44, 68, 56, 49, 11, 82, 13, 92, 54, 87, 59, 36, 28, 39,
+       14, 70, 58, 45, 57, 92, 87, 29, 92, 68, 51, 28, 51, 44, 38, 79, 55,
+       84, 32, 84, 90, 92, 21, 14, 67, 66, 91, 99, 33, 72, 56, 44]), array([75, 57, 97, 37, 29, 95, 49, 61, 68, 36, 98, 65, 65, 65, 12,  4, 70,
+       32,  5, 30,  7, 10, 56, 88, 51, 88, 81, 53, 42, 45, 51, 53, 28, 29,
+       92, 84, 29, 75, 87, 44, 49, 37, 36, 78, 85, 64,  3,  8,  1, 28, 27,
+       54, 60, 32, 79, 85,  1, 57, 46, 62, 71, 82, 30, 34, 73, 84, 87,  0,
+       66, 78, 90, 95, 48, 92,  2, 16, 32, 26, 83, 47, 79, 92, 61, 64,  1,
+       95, 37,  6, 74, 99, 47,  6, 27, 18, 39, 73, 15, 91, 52, 12]), array([11, 69, 68, 88, 97,  6, 68, 64, 30, 13, 92,  9, 50, 57, 32, 73, 99,
+       65, 24, 55, 14,  1, 55, 77, 76, 53, 13,  7, 60, 72, 91, 77, 26, 75,
+       37, 25,  5, 80, 54, 65, 75, 39,  0,  9, 47, 88, 33, 45, 96, 77, 56,
+       35, 46, 22, 28,  4,  4, 42,  8, 97, 55, 77, 44, 68, 95, 99, 74, 66,
+       41, 85, 64,  1, 67, 36, 45,  6, 67, 72, 27, 44, 95, 95, 71, 66,  9,
+       51, 71, 28, 14, 56, 44, 97, 99, 62, 93, 93, 84, 96, 75, 37]), array([89, 72, 63, 48, 81,  9, 53, 42, 32, 43, 95, 23, 60, 77, 40, 29, 42,
+       75, 78,  9, 51, 83, 72, 81, 11, 84, 64, 33, 72, 23, 68, 72, 19, 77,
+       89, 73, 17, 70, 93, 12, 67, 87, 11, 31, 20, 50,  3,  4, 12, 22, 23,
+       64, 97, 90, 36, 19, 21, 59, 85, 31, 41, 15, 79, 93,  8, 24, 27, 20,
+       40,  7, 32, 21, 47, 46, 15, 56, 42, 38, 12, 61,  0, 45, 50, 60, 77,
+       76, 11, 21, 30, 75, 92, 72, 13, 37, 66, 53, 79, 50,  2, 54]), array([39, 58, 57, 29, 32, 88, 19, 98, 25, 98, 40, 30, 25, 12, 99,  0, 32,
+       18,  2, 63, 31, 27, 94, 31, 23,  9, 66, 44, 42, 76, 77, 88, 16, 68,
+       86, 30, 79, 30, 27, 68, 61, 97, 98, 70, 11, 60, 49, 23, 56, 24, 93,
+       74, 86, 80, 46, 89, 87, 85,  1,  7, 71, 34, 10, 92, 86, 81, 99, 54,
+        9, 80, 74, 45, 29, 16, 81, 17, 26, 58, 84, 22, 78, 90, 62, 87, 51,
+       27, 35, 82, 55, 17, 27, 41, 98,  4,  7, 13, 91, 62, 66, 37]), array([85, 78,  4, 35, 34, 88, 40, 47, 98, 93,  8, 73, 48,  3, 95, 57, 96,
+       81,  4, 47, 72, 21, 53, 73, 71, 43, 61, 20, 90, 59, 35, 62, 41, 38,
+       24, 78, 72,  2, 72, 58, 93, 50,  1,  7, 39, 25, 99, 77, 82, 30,  0,
+       59,  8, 32, 61, 85, 67, 20, 56, 86, 23, 45, 52, 55, 55, 16, 80, 29,
+       66, 63, 14, 82, 63, 11, 76, 27, 53,  4, 69, 18, 30,  8, 46, 32, 34,
+       87, 38, 42, 46, 17, 21, 66, 90, 33, 57, 45, 56, 15,  0, 79]), array([ 3, 16, 71, 16,  0, 40,  7, 69, 34, 56, 85, 12, 72, 35,  6, 17, 94,
+       54, 77, 41, 93, 19, 95, 37, 87, 29, 13, 42, 43, 66, 47, 33, 71, 86,
+        0, 66, 62, 50, 74, 70, 27, 10, 61, 83, 17, 33,  2, 18, 42, 37, 87,
+       87, 66, 48, 18, 42, 50, 19, 18,  5, 46,  6, 15,  7, 71, 41, 74, 63,
+       16, 38,  5, 60, 98, 96, 77, 99, 32, 60, 68, 27, 53, 89, 22, 59, 88,
+       98,  7, 44, 41, 38, 95, 37, 55, 52, 27, 37, 63, 91, 62, 24]), array([ 9, 13, 92, 22, 42, 17, 29, 15, 21,  6, 43, 88, 86, 26, 76, 81, 67,
+       94, 91, 95, 81, 94, 17, 29, 97, 82, 81, 25, 48, 21, 29, 29, 19, 78,
+       87, 50, 88, 60, 63, 98, 72, 78, 17, 97, 62, 35, 32, 87, 75, 16, 75,
+        8, 64, 69, 93, 95, 95, 61,  9, 77, 37, 82,  6, 37, 56, 51, 25, 45,
+       63, 99,  0, 90, 79, 34, 92, 40, 18, 89,  3,  5, 39, 54, 12, 70, 83,
+       20, 48,  0,  1, 54, 31, 76,  0, 99, 73, 65, 28, 76, 44, 46]), array([14,  1, 52,  9, 54, 89, 86, 45, 57, 63, 40, 17, 51, 47, 60, 62, 93,
+       29, 74, 14, 65, 76, 42, 37, 65, 77,  1, 83,  3, 14, 64, 31,  7,  3,
+       65, 69, 87,  8, 26, 58, 24, 60, 91, 45, 57, 99,  8, 78,  5, 45,  3,
+       89, 76, 79, 89,  0,  7, 14, 86, 84, 97, 40, 76, 11, 89, 33, 31, 33,
+       54, 66,  4, 79, 46, 19, 37, 90, 46, 65, 97, 61, 88, 86, 19, 73, 63,
+       79, 39, 53, 52, 31, 76, 96, 28,  9, 49, 29, 57, 66, 63, 25]), array([28, 95, 36, 53, 51,  6,  8,  8, 24, 72, 76, 72, 69, 66, 87, 52, 39,
+       85, 43, 99, 45, 92, 93, 66, 78, 77, 14, 38, 65, 25, 17, 99, 58, 19,
+       96, 99, 49, 69, 62, 13, 93,  7, 95, 78, 95, 47, 56,  4, 66, 46, 55,
+       67, 91, 36, 12, 35, 38, 28, 89, 73, 53, 21, 78, 74,  9,  1, 21, 62,
+       17, 32, 77, 90, 13, 52, 56, 70, 94, 94, 17,  9, 41, 89, 99, 49, 47,
+       16, 46, 72, 98, 88, 11, 18, 51, 60, 57, 53, 49, 69, 77, 96]), array([55, 63, 14, 17, 44, 84, 49, 33, 86, 76, 45,  6, 46, 60, 95, 46,  7,
+       55, 28, 78, 56, 50, 75, 63, 60,  7, 12, 91, 84, 16, 38, 51,  1, 63,
+       40, 77, 54, 84, 50, 20, 97, 79,  4, 19, 50, 13, 21, 29, 10,  1, 45,
+       76,  7, 21, 25, 30,  3, 93, 51, 70, 87,  5, 93, 77, 49, 39, 10, 82,
+       40, 35,  2, 73, 72, 46, 21, 14,  9, 91, 85, 44, 56, 18, 95, 25, 21,
+       50, 37, 64, 36, 55, 16, 22, 48, 70, 97, 57, 83,  7, 13, 34]), array([61, 49, 92, 23, 42, 73, 26, 89, 20, 74,  8, 93, 62, 43, 60, 97, 68,
+       42, 72, 32, 57, 78,  4, 46, 90, 99, 79, 66, 70, 20, 17, 64, 16, 80,
+       59, 85,  5, 29, 38, 69, 70, 72, 90, 51, 94, 93, 26, 39, 76, 68, 55,
+        5,  5, 46, 63, 83, 14, 28, 86, 49, 51, 96, 15, 35, 47, 53, 36, 42,
+       87, 51, 31, 45, 65, 24, 19, 81, 47, 24, 10, 78, 89,  5, 51, 24,  2,
+       70, 23,  9, 93, 41, 43, 24, 12, 99, 47, 34, 52, 90, 88, 89]), array([89, 15, 37, 13, 54, 51, 85, 78, 22, 28, 68, 46, 42, 31, 94, 49, 46,
+       28, 30, 26, 76, 33, 74, 65, 92, 55, 70,  1, 52, 25, 28, 14, 51, 47,
+       55,  9, 62,  3, 78, 16, 21, 18, 65,  8, 29, 34, 52, 57, 36, 40, 81,
+       24, 56, 95, 38, 23, 73,  6, 22, 37, 89, 23, 19, 59, 80, 29, 23, 63,
+       65, 18, 53, 14, 78, 14, 67, 69, 86,  9, 58, 97, 27, 28, 21, 81,  8,
+       91, 68, 17, 94, 48, 95, 77, 93, 99, 47, 75, 48,  3, 81,  9]), array([34, 75, 39, 50, 24, 23, 72, 87, 86, 11, 78, 71,  8, 13, 20, 57, 35,
+       89, 89, 34, 28, 48, 16, 55, 91, 70, 59, 93, 35, 89, 50, 61, 64, 73,
+       11, 14, 60, 94, 23, 99, 42, 16, 79, 92, 79,  6, 13,  0, 20, 39,  0,
+       99, 90, 94, 28, 63, 53, 81, 55, 15, 22, 98,  7, 20, 23, 81, 33, 11,
+       69, 86, 63, 81, 25, 36, 14,  5, 68, 49, 99, 47, 43, 69, 65, 17, 61,
+       50, 30, 20, 10, 24,  7, 35, 12, 74, 37, 40,  8, 10,  6, 42]), array([54, 93, 46, 20, 87, 83, 85, 60,  3, 22,  3, 85, 22, 80, 34, 54, 51,
+       18,  0, 67, 87, 55, 38, 61, 48, 75, 30, 30, 96, 87, 76, 43, 67, 14,
+        8, 26, 26,  6, 58, 15, 93, 38, 29,  3,  2, 22, 84, 32, 69, 42, 26,
+       56, 73,  1, 64, 82, 16, 70, 66, 94, 49,  3, 24, 42, 69, 32, 58, 77,
+       66, 78, 60, 50, 31, 66, 62, 17, 37, 22, 68, 95, 83,  7, 87, 15, 51,
+       67, 10, 25, 93,  9, 31, 26, 81, 31, 58, 77, 82, 86, 42, 83]), array([37, 48, 16, 58, 11,  2, 54, 52, 20, 65, 37, 27, 62, 15, 92, 49, 30,
+       69, 55, 31, 61, 48, 72, 95, 74, 87, 95, 35, 25, 81, 73, 96, 66, 54,
+       90, 23, 24, 73,  9, 42, 85, 10, 89, 40, 95, 14, 56, 83, 15, 92, 41,
+        7, 77, 50, 43, 95, 22, 99, 89, 37, 66, 95, 56, 25, 51, 51, 80, 94,
+       12, 84, 12, 92, 73, 45, 25, 79,  4, 61, 82, 66,  7, 36, 61, 40, 49,
+       16, 56, 21, 90,  4, 10, 58,  7, 68, 19, 11, 41, 63, 88, 70]), array([45,  0, 73, 90, 94, 68, 24, 91, 43, 73, 59, 79, 84, 40, 76,  5, 90,
+       34, 45, 55, 44, 81, 81,  9, 83, 64, 24, 34, 71, 67, 81, 89, 20, 84,
+       19, 67, 49,  0, 15, 55, 47, 54, 46, 40, 13, 88,  1, 98, 67, 92, 66,
+       60, 20, 69, 13, 18, 26, 11, 24,  5, 76, 64, 60, 79, 65, 66, 54, 36,
+       86,  5, 66, 99, 69, 83, 96, 70, 21, 60, 51, 99, 23, 82, 37, 21,  8,
+       24, 40, 44, 83, 11, 94, 27, 71, 93, 55, 17, 97, 25, 14, 31]), array([15, 87, 80, 81, 30, 65, 66, 73,  3, 81, 26, 21, 82, 26, 13, 27, 61,
+       19,  7, 85, 37, 38, 41, 80, 43, 71, 11, 23, 24,  7, 78, 95, 62, 83,
+       33, 97,  7, 83, 34, 74, 80,  7, 28, 47, 56, 96, 17, 18, 87, 86, 19,
+       59,  9, 33, 86, 91, 16,  3, 70, 91, 46, 75, 87, 70, 83,  3,  4,  0,
+        3, 98, 92, 26, 45, 43, 98, 65,  2, 23, 47, 10, 46, 22, 84,  4,  8,
+       69, 38, 13, 75, 21, 92, 91, 48, 27, 46, 32, 99, 21,  0, 49]), array([37, 26, 67, 68, 45, 51, 66, 58, 72, 46, 23, 66, 23, 76, 82,  0, 40,
+       39, 65, 66, 15,  6, 67, 37, 92, 61, 11, 12, 50, 35, 13, 96, 65, 61,
+       19, 33, 57, 76, 43, 31, 61, 39, 26, 62, 64, 68, 84,  1, 68,  7, 76,
+       54, 55, 29, 83, 89, 70, 94, 29, 85, 67, 76, 50, 10, 10, 82, 94, 53,
+       15, 98, 30, 18,  3, 21, 15, 31, 10, 27,  3, 79, 13, 58, 68, 73, 71,
+       65, 20, 43, 75, 79, 84, 33, 29, 46, 81, 13, 21, 47, 73, 81]), array([92,  4,  1, 69,  5, 33, 80, 20, 69, 31, 24, 11, 46, 82, 76, 11, 66,
+       12, 46, 13, 48, 23, 53, 16, 75, 40, 16, 94, 42, 92, 20, 39, 64, 97,
+       19,  2, 85,  5, 83, 58, 15, 29, 17, 26, 92,  1, 71, 55, 76, 40, 82,
+       66, 21, 63, 44, 20, 24, 61,  4, 13, 81,  6, 15,  6, 18, 11, 23, 33,
+       14, 46, 42, 88, 51, 81, 93, 15, 34, 80,  1, 18, 99, 99, 75, 23, 64,
+       13, 48, 71,  5, 19, 32, 26, 82, 88,  4, 44, 68, 97,  3, 94]), array([98, 11, 82, 23, 91, 31, 53, 41, 88, 41, 65, 65, 20, 32,  3, 49, 82,
+       62, 71, 21, 19, 19,  1, 77, 50,  4, 94, 90, 48, 21, 25, 64, 60, 61,
+        6, 85, 67, 89, 44, 24, 36, 46, 56, 31, 81, 16, 48, 37, 33, 57, 91,
+       90, 37, 54, 18, 68, 23, 82, 83, 66, 16, 69, 71, 16, 32, 68, 62, 90,
+       95, 18, 91, 80, 66,  3, 93, 57, 34, 69, 44, 89,  7, 60, 99, 11, 18,
+       90, 83, 37, 29, 10, 30, 40, 12, 27, 57, 48,  1, 39, 56, 76]), array([65, 51, 31, 45, 67, 38, 30, 75, 75, 47, 22, 58, 48, 74, 29, 51, 96,
+       23, 58,  9, 53, 40, 48, 33, 31, 13,  0, 12, 90, 86, 35, 37, 44, 21,
+       64, 84, 23, 20, 87, 16, 33, 91, 94,  5, 76, 99, 71,  2,  9, 18, 39,
+       50, 57, 78, 44, 94, 94, 33, 74, 26, 80, 93, 92, 93, 72, 64, 10, 86,
+       76, 69,  6, 60, 91, 93, 70, 61, 38,  4, 93, 27,  9,  2, 27, 60, 23,
+       73,  6, 20, 77,  4, 30, 53, 54, 80, 14, 47, 27,  0, 90, 66]), array([96, 31, 87, 62, 62, 77, 33, 62, 55, 84, 27, 54, 15, 45, 89, 27, 98,
+        6, 82, 65, 44, 22, 67, 33, 93, 51, 72, 79, 67, 38, 16, 78, 74, 12,
+       81, 55,  7, 88,  8,  3, 65, 53, 80, 90, 96, 82, 14, 24, 10, 16, 92,
+       20, 20, 71, 95, 36,  5, 11, 62, 11, 62, 21,  8, 55, 32, 38, 84, 35,
+       45, 93, 40, 77, 38,  9, 93, 22,  5,  4, 95, 16, 16, 44, 35, 64, 85,
+       22, 28, 66, 13, 97,  5, 11, 56, 22, 76, 38, 95, 72, 56, 65]), array([65, 74, 38, 43, 70, 39, 67, 75,  8, 86, 55, 22,  0, 70, 68, 76, 31,
+       42,  7, 19, 90, 56, 58, 35, 81, 36, 96, 91, 94, 57, 10, 38, 62, 14,
+       44,  5, 13, 70, 47, 41, 53, 63, 90, 33,  5, 69, 17, 99, 86, 49, 96,
+       61, 50, 43, 47, 86, 14, 58, 10, 32, 53, 42, 70, 99, 54, 50, 12, 98,
+       61, 46, 92, 37, 16, 44, 50, 97, 57,  8,  0, 39, 17, 10, 41, 17, 21,
+       76, 74, 42, 37, 33, 23, 35, 80, 79, 47, 25, 98, 43, 27, 77]), array([77, 28, 89, 15, 46, 35, 50, 84, 73, 65, 12, 44, 62, 91, 42, 12, 86,
+       16, 25, 20, 97, 56, 56, 61, 61, 85, 16, 16, 23, 68, 33, 36, 79, 43,
+       53, 49, 78, 74, 42, 11, 67, 91, 81, 51, 36, 96, 87, 65, 52, 15, 53,
+       57, 93, 84, 67, 17,  2, 15, 96, 80, 36,  1, 43, 96, 22,  2, 22, 92,
+       54, 88, 29, 39, 35, 27, 38, 93, 61, 55, 38, 94, 37, 35, 11, 81,  6,
+       93, 73, 31, 24, 90, 77,  6, 75, 51, 59, 13, 63, 18, 92, 80]), array([12, 86, 45, 61, 49, 88, 21, 94,  0, 58, 27, 22, 96, 96, 89, 94, 35,
+       72, 96, 15, 96, 89, 14, 48, 64, 52, 29,  2, 19, 65, 63, 27, 80, 82,
+       33, 15, 26, 75, 55, 80, 12, 48, 73, 75,  9, 48,  4, 98, 60, 51, 95,
+       32,  3, 99, 86, 68, 83,  5, 77, 92, 14, 39, 91, 74, 19, 54, 25, 93,
+       38, 37, 41,  8, 97, 10, 85, 92, 62, 10,  2, 77, 24, 54, 27, 52, 20,
+       97, 61, 70,  1, 37, 87, 66, 95, 50, 33, 24, 59, 62, 16, 94]), array([55, 34, 65, 21, 17, 37, 98, 71, 74, 51,  7, 20, 60, 37,  6, 52, 71,
+       93, 48, 94, 84, 64, 32, 93, 36, 93, 23,  8, 24,  5, 83,  7, 17, 48,
+        8, 90, 31, 53, 55,  5, 74, 27, 64, 76, 58, 55, 87, 27, 40,  4,  3,
+       24, 65, 33, 35, 36, 50, 96, 33, 61, 91, 87, 22, 53, 12, 17, 11, 76,
+       69,  7, 33, 41, 55, 56,  7, 77, 49, 10, 93, 70, 43, 82, 25, 17, 44,
+       44, 98, 28,  0, 58, 66, 30, 60, 54, 50, 69, 87, 36, 59, 56]), array([94, 42, 49, 54, 45, 41, 31, 50, 88, 71,  3, 23, 31,  5, 90, 21, 81,
+       40, 58, 54, 52, 35, 87, 56, 28, 24, 75, 71, 10,  5, 90, 23, 37, 34,
+       66, 39, 11, 82,  5, 69, 28, 21, 82, 13, 83, 77, 23, 45, 79, 14, 16,
+       72, 49, 22, 41, 52, 63, 41,  6, 24, 99, 32, 89, 62, 41,  3, 63, 52,
+       42, 87, 40, 65, 49, 83, 10, 46, 49, 66, 63, 39, 41, 87, 94, 80, 54,
+       15, 91, 75, 97, 70, 30, 90, 64, 69, 40, 39, 47, 36, 94, 92]), array([ 2, 48, 56, 45,  2, 38,  5, 23, 29, 48, 68, 35, 47, 40, 11, 16, 73,
+       37, 73, 45, 97, 43, 92, 86, 12, 88, 74, 23, 42,  6, 45, 83, 34, 36,
+       94, 87, 64, 46, 92, 69, 33, 76, 88, 68, 36, 30, 90, 74, 21, 35, 28,
+        6, 78, 77, 64, 69, 60, 95, 74, 75, 51, 76, 46, 75, 74, 55, 90,  2,
+       56, 57, 62, 50, 87, 12, 93, 26, 18, 81, 97, 76, 84, 71,  5,  0, 16,
+       41, 29, 86, 97, 74, 46, 38, 50, 84, 55, 89, 93, 18, 78, 11]), array([49, 65, 73,  3, 43, 86, 26, 82, 40, 84, 99, 52, 34, 49, 53, 60, 40,
+       22, 61,  0, 28, 95, 77, 39, 42, 89, 40, 30, 37,  7, 87, 30, 29, 32,
+       16, 50,  1, 43, 52, 26, 48, 30, 83, 88, 26, 52, 24, 62, 25, 23, 62,
+       43, 64,  3,  1, 20, 78, 68, 36, 91, 96, 78, 85, 13, 35, 57, 26, 40,
+       76, 47, 33, 24, 19, 70, 68, 18, 25, 41, 32, 85, 73,  9, 64, 94, 64,
+       74, 87, 34, 25, 77, 59, 25, 57, 62, 61, 41, 82, 52, 21, 19]), array([74, 91,  6, 88, 26, 64, 29,  4, 27, 10, 73, 84, 42, 55, 41, 44, 76,
+       95, 56, 90, 98, 14, 13, 35, 26, 57, 54, 41, 73, 28,  9, 23, 95, 58,
+       16, 96, 52, 12,  6, 26, 31, 81, 74, 97, 82, 93, 18,  8, 14, 18, 67,
+        9, 15, 14, 32, 10, 20, 87, 71, 97, 91, 10, 15, 82, 52,  1, 82, 68,
+       97, 88, 15, 32, 59, 14, 96,  1, 34, 40, 79, 78, 56, 35, 15, 43,  7,
+       79, 90, 44, 66, 71,  6,  0, 91, 50,  4, 57, 40, 70, 67, 44]), array([ 3, 98, 38, 83,  6, 95, 39, 77, 94, 87, 77, 31, 87,  0, 85, 49, 32,
+        6, 93,  1, 54, 35, 25,  9, 20, 81, 56,  3, 41,  5,  6, 33, 54, 85,
+       21, 56, 60, 23, 45, 38, 14,  0, 10, 63, 10, 66, 60, 28, 12, 67, 95,
+       88, 70, 32, 51, 58, 41, 60, 36, 42, 19, 35, 82, 48, 68, 18, 21, 94,
+       61, 57,  3, 36, 59, 12, 60, 13, 36, 70,  4, 20, 53, 49, 51, 40, 30,
+       68, 39, 21, 32,  0, 91, 46, 96, 61, 76,  8, 18, 51, 23, 73]), array([19, 24,  4, 17, 16, 81, 29, 96,  8, 90, 41, 68, 26, 65, 55, 59,  8,
+       78, 24, 96, 68, 45, 46, 71, 51, 89, 79, 35, 85, 65, 38, 35, 59,  2,
+       97, 39, 80, 11, 51, 83, 55, 71, 53, 31, 79,  3, 76,  0, 74, 78,  6,
+       71,  7, 65, 26, 85, 99, 60, 75, 83, 47,  2, 55, 46, 35, 17, 47, 58,
+       56, 57, 34, 39,  2, 18, 87, 75,  8, 13, 62, 49, 78, 75, 78, 46, 37,
+       15, 91, 63, 37, 39, 43,  0, 48, 98, 71, 51, 71, 47, 99, 51]), array([15, 82, 60, 77, 34,  0, 12, 46, 17, 42, 74, 69, 19, 29, 16,  2, 39,
+       33, 63,  4, 63, 42, 66, 76, 45, 80, 58, 74, 42, 25, 64, 42, 22, 75,
+       34, 44, 55, 39, 43, 60,  2, 55, 52,  2, 67, 22, 19, 31, 80, 66, 61,
+       35, 89, 27, 12, 23, 90, 55, 10, 52, 18, 31, 12, 89, 65, 16, 52, 36,
+       56, 94, 25, 93, 94, 93,  3, 29, 98, 12, 30, 42, 34, 95, 39, 69, 44,
+       19, 30, 56, 69, 33, 74, 89, 66, 11, 18, 65, 13, 28, 15, 72]), array([45, 26, 67, 12, 65, 24, 46, 80, 57, 69, 69, 57, 77, 41,  1, 61, 82,
+       48, 60, 57, 44, 23, 99, 75, 47, 31, 77, 56, 15, 79, 41, 13, 11, 21,
+       97, 65,  5, 17, 27, 31,  2, 48, 65, 15, 75, 44, 41, 45, 33, 39, 31,
+       55, 18, 26, 64, 85, 82, 47, 23, 36, 69, 12, 42, 55, 29, 12, 14, 91,
+       44, 58, 19, 70, 38, 55, 55, 11, 87, 95, 14, 94, 21, 79, 83, 38, 85,
+       55, 78, 81,  7, 54, 69, 95, 48, 36, 43, 23, 82, 42, 77, 76]), array([12,  4, 55, 86, 61, 40, 21, 97, 42, 54, 99, 19, 91, 22, 56, 56, 22,
+       29, 82, 77, 83, 90, 89, 65,  3, 67, 64, 49, 58,  8,  3, 32, 87, 29,
+        5, 36, 36, 67, 67, 94,  0, 29, 68, 61, 53, 28, 23, 75, 89, 96, 31,
+       11, 34, 99, 90, 90, 89, 13, 36, 69,  4, 57, 48, 28, 84,  4, 63, 75,
+       82, 88, 98, 69, 63, 54, 26, 34, 20, 36, 77, 81, 39, 14, 96,  4, 74,
+       26, 70,  1, 68, 41, 97,  0, 91, 73, 88, 65, 20, 80, 98, 53]), array([95, 59, 91, 84,  1, 34, 39, 43, 54, 12, 52, 11, 49, 17, 49, 82, 67,
+       95,  6, 35,  2, 87, 34, 84, 83,  4, 31, 85,  9,  7, 19, 24, 45, 28,
+        8, 25, 66, 91, 36, 50, 81,  4, 51, 38, 85, 44, 66, 50, 50, 91,  2,
+       59, 24, 93, 32, 94, 84, 30,  4,  8,  3, 87, 31, 29, 20, 89, 29,  8,
+       79, 84, 15, 95, 45, 82, 38, 29, 10, 32, 96, 70, 38, 54, 51, 42,  8,
+       72, 21, 95, 58, 19, 48, 54, 80,  0, 88, 49, 77, 99, 98, 72]), array([40, 71, 61, 33, 90, 31,  8, 44, 96, 52, 98, 21, 61, 19,  0, 99, 88,
+       38, 22, 75, 16, 74, 35, 61, 43, 76, 78, 68, 98, 31, 28, 40, 36, 49,
+       39, 67, 74, 30, 28, 83, 77,  7, 93, 45, 32, 50, 83, 15, 43, 79, 90,
+       77, 12, 38, 83, 89, 56,  0, 38, 20, 25, 57, 83, 25, 25, 66, 81, 19,
+       65, 96, 96,  6, 64, 52, 77, 93,  8, 14,  7, 11, 35, 56, 57, 60, 91,
+       16, 98, 16, 88, 55, 64,  4, 40, 90, 97, 36, 88, 52, 56, 72]), array([37, 46, 92, 23, 41, 88, 90, 79, 69, 35, 54, 64, 18, 60, 69, 14, 57,
+        8, 78, 65, 16, 41,  4,  5, 55, 46, 47, 70, 33, 52, 80, 33, 40, 67,
+       77, 28, 88, 23,  2, 39, 37, 89, 46, 30, 45,  6, 93, 56, 79, 28, 14,
+       98, 88, 76, 22, 59,  4, 53, 76, 74, 50,  4, 80, 57, 55,  1, 78, 43,
+       85, 64, 15, 23, 10, 49, 17, 75,  2, 78, 44, 50, 12, 18,  4, 41, 51,
+       88,  0, 32, 95, 99, 88, 72, 74, 22,  9, 36, 59, 60, 13, 25]), array([78, 87, 11,  6, 54, 97, 66, 92, 15, 50, 42, 97, 39,  7, 97, 16,  0,
+       31, 69, 70, 46, 44, 61, 43, 13, 64, 89, 89, 38, 26, 28, 73, 42, 82,
+       51, 66, 13, 94, 17, 37, 27, 12, 92,  0, 35, 47,  1, 23, 40, 55, 73,
+       12, 85, 82, 66, 75, 71, 57, 25, 57, 72, 11, 95, 63, 73, 25, 40, 16,
+       22, 51, 27, 42, 45, 44, 76,  5, 40, 97, 72, 27, 89, 32, 89,  9, 11,
+       82, 56,  9, 96,  7, 92, 93, 57, 50, 99, 88, 60,  6, 40, 88]), array([65, 95, 61, 81, 38, 74, 41, 80, 64, 30, 74,  4, 82, 32, 66, 52, 88,
+       24, 46, 39,  3, 77, 26, 39, 70, 82, 17, 60, 75, 49, 95, 60, 88, 17,
+        7, 21, 76, 70, 91, 76, 29, 28, 71, 77, 38, 60, 92, 95, 86, 86, 40,
+       92, 15, 67, 18, 46, 90, 53, 23, 24, 44, 11, 32, 70, 19, 58, 25, 25,
+       99, 18, 25, 65, 70,  1, 86, 70, 48, 31,  1, 79, 78, 99, 66, 78, 43,
+       78, 91,  8, 88, 14,  3, 11, 58, 25, 94, 78, 98, 23, 83, 61]), array([73, 21, 52, 11, 95,  5, 22, 31, 27, 86, 73,  0, 95, 29, 53, 36, 35,
+       82, 35, 39, 48,  7,  1, 18, 59, 66, 22, 50, 97,  6, 29, 92, 17, 95,
+       95, 30,  9, 11, 61, 19, 11, 89, 15, 56, 83, 33, 77,  8, 70,  1,  6,
+        3, 48, 19, 72, 26, 11, 67, 30, 33, 48, 93, 19, 40, 62, 92,  3,  3,
+       85, 62, 89, 32, 64, 24, 75, 18, 16, 18, 58, 40, 29, 67, 49, 91, 25,
+       56, 34, 78, 20, 34, 18, 81, 98, 33, 64, 94, 33, 55, 60, 92]), array([37, 50, 30, 28, 46, 95, 74, 87, 50, 52, 80, 48, 89, 78, 41, 10, 59,
+       99, 70, 74, 34, 94, 64,  2, 12, 74, 91, 16, 85, 53, 32, 93, 49, 46,
+       11, 16, 96, 64, 45, 40, 66, 29, 57, 19, 32, 33,  0, 39, 14, 55, 50,
+       32, 74, 55, 65, 22, 57, 55, 44, 29, 70, 88, 68, 17, 42, 84, 65, 61,
+       33, 49,  8, 87, 67, 28, 18, 55, 74, 34, 23, 13, 37, 78, 38, 26, 81,
+       15, 64, 47, 24, 62, 77, 19, 49, 55, 71,  3, 24, 72, 46,  7]), array([97, 20, 21, 59, 52,  8, 59, 76, 37, 36, 26, 73, 65, 72,  5, 73, 40,
+       40,  6, 75, 86, 67, 69, 57, 51,  1, 39, 67, 61, 27, 35, 74, 89, 99,
+       43, 29, 32, 90, 59, 45, 89, 75, 39, 10, 11, 99, 70, 58, 17, 18, 58,
+       82, 74, 57, 64, 97, 71, 31, 73, 22, 68, 40, 30, 67,  9, 60, 36, 35,
+       50, 52, 37, 67, 25, 38, 62, 65, 32, 48, 25,  3, 50, 91, 91, 37, 82,
+       19, 97, 54, 22, 52, 43, 34, 12, 97, 21, 16, 48, 27,  6, 81]), array([33, 50, 70, 74, 43, 92, 64, 79, 39, 61, 33, 72, 21,  6, 39, 89, 77,
+       27, 12, 51,  6, 40, 13, 30, 17,  4, 35, 22, 18, 54, 76, 74, 70, 88,
+       92, 13,  6, 23, 49, 82, 20, 87, 33, 81, 95, 30, 83, 55,  8,  5, 84,
+       68, 18, 73, 97, 23, 37, 86, 24, 36, 36, 87, 27, 37, 48, 87, 70, 59,
+       97, 46,  2, 18, 38, 61, 51, 14, 78, 38, 89, 44, 97, 74, 52, 54, 16,
+        2,  1, 30, 36, 43, 59, 89, 46,  6, 73, 87, 48, 92, 88,  0]), array([26, 19, 36, 56, 70, 75, 43, 93, 12, 24, 27, 96, 56, 16,  4, 79, 19,
+       26,  5, 47, 77, 21, 38, 71, 76,  2, 22, 45, 25,  2, 75, 77, 36, 14,
+       21, 24, 39, 53,  2, 42, 39, 51, 55, 32, 93, 85, 22,  7, 22, 35, 69,
+       59, 77, 54, 11,  1, 97, 62, 99, 34, 88, 75, 66, 25, 31, 78, 10, 36,
+        8, 78, 92, 50, 47, 48,  5, 97,  0, 86, 45,  9, 24, 20, 19, 95, 87,
+       79, 26,  9, 69, 28, 65, 22,  3, 28, 25, 53, 45, 91, 24, 38]), array([40,  2, 15, 75, 89,  1, 63, 54, 38, 90,  9, 91, 11, 59, 37, 44, 21,
+       74, 72, 54, 23, 28, 14, 26, 27, 98, 53, 83, 38, 64, 21, 24, 97, 84,
+       17, 83, 91, 86, 62, 66, 80, 50,  5, 93, 63, 71, 48, 48, 82, 57, 64,
+        8, 42, 75, 65, 15, 25, 85, 26,  9, 97,  3, 20, 58, 10, 86, 17, 58,
+       39, 28, 71, 10, 83,  9, 13, 95, 86, 91, 19, 35, 68, 72, 66, 35, 58,
+       69, 75, 82, 20, 12, 87, 84, 23, 38, 71, 90, 20, 76, 83, 31]), array([12, 90, 97, 99, 28, 77, 37, 99, 70,  2, 77, 68, 61, 80,  3, 72, 71,
+       12, 88, 18, 24, 22, 14, 68, 15, 65, 96, 49, 67, 35, 93,  7, 79, 70,
+       90, 16, 98, 94, 26, 26, 29, 60, 56, 60, 63, 44, 70, 49, 15, 93, 20,
+        3, 40, 47, 59, 16, 28, 55,  8, 45, 51, 74, 40, 35, 81, 70, 53, 54,
+       55, 92,  4, 72, 59, 29, 86, 51, 15, 39, 92, 92, 80, 13, 44, 81, 24,
+       30, 50, 25, 13, 67, 84, 33, 22, 96, 93, 81, 17, 29, 34, 60]), array([63, 52, 32, 16, 46, 30, 52, 68, 96, 84, 61, 34, 61, 66, 64, 21, 82,
+       94, 86, 89, 54, 16, 66, 64, 80, 47, 19, 98,  6, 66, 18, 81, 96, 54,
+       47, 34,  4, 66, 55, 92, 94,  6, 28,  6, 75, 90, 72, 71, 36, 29,  0,
+       32, 52, 63, 95, 60, 23, 43, 76, 50, 94, 39, 68,  3, 83, 98, 87, 35,
+        8, 37,  3, 52, 78, 65, 39, 96, 86, 12, 68, 34, 91,  6, 91, 90, 59,
+       90, 51, 47, 28,  4,  8, 31, 10,  4, 56,  0, 27, 43, 44, 78]), array([83,  6, 51, 64, 22, 74, 21, 43, 70,  3, 39, 34, 95, 77, 90, 34, 21,
+       13, 90, 20,  2, 50, 66, 40, 66, 15, 91, 76, 72, 21,  5, 44,  1, 40,
+       10, 13, 73,  5, 17,  6, 31, 84, 67, 93, 13, 19, 97, 42, 17, 99, 79,
+       17,  9, 74, 54,  2, 34, 21, 21, 99, 67, 53, 39,  0, 18,  1, 34, 56,
+       45, 45, 28, 43, 47, 73, 58, 82, 67, 97,  6, 52, 93, 63, 69, 54, 95,
+       61, 47,  6, 19, 40, 27, 56, 65,  5, 60, 55, 97, 19, 86, 92]), array([14, 45,  8, 96,  6, 60, 75, 97, 32, 30, 77, 15, 83, 40, 64, 71, 65,
+       78, 11, 53, 30, 80, 33, 28, 68, 73, 11, 82, 32, 13, 84, 96, 79, 61,
+        3, 10,  8, 10, 82, 96, 54, 97,  1, 39, 40, 31,  6,  0, 44, 65, 35,
+       98, 13, 61, 76, 23, 87, 66, 70,  5, 64, 89, 21, 23,  3, 76, 85,  4,
+       78, 66,  7, 27, 76, 76,  8, 32, 99, 19, 88, 10, 55, 73, 37, 61, 91,
+       94, 31, 72, 50, 22, 31, 50, 45, 47,  7, 96, 82, 21, 74, 91]), array([73, 52, 86, 35, 49, 35,  2, 16,  6,  0, 47, 23, 89, 37, 51, 45, 89,
+       92, 20,  8, 82,  5, 93, 59, 40, 17, 83, 99, 90, 78, 25, 52, 48, 66,
+       30, 66, 22,  9, 51, 50, 82, 83, 63, 67, 96, 70, 39, 84, 98, 17, 13,
+       75, 47, 74, 47, 52, 28,  9, 32,  6, 41, 20, 35, 82,  1, 65, 50, 96,
+       22, 97, 18, 50,  2, 35, 41, 10, 87, 39, 47, 72, 25, 85, 87, 43, 82,
+       56, 84, 55, 10,  0, 65, 76, 47, 31, 81, 17, 67,  2, 56, 18]), array([62, 96, 35, 65, 27, 61, 48, 98, 96, 30,  1, 71,  1, 87, 63, 98, 75,
+       89, 63, 62, 12, 25, 85, 55, 45, 51, 66, 68, 58, 45, 56,  9, 64,  5,
+       23, 22,  9, 48, 46, 58, 64, 10, 71, 41, 70, 84, 52, 56, 46, 58, 91,
+        7,  0, 21, 55, 35, 74, 46,  6, 95, 71, 99, 59, 46,  1,  7, 81, 16,
+       88,  4, 12, 56, 13, 55, 10, 36, 52, 33, 36, 21, 95, 31, 96, 14, 69,
+       75, 66, 77, 21, 21, 62, 55, 49, 30, 73, 69, 37, 87, 55, 50]), array([43, 88, 68, 44, 22, 32, 58,  3, 21, 81,  2, 42, 76, 97, 70, 75, 38,
+       57, 27, 68, 21, 10, 20, 63, 80, 13, 81, 84, 72,  9, 47, 24, 76, 32,
+       53, 20, 61, 58, 13, 22,  6, 71, 60, 18, 59, 24, 46, 10, 83, 34, 40,
+       33, 68, 48, 87, 33, 29, 98, 13,  5, 35, 29, 49, 86, 53, 90, 66, 96,
+       98, 53, 21, 91, 14, 49, 82, 65, 99, 79, 52, 31, 54, 60, 68, 42, 97,
+       77, 19, 96, 93, 34, 92, 30, 91, 37, 19, 53, 58, 90, 10, 95]), array([88, 34, 92,  8, 76, 35,  4, 59, 48, 10,  6, 97, 83, 52, 44, 76, 78,
+       15, 26, 69,  2, 22, 80, 60, 50, 93, 99, 42, 49, 14, 83, 42, 79, 91,
+       57, 28, 82, 59, 88, 46,  4, 98, 30, 43, 35,  8, 87, 28, 71, 67, 70,
+       62, 98, 25, 91, 96, 28, 16, 27, 98, 53,  7, 14, 33, 94, 38, 42, 88,
+       68,  7, 56,  2, 64, 53, 60, 37, 25, 13, 23, 59, 85, 42, 20, 79,  8,
+       46, 11, 64, 26, 37, 27, 65, 95, 81, 32, 56, 88, 22, 20, 66]), array([39, 62, 27, 28, 46, 37, 10, 42, 81,  9, 32, 83, 28, 69, 53, 60, 80,
+       61, 96, 68, 73, 61, 88, 96, 55, 93, 10, 26, 99, 57, 16, 55, 19,  5,
+       28,  7, 88, 24, 75, 20, 41, 68, 19, 39, 46, 94, 56, 17, 71, 50, 60,
+       29, 53, 16,  6, 59,  2, 19, 62, 91, 43, 63, 53, 33, 49, 28,  4, 24,
+       47, 30, 73, 95, 86, 90, 65, 20, 20, 97, 38, 73, 50, 31, 31, 27, 56,
+       32, 77, 55, 88, 69, 62,  7, 61, 75, 17,  4, 45, 43, 80, 21]), array([69, 18, 45, 48, 53, 40, 59, 88, 78, 30, 41, 58, 69, 89, 14, 59, 26,
+        1, 67, 33, 82, 71, 90, 16, 30, 38, 43, 52, 25, 99, 20, 33, 38, 10,
+       99, 17, 39, 54, 64, 46, 72, 72, 80, 46, 83, 86, 65, 22,  2, 98, 98,
+       14, 76, 65, 72, 79, 62, 12, 19, 61, 62, 29, 19, 35, 32,  3, 78, 39,
+       26, 30, 41,  5, 64, 52, 45, 25, 97, 25, 60, 87, 18, 43, 93, 29, 60,
+       98, 83,  6, 81, 57, 34, 17, 92, 84, 40, 11, 40, 42, 26, 72]), array([17,  4, 96, 24, 11, 91, 25,  3, 46, 34, 65, 73, 65, 59, 86, 67, 52,
+       45, 52, 48, 29, 76, 70,  6, 54, 58, 76, 39, 26, 89, 52, 40,  3, 12,
+       86, 67, 74, 16, 75, 65, 75, 68, 43, 70, 72, 73,  6,  7, 41, 73, 73,
+       68, 90, 97,  8,  0, 66, 14, 44, 38, 32, 72, 66, 53, 84,  9, 15,  0,
+       99,  7, 27, 62, 67, 93, 36, 65, 80, 24, 30, 18,  7, 41, 16, 57, 10,
+       57, 60, 42, 67, 89, 70, 28, 95, 79, 12, 94,  7, 29, 93, 89]), array([10,  4, 96, 16, 67, 73, 45, 39, 21, 90, 22, 31, 23, 54, 47, 50, 53,
+       53, 18, 19, 45, 56, 91, 28, 26, 39, 73,  4, 35, 18, 46,  8, 39, 56,
+       41, 83, 64, 76, 74, 26, 46, 48,  0, 31, 96, 36, 91, 37, 94, 97, 12,
+       79, 40, 60, 29, 90, 73, 24, 53, 95, 12, 12, 15, 17, 12,  8,  5, 99,
+       55, 66, 33, 95, 57, 47, 20, 64, 54, 81, 33, 72, 87, 85, 33, 12, 37,
+       43, 70, 29, 43, 97,  5, 68, 54,  6, 35, 69,  4, 30, 72, 23]), array([45, 39, 79, 48, 59, 15, 58, 15, 64, 60, 74,  5, 19, 70, 24, 94, 35,
+       56, 83, 50, 80, 89, 39, 43, 60, 96, 72, 77, 59, 56, 95, 27,  2, 93,
+       41, 24, 24, 59, 26, 34, 60, 76, 91, 20, 70, 45, 11, 34, 13,  0, 66,
+       13, 64, 49, 69, 96, 29, 59, 86, 83,  5, 55, 90, 27, 33, 51,  2, 59,
+       23, 12, 32, 23, 61, 49,  5, 17, 11, 84, 55, 62, 81, 50, 40, 75, 64,
+       37, 55, 97, 63, 53, 40, 86, 45, 48, 80,  7, 54,  4, 46, 89]), array([81, 61, 21, 30,  1, 62, 73, 50, 84, 55, 60, 85, 65, 94, 60, 83, 65,
+       11, 36, 74, 50, 14, 50, 21,  4, 39, 43, 73, 51, 66, 83, 57, 18, 67,
+       57, 80, 78, 65, 71, 96, 20, 22, 13, 60, 75, 29, 75, 39, 94, 82, 14,
+       35, 96, 28,  0,  7,  7, 68, 79, 31, 93,  1, 15, 30, 14, 93, 53,  2,
+       86, 29, 98, 59, 78,  5, 32, 86, 48, 49, 98, 24, 89,  0, 22, 25, 60,
+       24, 95, 37, 40, 32, 73, 74, 77, 90, 65, 89, 16, 25, 87, 38]), array([47, 40, 25, 73, 56, 34, 12,  1, 44, 81, 21, 31, 33, 26, 14, 60,  4,
+       52, 79,  3, 11, 80, 18, 41,  7, 21, 37,  5, 33, 88, 49, 79,  9, 99,
+       67, 95, 97, 42, 40, 64,  2, 84, 66, 49, 25, 77, 25,  9, 34, 79, 55,
+       70,  3, 89, 93, 59, 75, 81, 75, 61, 11, 25, 68, 54, 69, 13, 31, 12,
+       89, 52, 78, 85, 48, 52, 14,  8, 37, 41, 96, 66, 21, 63,  5, 62, 96,
+        3, 56, 15, 72, 97, 15,  9,  2, 11, 76, 14, 98, 64, 26, 49]), array([91, 96, 58, 84, 88, 34, 79, 31, 56, 80, 56, 22, 30, 42,  8, 47, 17,
+       78, 25,  0, 96, 97,  7, 38, 63, 23, 84, 37,  2, 98, 53, 13,  9, 77,
+       64, 17, 23, 77, 94, 60, 38, 20, 76, 86, 10,  1, 34, 99, 46, 22, 21,
+       57,  0, 20, 99, 92, 64, 87, 31, 73, 26,  5, 67, 69, 80, 27, 98, 35,
+       35, 88, 28, 19, 48, 54, 48, 48, 24, 51, 90, 71, 18, 18, 87, 87, 87,
+       39, 26,  1, 83, 23, 56, 62, 24, 36, 65, 23, 61,  3, 83, 45]), array([79, 56, 66, 33, 30, 96, 74, 45,  5,  5, 20, 52, 80, 14, 68, 74, 94,
+       23, 27, 88, 15, 85, 50, 75, 43, 88, 16, 49, 26, 47, 27, 60,  2, 74,
+       66,  8,  4, 50, 17,  9, 97, 91, 96, 70, 45, 11, 69, 12, 65, 81, 54,
+       39, 69, 85,  4, 98, 10,  1,  8, 23,  0, 92,  0, 66, 26, 69, 18, 30,
+       22, 35, 58, 24, 12, 82, 61, 80, 33,  5, 94, 52, 76, 28, 27, 21, 12,
+       72, 42, 39, 87, 87, 64,  6, 49, 77,  6,  2, 87, 18, 45, 39]), array([88, 82, 97, 13, 53, 50, 13, 31, 23, 94,  3,  4, 98, 93, 85, 63, 46,
+       62, 86, 99, 71, 35, 93, 43, 97, 73, 55,  8, 84, 13, 28, 32, 83, 32,
+       93,  2, 44, 44, 66, 98, 85,  2,  9, 89, 92,  4, 79, 44, 72, 41, 16,
+       41, 72, 68,  0, 68, 18, 26, 77, 98, 98, 94, 51, 15, 72, 21, 14, 53,
+       58, 31, 83,  3, 76, 64, 29,  0, 54, 54, 80, 77, 65, 90, 21,  6, 38,
+        8, 29, 67, 80, 97, 66, 27, 12, 96, 41, 85, 30, 36, 14, 47]), array([41, 73, 26, 62, 34, 64, 95, 74, 71, 44, 15, 84, 39, 23, 44, 96, 57,
+       12,  6, 69, 66, 95, 28, 20, 29, 61, 32, 49, 13, 23, 68, 61, 70, 87,
+        8, 49, 37, 20, 85, 18, 57, 49, 74, 41, 85, 75, 32,  0, 19, 66, 76,
+       36, 30, 45, 98, 90, 33, 26,  1, 84, 86, 14, 47, 26, 20, 25, 76, 67,
+       10, 58, 60, 21, 98, 53, 86, 64,  7, 87, 10, 58, 17, 79, 44, 22, 69,
+       97, 77, 56, 23, 76, 66, 80, 71, 59, 67, 44, 78,  5, 52, 26]), array([38, 75, 41, 87, 44, 37, 56, 97, 68, 63, 13, 22, 57, 89, 54, 89, 59,
+       57,  6, 93, 18,  8, 47,  2, 66, 52, 22, 75, 17,  4, 45,  9, 16, 65,
+       62, 59, 52, 66, 12, 18,  8, 85, 37, 43, 96,  1, 39, 36, 79, 78, 64,
+       30, 50, 70, 72, 78,  8, 72,  4, 40, 96, 39, 37, 69, 13, 27, 82, 79,
+       82, 69, 66, 92, 87, 32, 85, 60, 33, 81,  4, 60, 60, 12, 11, 34, 61,
+       65, 24, 60, 48, 27, 52, 61,  5, 55, 84, 58, 11, 36, 13, 61]), array([99, 98, 40, 86, 93, 59, 51, 57, 63, 84, 13,  0, 32, 34, 24, 92,  5,
+       71, 64, 97, 59, 75, 64, 35, 98, 77, 55, 82, 30, 44, 36, 67, 42, 57,
+       75, 79, 66, 12, 78,  1, 41, 66,  8, 60, 79,  9, 31,  9, 75, 37, 87,
+       44, 46, 77, 77, 25, 13, 21, 82, 28, 66, 19,  5, 59, 74, 11, 30, 56,
+       72, 43, 16, 44, 35, 91, 40, 29, 87, 54, 11, 11, 34, 49, 60, 96, 78,
+       83, 40, 90, 20, 31, 10, 14, 36, 76, 49,  4,  5, 10, 48, 66]), array([ 6, 97, 97, 74, 31, 43, 52, 92, 98, 13, 47, 71, 46, 70, 20,  2, 49,
+       79, 94, 56, 47, 86, 68, 44, 29, 40, 64, 98, 73, 42, 81, 71, 71, 52,
+       74, 77, 33, 65, 38, 97, 36, 81, 64, 91, 89, 83, 12, 33, 63, 17, 67,
+       39, 11, 57, 34, 73, 17, 60, 92, 53, 15, 73,  0, 28, 18, 85, 47, 25,
+        3, 62, 37, 58, 23, 11, 35, 80, 70, 70, 77, 41, 89, 11, 58, 13, 61,
+       69, 24,  9, 19, 58, 98, 46, 56, 28,  2, 22, 95, 49, 26, 50]), array([48, 56, 71, 21, 90, 38,  7, 70, 90, 26, 44, 97, 76, 16, 62, 41, 48,
+       51, 70, 21, 91, 80, 69, 67, 20, 77, 39, 43,  7, 95, 68, 57, 78, 72,
+       87, 91, 99, 17, 44, 66, 66,  8, 17, 88, 31, 67, 17, 97, 56, 44, 10,
+       89, 63, 41, 35, 85, 27,  7, 24, 73, 32, 34, 80,  7,  6, 37, 16, 59,
+       52, 29, 47, 65, 47, 74, 50, 40, 40, 60, 32, 36,  5, 75, 72, 64, 91,
+       52, 94,  6,  7, 72, 18, 52, 88, 20, 22, 28, 27, 48,  5, 15]), array([32, 19, 59, 15, 30, 29, 44, 17, 78, 11, 62, 76, 89, 12,  3, 14, 55,
+       73, 50, 72, 69,  6, 18, 21,  7, 85, 66, 88, 97,  6, 82, 48, 61, 48,
+       49, 60, 90,  8, 16,  3,  1,  2,  8, 28, 33, 35, 86, 94, 61, 58, 18,
+       10, 65, 73, 99, 87, 80, 64, 83, 45, 89, 75, 88, 23,  5, 17, 18, 34,
+        1, 85, 79, 26, 51, 39, 69, 66, 47,  4, 17, 23, 33, 80, 27, 70, 44,
+       43, 25, 40, 57, 14, 28, 14, 28, 33,  2, 28, 71, 17, 59, 20]), array([19, 57, 57, 79, 92, 45, 96, 25, 68, 33, 69, 31, 94, 81, 82,  6, 42,
+       84, 92, 43, 97, 58, 92, 72, 47, 71, 82, 65, 84, 64, 42,  8,  9, 61,
+       40, 38, 29, 73, 66, 14, 69, 17, 89, 16, 49, 75, 40, 75,  1,  9, 52,
+       54, 61, 43, 19, 76, 12, 67, 39, 52, 42, 69, 69, 78, 35, 35, 55, 42,
+       23, 98,  3, 16, 55, 21, 40, 80, 92, 71, 24, 90,  5, 11, 68, 68, 23,
+       29, 25, 14, 21, 14, 82, 51, 50, 33, 31, 10, 36, 83, 81, 69]), array([63, 70, 86, 34, 55, 80, 82, 14, 14, 60, 26,  4, 99,  3, 80, 87, 55,
+       88, 44, 59, 62, 59, 23, 91, 38, 96, 52, 57, 81, 12, 37, 58,  9, 57,
+       89, 95, 54, 11,  7, 35, 88, 22, 68, 59, 78, 56, 35, 82, 42, 19, 68,
+       30, 59, 11, 35, 33, 76,  3, 21, 30, 95, 84, 95, 53,  4, 34, 12, 11,
+       56, 82, 22, 48, 38, 76, 37, 81,  6, 51, 91, 42, 67, 68, 26, 48, 79,
+       49, 48, 14, 29, 56, 97, 87, 33, 76,  9, 12, 19, 62, 19, 21]), array([19, 91, 72, 28, 77, 95, 73, 38, 58, 79, 97, 61, 98, 76, 77, 64, 32,
+       33, 53, 84, 40, 57, 61,  8, 33, 76, 85, 28, 99, 94, 95,  8, 66, 88,
+       61, 42, 95, 25, 15, 96, 14, 44,  7, 48, 54, 13, 39, 16, 22, 73, 81,
+       72, 53, 66, 47, 94, 38, 39, 78, 50, 23, 25,  8, 73, 39, 12, 41, 19,
+       32, 10, 90, 14, 22, 25, 98, 97, 81, 84, 12, 67, 90, 64, 59, 97,  0,
+       90, 25,  3, 33, 17, 87, 90, 97, 12, 70, 19, 69, 34, 11, 78]), array([88,  4, 24, 37, 53, 18, 47, 93, 71, 67, 40, 69, 64, 55, 57, 91,  3,
+       28, 91, 99, 79, 26, 70, 16, 89, 74, 33, 62, 82, 50, 97,  2, 52, 77,
+       14, 59, 44, 32, 71, 34, 56, 37,  3, 15, 87, 81, 76, 12, 64, 89, 76,
+       41, 33, 68, 54, 47, 98, 97,  2, 18, 83, 25, 75, 10, 96,  2, 70, 93,
+       95, 97, 34, 90, 31, 17, 48, 10,  8, 72, 20, 73, 31, 52, 89, 66, 49,
+       70,  6, 61, 57, 16, 22, 80, 26, 44, 78, 49,  4, 93, 79, 45]), array([65, 41, 28,  3, 72, 18,  5, 21,  3, 30, 38, 89, 74, 18,  4, 21, 70,
+       64, 55, 24, 66, 22, 37, 78,  4, 18, 28, 24,  3, 93, 71,  5, 32, 22,
+       86, 89, 72, 43,  2, 40, 12,  8,  8, 62, 28, 64, 11, 24,  6,  0, 46,
+       99, 91, 93, 10, 64, 69, 24, 98, 86, 93, 41,  5, 40, 42, 63, 67, 38,
+       94, 60, 44, 60, 16, 23, 68,  4, 16, 19, 34, 24, 74, 48, 64, 16, 57,
+       69, 69, 30, 66,  2,  5, 31,  1,  5, 42, 35, 32, 63, 58, 28]), array([11, 22, 14, 91, 61, 77, 89, 31,  4, 14, 35, 97,  9, 16, 68, 38, 87,
+       95, 23, 92, 32, 13, 32,  8,  8, 67, 46, 27, 86, 81, 99,  5, 24, 53,
+       21, 41, 51, 55, 82, 12, 96, 31, 95, 40, 13, 23, 90, 35, 81, 93, 80,
+        9, 39, 61,  0, 49, 50, 57, 88, 99, 91, 75, 93, 73, 11, 41, 95, 28,
+       53, 33,  4, 58, 11, 42, 90, 75, 79, 89, 60, 44, 15, 47, 27, 41, 25,
+       35,  4,  2, 98, 23, 88, 45, 17, 20, 17, 99, 91, 53, 74, 64])], 'feature_importances_': array([0.01961227, 0.01788882, 0.0177844 , 0.02662382, 0.03526735,
+       0.01605791, 0.01625369, 0.02484259, 0.01516394, 0.22031669,
+       0.02988917, 0.01990195, 0.35851355, 0.04824655, 0.01184591,
+       0.01972861, 0.02501337, 0.02912331, 0.02353892, 0.02438721]), 'n_classes_': 2, 'n_features_in_': 20, 'n_outputs_': 1}</code></pre>
+</div>
+</div>
+</section>
+<section id="keras" class="level2">
+<h2 class="anchored" data-anchor-id="keras">Keras</h2>
+<div class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>WARNING:tensorflow:From C:\Users\st004186\Envs\gingado\lib\site-packages\keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>keras_clf <span class="op">=</span> keras.Sequential()</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>keras_clf.add(keras.layers.Dense(<span class="dv">16</span>, activation<span class="op">=</span><span class="st">'relu'</span>, input_shape<span class="op">=</span>(<span class="dv">20</span>,)))</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>keras_clf.add(keras.layers.Dense(<span class="dv">8</span>, activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>keras_clf.add(keras.layers.Dense(<span class="dv">1</span>, activation<span class="op">=</span><span class="st">'sigmoid'</span>))</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>keras_clf.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'binary_crossentropy'</span>)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>keras_clf.fit(X, y, batch_size<span class="op">=</span><span class="dv">10</span>, epochs<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>WARNING:tensorflow:From C:\Users\st004186\Envs\gingado\lib\site-packages\keras\src\backend.py:873: The name tf.get_default_graph is deprecated. Please use tf.compat.v1.get_default_graph instead.
+
+WARNING:tensorflow:From C:\Users\st004186\Envs\gingado\lib\site-packages\keras\src\optimizers\__init__.py:309: The name tf.train.Optimizer is deprecated. Please use tf.compat.v1.train.Optimizer instead.
+
+Epoch 1/10
+WARNING:tensorflow:From C:\Users\st004186\Envs\gingado\lib\site-packages\keras\src\utils\tf_utils.py:492: The name tf.ragged.RaggedTensorValue is deprecated. Please use tf.compat.v1.ragged.RaggedTensorValue instead.
+
+ 1/10 [==&gt;...........................] - ETA: 7s - loss: 0.694010/10 [==============================] - 1s 2ms/step - loss: 0.6796
+Epoch 2/10
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.598810/10 [==============================] - 0s 2ms/step - loss: 0.6566
+Epoch 3/10
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.711010/10 [==============================] - 0s 2ms/step - loss: 0.6382
+Epoch 4/10
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.483310/10 [==============================] - 0s 2ms/step - loss: 0.6218
+Epoch 5/10
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.545310/10 [==============================] - 0s 2ms/step - loss: 0.6062
+Epoch 6/10
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.678410/10 [==============================] - 0s 1ms/step - loss: 0.5924
+Epoch 7/10
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.393010/10 [==============================] - 0s 2ms/step - loss: 0.5790
+Epoch 8/10
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.487210/10 [==============================] - 0s 2ms/step - loss: 0.5672
+Epoch 9/10
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.553210/10 [==============================] - 0s 2ms/step - loss: 0.5550
+Epoch 10/10
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.453210/10 [==============================] - 0s 2ms/step - loss: 0.5448</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>&lt;keras.src.callbacks.History at 0x27d58298910&gt;</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>model_doc_keras <span class="op">=</span> ModelCard()</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>model_doc_keras.read_model(keras_clf)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>model_doc_keras.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+<pre><code>'{"class_name": "Sequential", "config": {"name": "sequential", "layers": [{"module": "keras.layers", "class_name": "InputLayer", "config": {"batch_input_shape": [null, 20], "dtype": "float32", "sparse": false, "ragged": false, "name": "dense_input"}, "registered_name": null}, {"module": "keras.layers", "class_name": "Dense", "config": {"name": "dense", "trainable": true, "dtype": "float32", "batch_input_shape": [null, 20], "units": 16, "activation": "relu", "use_bias": true, "kernel_initializer": {"module": "keras.initializers", "class_name": "GlorotUniform", "config": {"seed": null}, "registered_name": null}, "bias_initializer": {"module": "keras.initializers", "class_name": "Zeros", "config": {}, "registered_name": null}, "kernel_regularizer": null, "bias_regularizer": null, "activity_regularizer": null, "kernel_constraint": null, "bias_constraint": null}, "registered_name": null, "build_config": {"input_shape": [null, 20]}}, {"module": "keras.layers", "class_name": "Dense", "config": {"name": "dense_1", "trainable": true, "dtype": "float32", "units": 8, "activation": "relu", "use_bias": true, "kernel_initializer": {"module": "keras.initializers", "class_name": "GlorotUniform", "config": {"seed": null}, "registered_name": null}, "bias_initializer": {"module": "keras.initializers", "class_name": "Zeros", "config": {}, "registered_name": null}, "kernel_regularizer": null, "bias_regularizer": null, "activity_regularizer": null, "kernel_constraint": null, "bias_constraint": null}, "registered_name": null, "build_config": {"input_shape": [null, 16]}}, {"module": "keras.layers", "class_name": "Dense", "config": {"name": "dense_2", "trainable": true, "dtype": "float32", "units": 1, "activation": "sigmoid", "use_bias": true, "kernel_initializer": {"module": "keras.initializers", "class_name": "GlorotUniform", "config": {"seed": null}, "registered_name": null}, "bias_initializer": {"module": "keras.initializers", "class_name": "Zeros", "config": {}, "registered_name": null}, "kernel_regularizer": null, "bias_regularizer": null, "activity_regularizer": null, "kernel_constraint": null, "bias_constraint": null}, "registered_name": null, "build_config": {"input_shape": [null, 8]}}]}, "keras_version": "2.15.0", "backend": "tensorflow"}'</code></pre>
+</div>
+</div>
+</section>
+<section id="other-models" class="level2">
+<h2 class="anchored" data-anchor-id="other-models">Other models</h2>
+<p>Native support for automatic documentation of other model types, such as from <code>fastai</code>, <code>pytorch</code> is expected to be available in future versions. Until then, any models coded form scratch by the user as well as any other model can be documented by passing the information as an argument to the Documenter’s <code>fill_model_info</code> method. This can be done with a string or dictionary. For example:</p>
+<div class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MockDataset(torch.utils.data.Dataset):</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, X, y):</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.X <span class="op">=</span> torch.from_numpy(X.astype(np.float32))</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.y <span class="op">=</span> torch.from_numpy(y.astype(np.float32))</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.<span class="bu">len</span> <span class="op">=</span> <span class="va">self</span>.X.shape[<span class="dv">0</span>]</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>):</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.<span class="bu">len</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, idx):</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.X[idx], <span class="va">self</span>.y[idx]</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PytorchNet(torch.nn.Module):</span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(PytorchNet, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layer1 <span class="op">=</span> torch.nn.Linear(<span class="dv">20</span>, <span class="dv">16</span>)</span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layer2 <span class="op">=</span> torch.nn.Linear(<span class="dv">16</span>, <span class="dv">8</span>)</span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layer3 <span class="op">=</span> torch.nn.Linear(<span class="dv">8</span>, <span class="dv">1</span>)</span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> torch.relu(<span class="va">self</span>.layer1(x))</span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> torch.relu(<span class="va">self</span>.layer2(x))</span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> torch.sigmoid(<span class="va">self</span>.layer3(x))</span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>pytorch_clf <span class="op">=</span> PytorchNet()</span>
+<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a>dataloader <span class="op">=</span> MockDataset(X, y)</span>
+<span id="cb43-29"><a href="#cb43-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-30"><a href="#cb43-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-31"><a href="#cb43-31" aria-hidden="true" tabindex="-1"></a>loss_func <span class="op">=</span> torch.nn.BCELoss()</span>
+<span id="cb43-32"><a href="#cb43-32" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.SGD(pytorch_clf.parameters(), lr<span class="op">=</span><span class="fl">0.001</span>, momentum<span class="op">=</span><span class="fl">0.9</span>)</span>
+<span id="cb43-33"><a href="#cb43-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-34"><a href="#cb43-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb43-35"><a href="#cb43-35" aria-hidden="true" tabindex="-1"></a>    running_loss <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb43-36"><a href="#cb43-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, data <span class="kw">in</span> <span class="bu">enumerate</span>(dataloader, <span class="dv">0</span>):</span>
+<span id="cb43-37"><a href="#cb43-37" aria-hidden="true" tabindex="-1"></a>        _X, _y <span class="op">=</span> data</span>
+<span id="cb43-38"><a href="#cb43-38" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
+<span id="cb43-39"><a href="#cb43-39" aria-hidden="true" tabindex="-1"></a>        y_pred_epoch <span class="op">=</span> pytorch_clf(_X)</span>
+<span id="cb43-40"><a href="#cb43-40" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> loss_func(y_pred_epoch, _y.reshape(<span class="dv">1</span>))</span>
+<span id="cb43-41"><a href="#cb43-41" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
+<span id="cb43-42"><a href="#cb43-42" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>model_doc_pytorch <span class="op">=</span> ModelCard()</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>model_doc_pytorch.fill_model_info(<span class="st">"This model is a neural network consisting of two fully connected layers and ending in a linear layer with a sigmoid activation"</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>model_doc_pytorch.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="43">
+<pre><code>'This model is a neural network consisting of two fully connected layers and ending in a linear layer with a sigmoid activation'</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-custom" class="level1">
+<h1>Creating a custom Documenter</h1>
+<p><code>gingado</code> users can easily transform their model documentation needs into a Documenter object. The main advantages of doing this are:</p>
+<ul>
+<li>the documentation template becomes a “recyclable” object that can be saved, loaded, and used in other models or code routines; and</li>
+<li>model documentation can be more closely aligned with model creation and training, thus decreasing the probability that the model and its documentation diverge during the process of model development.</li>
+</ul>
+<p>A <code>gingado</code> Documenter must:</p>
+<ul>
+<li>subclass <code>ggdModelDocumentation</code> (or implement all its methods if the user does not want to keep a dependency to <code>gingado</code>),</li>
+<li>include the actual template for the documentation as a dictionary (with at most two levels of keys) in a class attribute called <code>template</code>,</li>
+<li>ensure that <code>template</code> complies with <a href="https://www.json.org/json-en.html">JSON specifications</a>,</li>
+<li>have <code>file_path</code>, <code>autofill</code> and <code>indent_level</code> as arguments in <code>__init__</code>,</li>
+<li>follow the <code>scikit-learn</code> convention of storing the <code>__init__</code> parameters in <code>self</code> attributes with the same name, and</li>
+<li>implement the <code>autofill_template</code> method using the <code>fill_info</code> method to set the automatically filled information fields.</li>
+</ul>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-ModelCards" class="csl-entry" role="listitem">
+Mitchell, Margaret, Simone Wu, Andrew Zaldivar, Parker Barnes, Lucy Vasserman, Ben Hutchinson, Elena Spitzer, Inioluwa Deborah Raji, and Timnit Gebru. 2018. <span>“Model Cards for Model Reporting.”</span> <em>CoRR</em> abs/1810.03993. <a href="http://arxiv.org/abs/1810.03993">http://arxiv.org/abs/1810.03993</a>.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

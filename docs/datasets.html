@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Functions to load real or simulated datasets that are relevant for economic and financial models">
+
+<title>gingado - Datasets for economic research</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="gingado - Datasets for economic research">
+<meta property="og:description" content="Functions to load real or simulated datasets that are relevant for economic and financial models">
+<meta property="og:image" content="00_datasets_files/figure-html/cell-6-output-2.png">
+<meta property="og:site-name" content="gingado">
+<meta name="twitter:title" content="gingado - Datasets for economic research">
+<meta name="twitter:description" content="Functions to load real or simulated datasets that are relevant for economic and financial models">
+<meta name="twitter:image" content="00_datasets_files/figure-html/cell-6-output-2.png">
+<meta name="twitter:creator" content="@DouglasKGAraujo">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">gingado</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Examples</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-examples">    
+        <li>
+    <a class="dropdown-item" href="./barrolee1994.html" rel="" target="">
+ <span class="dropdown-text">Economic growth</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./forecast.html" rel="" target="">
+ <span class="dropdown-text">Forecasting FX rates</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./machine_controls.html" rel="" target="">
+ <span class="dropdown-text">Effects of labour reform</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Reference</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-reference">    
+        <li>
+    <a class="dropdown-item" href="./augmentation.html" rel="" target="">
+ <span class="dropdown-text">gingado.augmentation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./datasets.html" rel="" target="">
+ <span class="dropdown-text">gingado.datasets</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./benchmark.html" rel="" target="">
+ <span class="dropdown-text">gingado.benchmark</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./estimators.html" rel="" target="">
+ <span class="dropdown-text">gingado.estimators</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./documentation.html" rel="" target="">
+ <span class="dropdown-text">gingado.model_documentation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./utils.html" rel="" target="">
+ <span class="dropdown-text">gingado.utils</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/dkgaraujo/gingado" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/DouglasKGARaujo" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#real-datasets" id="toc-real-datasets" class="nav-link active" data-scroll-target="#real-datasets">Real datasets</a>
+  <ul>
+  <li><a href="#load_barrolee_1994" id="toc-load_barrolee_1994" class="nav-link" data-scroll-target="#load_barrolee_1994"></a><a id="load_barrolee_1994" class="nav-link" data-scroll-target="undefined">load_BarroLee_1994</a></li>
+  </ul></li>
+  <li><a href="#simulated-datasets" id="toc-simulated-datasets" class="nav-link" data-scroll-target="#simulated-datasets">Simulated datasets</a>
+  <ul>
+  <li><a href="#make_causal_effect" id="toc-make_causal_effect" class="nav-link" data-scroll-target="#make_causal_effect"></a><a id="make_causal_effect" class="nav-link" data-scroll-target="undefined">make_causal_effect</a>
+  <ul class="collapse">
+  <li><a href="#pre-treatment-outcome" id="toc-pre-treatment-outcome" class="nav-link" data-scroll-target="#pre-treatment-outcome">Pre-treatment outcome</a></li>
+  <li><a href="#treatment-propensity" id="toc-treatment-propensity" class="nav-link" data-scroll-target="#treatment-propensity">Treatment propensity</a></li>
+  <li><a href="#treatment-assignment" id="toc-treatment-assignment" class="nav-link" data-scroll-target="#treatment-assignment">Treatment assignment</a></li>
+  <li><a href="#treatment-value" id="toc-treatment-value" class="nav-link" data-scroll-target="#treatment-value">Treatment value</a></li>
+  <li><a href="#treatment-effect" id="toc-treatment-effect" class="nav-link" data-scroll-target="#treatment-effect">Treatment effect</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Datasets for economic research</h1>
+</div>
+
+<div>
+  <div class="description">
+    Functions to load real or simulated datasets that are relevant for economic and financial models
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="real-datasets" class="level2">
+<h2 class="anchored" data-anchor-id="real-datasets">Real datasets</h2>
+<section id="load_barrolee_1994" class="level3">
+<h3 class="anchored" data-anchor-id="load_barrolee_1994"><a id="load_barrolee_1994">load_BarroLee_1994</a></h3>
+<blockquote class="blockquote">
+<p>load_BarroLee_1994 <code>(return_tuple: bool = True)</code></p>
+</blockquote>
+<pre>Loads the dataset used in R. Barro and J.-W. Lee's "Sources of Economic Growth" (1994).
+
+Args:
+    return_tuple (bool):  Whether to return the data in a tuple or jointly in a single pandas
+                          DataFrame.
+
+Returns:
+    pandas.DataFrame or tuple: If `return_tuple` is True, returns a tuple of (X, y), where `X` is a
+    DataFrame of independent variables and `y` is a Series of the dependent variable. If False,
+    returns a single DataFrame with both independent and dependent variables.</pre>
+<p>Robert Barro and Jong-Wha Lee’s <span class="citation" data-cites="BARRO19941">(<a href="#ref-BARRO19941" role="doc-biblioref">1994</a>)</span> dataset has been used over time by other economists, such as by <span class="citation" data-cites="belloni2011inference">Belloni, Chernozhukov, and Hansen (<a href="#ref-belloni2011inference" role="doc-biblioref">2011</a>)</span> and <span class="citation" data-cites="giannone2021illusion">Giannone, Lenza, and Primiceri (<a href="#ref-giannone2021illusion" role="doc-biblioref">2021</a>)</span>. This function uses the version available in their <a href="https://onlinelibrary.wiley.com/doi/abs/10.3982/ECTA17842">online annex</a>. In that paper, this dataset corresponds to what the authors call “macro2”.</p>
+<p>The original data, along with more information on the variables, can be found in <a href="http://www2.nber.org/pub/barro.lee/">this NBER website</a>. A very helpful codebook is found <a href="https://github.com/bizmaercq/Do-Poor-Countries-Grow-Faster-than-Rich-Countries/blob/master/data/Codebook.txt">in this repo</a>.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_BarroLee_1994()</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>X.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">gdpsh465</th>
+<th data-quarto-table-cell-role="th">bmp1l</th>
+<th data-quarto-table-cell-role="th">freeop</th>
+<th data-quarto-table-cell-role="th">freetar</th>
+<th data-quarto-table-cell-role="th">h65</th>
+<th data-quarto-table-cell-role="th">hm65</th>
+<th data-quarto-table-cell-role="th">hf65</th>
+<th data-quarto-table-cell-role="th">p65</th>
+<th data-quarto-table-cell-role="th">pm65</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">seccf65</th>
+<th data-quarto-table-cell-role="th">syr65</th>
+<th data-quarto-table-cell-role="th">syrm65</th>
+<th data-quarto-table-cell-role="th">syrf65</th>
+<th data-quarto-table-cell-role="th">teapri65</th>
+<th data-quarto-table-cell-role="th">teasec65</th>
+<th data-quarto-table-cell-role="th">ex1</th>
+<th data-quarto-table-cell-role="th">im1</th>
+<th data-quarto-table-cell-role="th">xr65</th>
+<th data-quarto-table-cell-role="th">tot1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>6.591674</td>
+<td>0.2837</td>
+<td>0.153491</td>
+<td>0.043888</td>
+<td>0.007</td>
+<td>0.013</td>
+<td>0.001</td>
+<td>0.29</td>
+<td>0.37</td>
+<td>...</td>
+<td>0.04</td>
+<td>0.033</td>
+<td>0.057</td>
+<td>0.010</td>
+<td>47.6</td>
+<td>17.3</td>
+<td>0.0729</td>
+<td>0.0667</td>
+<td>0.348</td>
+<td>-0.014727</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>6.829794</td>
+<td>0.6141</td>
+<td>0.313509</td>
+<td>0.061827</td>
+<td>0.019</td>
+<td>0.032</td>
+<td>0.007</td>
+<td>0.91</td>
+<td>1.00</td>
+<td>...</td>
+<td>0.64</td>
+<td>0.173</td>
+<td>0.274</td>
+<td>0.067</td>
+<td>57.1</td>
+<td>18.0</td>
+<td>0.0940</td>
+<td>0.1438</td>
+<td>0.525</td>
+<td>0.005750</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2</td>
+<td>8.895082</td>
+<td>0.0000</td>
+<td>0.204244</td>
+<td>0.009186</td>
+<td>0.260</td>
+<td>0.325</td>
+<td>0.201</td>
+<td>1.00</td>
+<td>1.00</td>
+<td>...</td>
+<td>18.14</td>
+<td>2.573</td>
+<td>2.478</td>
+<td>2.667</td>
+<td>26.5</td>
+<td>20.7</td>
+<td>0.1741</td>
+<td>0.1750</td>
+<td>1.082</td>
+<td>-0.010040</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>3</td>
+<td>7.565275</td>
+<td>0.1997</td>
+<td>0.248714</td>
+<td>0.036270</td>
+<td>0.061</td>
+<td>0.070</td>
+<td>0.051</td>
+<td>1.00</td>
+<td>1.00</td>
+<td>...</td>
+<td>2.63</td>
+<td>0.438</td>
+<td>0.453</td>
+<td>0.424</td>
+<td>27.8</td>
+<td>22.7</td>
+<td>0.1265</td>
+<td>0.1496</td>
+<td>6.625</td>
+<td>-0.002195</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>4</td>
+<td>7.162397</td>
+<td>0.1740</td>
+<td>0.299252</td>
+<td>0.037367</td>
+<td>0.017</td>
+<td>0.027</td>
+<td>0.007</td>
+<td>0.82</td>
+<td>0.85</td>
+<td>...</td>
+<td>2.11</td>
+<td>0.257</td>
+<td>0.287</td>
+<td>0.229</td>
+<td>34.5</td>
+<td>17.6</td>
+<td>0.1211</td>
+<td>0.1308</td>
+<td>2.500</td>
+<td>0.003283</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 62 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>y.plot.hist(title<span class="op">=</span><span class="st">'GDP growth'</span>, bins<span class="op">=</span><span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>&lt;Axes: title={'center': 'GDP growth'}, ylabel='Frequency'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="00_datasets_files/figure-html/cell-6-output-2.png" width="585" height="431"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="simulated-datasets" class="level2">
+<h2 class="anchored" data-anchor-id="simulated-datasets">Simulated datasets</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>All of the functions creating simulated datasets have a parameter <code>random_state</code> that allow for reproducible random numbers.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.datasets <span class="im">import</span> make_causal_effect</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="make_causal_effect" class="level3">
+<h3 class="anchored" data-anchor-id="make_causal_effect"><a id="make_causal_effect">make_causal_effect</a></h3>
+<blockquote class="blockquote">
+<p>make_causal_effect <code>(n_samples: int = 100, n_features: int = 100, pretreatment_outcome=&lt;function &lt;lambda&gt; at 0x00000269ADF72040&gt;, treatment_propensity=&lt;function &lt;lambda&gt; at 0x00000269B5D801F0&gt;, treatment_assignment=&lt;function &lt;lambda&gt; at 0x00000269B5D80160&gt;, treatment=&lt;function &lt;lambda&gt; at 0x00000269B5D80280&gt;, treatment_effect=&lt;function &lt;lambda&gt; at 0x00000269B5D80310&gt;, bias: float = 0, noise: float = 0, random_state=None, return_propensity: bool = False, return_assignment: bool = False, return_treatment_value: bool = False, return_treatment_effect: bool = True, return_pretreatment_y: bool = False, return_as_dict: bool = False)</code></p>
+</blockquote>
+<pre>Generates a simulated dataset to analyze causal effects of a treatment on an outcome variable.
+
+Args:
+    n_samples (int): Number of observations in the dataset.
+    n_features (int): Number of covariates for each observation.
+    pretreatment_outcome (function): Function to generate outcome variable before any treatment.
+    treatment_propensity (function or float): Function to generate treatment propensity or a fixed value for each observation.
+    treatment_assignment (function): Function to determine treatment assignment based on propensity.
+    treatment (function): Function to determine the magnitude of treatment for each treated observation.
+    treatment_effect (function): Function to calculate the effect of treatment on the outcome variable.
+    bias (float): Constant value added to the outcome variable.
+    noise (float): Standard deviation of the noise added to the outcome variable. If 0, no noise is added.
+    random_state (int, RandomState instance, or None): Seed or numpy random state instance for reproducibility.
+    return_propensity (bool): If True, returns the treatment propensity for each observation.
+    return_assignment (bool): If True, returns the treatment assignment status for each observation.
+    return_treatment_value (bool): If True, returns the treatment value for each observation.
+    return_treatment_effect (bool): If True, returns the treatment effect for each observation.
+    return_pretreatment_y (bool): If True, returns the outcome variable of each observation before treatment effect.
+    return_as_dict (bool): If True, returns the results as a dictionary; otherwise, returns as a list.
+    
+Returns:
+    A dictionary or list containing the simulated dataset components specified by the return flags.</pre>
+<p><code>make_causal_effect</code> creates a dataset for when the question of interest is related to the causal effects of a treatment. For example, for a simulated dataset, we can check that <span class="math inline">\(Y_i\)</span> corresponds to the sum of the treatment effects plus the component that does not depend on the treatment:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a> causal_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">2000</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    n_features<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    return_propensity<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    return_treatment_effect<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    return_pretreatment_y<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    return_as_dict<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a> <span class="cf">assert</span> <span class="kw">not</span> np.<span class="bu">any</span>(np.<span class="bu">round</span>(causal_sim[<span class="st">'y'</span>] <span class="op">-</span> causal_sim[<span class="st">'pretreatment_y'</span>] <span class="op">-</span> causal_sim[<span class="st">'treatment_effect'</span>], decimals<span class="op">=</span><span class="dv">13</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="pre-treatment-outcome" class="level4">
+<h4 class="anchored" data-anchor-id="pre-treatment-outcome">Pre-treatment outcome</h4>
+<p>The pre-treatment outcome <span class="math inline">\(Y_i|X_i\)</span> (the part of the outcome variable that is not dependent on the treatment) might be defined by the user. This corresponds to the value of the outcome for any untreated observations. The function should always take at least two arguments: <code>X</code> and <code>bias</code>, even if one of them is unused; <code>bias</code> is the constant. The argument is zero by default but can be set by the user to be another value.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>causal_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    bias<span class="op">=</span><span class="fl">0.123</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    pretreatment_outcome<span class="op">=</span><span class="kw">lambda</span> X, bias: bias,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    return_assignment<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(causal_sim[<span class="st">'y'</span>][causal_sim[<span class="st">'treatment_assignment'</span>] <span class="op">==</span> <span class="dv">0</span>] <span class="op">==</span> <span class="fl">0.123</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If the outcome depends on specific columns of <span class="math inline">\(X\)</span>, this can be implemented as shown below.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>causal_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    pretreatment_outcome<span class="op">=</span><span class="kw">lambda</span> X, bias: X[:, <span class="dv">1</span>] <span class="op">+</span> np.maximum(X[:,<span class="dv">2</span>], <span class="dv">0</span>) <span class="op">+</span> X[:,<span class="dv">3</span>] <span class="op">*</span> X[:,<span class="dv">4</span>] <span class="op">+</span> bias</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And of course, the outcome might also have a random component.</p>
+<p>In these cases (and in other parts of this function), when the user wants to use the same random number generator as the other parts of the function, the function must have an argment <code>rng</code> for the NumPy random number generator used in other parts of the function.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>causal_sim_1 <span class="op">=</span> make_causal_effect(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    pretreatment_outcome<span class="op">=</span><span class="kw">lambda</span> X, bias, rng: X[:, <span class="dv">1</span>] <span class="op">+</span> np.maximum(X[:,<span class="dv">2</span>], <span class="dv">0</span>) <span class="op">+</span> X[:,<span class="dv">3</span>] <span class="op">*</span> X[:,<span class="dv">4</span>] <span class="op">+</span> bias <span class="op">+</span> rng.standard_normal(size<span class="op">=</span>X.shape[<span class="dv">0</span>]),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    return_pretreatment_y<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>causal_sim_2 <span class="op">=</span> make_causal_effect(</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    pretreatment_outcome<span class="op">=</span><span class="kw">lambda</span> X, bias, rng: X[:, <span class="dv">1</span>] <span class="op">+</span> np.maximum(X[:,<span class="dv">2</span>], <span class="dv">0</span>) <span class="op">+</span> X[:,<span class="dv">3</span>] <span class="op">*</span> X[:,<span class="dv">4</span>] <span class="op">+</span> bias <span class="op">+</span> rng.standard_normal(size<span class="op">=</span>X.shape[<span class="dv">0</span>]),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    return_pretreatment_y<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(causal_sim_1[<span class="st">'X'</span>].reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="op">==</span> causal_sim_2[<span class="st">'X'</span>].reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(causal_sim_1[<span class="st">'y'</span>] <span class="op">==</span> causal_sim_2[<span class="st">'y'</span>])</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(causal_sim_1[<span class="st">'pretreatment_y'</span>] <span class="op">==</span> causal_sim_2[<span class="st">'pretreatment_y'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="treatment-propensity" class="level4">
+<h4 class="anchored" data-anchor-id="treatment-propensity">Treatment propensity</h4>
+<p>The treatment propensity of observations may all be the same, in which case <code>treatment_propensity</code> is a floating number between 0 and 1.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>same_propensity_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">485</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    treatment_propensity<span class="op">=</span><span class="fl">0.3</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    return_propensity<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.unique(same_propensity_sim[<span class="st">'propensity'</span>]) <span class="op">==</span> <span class="fl">0.3</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(same_propensity_sim[<span class="st">'propensity'</span>]) <span class="op">==</span> <span class="dv">485</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Or it might depend on the observation’s covariates, with the user passing a function with an argument ‘X’.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>heterogenous_propensities_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    treatment_propensity<span class="op">=</span><span class="kw">lambda</span> X: <span class="fl">0.3</span> <span class="op">+</span> (X[:, <span class="dv">0</span>] <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">*</span> <span class="fl">0.2</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    return_propensity<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Heterogenously distributed propensities"</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Propensity"</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"No of observations"</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>plt.hist(heterogenous_propensities_sim[<span class="st">'propensity'</span>], bins<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="00_datasets_files/figure-html/cell-14-output-1.png" width="593" height="449"></p>
+</div>
+</div>
+<p>The propensity can also be randomly allocated, together with covariate dependence or not. Note that even if the propensity is completely random and does not depend on covariates, the function must still use the argument <code>X</code> to calculate a random vector with the appropriate size.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>random_propensities_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">50000</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    treatment_propensity<span class="op">=</span><span class="kw">lambda</span> X: np.random.uniform(size<span class="op">=</span>X.shape[<span class="dv">0</span>]),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    return_propensity<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Randomly distributed propensities"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Propensity"</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"No of observations"</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>plt.hist(random_propensities_sim[<span class="st">'propensity'</span>], bins<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="00_datasets_files/figure-html/cell-15-output-1.png" width="593" height="449"></p>
+</div>
+</div>
+</section>
+<section id="treatment-assignment" class="level4">
+<h4 class="anchored" data-anchor-id="treatment-assignment">Treatment assignment</h4>
+<p>As seen above, every observation has a given treatment propensity - the chance that they are treated. Users can define how this propensity translates into actual treatment with the argument <code>treatment_assignment</code>. This argument takes a function, which must have an argument called <code>propensity</code>.</p>
+<p>The default value for this argument is a function returning 1s with probability <code>propensity</code> and 0s otherwise. Any other function should always return either 0s or 1s for the data simulator to work as expected.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>causal_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    treatment_assignment<span class="op">=</span><span class="kw">lambda</span> propensity: np.random.binomial(<span class="dv">1</span>, propensity)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>While the case above is likely to be the most useful in practice, this argument accepts more complex relationships between an observation’s propensity and the actual treatment assignment.</p>
+<p>For example, if treatment is subject to rationing, then one could simulate data with 10 observations where only the samples with the highest (say, 3) propensity scores get treated, as below:</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rationed_treatment_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    treatment_propensity<span class="op">=</span><span class="kw">lambda</span> X: np.random.uniform(size<span class="op">=</span>X.shape[<span class="dv">0</span>]),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    treatment_assignment<span class="op">=</span><span class="kw">lambda</span> propensity: propensity <span class="op">&gt;=</span> propensity[np.argsort(propensity)][<span class="op">-</span><span class="dv">3</span>],</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    return_propensity<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    return_assignment<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>rationed_treatment <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    np.column_stack((rationed_treatment_sim[<span class="st">'propensity'</span>], rationed_treatment_sim[<span class="st">'treatment_assignment'</span>])),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    columns <span class="op">=</span> [<span class="st">'propensity'</span>, <span class="st">'assignment'</span>]</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>rationed_treatment.sort_values(<span class="st">'propensity'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">propensity</th>
+<th data-quarto-table-cell-role="th">assignment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>0.088629</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0.132043</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0.262408</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>0.288975</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0.310421</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0.507710</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9</td>
+<td>0.732059</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>0.875741</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>0.943250</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0.945038</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="treatment-value" class="level4">
+<h4 class="anchored" data-anchor-id="treatment-value">Treatment value</h4>
+<p>The <code>treatment</code> argument indicates the magnitude of the treatment for each observation assigned for treatment. Its value is always a function that must have an argument called <code>assignment</code>, as in the first example below.</p>
+<p>In the simplest case, the treatment is a binary variable indicating whether or not a variable was treated. In other words, the treatment is the same as the assignment, as in the default value.</p>
+<p>But users can also simulate data with heterogenous treatment, conditional on assignment. This is done by including a pararemeter <code>X</code> in the function, as shown in the second example below.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>binary_treatment_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">15</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    treatment<span class="op">=</span><span class="kw">lambda</span> assignment: assignment,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    return_assignment<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    return_treatment_value<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>(binary_treatment_sim[<span class="st">'treatment_assignment'</span>] <span class="op">-</span> binary_treatment_sim[<span class="st">'treatment_value'</span>][<span class="dv">0</span>]) <span class="op">==</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Heterogenous treatments may occur in settings where treatment intensity, conditional on assignment, varies across observations. Please note the following:</p>
+<ul>
+<li><p>the heterogenous treatment amount may or may not depend on covariates, but either way, if treatment values are heterogenous, then <code>X</code> needs to be an argument of the function passed to <code>treatment</code>, if nothing else to make sure the shapes match; and</p></li>
+<li><p>if treatments are heterogenous, then it is important to multiply the treatment value with the <code>assignment</code> argument to ensure that observations that are not assigned to be treated are indeed not treated (the function will return an <code>AssertionError</code> otherwise).</p></li>
+</ul>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>hetereogenous_treatment_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">15</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    treatment<span class="op">=</span><span class="kw">lambda</span> assignment, X: assignment <span class="op">*</span> np.random.uniform(size<span class="op">=</span>X.shape[<span class="dv">0</span>]),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    return_assignment<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    return_treatment_value<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In contrast to the function above, in the chunk below the function <code>make_causal_effect</code> fails because a treatment value is also assigned to observations that were not assigned for treatment.</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>test_fail(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    make_causal_effect, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    kwargs<span class="op">=</span><span class="bu">dict</span>(treatment<span class="op">=</span><span class="kw">lambda</span> assignment, X: assignment <span class="op">+</span> np.random.uniform(size<span class="op">=</span>X.shape[<span class="dv">0</span>]))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="treatment-effect" class="level4">
+<h4 class="anchored" data-anchor-id="treatment-effect">Treatment effect</h4>
+<p>The treatment effect can be homogenous, ie, is doesn’t depend on any other characteristic of the individual observations (in other words, does not depend on <span class="math inline">\(X_i\)</span>), or heterogenous (where the treatment effect on <span class="math inline">\(Y_i\)</span> does depend on each observation’s <span class="math inline">\(X_i\)</span>). This can be done by specifying the causal relationship through a lambda function, as below:</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>homogenous_effects_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>        treatment_effect<span class="op">=</span><span class="kw">lambda</span> treatment_value: treatment_value,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>        return_treatment_value<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (homogenous_effects_sim[<span class="st">'treatment_effect'</span>] <span class="op">==</span> homogenous_effects_sim[<span class="st">'treatment_value'</span>]).<span class="bu">all</span>()</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>heterogenous_effects_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        treatment_effect<span class="op">=</span><span class="kw">lambda</span> treatment_value, X: np.maximum(X[:, <span class="dv">1</span>], <span class="dv">0</span>) <span class="op">*</span> treatment_value,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        return_treatment_value<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>        return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (heterogenous_effects_sim[<span class="st">'treatment_effect'</span>] <span class="op">!=</span> heterogenous_effects_sim[<span class="st">'treatment_value'</span>]).<span class="bu">any</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-BARRO19941" class="csl-entry" role="listitem">
+Barro, Robert J., and Jong-Wha Lee. 1994. <span>“Sources of Economic Growth.”</span> <em>Carnegie-Rochester Conference Series on Public Policy</em> 40: 1–46. <a href="https://doi.org/10.1016/0167-2231(94)90002-7">https://doi.org/10.1016/0167-2231(94)90002-7</a>.
+</div>
+<div id="ref-belloni2011inference" class="csl-entry" role="listitem">
+Belloni, Alexandre, Victor Chernozhukov, and Christian Hansen. 2011. <span>“Inference for High-Dimensional Sparse Econometric Models.”</span> <em>arXiv Preprint arXiv:1201.0220</em>.
+</div>
+<div id="ref-giannone2021illusion" class="csl-entry" role="listitem">
+Giannone, Domenico, Michele Lenza, and Giorgio E Primiceri. 2021. <span>“Economic Predictions with Big Data: The Illusion of Sparsity.”</span> <em>Econometrica</em> 89 (5): 2409–37.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

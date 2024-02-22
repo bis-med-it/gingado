@@ -1,0 +1,233 @@
+---
+description: Functions to augment the user's dataset with information from official sources.
+output-file: augmentation.html
+title: Data augmentation
+jupyter: python3
+warning: false
+---
+
+
+```{python}
+#| echo: false
+#| output: false
+%load_ext autoreload
+%autoreload 2
+```
+
+```{python}
+#| echo: false
+#| output: false
+from __future__ import annotations
+import numpy as np
+import pandas as pd
+import pandasdmx as sdmx
+from utils import show_doc
+```
+
+`gingado` provides data augmentation functionalities that can help users to augment their datasets with a time series dimension. This can be done both on a stand-alone basis as the user incorporates new data on top of the original dataset, or as part of a `scikit-learn` [`Pipeline`](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html) that also includes other steps like data transformation and model estimation.
+
+# Data augmentation with SDMX
+
+The **S**tatistical **D**ata and **M**etadata e**X**change (SDMX) is an ISO standard comprising:
+
+* technical standards
+
+* statistical guidelines, including cross-domain concepts and codelists
+
+* an IT architecture and tools
+
+SDMX is sponsored by the Bank for International Settlements, European Central Bank, Eurostat, International Monetary Fund, Organisation for Economic Co-operation and Development, United Nations, and World Bank Group.
+
+More information about the SDMX is available on its [webpage](http://sdmx.org).
+
+`gingado` uses SDMX to augment user datasets through the transformer `AugmentSDMX`.
+
+For example, the code below is a simple illustration of `AugmentSDMX` augmentation under two scenarios: without a variance threshold (ie, including all data regardless if they are constants) or with a relatively high variance threshold (such that no data is actually added).
+
+In both cases, the object is using the default data flow, which is the daily series of monetary policy rates set by central banks.
+
+These `AugmentSDMX` objects are used to augment a data frame with simulated data for illustrative purposes. In real life, this data would be the user's original data.
+
+```{python}
+rng = np.random.default_rng(seed=42)
+
+periods = 15
+idx = pd.date_range(freq='d', start='2020-01-01', periods=periods)
+orig_data = pd.DataFrame({'orig_col': rng.standard_normal(periods)}, index=idx)
+orig_data.head()
+```
+
+```{python}
+from gingado.augmentation import AugmentSDMX
+aug_NoVarThresh = AugmentSDMX(variance_threshold=None)
+aug_data = aug_NoVarThresh.fit_transform(orig_data)
+aug_data
+```
+
+```{python}
+aug_StrictVarThresh = AugmentSDMX(variance_threshold=10)
+aug_data = aug_StrictVarThresh.fit_transform(orig_data)
+aug_data
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(AugmentSDMX)
+```
+
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(AugmentSDMX.fit)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(AugmentSDMX.transform)
+```
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(AugmentSDMX.fit_transform)
+```
+
+## Compatibility with `scikit-learn`
+
+As mentioned above, `gingado`'s transformers are built to be compatible with `scikit-learn`. The code below demonstrates this compatibility.
+
+First, we create the example dataset. In this case, it comprises the daily foreign exchange rate of selected currencies to the Euro. The Brazilian Real (BRL) is chosen for this example as the dependent variable.
+
+```{python}
+from gingado.utils import load_SDMX_data, Lag
+from sklearn.model_selection import TimeSeriesSplit
+```
+
+```{python}
+X = load_SDMX_data(
+    sources={'ECB': 'EXR'}, 
+    keys={'FREQ': 'D', 'CURRENCY': ['EUR', 'AUD', 'BRL', 'CAD', 'CHF', 'GBP', 'JPY', 'SGD', 'USD']},
+    params={"startPeriod": 2003}
+    )
+# drop rows with empty values
+X.dropna(inplace=True)
+# adjust column names in this simple example for ease of understanding:
+# remove parts related to source and dataflow names
+X.columns = X.columns.str.replace("ECB__EXR_D__", "").str.replace("__EUR__SP00__A", "")
+X = Lag(lags=1, jump=0, keep_contemporaneous_X=True).fit_transform(X)
+y = X.pop('BRL')
+# retain only the lagged variables in the X variable
+X = X[X.columns[X.columns.str.contains('_lag_')]]
+```
+
+```{python}
+X_train, X_test = X.iloc[:-1], X.tail(1)
+y_train, y_test = y.iloc[:-1], y.tail(1)
+
+X_train.shape, y_train.shape, X_test.shape, y_test.shape
+```
+
+Next, the data augmentation object provided by `gingado` adds more data. In this case, for brevity only one dataflow from one source is listed. If users want to add more SDMX sources, simply add more keys to the dictionary. And if users want data from all dataflows from a given source provided the keys and parameters such as frequency and dates match, the value should be set to `'all'`, as in `{'ECB': ['CISS'], 'BIS': 'all'}`.
+
+```{python}
+test_src = {'ECB': ['CISS'], 'BIS': ['WS_CBPOL_D']}
+
+X_train__fit_transform = AugmentSDMX(sources=test_src).fit_transform(X=X_train)
+X_train__fit_then_transform = AugmentSDMX(sources=test_src).fit(X=X_train).transform(X=X_train, training=True)
+
+assert X_train__fit_transform.shape == X_train__fit_then_transform.shape
+```
+
+This is the dataset now after this particular augmentation:
+
+```{python}
+print(f"No of columns: {len(X_train__fit_transform.columns)} {X_train__fit_transform.columns}")
+X_train__fit_transform
+```
+
+### Pipeline
+
+`AugmentSDMX` can also be part of a `Pipeline` object, which minimises operational errors during modelling and avoids using testing data during training:
+
+```{python}
+from sklearn.pipeline import Pipeline
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import GridSearchCV
+```
+
+```{python}
+pipeline = Pipeline([
+    ('augmentation', AugmentSDMX(sources={'BIS': 'WS_CBPOL_D'})),
+    ('imp', IterativeImputer(max_iter=10)),
+    ('forest', RandomForestRegressor())
+], verbose=True)
+```
+
+### Tuning the data augmentation to enhance model performance
+
+And since `AugmentSDMX` can be included in a `Pipeline`, it can also be fine-tuned by parameter search techniques (such as grid search), further helping users make the best of available data to enhance performance of their models.
+
+::: {.callout-tip}
+Users can cache the data augmentation step to avoid repeating potentially lengthy data downloads. See the `memory` argument in the [`sklearn.pipeline.Pipeline` documentation](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html).
+:::
+
+```{python}
+grid = GridSearchCV(
+    estimator=pipeline,
+    param_grid={
+        'augmentation': ['passthrough', AugmentSDMX(sources={'ECB': 'CISS'})]
+    },
+    verbose=2,
+    cv=TimeSeriesSplit(n_splits=2)
+    )
+
+y_pred_grid = grid.fit(X_train, y_train).predict(X_test)
+```
+
+```{python}
+grid.best_params_
+```
+
+```{python}
+print(f"In this particular case, the best model was achieved by {'not ' if grid.best_params_['augmentation'] == 'passthrough' else ''}using the data augmentation.")
+```
+
+```{python}
+print(f"The last value in the training dataset was {y_train.tail(1).to_numpy()}. The predicted value was {y_pred_grid}, and the actual value was {y_test.to_numpy()}.")
+```
+
+# Sources of data
+
+`gingado` seeks to only lists realiable data sources by choice, with a focus on official sources. This is meant to provide users with the trust that their dataset will be complemented by reliable sources. Unfortunately, it is not possible at this stage to include *all* official sources given the substantial manual and maintenance work. `gingado` leverages the existence of the [Statistical Data and Metadata eXchange (SDMX)](https://sdmx.org), an organisation of official data sources that establishes common data and metadata formats, to download data that is relevant (and hopefully also useful) to users.
+
+The function `list_SDMX_sources` returns a list of codes corresponding to the data sources available to provide `gingado` users with data through SDMX.
+
+```{python}
+from gingado.utils import list_SDMX_sources
+```
+
+```{python}
+list_SDMX_sources()
+```
+
+You can also see what the available dataflows are. The code below returns a dictionary where each key is the code for an SDMX source, and the values associated with each key are the code and name for the respective dataflows.
+
+```{python}
+from gingado.utils import list_all_dataflows
+```
+
+```{python}
+dflows = list_all_dataflows()
+dflows
+```
+
+For example, the dataflows from the World Bank are:
+
+```{python}
+dflows['WB']
+```

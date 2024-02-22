@@ -1,0 +1,3043 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Machine learning-based estimators of economic models">
+
+<title>gingado - Estimators</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="gingado - Estimators">
+<meta property="og:description" content="Machine learning-based estimators of economic models">
+<meta property="og:site-name" content="gingado">
+<meta name="twitter:title" content="gingado - Estimators">
+<meta name="twitter:description" content="Machine learning-based estimators of economic models">
+<meta name="twitter:creator" content="@DouglasKGAraujo">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">gingado</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Examples</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-examples">    
+        <li>
+    <a class="dropdown-item" href="./barrolee1994.html" rel="" target="">
+ <span class="dropdown-text">Economic growth</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./forecast.html" rel="" target="">
+ <span class="dropdown-text">Forecasting FX rates</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./machine_controls.html" rel="" target="">
+ <span class="dropdown-text">Effects of labour reform</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Reference</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-reference">    
+        <li>
+    <a class="dropdown-item" href="./augmentation.html" rel="" target="">
+ <span class="dropdown-text">gingado.augmentation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./datasets.html" rel="" target="">
+ <span class="dropdown-text">gingado.datasets</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./benchmark.html" rel="" target="">
+ <span class="dropdown-text">gingado.benchmark</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./estimators.html" rel="" target="">
+ <span class="dropdown-text">gingado.estimators</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./documentation.html" rel="" target="">
+ <span class="dropdown-text">gingado.model_documentation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./utils.html" rel="" target="">
+ <span class="dropdown-text">gingado.utils</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/dkgaraujo/gingado" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/DouglasKGARaujo" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#covariate-selection" id="toc-covariate-selection" class="nav-link active" data-scroll-target="#covariate-selection">Covariate selection</a>
+  <ul>
+  <li><a href="#clustering" id="toc-clustering" class="nav-link" data-scroll-target="#clustering">Clustering</a>
+  <ul class="collapse">
+  <li><a href="#findcluster" id="toc-findcluster" class="nav-link" data-scroll-target="#findcluster"></a><a id="findcluster" class="nav-link" data-scroll-target="undefined">FindCluster</a>
+  <ul class="collapse">
+  <li><a href="#fit" id="toc-fit" class="nav-link" data-scroll-target="#fit"></a><a id="fit" class="nav-link" data-scroll-target="undefined">fit</a></li>
+  <li><a href="#transform" id="toc-transform" class="nav-link" data-scroll-target="#transform"></a><a id="transform" class="nav-link" data-scroll-target="undefined">transform</a></li>
+  <li><a href="#fit_transform" id="toc-fit_transform" class="nav-link" data-scroll-target="#fit_transform"></a><a id="fit_transform" class="nav-link" data-scroll-target="undefined">fit_transform</a></li>
+  <li><a href="#document" id="toc-document" class="nav-link" data-scroll-target="#document"></a><a id="document" class="nav-link" data-scroll-target="undefined">document</a></li>
+  <li><a href="#example-finding-similar-countries" id="toc-example-finding-similar-countries" class="nav-link" data-scroll-target="#example-finding-similar-countries">Example: finding similar countries</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#causal-inference" id="toc-causal-inference" class="nav-link" data-scroll-target="#causal-inference">Causal inference</a>
+  <ul>
+  <li><a href="#comparative-case-studies" id="toc-comparative-case-studies" class="nav-link" data-scroll-target="#comparative-case-studies">Comparative case studies</a>
+  <ul class="collapse">
+  <li><a href="#machinecontrol" id="toc-machinecontrol" class="nav-link" data-scroll-target="#machinecontrol"></a><a id="machinecontrol" class="nav-link" data-scroll-target="undefined">MachineControl</a>
+  <ul class="collapse">
+  <li><a href="#fit-1" id="toc-fit-1" class="nav-link" data-scroll-target="#fit-1"></a><a id="fit" class="nav-link" data-scroll-target="undefined">fit</a></li>
+  <li><a href="#predict" id="toc-predict" class="nav-link" data-scroll-target="#predict"></a><a id="predict" class="nav-link" data-scroll-target="undefined">predict</a></li>
+  <li><a href="#get_controls" id="toc-get_controls" class="nav-link" data-scroll-target="#get_controls"></a><a id="get_controls" class="nav-link" data-scroll-target="undefined">get_controls</a></li>
+  <li><a href="#document-1" id="toc-document-1" class="nav-link" data-scroll-target="#document-1"></a><a id="document" class="nav-link" data-scroll-target="undefined">document</a></li>
+  <li><a href="#brief-econometric-description" id="toc-brief-econometric-description" class="nav-link" data-scroll-target="#brief-econometric-description">Brief econometric description</a></li>
+  <li><a href="#example-impact-of-labour-reform-on-productivity" id="toc-example-impact-of-labour-reform-on-productivity" class="nav-link" data-scroll-target="#example-impact-of-labour-reform-on-productivity">Example: impact of labour reform on productivity</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Estimators</h1>
+</div>
+
+<div>
+  <div class="description">
+    Machine learning-based estimators of economic models
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>In many instances, economists are interested in using machine learning models for specific purposes that go beyond their ability to predict variables to a good accuracy. For example:</p>
+<ul>
+<li><p>understanding the relationship between covariates and the outcome, usually to demonstrate that a non-trivial effect of one variable on another exists;</p></li>
+<li><p>identifying which covariates are related or not to a certain outcome, often to demonstrate the relevance of a certain theory;</p></li>
+<li><p>estimating a certain measure with certain desirable statistical and econometric properties, such as causal inference, where the object of interest is the predicted outcome of an adapted algorithm; and</p></li>
+<li><p>process non-traditional data (eg, text) for inclusion in a traditional econometrics regression, especially useful in settings where measurable quantitative data is complemented with this other type of data.</p></li>
+</ul>
+<p>The <code>gingado.estimators</code> module contains machine learning algorithms adapted to enable the types of analyses described above. More estimators can be expected over time.</p>
+<p>For more academic discussions of machine learning methods in economics covering a broad range of topics, see <span class="citation" data-cites="doi:10.1146/annurev-economics-080217-053433">Athey and Imbens (<a href="#ref-doi:10.1146/annurev-economics-080217-053433" role="doc-biblioref">2019</a>)</span>.</p>
+<section id="covariate-selection" class="level1">
+<h1>Covariate selection</h1>
+<section id="clustering" class="level2">
+<h2 class="anchored" data-anchor-id="clustering">Clustering</h2>
+<p>The clustering algorithms used below are not themselves adapted from the general use methods. Rather, the functions offer convenience functionalities to find and retain the other variables in the same cluster.</p>
+<p>These variables are usually entities (individuals, countries, stocks, etc) in a larger population.</p>
+<p>The <code>gingado</code> clustering routines are designed to allow users standalone usage, or a seamless integration as part of a pipeline.</p>
+<p>There are three levels of sophistication that users can choose from:</p>
+<ul>
+<li><p>using the off-the-shelf clustering routines provided by <code>gingado</code>, which were selected to be applied cross various use cases;</p></li>
+<li><p>selecting an existing clustering routine from the <a href="https://scikit-learn.org/stable/modules/clustering.html"><code>scikit-learn.cluster</code></a> module; or</p></li>
+<li><p>designing their own clustering algorithm.</p></li>
+</ul>
+<section id="findcluster" class="level3">
+<h3 class="anchored" data-anchor-id="findcluster"><a id="findcluster">FindCluster</a></h3>
+<blockquote class="blockquote">
+<p>FindCluster <code>(cluster_alg: '[BaseEstimator, ClusterMixin]' = AffinityPropagation(), auto_document: 'ggdModelDocumentation' = &lt;class 'gingado.model_documentation.ModelCard'&gt;, random_state: 'int | None' = None)</code></p>
+</blockquote>
+<pre>Retain only the columns of `X` that are in the same cluster as `y`.
+
+Args:
+    cluster_alg (BaseEstimator|ClusterMixin): An instance of the clustering algorithm to use.
+    auto_document (ggdModelDocumentation): gingado Documenter template to facilitate model documentation.
+    random_state (int|None): The random seed to be used by the algorithm, if relevant. Defaults to None.</pre>
+<section id="fit" class="level4">
+<h4 class="anchored" data-anchor-id="fit"><a id="fit">fit</a></h4>
+<blockquote class="blockquote">
+<p>fit <code>(self, X, y)</code></p>
+</blockquote>
+<pre>Fit `FindCluster`.
+
+Args:
+    X: The population of entities, organized in columns.
+    y: The entity of interest.</pre>
+</section>
+<section id="transform" class="level4">
+<h4 class="anchored" data-anchor-id="transform"><a id="transform">transform</a></h4>
+<blockquote class="blockquote">
+<p>transform <code>(self, X) -&gt; 'np.array'</code></p>
+</blockquote>
+<pre>Keep only the entities in `X` that belong to the same cluster as `y`.
+
+Args:
+    X: The population of entities, organized in columns.
+
+Returns:
+    np.array: Columns of `X` that are in the same cluster as `y`.</pre>
+</section>
+<section id="fit_transform" class="level4">
+<h4 class="anchored" data-anchor-id="fit_transform"><a id="fit_transform">fit_transform</a></h4>
+<blockquote class="blockquote">
+<p>fit_transform <code>(self, X, y) -&gt; 'np.array'</code></p>
+</blockquote>
+<pre>Fit a `FindCluster` object and keep only the entities in `X` that belong to the same cluster as `y`.
+
+Args:
+    X: The population of entities, organized in columns.
+    y: The entity of interest.
+
+Returns:
+    np.array: Columns of `X` that are in the same cluster as `y`.</pre>
+</section>
+<section id="document" class="level4">
+<h4 class="anchored" data-anchor-id="document"><a id="document">document</a></h4>
+<blockquote class="blockquote">
+<p>document <code>(self, documenter: 'ggdModelDocumentation | None' = None)</code></p>
+</blockquote>
+<pre>Document the `FindCluster` model using the template in `documenter`.
+
+Args:
+    documenter (ggdModelDocumentation|None): A gingado Documenter or the documenter set in `auto_document` if None.
+        Defaults to None.</pre>
+</section>
+<section id="example-finding-similar-countries" class="level4">
+<h4 class="anchored" data-anchor-id="example-finding-similar-countries">Example: finding similar countries</h4>
+<p>The <span class="citation" data-cites="BARRO19941">Barro and Lee (<a href="#ref-BARRO19941" role="doc-biblioref">1994</a>)</span> dataset is used to illustrate the use of <code>FindCluster</code>. It is a country-level dataset. Let’s use it to answer the following question: for some specific country, what other countries are the closest to it considering the data available?</p>
+<p>First, we import the data:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.datasets <span class="im">import</span> load_BarroLee_1994</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The data is organized by rows: each row is a different country, and the variables are organised in columns.</p>
+<p>The dataset is originally organised for a regression of GDP growth (here denoted <code>y</code>) on the covariates (<code>X</code>). This is not what we want to do in this case. So instead of keeping GDP as a separate variable, the next step is to include it in the <code>X</code> DataFrame.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_BarroLee_1994()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X[<span class="st">'gdp'</span>] <span class="op">=</span> y</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>X.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">gdpsh465</th>
+<th data-quarto-table-cell-role="th">bmp1l</th>
+<th data-quarto-table-cell-role="th">freeop</th>
+<th data-quarto-table-cell-role="th">freetar</th>
+<th data-quarto-table-cell-role="th">h65</th>
+<th data-quarto-table-cell-role="th">hm65</th>
+<th data-quarto-table-cell-role="th">hf65</th>
+<th data-quarto-table-cell-role="th">p65</th>
+<th data-quarto-table-cell-role="th">pm65</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">syr65</th>
+<th data-quarto-table-cell-role="th">syrm65</th>
+<th data-quarto-table-cell-role="th">syrf65</th>
+<th data-quarto-table-cell-role="th">teapri65</th>
+<th data-quarto-table-cell-role="th">teasec65</th>
+<th data-quarto-table-cell-role="th">ex1</th>
+<th data-quarto-table-cell-role="th">im1</th>
+<th data-quarto-table-cell-role="th">xr65</th>
+<th data-quarto-table-cell-role="th">tot1</th>
+<th data-quarto-table-cell-role="th">gdp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>6.591674</td>
+<td>0.2837</td>
+<td>0.153491</td>
+<td>0.043888</td>
+<td>0.007</td>
+<td>0.013</td>
+<td>0.001</td>
+<td>0.29</td>
+<td>0.37</td>
+<td>...</td>
+<td>0.033</td>
+<td>0.057</td>
+<td>0.010</td>
+<td>47.6</td>
+<td>17.3</td>
+<td>0.0729</td>
+<td>0.0667</td>
+<td>0.348</td>
+<td>-0.014727</td>
+<td>-0.024336</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>6.829794</td>
+<td>0.6141</td>
+<td>0.313509</td>
+<td>0.061827</td>
+<td>0.019</td>
+<td>0.032</td>
+<td>0.007</td>
+<td>0.91</td>
+<td>1.00</td>
+<td>...</td>
+<td>0.173</td>
+<td>0.274</td>
+<td>0.067</td>
+<td>57.1</td>
+<td>18.0</td>
+<td>0.0940</td>
+<td>0.1438</td>
+<td>0.525</td>
+<td>0.005750</td>
+<td>0.100473</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2</td>
+<td>8.895082</td>
+<td>0.0000</td>
+<td>0.204244</td>
+<td>0.009186</td>
+<td>0.260</td>
+<td>0.325</td>
+<td>0.201</td>
+<td>1.00</td>
+<td>1.00</td>
+<td>...</td>
+<td>2.573</td>
+<td>2.478</td>
+<td>2.667</td>
+<td>26.5</td>
+<td>20.7</td>
+<td>0.1741</td>
+<td>0.1750</td>
+<td>1.082</td>
+<td>-0.010040</td>
+<td>0.067051</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>3</td>
+<td>7.565275</td>
+<td>0.1997</td>
+<td>0.248714</td>
+<td>0.036270</td>
+<td>0.061</td>
+<td>0.070</td>
+<td>0.051</td>
+<td>1.00</td>
+<td>1.00</td>
+<td>...</td>
+<td>0.438</td>
+<td>0.453</td>
+<td>0.424</td>
+<td>27.8</td>
+<td>22.7</td>
+<td>0.1265</td>
+<td>0.1496</td>
+<td>6.625</td>
+<td>-0.002195</td>
+<td>0.064089</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>4</td>
+<td>7.162397</td>
+<td>0.1740</td>
+<td>0.299252</td>
+<td>0.037367</td>
+<td>0.017</td>
+<td>0.027</td>
+<td>0.007</td>
+<td>0.82</td>
+<td>0.85</td>
+<td>...</td>
+<td>0.257</td>
+<td>0.287</td>
+<td>0.229</td>
+<td>34.5</td>
+<td>17.6</td>
+<td>0.1211</td>
+<td>0.1308</td>
+<td>2.500</td>
+<td>0.003283</td>
+<td>0.027930</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 63 columns</p>
+</div>
+</div>
+</div>
+<p>Now we remove the first column (an identifier) and transpose the DataFrame, so that countries are organized in columns.</p>
+<p>Each country is identified by a number: 0, 1, …</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> X.iloc[:, <span class="dv">1</span>:]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>countries <span class="op">=</span> X.T</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>countries.columns <span class="op">=</span> [<span class="st">'country_'</span> <span class="op">+</span> <span class="bu">str</span>(c) <span class="cf">for</span> c <span class="kw">in</span> countries.columns]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>countries.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">country_0</th>
+<th data-quarto-table-cell-role="th">country_1</th>
+<th data-quarto-table-cell-role="th">country_2</th>
+<th data-quarto-table-cell-role="th">country_3</th>
+<th data-quarto-table-cell-role="th">country_4</th>
+<th data-quarto-table-cell-role="th">country_5</th>
+<th data-quarto-table-cell-role="th">country_6</th>
+<th data-quarto-table-cell-role="th">country_7</th>
+<th data-quarto-table-cell-role="th">country_8</th>
+<th data-quarto-table-cell-role="th">country_9</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">country_80</th>
+<th data-quarto-table-cell-role="th">country_81</th>
+<th data-quarto-table-cell-role="th">country_82</th>
+<th data-quarto-table-cell-role="th">country_83</th>
+<th data-quarto-table-cell-role="th">country_84</th>
+<th data-quarto-table-cell-role="th">country_85</th>
+<th data-quarto-table-cell-role="th">country_86</th>
+<th data-quarto-table-cell-role="th">country_87</th>
+<th data-quarto-table-cell-role="th">country_88</th>
+<th data-quarto-table-cell-role="th">country_89</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">gdpsh465</td>
+<td>6.591674</td>
+<td>6.829794</td>
+<td>8.895082</td>
+<td>7.565275</td>
+<td>7.162397</td>
+<td>7.218910</td>
+<td>7.853605</td>
+<td>7.703910</td>
+<td>9.063463</td>
+<td>8.151910</td>
+<td>...</td>
+<td>9.030974</td>
+<td>8.995537</td>
+<td>8.234830</td>
+<td>8.332549</td>
+<td>8.645586</td>
+<td>8.991064</td>
+<td>8.025189</td>
+<td>9.030137</td>
+<td>8.865312</td>
+<td>8.912339</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">bmp1l</td>
+<td>0.283700</td>
+<td>0.614100</td>
+<td>0.000000</td>
+<td>0.199700</td>
+<td>0.174000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.277600</td>
+<td>0.000000</td>
+<td>0.148400</td>
+<td>...</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.036300</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.005000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">freeop</td>
+<td>0.153491</td>
+<td>0.313509</td>
+<td>0.204244</td>
+<td>0.248714</td>
+<td>0.299252</td>
+<td>0.258865</td>
+<td>0.182525</td>
+<td>0.215275</td>
+<td>0.109614</td>
+<td>0.110885</td>
+<td>...</td>
+<td>0.293138</td>
+<td>0.304720</td>
+<td>0.288405</td>
+<td>0.345485</td>
+<td>0.288440</td>
+<td>0.371898</td>
+<td>0.296437</td>
+<td>0.265778</td>
+<td>0.282939</td>
+<td>0.150366</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">freetar</td>
+<td>0.043888</td>
+<td>0.061827</td>
+<td>0.009186</td>
+<td>0.036270</td>
+<td>0.037367</td>
+<td>0.020880</td>
+<td>0.014385</td>
+<td>0.029713</td>
+<td>0.002171</td>
+<td>0.028579</td>
+<td>...</td>
+<td>0.005517</td>
+<td>0.011658</td>
+<td>0.011589</td>
+<td>0.006503</td>
+<td>0.005995</td>
+<td>0.014586</td>
+<td>0.013615</td>
+<td>0.008629</td>
+<td>0.005048</td>
+<td>0.024377</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">h65</td>
+<td>0.007000</td>
+<td>0.019000</td>
+<td>0.260000</td>
+<td>0.061000</td>
+<td>0.017000</td>
+<td>0.023000</td>
+<td>0.039000</td>
+<td>0.024000</td>
+<td>0.402000</td>
+<td>0.145000</td>
+<td>...</td>
+<td>0.245000</td>
+<td>0.246000</td>
+<td>0.183000</td>
+<td>0.188000</td>
+<td>0.256000</td>
+<td>0.255000</td>
+<td>0.108000</td>
+<td>0.288000</td>
+<td>0.188000</td>
+<td>0.257000</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 90 columns</p>
+</div>
+</div>
+</div>
+<p>Suppose we are interested in country No 13. What other countries are similar to it?</p>
+<p>First, country No 13 needs to be carved out of the DataFrame with the other countries.</p>
+<p>Second, we can now pass the larger DataFrame and country 13’s data separately to an instance of <code>FindCluster</code>.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>country_of_interest <span class="op">=</span> countries.pop(<span class="st">'country_13'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>similar <span class="op">=</span> FindCluster(AffinityPropagation(convergence_iter<span class="op">=</span><span class="dv">5000</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>similar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<style>#sk-container-id-1 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-1 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-1 pre {
+  padding: 0;
+}
+
+#sk-container-id-1 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-1 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-1 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-1 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-1 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-1 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-1 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-1 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-1 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-1 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label label.sk-toggleable__label,
+#sk-container-id-1 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-1 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-1 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-1 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-1 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-1 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-1 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</a></style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>FindCluster(cluster_alg=AffinityPropagation(convergence_iter=5000))</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox"><label for="sk-estimator-id-1" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;FindCluster<span class="sk-estimator-doc-link ">i<span>Not fitted</span></span></label><div class="sk-toggleable__content "><pre>FindCluster(cluster_alg=AffinityPropagation(convergence_iter=5000))</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox"><label for="sk-estimator-id-2" class="sk-toggleable__label  sk-toggleable__label-arrow ">cluster_alg: AffinityPropagation</label><div class="sk-toggleable__content "><pre>AffinityPropagation(convergence_iter=5000)</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox"><label for="sk-estimator-id-3" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;AffinityPropagation<a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.AffinityPropagation.html">?<span>Documentation for AffinityPropagation</span></a></label><div class="sk-toggleable__content "><pre>AffinityPropagation(convergence_iter=5000)</pre></div> </div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>same_cluster <span class="op">=</span> similar.fit_transform(X<span class="op">=</span>countries, y<span class="op">=</span>country_of_interest)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> same_cluster.equals(similar.fit(X<span class="op">=</span>countries, y<span class="op">=</span>country_of_interest).transform(X<span class="op">=</span>countries))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>same_cluster</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">country_2</th>
+<th data-quarto-table-cell-role="th">country_9</th>
+<th data-quarto-table-cell-role="th">country_41</th>
+<th data-quarto-table-cell-role="th">country_48</th>
+<th data-quarto-table-cell-role="th">country_49</th>
+<th data-quarto-table-cell-role="th">country_52</th>
+<th data-quarto-table-cell-role="th">country_60</th>
+<th data-quarto-table-cell-role="th">country_64</th>
+<th data-quarto-table-cell-role="th">country_66</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">gdpsh465</td>
+<td>8.895082</td>
+<td>8.151910</td>
+<td>7.360740</td>
+<td>6.469250</td>
+<td>5.762051</td>
+<td>9.224933</td>
+<td>8.346168</td>
+<td>7.655864</td>
+<td>7.830028</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">bmp1l</td>
+<td>0.000000</td>
+<td>0.148400</td>
+<td>0.418100</td>
+<td>0.538800</td>
+<td>0.600500</td>
+<td>0.000000</td>
+<td>0.319900</td>
+<td>0.134500</td>
+<td>0.488000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">freeop</td>
+<td>0.204244</td>
+<td>0.110885</td>
+<td>0.218471</td>
+<td>0.153491</td>
+<td>0.151848</td>
+<td>0.204244</td>
+<td>0.110885</td>
+<td>0.164598</td>
+<td>0.136287</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">freetar</td>
+<td>0.009186</td>
+<td>0.028579</td>
+<td>0.027087</td>
+<td>0.043888</td>
+<td>0.024100</td>
+<td>0.009186</td>
+<td>0.028579</td>
+<td>0.044446</td>
+<td>0.046730</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">h65</td>
+<td>0.260000</td>
+<td>0.145000</td>
+<td>0.032000</td>
+<td>0.015000</td>
+<td>0.002000</td>
+<td>0.393000</td>
+<td>0.272000</td>
+<td>0.080000</td>
+<td>0.146000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">ex1</td>
+<td>0.174100</td>
+<td>0.052400</td>
+<td>0.190500</td>
+<td>0.069200</td>
+<td>0.148400</td>
+<td>0.255800</td>
+<td>0.062500</td>
+<td>0.052500</td>
+<td>0.076400</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">im1</td>
+<td>0.175000</td>
+<td>0.052300</td>
+<td>0.225700</td>
+<td>0.074800</td>
+<td>0.186400</td>
+<td>0.241200</td>
+<td>0.057800</td>
+<td>0.057200</td>
+<td>0.086600</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">xr65</td>
+<td>1.082000</td>
+<td>2.119000</td>
+<td>3.949000</td>
+<td>0.348000</td>
+<td>7.367000</td>
+<td>1.017000</td>
+<td>36.603000</td>
+<td>30.929000</td>
+<td>40.500000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">tot1</td>
+<td>-0.010040</td>
+<td>0.007584</td>
+<td>0.205768</td>
+<td>0.035226</td>
+<td>0.007548</td>
+<td>0.018636</td>
+<td>0.014286</td>
+<td>-0.004592</td>
+<td>-0.007018</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">gdp</td>
+<td>0.067051</td>
+<td>0.039147</td>
+<td>0.016775</td>
+<td>-0.048712</td>
+<td>0.024477</td>
+<td>0.050757</td>
+<td>-0.034045</td>
+<td>0.046010</td>
+<td>-0.011384</td>
+</tr>
+</tbody>
+</table>
+
+<p>62 rows × 9 columns</p>
+</div>
+</div>
+</div>
+<p>The default clustering algorithm used by <code>FindCluster</code> is affinity propagation <span class="citation" data-cites="frey2007clustering">(<a href="#ref-frey2007clustering" role="doc-biblioref">Frey and Dueck 2007</a>)</span>. It is the algorithm of choice because of it combines several desireable characteristics, in particular: - the number of clusters is data-driven instad of set by the user, - the number of entities in each cluster is also chosen by the model, - all entities are part of a cluster, and - each cluster might have a different number of entities.</p>
+<p>However, we may want to try different clustering algorithms. Let’s compare the result above with the same analyses using DBSCAN <span class="citation" data-cites="ester1996density">(<a href="#ref-ester1996density" role="doc-biblioref">Ester et al. 1996</a>)</span>.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> DBSCAN</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>similar_dbscan <span class="op">=</span> FindCluster(cluster_alg<span class="op">=</span>DBSCAN())</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>similar_dbscan</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<style>#sk-container-id-2 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-2 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-2 pre {
+  padding: 0;
+}
+
+#sk-container-id-2 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-2 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-2 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-2 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-2 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-2 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-2 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-2 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-2 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-2 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label label.sk-toggleable__label,
+#sk-container-id-2 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-2 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-2 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-2 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-2 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-2 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-2 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-2 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</a></style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>FindCluster(cluster_alg=DBSCAN())</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox"><label for="sk-estimator-id-4" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;FindCluster<span class="sk-estimator-doc-link ">i<span>Not fitted</span></span></label><div class="sk-toggleable__content "><pre>FindCluster(cluster_alg=DBSCAN())</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox"><label for="sk-estimator-id-5" class="sk-toggleable__label  sk-toggleable__label-arrow ">cluster_alg: DBSCAN</label><div class="sk-toggleable__content "><pre>DBSCAN()</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-6" type="checkbox"><label for="sk-estimator-id-6" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;DBSCAN<a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.DBSCAN.html">?<span>Documentation for DBSCAN</span></a></label><div class="sk-toggleable__content "><pre>DBSCAN()</pre></div> </div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>same_cluster_dbscan <span class="op">=</span> similar_dbscan.fit_transform(X<span class="op">=</span>countries, y<span class="op">=</span>country_of_interest)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> same_cluster_dbscan.equals(similar_dbscan.fit(X<span class="op">=</span>countries, y<span class="op">=</span>country_of_interest).transform(X<span class="op">=</span>countries))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>same_cluster_dbscan</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">country_0</th>
+<th data-quarto-table-cell-role="th">country_1</th>
+<th data-quarto-table-cell-role="th">country_2</th>
+<th data-quarto-table-cell-role="th">country_3</th>
+<th data-quarto-table-cell-role="th">country_4</th>
+<th data-quarto-table-cell-role="th">country_5</th>
+<th data-quarto-table-cell-role="th">country_6</th>
+<th data-quarto-table-cell-role="th">country_7</th>
+<th data-quarto-table-cell-role="th">country_8</th>
+<th data-quarto-table-cell-role="th">country_9</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">country_80</th>
+<th data-quarto-table-cell-role="th">country_81</th>
+<th data-quarto-table-cell-role="th">country_82</th>
+<th data-quarto-table-cell-role="th">country_83</th>
+<th data-quarto-table-cell-role="th">country_84</th>
+<th data-quarto-table-cell-role="th">country_85</th>
+<th data-quarto-table-cell-role="th">country_86</th>
+<th data-quarto-table-cell-role="th">country_87</th>
+<th data-quarto-table-cell-role="th">country_88</th>
+<th data-quarto-table-cell-role="th">country_89</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">gdpsh465</td>
+<td>6.591674</td>
+<td>6.829794</td>
+<td>8.895082</td>
+<td>7.565275</td>
+<td>7.162397</td>
+<td>7.218910</td>
+<td>7.853605</td>
+<td>7.703910</td>
+<td>9.063463</td>
+<td>8.151910</td>
+<td>...</td>
+<td>9.030974</td>
+<td>8.995537</td>
+<td>8.234830</td>
+<td>8.332549</td>
+<td>8.645586</td>
+<td>8.991064</td>
+<td>8.025189</td>
+<td>9.030137</td>
+<td>8.865312</td>
+<td>8.912339</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">bmp1l</td>
+<td>0.283700</td>
+<td>0.614100</td>
+<td>0.000000</td>
+<td>0.199700</td>
+<td>0.174000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.277600</td>
+<td>0.000000</td>
+<td>0.148400</td>
+<td>...</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.036300</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.005000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">freeop</td>
+<td>0.153491</td>
+<td>0.313509</td>
+<td>0.204244</td>
+<td>0.248714</td>
+<td>0.299252</td>
+<td>0.258865</td>
+<td>0.182525</td>
+<td>0.215275</td>
+<td>0.109614</td>
+<td>0.110885</td>
+<td>...</td>
+<td>0.293138</td>
+<td>0.304720</td>
+<td>0.288405</td>
+<td>0.345485</td>
+<td>0.288440</td>
+<td>0.371898</td>
+<td>0.296437</td>
+<td>0.265778</td>
+<td>0.282939</td>
+<td>0.150366</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">freetar</td>
+<td>0.043888</td>
+<td>0.061827</td>
+<td>0.009186</td>
+<td>0.036270</td>
+<td>0.037367</td>
+<td>0.020880</td>
+<td>0.014385</td>
+<td>0.029713</td>
+<td>0.002171</td>
+<td>0.028579</td>
+<td>...</td>
+<td>0.005517</td>
+<td>0.011658</td>
+<td>0.011589</td>
+<td>0.006503</td>
+<td>0.005995</td>
+<td>0.014586</td>
+<td>0.013615</td>
+<td>0.008629</td>
+<td>0.005048</td>
+<td>0.024377</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">h65</td>
+<td>0.007000</td>
+<td>0.019000</td>
+<td>0.260000</td>
+<td>0.061000</td>
+<td>0.017000</td>
+<td>0.023000</td>
+<td>0.039000</td>
+<td>0.024000</td>
+<td>0.402000</td>
+<td>0.145000</td>
+<td>...</td>
+<td>0.245000</td>
+<td>0.246000</td>
+<td>0.183000</td>
+<td>0.188000</td>
+<td>0.256000</td>
+<td>0.255000</td>
+<td>0.108000</td>
+<td>0.288000</td>
+<td>0.188000</td>
+<td>0.257000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">ex1</td>
+<td>0.072900</td>
+<td>0.094000</td>
+<td>0.174100</td>
+<td>0.126500</td>
+<td>0.121100</td>
+<td>0.063400</td>
+<td>0.034200</td>
+<td>0.086400</td>
+<td>0.059400</td>
+<td>0.052400</td>
+<td>...</td>
+<td>0.166200</td>
+<td>0.259700</td>
+<td>0.104400</td>
+<td>0.286600</td>
+<td>0.129600</td>
+<td>0.440700</td>
+<td>0.166900</td>
+<td>0.323800</td>
+<td>0.184500</td>
+<td>0.187600</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">im1</td>
+<td>0.066700</td>
+<td>0.143800</td>
+<td>0.175000</td>
+<td>0.149600</td>
+<td>0.130800</td>
+<td>0.076200</td>
+<td>0.042800</td>
+<td>0.093100</td>
+<td>0.046000</td>
+<td>0.052300</td>
+<td>...</td>
+<td>0.161700</td>
+<td>0.228800</td>
+<td>0.179600</td>
+<td>0.350000</td>
+<td>0.145800</td>
+<td>0.425700</td>
+<td>0.220100</td>
+<td>0.313400</td>
+<td>0.194000</td>
+<td>0.200700</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">xr65</td>
+<td>0.348000</td>
+<td>0.525000</td>
+<td>1.082000</td>
+<td>6.625000</td>
+<td>2.500000</td>
+<td>1.000000</td>
+<td>12.499000</td>
+<td>7.000000</td>
+<td>1.000000</td>
+<td>2.119000</td>
+<td>...</td>
+<td>4.286000</td>
+<td>2.460000</td>
+<td>32.051000</td>
+<td>0.452000</td>
+<td>652.850000</td>
+<td>2.529000</td>
+<td>25.553000</td>
+<td>4.152000</td>
+<td>0.452000</td>
+<td>0.886000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">tot1</td>
+<td>-0.014727</td>
+<td>0.005750</td>
+<td>-0.010040</td>
+<td>-0.002195</td>
+<td>0.003283</td>
+<td>-0.001747</td>
+<td>0.009092</td>
+<td>0.011630</td>
+<td>0.008169</td>
+<td>0.007584</td>
+<td>...</td>
+<td>-0.006642</td>
+<td>-0.003241</td>
+<td>-0.034352</td>
+<td>-0.001660</td>
+<td>-0.046278</td>
+<td>-0.011883</td>
+<td>-0.039080</td>
+<td>0.005175</td>
+<td>-0.029551</td>
+<td>-0.036482</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">gdp</td>
+<td>-0.024336</td>
+<td>0.100473</td>
+<td>0.067051</td>
+<td>0.064089</td>
+<td>0.027930</td>
+<td>0.046407</td>
+<td>0.067332</td>
+<td>0.020978</td>
+<td>0.033551</td>
+<td>0.039147</td>
+<td>...</td>
+<td>0.038095</td>
+<td>0.034213</td>
+<td>0.052759</td>
+<td>0.038416</td>
+<td>0.031895</td>
+<td>0.031196</td>
+<td>0.034096</td>
+<td>0.046900</td>
+<td>0.039773</td>
+<td>0.040642</td>
+</tr>
+</tbody>
+</table>
+
+<p>62 rows × 89 columns</p>
+</div>
+</div>
+</div>
+<p>As illustrated above, the results can be quite different. In this case, affinity propagation converged to more tightly defined clusters, while DBSCAN selected a cluster that contains almost all other countries (therefore, not useful in this particular case).</p>
+<p>Note that model documentation is already jumpstarted when the cluster is fit. A glimpse of the current template, including the questions in the documentation template that have been automatically filled, are shown below.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>similar.model_documentation.show_json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>{'model_details': {'developer': 'Person or organisation developing the model',
+  'datetime': '2024-02-22 14:54:45 ',
+  'version': 'Model version',
+  'type': 'Model type',
+  'info': {'_estimator_type': 'clusterer',
+   'affinity_matrix_': array([[-4.23373922e+08, -5.97375771e+07, -5.35974361e+07, ...,
+           -1.92434215e+09, -8.60822083e+07, -3.77976931e+07],
+          [-5.97375771e+07, -4.23373922e+08, -2.26471602e+08, ...,
+           -2.66217555e+09, -2.43057326e+06, -1.92555486e+08],
+          [-5.35974361e+07, -2.26471602e+08, -4.23373922e+08, ...,
+           -1.33575671e+09, -2.75395788e+08, -1.37934978e+06],
+          ...,
+          [-1.92434215e+09, -2.66217555e+09, -1.33575671e+09, ...,
+           -4.23373922e+08, -2.82418157e+09, -1.42280304e+09],
+          [-8.60822083e+07, -2.43057326e+06, -2.75395788e+08, ...,
+           -2.82418157e+09, -4.23373922e+08, -2.37881124e+08],
+          [-3.77976931e+07, -1.92555486e+08, -1.37934978e+06, ...,
+           -1.42280304e+09, -2.37881124e+08, -4.23373922e+08]]),
+   'cluster_centers_': array([[ 6.82979374e+00,  6.14100000e-01,  3.13509000e-01, ...,
+            5.25000000e-01,  5.75000000e-03,  1.00472567e-01],
+          [ 8.89508153e+00,  0.00000000e+00,  2.04244000e-01, ...,
+            1.08200000e+00, -1.00400000e-02,  6.70514822e-02],
+          [ 7.56527528e+00,  1.99700000e-01,  2.48714000e-01, ...,
+            6.62500000e+00, -2.19500000e-03,  6.40891662e-02],
+          ...,
+          [ 8.33254894e+00,  0.00000000e+00,  3.45485000e-01, ...,
+            4.52000000e-01, -1.66000000e-03,  3.84156381e-02],
+          [ 8.86531163e+00,  0.00000000e+00,  2.82939000e-01, ...,
+            4.52000000e-01, -2.95510000e-02,  3.97733722e-02],
+          [ 8.91233857e+00,  0.00000000e+00,  1.50366000e-01, ...,
+            8.86000000e-01, -3.64820000e-02,  4.06415381e-02]]),
+   'cluster_centers_indices_': array([ 1,  2,  3,  4,  5,  7,  8, 10, 13, 14, 16, 18, 19, 25, 27, 32, 35,
+          39, 42, 45, 46, 49, 50, 52, 53, 55, 57, 58, 60, 62, 67, 68, 69, 71,
+          76, 82, 87, 88], dtype=int64),
+   'feature_names_in_': array(['gdpsh465', 'bmp1l', 'freeop', 'freetar', 'h65', 'hm65', 'hf65',
+          'p65', 'pm65', 'pf65', 's65', 'sm65', 'sf65', 'fert65', 'mort65',
+          'lifee065', 'gpop1', 'fert1', 'mort1', 'invsh41', 'geetot1',
+          'geerec1', 'gde1', 'govwb1', 'govsh41', 'gvxdxe41', 'high65',
+          'highm65', 'highf65', 'highc65', 'highcm65', 'highcf65', 'human65',
+          'humanm65', 'humanf65', 'hyr65', 'hyrm65', 'hyrf65', 'no65',
+          'nom65', 'nof65', 'pinstab1', 'pop65', 'worker65', 'pop1565',
+          'pop6565', 'sec65', 'secm65', 'secf65', 'secc65', 'seccm65',
+          'seccf65', 'syr65', 'syrm65', 'syrf65', 'teapri65', 'teasec65',
+          'ex1', 'im1', 'xr65', 'tot1', 'gdp'], dtype=object),
+   'labels_': array([29,  0,  1,  2,  3,  4, 18,  5,  6,  1,  7, 30, 14,  8,  9, 29, 10,
+          29, 11, 12, 12, 18, 29, 36, 18, 13, 18, 14, 29, 36, 36, 14, 15, 36,
+          29, 16, 18, 14, 36, 17,  1, 14, 18, 29, 29, 19, 20,  1,  1, 21, 22,
+           1, 23, 24, 21, 25, 36, 26, 27,  1, 28, 12, 29,  1, 14,  1, 29, 30,
+          31, 32, 12, 33, 18, 29, 30, 18, 34, 14, 18, 36, 36, 29, 35, 36, 29,
+          29, 14, 36, 37,  1], dtype=int64),
+   'n_features_in_': 62,
+   'n_iter_': 200},
+  'paper': 'Paper or other resource for more information',
+  'citation': 'Citation details',
+  'license': 'License',
+  'contact': 'Where to send questions or comments about the model'},
+ 'intended_use': {'primary_uses': 'Primary intended uses',
+  'primary_users': 'Primary intended users',
+  'out_of_scope': 'Out-of-scope use cases'},
+ 'factors': {'relevant': 'Relevant factors',
+  'evaluation': 'Evaluation factors'},
+ 'metrics': {'performance_measures': 'Model performance measures',
+  'thresholds': 'Decision thresholds',
+  'variation_approaches': 'Variation approaches'},
+ 'evaluation_data': {'datasets': 'Datasets',
+  'motivation': 'Motivation',
+  'preprocessing': 'Preprocessing'},
+ 'training_data': {'training_data': 'Information on training data'},
+ 'quant_analyses': {'unitary': 'Unitary results',
+  'intersectional': 'Intersectional results'},
+ 'ethical_considerations': {'sensitive_data': 'Does the model use any sensitive data (e.g., protected classes)?',
+  'human_life': 'Is the model intended to inform decisions about matters central to human life or flourishing - e.g., health or safety? Or could it be used in such a way?',
+  'mitigations': 'What risk mitigation strategies were used during model development?',
+  'risks_and_harms': 'What risks may be present in model usage? Try to identify the potential recipients,likelihood, and magnitude of harms. If these cannot be determined, note that they were considered but remain unknown',
+  'use_cases': 'Are there any known model use cases that are especially fraught?',
+  'additional_information': 'If possible, this section should also include any additional ethical considerations that went into model development, for example, review by an external board, or testing with a specific community.'},
+ 'caveats_recommendations': {'caveats': 'For example, did the results suggest any further testing? Were there any relevant groups that were not represented in the evaluation dataset?',
+  'recommendations': 'Are there additional recommendations for model use? What are the ideal characteristics of an evaluation dataset for this model?'}}</code></pre>
+</div>
+</div>
+<p><code>FindCluster</code> can also be used as part of a <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline"><code>pipeline</code></a>. In this case, only the entities in the same cluster as the entity of interest will continue on to the next steps of the estimation.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.benchmark <span class="im">import</span> RegressionBenchmark</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> Pipeline([</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'cluster'</span>, FindCluster(AffinityPropagation(convergence_iter<span class="op">=</span><span class="dv">5000</span>))),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'rf'</span>, RegressionBenchmark())</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pipe.fit(X<span class="op">=</span>countries, y<span class="op">=</span>country_of_interest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<style>#sk-container-id-3 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-3 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-3 pre {
+  padding: 0;
+}
+
+#sk-container-id-3 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-3 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-3 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-3 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-3 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-3 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-3 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-3 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-3 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-3 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-3 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-3 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-3 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-3 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-3 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-3 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-3 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-3 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-3 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-3 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-3 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-3 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-3 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-3 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-3 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-3 div.sk-label label.sk-toggleable__label,
+#sk-container-id-3 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-3 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-3 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-3 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-3 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-3 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-3 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-3 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-3 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-3 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-3 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-3 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-3 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</a></style><div id="sk-container-id-3" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[('cluster',
+                 FindCluster(cluster_alg=AffinityPropagation(convergence_iter=5000))),
+                ('rf',
+                 RegressionBenchmark(cv=ShuffleSplit(n_splits=10, random_state=None, test_size=None, train_size=None)))])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-7" type="checkbox"><label for="sk-estimator-id-7" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;Pipeline<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.pipeline.Pipeline.html">?<span>Documentation for Pipeline</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>Pipeline(steps=[('cluster',
+                 FindCluster(cluster_alg=AffinityPropagation(convergence_iter=5000))),
+                ('rf',
+                 RegressionBenchmark(cv=ShuffleSplit(n_splits=10, random_state=None, test_size=None, train_size=None)))])</pre></div> </div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-8" type="checkbox"><label for="sk-estimator-id-8" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">cluster: FindCluster</label><div class="sk-toggleable__content fitted"><pre>FindCluster(cluster_alg=AffinityPropagation(convergence_iter=5000))</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-9" type="checkbox"><label for="sk-estimator-id-9" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">cluster_alg: AffinityPropagation</label><div class="sk-toggleable__content fitted"><pre>AffinityPropagation(convergence_iter=5000)</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-10" type="checkbox"><label for="sk-estimator-id-10" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;AffinityPropagation<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.cluster.AffinityPropagation.html">?<span>Documentation for AffinityPropagation</span></a></label><div class="sk-toggleable__content fitted"><pre>AffinityPropagation(convergence_iter=5000)</pre></div> </div></div></div></div></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-11" type="checkbox"><label for="sk-estimator-id-11" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">rf: RegressionBenchmark</label><div class="sk-toggleable__content fitted"><pre>RegressionBenchmark(cv=ShuffleSplit(n_splits=10, random_state=None, test_size=None, train_size=None))</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-12" type="checkbox"><label for="sk-estimator-id-12" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">estimator: RandomForestRegressor</label><div class="sk-toggleable__content fitted"><pre>RandomForestRegressor(oob_score=True)</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-13" type="checkbox"><label for="sk-estimator-id-13" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;RandomForestRegressor<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.ensemble.RandomForestRegressor.html">?<span>Documentation for RandomForestRegressor</span></a></label><div class="sk-toggleable__content fitted"><pre>RandomForestRegressor(oob_score=True)</pre></div> </div></div></div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="causal-inference" class="level1">
+<h1>Causal inference</h1>
+<section id="comparative-case-studies" class="level2">
+<h2 class="anchored" data-anchor-id="comparative-case-studies">Comparative case studies</h2>
+<section id="machinecontrol" class="level3">
+<h3 class="anchored" data-anchor-id="machinecontrol"><a id="machinecontrol">MachineControl</a></h3>
+<blockquote class="blockquote">
+<p>MachineControl <code>(cluster_alg: '[BaseEstimator, ClusterMixin] | None' = AffinityPropagation(), estimator: 'BaseEstimator' = RegressionBenchmark(), manifold: 'BaseEstimator' = TSNE(), with_placebo: 'bool' = True, auto_document: 'ggdModelDocumentation' = &lt;class 'gingado.model_documentation.ModelCard'&gt;, random_state: 'int | None' = None)</code></p>
+</blockquote>
+<pre>Synthetic controls with machine learning methods
+
+Args:
+    cluster_alg (BaseEstimator | ClusterMixin | None): An instance of the clustering algorithm to use, or None to retain all entities.
+    estimator (BaseEstimator): Method to weight the control entities.
+    manifold (BaseEstimator): Algorithm for manifold learning.
+    with_placebo (bool): Include placebo estimations during prediction?
+    auto_document (ggdModelDocumentation): gingado Documenter template to facilitate model documentation.
+    random_state (int | None): The random seed to be used by the algorithm, if relevant.</pre>
+<section id="fit-1" class="level4">
+<h4 class="anchored" data-anchor-id="fit-1"><a id="fit">fit</a></h4>
+<blockquote class="blockquote">
+<p>fit <code>(self, X: 'pd.DataFrame', y: 'pd.DataFrame | pd.Series')</code></p>
+</blockquote>
+<pre>Fit the `MachineControl` model.
+
+Args:
+    X (pd.DataFrame): A pandas DataFrame with pre-intervention data of shape (n_samples, n_control_entities).
+    y (pd.DataFrame | pd.Series): A pandas DataFrame or Series with pre-intervention data of shape (n_samples,).</pre>
+</section>
+<section id="predict" class="level4">
+<h4 class="anchored" data-anchor-id="predict"><a id="predict">predict</a></h4>
+<blockquote class="blockquote">
+<p>predict <code>(self, X: 'pd.DataFrame', y: 'pd.DataFrame | pd.Series')</code></p>
+</blockquote>
+<pre>Calculate the model predictions before and after the intervention.
+
+Args:
+    X (pd.DataFrame): A pandas DataFrame with complete time series (pre- and post-intervention) of shape (n_samples, n_control_entities).
+    y (pd.DataFrame | pd.Series): A pandas DataFrame or Series with complete time series of shape (n_samples,).</pre>
+</section>
+<section id="get_controls" class="level4">
+<h4 class="anchored" data-anchor-id="get_controls"><a id="get_controls">get_controls</a></h4>
+<blockquote class="blockquote">
+<p>get_controls <code>(self)</code></p>
+</blockquote>
+<pre>Get the list of control entities</pre>
+</section>
+<section id="document-1" class="level4">
+<h4 class="anchored" data-anchor-id="document-1"><a id="document">document</a></h4>
+<blockquote class="blockquote">
+<p>document <code>(self, documenter: 'ggdModelDocumentation | None' = None)</code></p>
+</blockquote>
+<pre>Document the `MachineControl` model using the template in `documenter`.
+
+Args:
+    documenter (ggdModelDocumentation | None): A gingado Documenter or the documenter set in `auto_document` if None.</pre>
+</section>
+<section id="brief-econometric-description" class="level4">
+<h4 class="anchored" data-anchor-id="brief-econometric-description">Brief econometric description</h4>
+<p>The goal of <code>MachineControl</code> is to estimate:</p>
+<p><span class="math display">\[
+\tau_t = Y_{1, t}^{I} - Y_{1, t}^{N}, t &gt; T0
+\]</span></p>
+<p>where:</p>
+<ul>
+<li><p><span class="math inline">\(\tau\)</span> is the effect on entity <span class="math inline">\(i=1\)</span> of the intervention of interest</p></li>
+<li><p>without loss of generality, <span class="math inline">\(i=1\)</span> is an entity that has undergone the intervention of interest, amongst <span class="math inline">\(N\)</span> total entities</p></li>
+<li><p>time period <span class="math inline">\(T0\)</span> is a date in which the intervention occurred</p></li>
+<li><p>superscript <span class="math inline">\(I\)</span> in an outcome variable denotes the occurence of the intervention, whereas superscript <span class="math inline">\(N\)</span> is absence of intervention</p></li>
+<li><p>for <span class="math inline">\(t &gt; T0\)</span>, <span class="math inline">\(Y_{i, t}^{I}\)</span> is observed while <span class="math inline">\(Y_{i, t}^{N}\)</span> must be estimated because it is a counterfacual.</p></li>
+</ul>
+<p><span class="math inline">\(Y_{i, t}^{N}\)</span> is calculated from the values of the other entities, <span class="math inline">\(i \neq 1\)</span>. Collect this data in a vector <span class="math inline">\(\mathbb{Y}_{-1, t}^{N}\)</span>. Then, following <span class="citation" data-cites="doudchenko2016balancing">Doudchenko and Imbens (<a href="#ref-doudchenko2016balancing" role="doc-biblioref">2016</a>)</span>:</p>
+<p><span class="math display">\[
+\hat{Y}_{i, t}^{N} = f^*(\mathbb{Y}_{-1, t}^{N}),
+\]</span></p>
+<p>with the star (<span class="math inline">\(*\)</span>) superscript on the function <span class="math inline">\(f(\cdot)\)</span> representing that it was trained only with data up until the intervention date. The exact form of <span class="math inline">\(f(\cdot)\)</span> depends on the argument <code>estimator</code>. A general use estimator is the random forest <span class="citation" data-cites="breiman2001random">(<a href="#ref-breiman2001random" role="doc-biblioref">Breiman 2001</a>)</span>.</p>
+<p>The panel data itself might be the whole population in the data, or a subset when using the whole population might be too cumbersome to run analyses (eg, if the data contains too many entities). One way to select this subsample of control units without including subjective judgment in the data is quantitatilve. The control units are selected through a clustering algorithm (argument <code>cluster_arg</code>). One cluster algorithm that can be used is affinity propagation <span class="citation" data-cites="frey2007clustering">(<a href="#ref-frey2007clustering" role="doc-biblioref">Frey and Dueck 2007</a>)</span>.</p>
+<p>To finalise, the quality of the synthetic control can be assessed in many ways. One fully data-driven way to achieve this is by using manifold learning: lower-dimensional embeddings of a higher-dimensional data. A preferred manifold learning algorithm is t-SNE <span class="citation" data-cites="van2008visualizing">(<a href="#ref-van2008visualizing" role="doc-biblioref">Van der Maaten and Hinton 2008</a>)</span>.</p>
+<p>The relative distance between embeddings and the target centre, as well as the control and the target, represent the chance that a better feasible control (either from real or combined) will materialise. The intuition behind this test is:</p>
+<ul>
+<li><p>let <span class="math inline">\(d_{i,j}\)</span> be the Euclidean distance between the embeddings (2d points) of entities <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span></p></li>
+<li><p>if only a very small percentage of <span class="math inline">\(d_{1, j \in (2, ..., N)}\)</span> are lower than <span class="math inline">\(d_{1, \text{Synthetic control}}\)</span>, than the synthetic control produced with <span class="math inline">\(f(\cdot)\)</span> is indeed a formula that provides one of the best alternative.</p></li>
+</ul>
+<p><strong>Main references:</strong></p>
+<ul>
+<li><span class="citation" data-cites="abadie2003economic">Abadie and Gardeazabal (<a href="#ref-abadie2003economic" role="doc-biblioref">2003</a>)</span></li>
+<li><span class="citation" data-cites="abadie2010synthetic">Abadie, Diamond, and Hainmueller (<a href="#ref-abadie2010synthetic" role="doc-biblioref">2010</a>)</span></li>
+<li><span class="citation" data-cites="abadie2015comparative">Abadie, Diamond, and Hainmueller (<a href="#ref-abadie2015comparative" role="doc-biblioref">2015</a>)</span></li>
+<li><span class="citation" data-cites="doudchenko2016balancing">Doudchenko and Imbens (<a href="#ref-doudchenko2016balancing" role="doc-biblioref">2016</a>)</span></li>
+<li><span class="citation" data-cites="abadie2021using">Abadie (<a href="#ref-abadie2021using" role="doc-biblioref">2021</a>)</span></li>
+</ul>
+</section>
+<section id="example-impact-of-labour-reform-on-productivity" class="level4">
+<h4 class="anchored" data-anchor-id="example-impact-of-labour-reform-on-productivity">Example: impact of labour reform on productivity</h4>
+<p>See <a href="machine_controls.html">Machine controls: Synthetic controls with machine learning</a>.</p>
+</section>
+</section>
+</section>
+</section>
+<section id="references" class="level1">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-abadie2021using" class="csl-entry" role="listitem">
+Abadie, Alberto. 2021. <span>“Using Synthetic Controls: Feasibility, Data Requirements, and Methodological Aspects.”</span> <em>Journal of Economic Literature</em> 59 (2): 391–425.
+</div>
+<div id="ref-abadie2010synthetic" class="csl-entry" role="listitem">
+Abadie, Alberto, Alexis Diamond, and Jens Hainmueller. 2010. <span>“Synthetic Control Methods for Comparative Case Studies: Estimating the Effect of California’s Tobacco Control Program.”</span> <em>Journal of the American Statistical Association</em> 105 (490): 493–505.
+</div>
+<div id="ref-abadie2015comparative" class="csl-entry" role="listitem">
+———. 2015. <span>“Comparative Politics and the Synthetic Control Method.”</span> <em>American Journal of Political Science</em> 59 (2): 495–510.
+</div>
+<div id="ref-abadie2003economic" class="csl-entry" role="listitem">
+Abadie, Alberto, and Javier Gardeazabal. 2003. <span>“The Economic Costs of Conflict: A Case Study of the Basque Country.”</span> <em>American Economic Review</em> 93 (1): 113–32.
+</div>
+<div id="ref-doi:10.1146/annurev-economics-080217-053433" class="csl-entry" role="listitem">
+Athey, Susan, and Guido W. Imbens. 2019. <span>“Machine Learning Methods That Economists Should Know About.”</span> <em>Annual Review of Economics</em> 11 (1): 685–725. <a href="https://doi.org/10.1146/annurev-economics-080217-053433">https://doi.org/10.1146/annurev-economics-080217-053433</a>.
+</div>
+<div id="ref-BARRO19941" class="csl-entry" role="listitem">
+Barro, Robert J., and Jong-Wha Lee. 1994. <span>“Sources of Economic Growth.”</span> <em>Carnegie-Rochester Conference Series on Public Policy</em> 40: 1–46. <a href="https://doi.org/10.1016/0167-2231(94)90002-7">https://doi.org/10.1016/0167-2231(94)90002-7</a>.
+</div>
+<div id="ref-breiman2001random" class="csl-entry" role="listitem">
+Breiman, Leo. 2001. <span>“Random Forests.”</span> <em>Machine Learning</em> 45 (1): 5–32.
+</div>
+<div id="ref-doudchenko2016balancing" class="csl-entry" role="listitem">
+Doudchenko, Nikolay, and Guido W Imbens. 2016. <span>“Balancing, Regression, Difference-in-Differences and Synthetic Control Methods: A Synthesis.”</span> National Bureau of Economic Research.
+</div>
+<div id="ref-ester1996density" class="csl-entry" role="listitem">
+Ester, Martin, Hans-Peter Kriegel, Jörg Sander, Xiaowei Xu, et al. 1996. <span>“A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise.”</span> In <em>Proceedings of the 2nd International Conference on Knowledge Discovery and Data Mining</em>, 96:226–31. 34.
+</div>
+<div id="ref-frey2007clustering" class="csl-entry" role="listitem">
+Frey, Brendan J, and Delbert Dueck. 2007. <span>“Clustering by Passing Messages Between Data Points.”</span> <em>Science</em> 315 (5814): 972–76.
+</div>
+<div id="ref-van2008visualizing" class="csl-entry" role="listitem">
+Van der Maaten, Laurens, and Geoffrey Hinton. 2008. <span>“Visualizing Data Using t-SNE.”</span> <em>Journal of Machine Learning Research</em> 9 (11).
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

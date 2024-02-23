@@ -1,4 +1,5 @@
 import setuptools
+from utils import get_version_from_init
 
 # Function to read requirements from a file and return a list
 def read_requirements(file_path):
@@ -11,7 +12,7 @@ dev_requirements = read_requirements('dev_requirements.txt')
 
 setuptools.setup(
     name='gingado',
-    version='0.2.0',
+    version=get_version_from_init(),
     description='A machine learning library for economics and finance',
     long_description=open('README.md', encoding='utf8').read(),
     long_description_content_type='text/markdown',

@@ -1,4 +1,5 @@
 import inspect
+import re
 from IPython.display import Markdown
 
 def show_doc(obj, name=None, title_level=3):
@@ -42,3 +43,16 @@ def show_doc(obj, name=None, title_level=3):
     
     # Display the markdown
     return Markdown(markdown_output)
+
+def get_version_from_init() -> str:
+    """
+    Reads the version number from the __init__.py file and returns it as string.
+    """
+    with open("gingado/__init__.py", "r") as f:
+        version_file = f.read()
+
+    # Use regular expression to extract the version string
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")

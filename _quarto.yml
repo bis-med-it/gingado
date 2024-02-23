@@ -48,7 +48,7 @@ website:
             file: 00_utils.qmd
     right:
       - icon: github
-        href: "https://github.com/dkgaraujo/gingado"
+        href: "https://github.com/bis-med-it/gingado"
       - icon: twitter
         href: https://twitter.com/DouglasKGARaujo
 

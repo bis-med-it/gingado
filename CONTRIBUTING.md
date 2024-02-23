@@ -26,8 +26,8 @@ To work with the documentation an tests, we use `quarto`. You can either use RSt
 
 If you encounter a bug, have suggestions, or want to propose new functionalities:
 
-- **Check Existing Issues**: Ensure the bug or suggestion hasn't been reported/mentioned before by searching under [Issues](https://github.com/dkgaraujo/gingado/issues) on GitHub.
-- **Create a New Issue**: If no existing issue addresses the problem or suggestion, please [create a new issue](https://github.com/dkgaraujo/gingado/issues), providing a descriptive title, a clear description, and as much relevant information as possible. For bugs, include a code sample or an executable test case demonstrating the expected behavior that is not occurring, along with complete error messages.
+- **Check Existing Issues**: Ensure the bug or suggestion hasn't been reported/mentioned before by searching under [Issues](https://github.com/bis-med-it/gingado/issues) on GitHub.
+- **Create a New Issue**: If no existing issue addresses the problem or suggestion, please [create a new issue](https://github.com/bis-med-it/gingado/issues), providing a descriptive title, a clear description, and as much relevant information as possible. For bugs, include a code sample or an executable test case demonstrating the expected behavior that is not occurring, along with complete error messages.
 
 ### Contributing Code
 

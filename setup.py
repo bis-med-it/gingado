@@ -1,10 +1,24 @@
 import setuptools
-from utils import get_version_from_init
+import re
 
 # Function to read requirements from a file and return a list
 def read_requirements(file_path):
     with open(file_path, 'r') as file:
         return [line.strip() for line in file.readlines()]
+
+def get_version_from_init() -> str:
+    """
+    Reads the version number from the __init__.py file and returns it as string.
+    """
+    with open("gingado/__init__.py", "r") as f:
+        version_file = f.read()
+
+    # Use regular expression to extract the version string
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
+
 
 # Parse requirements
 requirements = read_requirements('requirements.txt')

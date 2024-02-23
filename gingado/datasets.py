@@ -23,7 +23,7 @@ def load_BarroLee_1994(
         returns a single DataFrame with both independent and dependent variables.
 
     """
-    file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'dataset_BarroLee_1994.csv')
+    file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'dataset_BarroLee_1994.csv')
     df = pd.read_csv(file_path)
     if return_tuple:
         y = df.pop('Outcome')

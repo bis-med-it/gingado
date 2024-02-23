@@ -14,11 +14,11 @@ For more information on this data, consult the `datasets` page.
 import pandas as pd
 from scipy import io
 
-growth_data = io.loadmat('data/GrowthData.mat')
+growth_data = io.loadmat('gingado/data/GrowthData.mat')
 colnames = [m[0].strip() for m in growth_data['Mnem'][0]]
 df = pd.DataFrame(growth_data['data'], columns=colnames)
 
-df.to_csv('gingado/dataset_BarroLee_1994.csv')
+df.to_csv('gingado/data/dataset_BarroLee_1994.csv')
 ```
 
 ```{python}

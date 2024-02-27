@@ -190,10 +190,10 @@ div.csl-indent {
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#install" id="toc-install" class="nav-link" data-scroll-target="#install">Install</a></li>
+  <li><a href="#attribution" id="toc-attribution" class="nav-link" data-scroll-target="#attribution">Attribution</a></li>
   <li><a href="#design-principles" id="toc-design-principles" class="nav-link" data-scroll-target="#design-principles">Design principles</a></li>
   <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
-  <li><a href="#presentations-talks-papers" id="toc-presentations-talks-papers" class="nav-link" data-scroll-target="#presentations-talks-papers">Presentations, talks, papers</a></li>
-  <li><a href="#install" id="toc-install" class="nav-link" data-scroll-target="#install">Install</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -228,10 +228,10 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p><code>gingado</code> is a free, open source library built different functionalities:</p>
 <ul>
-<li><p><a href="https://bis-med-it.github.io/gingado/augmentation.html"><strong>data augmentation</strong></a>, to add more data from official sources, improving the machine models being trained by the user;</p></li>
-<li><p><strong>relevant</strong> <a href="https://bis-med-it.github.io/gingado/datasets.html"><strong>datasets</strong></a>, both real and simulamed, to allow for easier model development and comparison;</p></li>
+<li><p><a href="https://bis-med-it.github.io/gingado/augmentation.html"><strong>data augmentation</strong></a>, to add data from official sources, improving the machine models being trained by the user;</p></li>
+<li><p><strong>relevant</strong> <a href="https://bis-med-it.github.io/gingado/datasets.html"><strong>datasets</strong></a>, both real and simulated, to allow for easier model development and comparison;</p></li>
 <li><p><strong>automatic</strong> <a href="https://bis-med-it.github.io/gingado/benchmark.html"><strong>benchmark model</strong></a>, to assess candidate models against a reasonably well-performant model;</p></li>
-<li><p><em>(new!)</em> <strong>machine learning-based</strong> <a href="https://bis-med-it.github.io/gingado/estimators.html"><strong>estimators</strong></a>, to help answer questions of academic or practical importance;</p></li>
+<li><p><strong>machine learning-based</strong> <a href="https://bis-med-it.github.io/gingado/estimators.html"><strong>estimators</strong></a>, to help answer questions of academic or practical importance;</p></li>
 <li><p><strong>support for</strong> <a href="https://bis-med-it.github.io/gingado/documentation.html"><strong>model documentation</strong></a>, to embed documentation and ethical considerations in the model development phase; and</p></li>
 <li><p><a href="https://bis-med-it.github.io/gingado/utils.html"><strong>utilities</strong></a>, including tools to allow for lagging variables in a straightforward way.</p></li>
 </ul>
@@ -250,29 +250,6 @@ Tip
 </div>
 </div>
 </section>
-<section id="design-principles" class="level2">
-<h2 class="anchored" data-anchor-id="design-principles">Design principles</h2>
-<p>The choices made during development of <code>gingado</code> derive from the following principles, in no particular order:</p>
-<ul>
-<li><p><strong>flexibility</strong>: users can use <code>gingado</code> out of the box or build custom processes on top of it;</p></li>
-<li><p><strong>compatibility</strong>: <code>gingado</code> works well with other widely used libraries in machine learning, such as <code>scikit-learn</code> and <code>pandas</code>; and</p></li>
-<li><p><strong>responsibility</strong>: <code>gingado</code> facilitates and promotes model documentation, including ethical considerations, as part of the machine learning development workflow.</p></li>
-</ul>
-</section>
-<section id="acknowledgements" class="level2">
-<h2 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
-<p><code>gingado</code>’s API is inspired on the following libraries:</p>
-<ul>
-<li><p><code>scikit-learn</code> <span class="citation" data-cites="sklearnAPI">(<a href="#ref-sklearnAPI" role="doc-biblioref">Buitinck et al. 2013</a>)</span></p></li>
-<li><p><code>keras</code> (website <a href="https://keras.io/about/">here</a> and also, <a href="https://medium.com/s/story/notes-to-myself-on-software-engineering-c890f16f4e4d">this essay</a>)</p></li>
-<li><p><code>fastai</code> <span class="citation" data-cites="fastaiAPI">(<a href="#ref-fastaiAPI" role="doc-biblioref">Howard and Gugger 2020</a>)</span></p></li>
-</ul>
-<p>In addition, <code>gingado</code> is developed and maintained using <a href="https://quarto.org/"><code>quarto</code></a>.</p>
-</section>
-<section id="presentations-talks-papers" class="level2">
-<h2 class="anchored" data-anchor-id="presentations-talks-papers">Presentations, talks, papers</h2>
-<p>The most current version of the paper describing <code>gingado</code> is <a href="https://github.com/dkgaraujo/gingado_comms/blob/main/gingado.pdf">here</a>. The paper and other material about <code>gingado</code> (ie, slide decks, papers) in <a href="https://github.com/dkgaraujo/gingado_comms">this dedicated repository</a>. Interested users are welcome to visit the repository and comment on the drafts or slide decks, preferably by opening an <a href="https://github.com/dkgaraujo/gingado_comms/issues">issue</a>. I also store in this repository suggestions I receive as issues, so users can see what others commented (anonymously unless requested) and comment along as well!</p>
-</section>
 <section id="install" class="level2">
 <h2 class="anchored" data-anchor-id="install">Install</h2>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -290,8 +267,11 @@ Note
 </div>
 <p>To install <code>gingado</code>, simply run the following code on the terminal:</p>
 <p><code>$ pip install gingado</code></p>
-<p>If you use this package in your work, please cite it as below:</p>
-<p>Araujo, Douglas KG (2023): “gingado: a machine learning library focused on economics and finance”, BIS Working Paper No 1122.</p>
+</section>
+<section id="attribution" class="level2">
+<h2 class="anchored" data-anchor-id="attribution">Attribution</h2>
+<p>If you use this package in your work, please consider citing <span class="citation" data-cites="gingado">Araujo (<a href="#ref-gingado" role="doc-biblioref">2023</a>)</span>.</p>
+<p>In BibTeX format:</p>
 <pre><code>@techreport{gingado,
     author = {Araujo, Douglas KG},
     title = {gingado: a machine learning library focused on economics and finance},
@@ -301,10 +281,34 @@ Note
     year = {2023},
     number = {1122}
 }</code></pre>
+<p>Over time, new tools that are described in specific papers might be added (eg, a machine learning-based econometric estimator). Please consider citing them as well if used in your work. Specific information, if any, can be found in the documentation.</p>
+</section>
+<section id="design-principles" class="level2">
+<h2 class="anchored" data-anchor-id="design-principles">Design principles</h2>
+<p>The choices made during development of <code>gingado</code> derive from the following principles, in no particular order:</p>
+<ul>
+<li><p><strong>flexibility</strong>: users can use <code>gingado</code> out of the box or build custom processes on top of it;</p></li>
+<li><p><strong>compatibility</strong>: <code>gingado</code> works well with other widely used libraries in machine learning, such as <code>scikit-learn</code> and <code>pandas</code>; and</p></li>
+<li><p><strong>responsibility</strong>: <code>gingado</code> facilitates and promotes model documentation, including ethical considerations, as part of the machine learning development workflow.</p></li>
+</ul>
+<p>For more information about <code>gingado</code>, please read the <a href="https://www.bis.org/publ/work1122.pdf">paper</a>.</p>
+</section>
+<section id="acknowledgements" class="level2">
+<h2 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
+<p><code>gingado</code>’s API is inspired on the following libraries:</p>
+<ul>
+<li><p><code>scikit-learn</code> <span class="citation" data-cites="sklearnAPI">(<a href="#ref-sklearnAPI" role="doc-biblioref">Buitinck et al. 2013</a>)</span></p></li>
+<li><p><code>keras</code> (website <a href="https://keras.io/about/">here</a> and also, <a href="https://medium.com/s/story/notes-to-myself-on-software-engineering-c890f16f4e4d">this essay</a>)</p></li>
+<li><p><code>fastai</code> <span class="citation" data-cites="fastaiAPI">(<a href="#ref-fastaiAPI" role="doc-biblioref">Howard and Gugger 2020</a>)</span></p></li>
+</ul>
+<p>In addition, <code>gingado</code> is developed and maintained using <a href="https://quarto.org/"><code>quarto</code></a>.</p>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-gingado" class="csl-entry" role="listitem">
+Araujo, Douglas KG. 2023. <span>“Gingado: A Machine Learning Library Focused on Economics and Finance.”</span> Working Paper 1122. BIS Working Paper. Bank for International Settlements.
+</div>
 <div id="ref-sklearnAPI" class="csl-entry" role="listitem">
 Buitinck, Lars, Gilles Louppe, Mathieu Blondel, Fabian Pedregosa, Andreas Mueller, Olivier Grisel, Vlad Niculae, et al. 2013. <span>“<span>API</span> Design for Machine Learning Software: Experiences from the Scikit-Learn Project.”</span> <em>CoRR</em> abs/1309.0238. <a href="http://arxiv.org/abs/1309.0238">http://arxiv.org/abs/1309.0238</a>.
 </div>

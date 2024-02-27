@@ -1,6 +1,11 @@
 ---
 description: A machine learning library for economics and finance
-output-file: index.html
+format:
+  html:
+    output-file: index.html
+  gfm:
+    output-file: README.md
+format-links: false
 title: Welcome to gingado!
 jupyter: python3
 ---

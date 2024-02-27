@@ -22,6 +22,10 @@ To work with the documentation an tests, we use `quarto`. You can either use RSt
    - **For RStudio**: Quarto is integrated with RStudio. Ensure you have the latest version of RStudio to work with Quarto seamlessly.
    - **For Visual Studio Code**: Install the Quarto extension from the Visual Studio Code marketplace. This extension provides support for `.qmd` files, including syntax highlighting and preview capabilities.
 
+### Modifying the index page and README.md
+
+To modify the index page or the README.md file in the repository root, please edit the index.qmd file. All changes in the index.qmd file will automatically be rendered to the README.md file in the repository root via a post-render script `copy_readme_to_root.py`.
+
 ### Reporting Issues and Suggestions
 
 If you encounter a bug, have suggestions, or want to propose new functionalities:

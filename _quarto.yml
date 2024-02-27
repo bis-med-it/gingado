@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: docs
+  post-render: 
+    - move_readme_to_root.py
 
 format:
   html:

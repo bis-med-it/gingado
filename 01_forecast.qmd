@@ -27,7 +27,7 @@ Unlike most scripts that concentrate the package imports at the beginning, this 
 
 First, we will use `gingado` to run a simple example with the following characteristics:
 
-* selected currency pairs will be downloaded from the European Central Bank (ECB) servers using the [SDMX](www.sdmx.org) protocol
+* selected currency pairs will be downloaded from the European Central Bank (ECB) servers using the [SDMX](https://www.sdmx.org) protocol
     * these pairs will form our dependent variables in the models
 
 * using `gingado`, this series will be augmented with a time series on central bank policy rates and the interaction of rate changes and FX rate movements

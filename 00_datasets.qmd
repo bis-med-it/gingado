@@ -36,6 +36,23 @@ Robert Barro and Jong-Wha Lee's [-@BARRO19941] dataset has been used over time b
 
 The original data, along with more information on the variables, can be found in [this NBER website](http://www2.nber.org/pub/barro.lee/). A very helpful codebook is found [in this repo](https://github.com/bizmaercq/Do-Poor-Countries-Grow-Faster-than-Rich-Countries/blob/master/data/Codebook.txt).
 
+If you use this data in your work, please cite @BARRO19941. A BibTeX code for convenience is below:
+
+```
+@article{BARRO19941,
+title = {Sources of economic growth},
+journal = {Carnegie-Rochester Conference Series on Public Policy},
+volume = {40},
+pages = {1-46},
+year = {1994},
+issn = {0167-2231},
+doi = {10.1016/0167-2231(94)90002-7},
+url = {https://www.sciencedirect.com/science/article/pii/0167223194900027},
+author = {Robert J. Barro and Jong-Wha Lee},
+abstract = {For 116 countries from 1965 to 1985, the lowest quintile had an average growth rate of real per capita GDP of - 1.3pct, whereas the highest quintile had an average of 4.8pct. We isolate five influences that discriminate reasonably well between the slow-and fast-growers: a conditional convergence effect, whereby a country grows faster if it begins with lower real per-capita GDP relative to its initial level of human capital in the forms of educational attainment and health; a positive effect on growth from a high ratio of investment to GDP (although this effect is weaker than that reported in some previous studies); a negative effect from overly large government; a negative effect from government-induced distortions of markets; and a negative effect from political instability. Overall, the fitted growth rates for 85 countries for 1965–1985 had a correlation of 0.8 with the actual values. We also find that female educational attainment has a pronounced negative effect on fertility, whereas female and male attainment are each positively related to life expectancy and negatively related to infant mortality. Male attainment plays a positive role in primary-school enrollment ratios, and male and female attainment relate positively to enrollment at the secondary level.}
+}
+```
+
 ```{python}
 
 X, y = load_BarroLee_1994()

@@ -13,19 +13,19 @@ functionalities:
 
 - [**data
   augmentation**](https://bis-med-it.github.io/gingado/augmentation.html),
-  to add more data from official sources, improving the machine models
-  being trained by the user;
+  to add data from official sources, improving the machine models being
+  trained by the user;
 
 - **relevant**
   [**datasets**](https://bis-med-it.github.io/gingado/datasets.html),
-  both real and simulamed, to allow for easier model development and
+  both real and simulated, to allow for easier model development and
   comparison;
 
 - **automatic** [**benchmark
   model**](https://bis-med-it.github.io/gingado/benchmark.html), to
   assess candidate models against a reasonably well-performant model;
 
-- *(new!)* **machine learning-based**
+- **machine learning-based**
   [**estimators**](https://bis-med-it.github.io/gingado/estimators.html),
   to help answer questions of academic or practical importance;
 
@@ -51,6 +51,45 @@ larger pipeline from data input to model training to documentation!
 
 </div>
 
+## Install
+
+<div>
+
+> **Note**
+>
+> Please make sure you have read and understood the license disclaimer
+> in the NOTES.md file in our [GitHub
+> repository](https://github.com/bis-med-it/gingado) before using
+> gingado.
+
+</div>
+
+To install `gingado`, simply run the following code on the terminal:
+
+`$ pip install gingado`
+
+## Attribution
+
+If you use this package in your work, please consider citing Araujo
+(2023).
+
+In BibTeX format:
+
+    @techreport{gingado,
+        author = {Araujo, Douglas KG},
+        title = {gingado: a machine learning library focused on economics and finance},
+        series = {BIS Working Paper},
+        type = {Working Paper},
+        institution = {Bank for International Settlements},
+        year = {2023},
+        number = {1122}
+    }
+
+Over time, new tools that are described in specific papers might be
+added (eg, a machine learning-based econometric estimator). Please
+consider citing them as well if used in your work. Specific information,
+if any, can be found in the documentation.
+
 ## Design principles
 
 The choices made during development of `gingado` derive from the
@@ -67,6 +106,9 @@ following principles, in no particular order:
   documentation, including ethical considerations, as part of the
   machine learning development workflow.
 
+For more information about `gingado`, please read the
+[paper](https://www.bis.org/publ/work1122.pdf).
+
 ## Acknowledgements
 
 `gingado`’s API is inspired on the following libraries:
@@ -81,44 +123,17 @@ following principles, in no particular order:
 In addition, `gingado` is developed and maintained using
 [`quarto`](https://quarto.org/).
 
-## Presentations, talks, papers
-
-The most current version of the paper describing `gingado` is
-[here](https://github.com/dkgaraujo/gingado_comms/blob/main/gingado.pdf).
-The paper and other material about `gingado` (ie, slide decks, papers)
-in [this dedicated
-repository](https://github.com/dkgaraujo/gingado_comms). Interested
-users are welcome to visit the repository and comment on the drafts or
-slide decks, preferably by opening an
-[issue](https://github.com/dkgaraujo/gingado_comms/issues). I also store
-in this repository suggestions I receive as issues, so users can see
-what others commented (anonymously unless requested) and comment along
-as well!
-
-## Install
-
-To install `gingado`, simply run the following code on the terminal:
-
-`$ pip install gingado`
-
-If you use this package in your work, please cite it as below:
-
-Araujo, Douglas KG (2023): “gingado: a machine learning library focused
-on economics and finance”, BIS Working Paper No 1122.
-
-    @techreport{gingado,
-        author = {Araujo, Douglas KG},
-        title = {gingado: a machine learning library focused on economics and finance},
-        series = {BIS Working Paper},
-        type = {Working Paper},
-        institution = {Bank for International Settlements},
-        year = {2023},
-        number = {1122}
-    }
-
 ## References
 
 <div id="refs" class="references csl-bib-body hanging-indent">
+
+<div id="ref-gingado" class="csl-entry">
+
+Araujo, Douglas KG. 2023. “Gingado: A Machine Learning Library Focused
+on Economics and Finance.” Working Paper 1122. BIS Working Paper. Bank
+for International Settlements.
+
+</div>
 
 <div id="ref-sklearnAPI" class="csl-entry">
 

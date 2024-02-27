@@ -288,7 +288,7 @@ div.csl-indent {
 <p>Unlike most scripts that concentrate the package imports at the beginning, this walkthrough will import as needed, to better highlight where each contribution of <code>gingado</code> is used in the workflow.</p>
 <p>First, we will use <code>gingado</code> to run a simple example with the following characteristics:</p>
 <ul>
-<li><p>selected currency pairs will be downloaded from the European Central Bank (ECB) servers using the <a href="www.sdmx.org">SDMX</a> protocol</p>
+<li><p>selected currency pairs will be downloaded from the European Central Bank (ECB) servers using the <a href="https://www.sdmx.org">SDMX</a> protocol</p>
 <ul>
 <li>these pairs will form our dependent variables in the models</li>
 </ul></li>
@@ -1008,8 +1008,8 @@ dtype: object</code></pre>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>RandomWalkEstimator()                                           0.000109
-RandomForestRegressor(max_features='log2', n_estimators=250)    0.000115
-AdaBoostRegressor(n_estimators=150)                             0.000112
+RandomForestRegressor(max_features='log2', n_estimators=250)    0.000114
+AdaBoostRegressor(n_estimators=150)                             0.000115
 Lasso(alpha=0.1)                                                0.000109
 dtype: float64</code></pre>
 </div>
@@ -1042,7 +1042,7 @@ dtype: float64</code></pre>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="31">
 <pre><code>{'model_details': {'developer': 'Person or organisation developing the model',
-  'datetime': '2024-02-22 15:17:30 ',
+  'datetime': '2024-02-27 07:43:39 ',
   'version': 'Model version',
   'type': 'Model type',
   'info': {'n_samples_': 4394},
@@ -1539,7 +1539,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a>First, we will use <span class="in">`gingado`</span> to run a simple example with the following characteristics:</span>
 <span id="cb43-29"><a href="#cb43-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-30"><a href="#cb43-30" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>selected currency pairs will be downloaded from the European Central Bank (ECB) servers using the <span class="co">[</span><span class="ot">SDMX</span><span class="co">](www.sdmx.org)</span> protocol</span>
+<span id="cb43-30"><a href="#cb43-30" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>selected currency pairs will be downloaded from the European Central Bank (ECB) servers using the <span class="co">[</span><span class="ot">SDMX</span><span class="co">](https://www.sdmx.org)</span> protocol</span>
 <span id="cb43-31"><a href="#cb43-31" aria-hidden="true" tabindex="-1"></a><span class="ss">    * </span>these pairs will form our dependent variables in the models</span>
 <span id="cb43-32"><a href="#cb43-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-33"><a href="#cb43-33" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>using <span class="in">`gingado`</span>, this series will be augmented with a time series on central bank policy rates and the interaction of rate changes and FX rate movements</span>

@@ -17,21 +17,21 @@ jupyter: python3
 
 `gingado` is a free, open source library built different functionalities:
 
-* [**data augmentation**](augmentation.html), to add more data from official sources, improving the machine models being trained by the user;
+* [**data augmentation**](https://bis-med-it.github.io/gingado/augmentation.html), to add more data from official sources, improving the machine models being trained by the user;
 
-* **relevant** [**datasets**](datasets.html), both real and
+* **relevant** [**datasets**](https://bis-med-it.github.io/gingado/datasets.html), both real and
   simulamed, to allow for easier model development and comparison;
 
-* **automatic** [**benchmark model**](benchmark.html), to assess
+* **automatic** [**benchmark model**](https://bis-med-it.github.io/gingado/benchmark.html), to assess
   candidate models against a reasonably well-performant model;
 
-* *(new!)* **machine learning-based** [**estimators**](estimators.html), to help answer questions of academic or practical importance;
+* *(new!)* **machine learning-based** [**estimators**](https://bis-med-it.github.io/gingado/estimators.html), to help answer questions of academic or practical importance;
 
-* **support for** [**model documentation**](documentation.html), to
+* **support for** [**model documentation**](https://bis-med-it.github.io/gingado/documentation.html), to
   embed documentation and ethical considerations in the model
   development phase; and
 
-* [**utilities**](utils.html), including tools to allow for lagging variables in a straightforward way.
+* [**utilities**](https://bis-med-it.github.io/gingado/utils.html), including tools to allow for lagging variables in a straightforward way.
 
 Each of these functionalities builds on top of the previous one. They can be used on a stand-alone basis, together, or even as part of a larger pipeline from data input to model training to documentation!
 

@@ -17,7 +17,7 @@ This notebook will use `gingado` to compare quickly setup a well-performing mach
 
 Because the notebook is for pedagogical purposes only, please bear in mind some aspects of the machine learning workflow (such as carefully thinking about the cross-validation strategy) are glossed over in this notebook. Also, only the key academic references are cited; more references can be found in the papers mentioned in this example.
 
-For a more thorough description of `gingado`, please refer to the package's [website](https://dkgaraujo.github.io/gingado) and to the academic [material](https://www.github.com/dkgaraujo/gingado_comms) about it.
+For a more thorough description of `gingado`, please refer to the package's [website](https://github.com/bis-med-it/gingado) and to the academic [material](https://www.github.com/dkgaraujo/gingado_comms) about it.
 
 ## Setting the stage
 

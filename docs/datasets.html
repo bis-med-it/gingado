@@ -126,11 +126,6 @@ div.csl-indent {
 <meta property="og:description" content="Functions to load real or simulated datasets that are relevant for economic and financial models">
 <meta property="og:image" content="00_datasets_files/figure-html/cell-6-output-2.png">
 <meta property="og:site-name" content="gingado">
-<meta name="twitter:title" content="gingado - Datasets for economic research">
-<meta name="twitter:description" content="Functions to load real or simulated datasets that are relevant for economic and financial models">
-<meta name="twitter:image" content="00_datasets_files/figure-html/cell-6-output-2.png">
-<meta name="twitter:creator" content="@DouglasKGAraujo">
-<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed">
@@ -208,7 +203,7 @@ div.csl-indent {
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/DouglasKGARaujo" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://www.sdmx.io" rel="" target=""><i class="bi bi-house-fill" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -251,7 +246,7 @@ div.csl-indent {
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-</nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -491,7 +486,7 @@ Note
 <section id="make_causal_effect" class="level3">
 <h3 class="anchored" data-anchor-id="make_causal_effect"><a id="make_causal_effect">make_causal_effect</a></h3>
 <blockquote class="blockquote">
-<p>make_causal_effect <code>(n_samples: int = 100, n_features: int = 100, pretreatment_outcome=&lt;function &lt;lambda&gt; at 0x00000266AB180040&gt;, treatment_propensity=&lt;function &lt;lambda&gt; at 0x00000266B2F9D1F0&gt;, treatment_assignment=&lt;function &lt;lambda&gt; at 0x00000266B2F9D160&gt;, treatment=&lt;function &lt;lambda&gt; at 0x00000266B2F9D280&gt;, treatment_effect=&lt;function &lt;lambda&gt; at 0x00000266B2F9D310&gt;, bias: float = 0, noise: float = 0, random_state=None, return_propensity: bool = False, return_assignment: bool = False, return_treatment_value: bool = False, return_treatment_effect: bool = True, return_pretreatment_y: bool = False, return_as_dict: bool = False)</code></p>
+<p>make_causal_effect <code>(n_samples: int = 100, n_features: int = 100, pretreatment_outcome=&lt;function &lt;lambda&gt; at 0x0000021711770040&gt;, treatment_propensity=&lt;function &lt;lambda&gt; at 0x00000217195901F0&gt;, treatment_assignment=&lt;function &lt;lambda&gt; at 0x0000021719590160&gt;, treatment=&lt;function &lt;lambda&gt; at 0x0000021719590280&gt;, treatment_effect=&lt;function &lt;lambda&gt; at 0x0000021719590310&gt;, bias: float = 0, noise: float = 0, random_state=None, return_propensity: bool = False, return_assignment: bool = False, return_treatment_value: bool = False, return_treatment_effect: bool = True, return_pretreatment_y: bool = False, return_as_dict: bool = False)</code></p>
 </blockquote>
 <pre>Generates a simulated dataset to analyze causal effects of a treatment on an outcome variable.
 
@@ -662,53 +657,53 @@ Returns:
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>0.025481</td>
+<td data-quarto-table-cell-role="th">6</td>
+<td>0.074590</td>
 <td>0.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">6</td>
-<td>0.025927</td>
+<td data-quarto-table-cell-role="th">4</td>
+<td>0.379970</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>0.390254</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>0.426122</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>0.431618</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0.432939</td>
 <td>0.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
-<td>0.237511</td>
-<td>0.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>0.257700</td>
-<td>0.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">1</td>
-<td>0.424010</td>
+<td>0.481415</td>
 <td>0.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">9</td>
-<td>0.431970</td>
-<td>0.0</td>
+<td>0.541593</td>
+<td>1.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">3</td>
-<td>0.465772</td>
-<td>0.0</td>
-</tr>
-<tr class="even">
 <td data-quarto-table-cell-role="th">2</td>
-<td>0.560694</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">7</td>
-<td>0.568330</td>
+<td>0.839705</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">8</td>
-<td>0.948788</td>
+<td data-quarto-table-cell-role="th">3</td>
+<td>0.841851</td>
 <td>1.0</td>
 </tr>
 </tbody>

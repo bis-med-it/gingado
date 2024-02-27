@@ -104,10 +104,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta property="og:title" content="gingado - Data augmentation">
 <meta property="og:description" content="Functions to augment the user’s dataset with information from official sources.">
 <meta property="og:site-name" content="gingado">
-<meta name="twitter:title" content="gingado - Data augmentation">
-<meta name="twitter:description" content="Functions to augment the user’s dataset with information from official sources.">
-<meta name="twitter:creator" content="@DouglasKGAraujo">
-<meta name="twitter:card" content="summary">
 </head>
 
 <body class="nav-fixed">
@@ -185,7 +181,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/DouglasKGARaujo" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://www.sdmx.io" rel="" target=""><i class="bi bi-house-fill" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -225,7 +221,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#sources-of-data" id="toc-sources-of-data" class="nav-link" data-scroll-target="#sources-of-data">Sources of data</a></li>
   </ul>
-</nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -895,7 +891,7 @@ Returns:
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>X_train.shape, y_train.shape, X_test.shape, y_test.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
-<pre><code>((5414, 8), (5414,), (1, 8), (1,))</code></pre>
+<pre><code>((5417, 8), (5417,), (1, 8), (1,))</code></pre>
 </div>
 </div>
 <p>Next, the data augmentation object provided by <code>gingado</code> adds more data. In this case, for brevity only one dataflow from one source is listed. If users want to add more SDMX sources, simply add more keys to the dictionary. And if users want data from all dataflows from a given source provided the keys and parameters such as frequency and dates match, the value should be set to <code>'all'</code>, as in <code>{'ECB': ['CISS'], 'BIS': 'all'}</code>.</p>
@@ -1164,78 +1160,6 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
 <td>...</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2024-02-14</td>
-<td>1.6526</td>
-<td>5.3465</td>
-<td>1.4511</td>
-<td>0.9481</td>
-<td>0.85098</td>
-<td>161.17</td>
-<td>1.4510</td>
-<td>1.0793</td>
-<td>0.111582</td>
-<td>0.098751</td>
-<td>...</td>
-<td>7.00</td>
-<td>6.5</td>
-<td>16.0</td>
-<td>6.0</td>
-<td>4.00</td>
-<td>2.50</td>
-<td>45.0</td>
-<td>5.375</td>
-<td>4.50</td>
-<td>8.25</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">2024-02-15</td>
-<td>1.6521</td>
-<td>5.3069</td>
-<td>1.4509</td>
-<td>0.9493</td>
-<td>0.85258</td>
-<td>161.28</td>
-<td>1.4451</td>
-<td>1.0713</td>
-<td>0.102352</td>
-<td>0.094350</td>
-<td>...</td>
-<td>7.00</td>
-<td>6.5</td>
-<td>16.0</td>
-<td>6.0</td>
-<td>4.00</td>
-<td>2.50</td>
-<td>45.0</td>
-<td>5.375</td>
-<td>4.50</td>
-<td>8.25</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2024-02-16</td>
-<td>1.6525</td>
-<td>5.3401</td>
-<td>1.4547</td>
-<td>0.9484</td>
-<td>0.85635</td>
-<td>161.26</td>
-<td>1.4472</td>
-<td>1.0743</td>
-<td>0.104774</td>
-<td>0.093517</td>
-<td>...</td>
-<td>7.00</td>
-<td>6.5</td>
-<td>16.0</td>
-<td>6.0</td>
-<td>4.00</td>
-<td>2.50</td>
-<td>45.0</td>
-<td>5.375</td>
-<td>4.50</td>
-<td>8.25</td>
-</tr>
-<tr class="even">
 <td data-quarto-table-cell-role="th">2024-02-19</td>
 <td>1.6517</td>
 <td>5.3551</td>
@@ -1259,7 +1183,7 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
 <td>4.50</td>
 <td>8.25</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td data-quarto-table-cell-role="th">2024-02-20</td>
 <td>1.6479</td>
 <td>5.3433</td>
@@ -1269,8 +1193,80 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
 <td>161.59</td>
 <td>1.4503</td>
 <td>1.0776</td>
-<td>0.102598</td>
-<td>0.087116</td>
+<td>0.102998</td>
+<td>0.087479</td>
+<td>...</td>
+<td>7.00</td>
+<td>6.5</td>
+<td>16.0</td>
+<td>6.0</td>
+<td>4.00</td>
+<td>2.50</td>
+<td>45.0</td>
+<td>5.375</td>
+<td>4.50</td>
+<td>8.25</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2024-02-21</td>
+<td>1.6457</td>
+<td>5.3521</td>
+<td>1.4562</td>
+<td>0.9526</td>
+<td>0.85660</td>
+<td>162.18</td>
+<td>1.4525</td>
+<td>1.0802</td>
+<td>0.107851</td>
+<td>0.088532</td>
+<td>...</td>
+<td>7.00</td>
+<td>6.5</td>
+<td>16.0</td>
+<td>6.0</td>
+<td>4.00</td>
+<td>2.50</td>
+<td>45.0</td>
+<td>5.375</td>
+<td>4.50</td>
+<td>8.25</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2024-02-22</td>
+<td>1.6486</td>
+<td>5.3253</td>
+<td>1.4618</td>
+<td>0.9510</td>
+<td>0.85619</td>
+<td>162.12</td>
+<td>1.4524</td>
+<td>1.0809</td>
+<td>0.103062</td>
+<td>0.086758</td>
+<td>...</td>
+<td>7.00</td>
+<td>6.5</td>
+<td>16.0</td>
+<td>6.0</td>
+<td>4.00</td>
+<td>2.50</td>
+<td>45.0</td>
+<td>5.375</td>
+<td>4.50</td>
+<td>8.25</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2024-02-23</td>
+<td>1.6515</td>
+<td>5.3499</td>
+<td>1.4618</td>
+<td>0.9535</td>
+<td>0.85625</td>
+<td>163.12</td>
+<td>1.4552</td>
+<td>1.0844</td>
+<td>0.097974</td>
+<td>0.089931</td>
 <td>...</td>
 <td>7.00</td>
 <td>6.5</td>
@@ -1286,7 +1282,7 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
 </tbody>
 </table>
 
-<p>5414 rows × 69 columns</p>
+<p>5417 rows × 69 columns</p>
 </div>
 </div>
 </div>
@@ -1338,28 +1334,28 @@ Tip
 <div class="cell-output cell-output-stdout">
 <pre><code>Fitting 2 folds for each of 2 candidates, totalling 4 fits
 [Pipeline] ...... (step 1 of 3) Processing augmentation, total=   0.0s
-[Pipeline] ............... (step 2 of 3) Processing imp, total=   0.0s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=   1.6s
-[CV] END ...........................augmentation=passthrough; total time=   1.6s
+[Pipeline] ............... (step 2 of 3) Processing imp, total=   0.1s
+[Pipeline] ............ (step 3 of 3) Processing forest, total=   1.8s
+[CV] END ...........................augmentation=passthrough; total time=   1.8s
 [Pipeline] ...... (step 1 of 3) Processing augmentation, total=   0.0s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.0s
 [Pipeline] ............ (step 3 of 3) Processing forest, total=   3.7s
 [CV] END ...........................augmentation=passthrough; total time=   3.7s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[Pipeline] ...... (step 1 of 3) Processing augmentation, total=  25.6s
+[Pipeline] ...... (step 1 of 3) Processing augmentation, total=  27.9s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.5s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=   4.8s
+[Pipeline] ............ (step 3 of 3) Processing forest, total=   4.7s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time=  46.0s
+[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time=  48.3s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[Pipeline] ...... (step 1 of 3) Processing augmentation, total=  30.2s
+[Pipeline] ...... (step 1 of 3) Processing augmentation, total=  32.1s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.6s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=  12.2s
+[Pipeline] ............ (step 3 of 3) Processing forest, total=  10.2s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time= 2.0min
+[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time= 1.2min
 [Pipeline] ...... (step 1 of 3) Processing augmentation, total=   0.0s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.0s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=   5.7s</code></pre>
+[Pipeline] ............ (step 3 of 3) Processing forest, total=   5.0s</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="18">
@@ -1377,7 +1373,7 @@ Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stres
 <div class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The last value in the training dataset was </span><span class="sc">{</span>y_train<span class="sc">.</span>tail(<span class="dv">1</span>)<span class="sc">.</span>to_numpy()<span class="sc">}</span><span class="ss">. The predicted value was </span><span class="sc">{</span>y_pred_grid<span class="sc">}</span><span class="ss">, and the actual value was </span><span class="sc">{</span>y_test<span class="sc">.</span>to_numpy()<span class="sc">}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The last value in the training dataset was [5.3521]. The predicted value was [5.341226], and the actual value was [5.3253].</code></pre>
+<pre><code>The last value in the training dataset was [5.3831]. The predicted value was [5.36024], and the actual value was [5.4111].</code></pre>
 </div>
 </div>
 </section>
@@ -1440,7 +1436,7 @@ WB       DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAI
          DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
          DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
          DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
-Name: dataflow, Length: 10580, dtype: object</code></pre>
+Name: dataflow, Length: 11082, dtype: object</code></pre>
 </div>
 </div>
 <p>For example, the dataflows from the World Bank are:</p>

@@ -24,7 +24,7 @@ To work with the documentation an tests, we use `quarto`. You can either use RSt
 
 ### Modifying the index page and README.md
 
-To modify the index page or the README.md file in the repository root, please edit the index.qmd file. All changes in the index.qmd file will automatically be rendered to the README.md file in the repository root via a post-render script `copy_readme_to_root.py`.
+To modify the index page or the README.md file in the repository root, please only edit the index.qmd file. All changes in the index.qmd file will be rendered to the README.md file and moved automatically to the repository root via a post-render script `move_readme_to_root.py`.
 
 ### Reporting Issues and Suggestions
 

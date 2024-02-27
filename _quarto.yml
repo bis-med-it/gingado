@@ -15,8 +15,7 @@ format:
 
 website:
   title: gingado
-  twitter-card:
-    creator: "@DouglasKGAraujo"
+  repo-url: "https://github.com/bis-med-it/gingado"
   open-graph: true
   repo-actions: [issue]
   reader-mode: true
@@ -49,7 +48,7 @@ website:
     right:
       - icon: github
         href: "https://github.com/bis-med-it/gingado"
-      - icon: twitter
-        href: https://twitter.com/DouglasKGARaujo
+      - icon: house-fill
+        href: https://www.sdmx.io
 
 bibliography: gingado.bib

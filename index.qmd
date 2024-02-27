@@ -64,6 +64,12 @@ The most current version of the paper describing `gingado` is [here](https://git
 
 ## Install
 
+:::{.callout-note}
+
+Please make sure you have read and understood the license disclaimer in the NOTES.md file in our [GitHub repository](https://github.com/bis-med-it/gingado) before using gingado.
+
+:::
+
 To install `gingado`, simply run the following code on the terminal:
 
 `$ pip install gingado`

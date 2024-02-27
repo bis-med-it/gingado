@@ -101,10 +101,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta property="og:title" content="gingado - Utils">
 <meta property="og:description" content="Functions to support the use of gingado">
 <meta property="og:site-name" content="gingado">
-<meta name="twitter:title" content="gingado - Utils">
-<meta name="twitter:description" content="Functions to support the use of gingado">
-<meta name="twitter:creator" content="@DouglasKGAraujo">
-<meta name="twitter:card" content="summary">
 </head>
 
 <body class="nav-fixed">
@@ -182,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/DouglasKGARaujo" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://www.sdmx.io" rel="" target=""><i class="bi bi-house-fill" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -227,7 +223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#load_sdmx_data" id="toc-load_sdmx_data" class="nav-link" data-scroll-target="#load_sdmx_data"></a><a id="load_sdmx_data" class="nav-link" data-scroll-target="undefined">load_SDMX_data</a></li>
   </ul></li>
   </ul>
-</nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -292,10 +288,10 @@ Args:
 <pre><code>([{'_estimator_type': 'regressor'}],
  [{'_estimator_type': 'regressor'},
   {'estimator_': DecisionTreeRegressor()},
-  {'estimators_': [DecisionTreeRegressor(max_features=1.0, random_state=2099199461),
-    DecisionTreeRegressor(max_features=1.0, random_state=520470076),
-    DecisionTreeRegressor(max_features=1.0, random_state=1821101536)]},
-  {'estimators_samples_': [array([1, 0]), array([1, 1]), array([1, 1])]},
+  {'estimators_': [DecisionTreeRegressor(max_features=1.0, random_state=1283971169),
+    DecisionTreeRegressor(max_features=1.0, random_state=926731869),
+    DecisionTreeRegressor(max_features=1.0, random_state=2118836830)]},
+  {'estimators_samples_': [array([1, 1]), array([0, 0]), array([0, 1])]},
   {'feature_importances_': array([0., 0.])},
   {'n_features_in_': 2},
   {'n_outputs_': 1}])</code></pre>
@@ -469,7 +465,7 @@ WB       DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAI
          DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
          DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
          DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
-Name: dataflow, Length: 2960, dtype: object</code></pre>
+Name: dataflow, Length: 11082, dtype: object</code></pre>
 </div>
 </div>
 <p>This format allows for more easily searching <code>dflows</code> by source:</p>
@@ -487,7 +483,7 @@ WB       0               DF_WITS_Tariff_TRAINS
          1      DF_WITS_TradeStats_Development
          2           DF_WITS_TradeStats_Tariff
          3            DF_WITS_TradeStats_Trade
-Name: dataflow, Length: 10580, dtype: object</code></pre>
+Name: dataflow, Length: 11082, dtype: object</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="21">
@@ -529,9 +525,15 @@ Name: dataflow, dtype: object</code></pre>
 <div class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'Interest rates'</span>, case<span class="op">=</span><span class="va">False</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
-<pre><code>BBK  BBSDI    Discount interest rates pursuant to section 25...
-     BBSEI    Expectation of inflation rate and expected rea...
-ECB  RIR                                  Retail Interest Rates
+<pre><code>BBK    BBSDI          Discount interest rates pursuant to section 25...
+       BBSEI          Expectation of inflation rate and expected rea...
+ECB    RIR                                        Retail Interest Rates
+ESTAT  EI_MFIR_M                          Interest rates - monthly data
+       ENPE_IRT_ST                          Money market interest rates
+       IRT_ST_A               Money market interest rates - annual data
+       IRT_ST_M              Money market interest rates - monthly data
+       IRT_ST_Q            Money market interest rates - quarterly data
+       TEIMF100                  Day-to-day money market interest rates
 Name: dataflow, dtype: object</code></pre>
 </div>
 </div>

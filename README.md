@@ -11,62 +11,72 @@ learning algorithms to more complex model pipelines used in production.
 `gingado` is a free, open source library built different
 functionalities:
 
--   [**data augmentation**](augmentation.html), to add more data from
-    official sources, improving the machine models being trained by the
-    user;
+- [**data
+  augmentation**](https://bis-med-it.github.io/gingado/augmentation.html),
+  to add more data from official sources, improving the machine models
+  being trained by the user;
 
--   **relevant** [**datasets**](datasets.html), both real and simulamed,
-    to allow for easier model development and comparison;
+- **relevant**
+  [**datasets**](https://bis-med-it.github.io/gingado/datasets.html),
+  both real and simulamed, to allow for easier model development and
+  comparison;
 
--   **automatic** [**benchmark model**](benchmark.html), to assess
-    candidate models against a reasonably well-performant model;
+- **automatic** [**benchmark
+  model**](https://bis-med-it.github.io/gingado/benchmark.html), to
+  assess candidate models against a reasonably well-performant model;
 
--   *(new!)* **machine learning-based**
-    [**estimators**](estimators.html), to help answer questions of
-    academic or practical importance;
+- *(new!)* **machine learning-based**
+  [**estimators**](https://bis-med-it.github.io/gingado/estimators.html),
+  to help answer questions of academic or practical importance;
 
--   **support for** [**model documentation**](documentation.html), to
-    embed documentation and ethical considerations in the model
-    development phase; and
+- **support for** [**model
+  documentation**](https://bis-med-it.github.io/gingado/documentation.html),
+  to embed documentation and ethical considerations in the model
+  development phase; and
 
--   [**utilities**](utils.html), including tools to allow for lagging
-    variables in a straightforward way.
+- [**utilities**](https://bis-med-it.github.io/gingado/utils.html),
+  including tools to allow for lagging variables in a straightforward
+  way.
 
 Each of these functionalities builds on top of the previous one. They
 can be used on a stand-alone basis, together, or even as part of a
 larger pipeline from data input to model training to documentation!
+
+<div>
 
 > **Tip**
 >
 > New functionalities are planned over time, so consider checking
 > frequently on `gingado` for the latest toolsets.
 
+</div>
+
 ## Design principles
 
 The choices made during development of `gingado` derive from the
 following principles, in no particular order:
 
--   **flexibility**: users can use `gingado` out of the box or build
-    custom processes on top of it;
+- **flexibility**: users can use `gingado` out of the box or build
+  custom processes on top of it;
 
--   **compatibility**: `gingado` works well with other widely used
-    libraries in machine learning, such as `scikit-learn` and `pandas`;
-    and
+- **compatibility**: `gingado` works well with other widely used
+  libraries in machine learning, such as `scikit-learn` and `pandas`;
+  and
 
--   **responsibility**: `gingado` facilitates and promotes model
-    documentation, including ethical considerations, as part of the
-    machine learning development workflow.
+- **responsibility**: `gingado` facilitates and promotes model
+  documentation, including ethical considerations, as part of the
+  machine learning development workflow.
 
 ## Acknowledgements
 
 `gingado`’s API is inspired on the following libraries:
 
--   `scikit-learn` (Buitinck et al. 2013)
+- `scikit-learn` (Buitinck et al. 2013)
 
--   `keras` (website [here](https://keras.io/about/) and also, [this
-    essay](https://medium.com/s/story/notes-to-myself-on-software-engineering-c890f16f4e4d))
+- `keras` (website [here](https://keras.io/about/) and also, [this
+  essay](https://medium.com/s/story/notes-to-myself-on-software-engineering-c890f16f4e4d))
 
--   `fastai` (Howard and Gugger 2020)
+- `fastai` (Howard and Gugger 2020)
 
 In addition, `gingado` is developed and maintained using
 [`quarto`](https://quarto.org/).
@@ -108,11 +118,23 @@ on economics and finance”, BIS Working Paper No 1122.
 
 ## References
 
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+<div id="ref-sklearnAPI" class="csl-entry">
+
 Buitinck, Lars, Gilles Louppe, Mathieu Blondel, Fabian Pedregosa,
 Andreas Mueller, Olivier Grisel, Vlad Niculae, et al. 2013. “API Design
 for Machine Learning Software: Experiences from the Scikit-Learn
 Project.” *CoRR* abs/1309.0238. <http://arxiv.org/abs/1309.0238>.
 
+</div>
+
+<div id="ref-fastaiAPI" class="csl-entry">
+
 Howard, Jeremy, and Sylvain Gugger. 2020. “Fastai: A Layered API for
 Deep Learning.” *Information* 11 (2).
 <https://doi.org/10.3390/info11020108>.
+
+</div>
+
+</div>

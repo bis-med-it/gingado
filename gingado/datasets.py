@@ -1,10 +1,16 @@
+from io import BytesIO
 import os
-import pandas as pd
+from pathlib import Path
+from zipfile import ZipFile
 
 import pandas as pd
+import requests
 import numpy as np
 from inspect import signature
 from sklearn.utils import check_random_state
+
+from gingado.internals import generate_timestamped_file_path, get_latest_timestamped_file_path
+from gingado.settings import CACHE_DIRECTORY, CB_SPEECHES_CSV_BASE_FILENAME, CB_SPEECHES_BASE_URL, CB_SPEECHES_ZIP_BASE_FILENAME
 
 __all__ = ['load_BarroLee_1994', 'make_causal_effect']
 
@@ -31,6 +37,92 @@ def load_BarroLee_1994(
         return X, y
     else:
         return df
+
+
+def load_CB_speeches(
+    year: str | int | list = 'all', cache: bool = True, timeout: float | None = 120, **kwargs
+) -> pd.DataFrame:
+    """Load Central Bankers speeches dataset from 
+    Bank for International Settlements (2024). Central bank speeches, all years,
+    https://www.bis.org/cbspeeches/download.htm.
+
+    Args:
+        year: Either 'all' to download all available central bank speeches or the year(s)
+            to download. Defaults to 'all'.
+        cache: If False, cached data will be ignored and the dataset will be downloaded again.
+            Defaults to True.
+        timeout: The timeout to for downloading each speeches file. Set to `None` to disable
+            timeout. Defaults to 120.
+        **kwargs. Additional keyword arguments which will be passed to pandas `read_csv` function.
+
+    Returns:
+        A pandas DataFrame containing the speeches dataset.
+
+    Usage:
+        >>> load_CB_speeches()
+
+        >>> load_CB_speeches('2020')
+
+        >>> load_CB_speeches([2020, 2021, 2022])
+    """
+    # Ensure year is list[str] for uniform handling
+    if not isinstance(year, list):
+        year = [str(year)]
+    year = [str(y) for y in year]
+
+    # Load data for each year
+    cb_speeches_dfs = []
+    for y in year:
+        # Get expected filename (without extension) for speeches file
+        filename_csv = (CB_SPEECHES_CSV_BASE_FILENAME if y == 'all' else f'{CB_SPEECHES_CSV_BASE_FILENAME}_{y}') + '.csv'
+
+        # Get the file path of the CSV
+        cb_speeches_file_path = str(Path(CACHE_DIRECTORY) / filename_csv)
+
+        # Try to read the CSV file from cache
+        cb_speeches_year_df: pd.DataFrame | None = None
+        if cache:
+            try:
+                timestamped_file_path = get_latest_timestamped_file_path(cb_speeches_file_path)
+                cb_speeches_year_df = pd.read_csv(timestamped_file_path, **kwargs)
+            except FileNotFoundError:
+                # File is not in cache
+                cb_speeches_year_df = None
+
+        # Download the CSV file, if it could not be loaded from cache
+        if cb_speeches_year_df is None:
+            # Get zip file URL
+            filename_no_extension = (
+                CB_SPEECHES_ZIP_BASE_FILENAME if y == 'all' else f'{CB_SPEECHES_ZIP_BASE_FILENAME}_{y}'
+            )
+            zip_url = CB_SPEECHES_BASE_URL + filename_no_extension + '.zip'
+
+            # Download the zip file, unzip it and parse the CSV file:
+            with requests.get(zip_url, timeout=timeout) as response:
+                zip_file_content = response.content
+                speeches_zip = ZipFile(BytesIO(zip_file_content))
+                speeches_zip_file = speeches_zip.open(filename_no_extension + '.csv', 'r')
+                cb_speeches_year_df = pd.read_csv(speeches_zip_file, **kwargs)
+
+            # Write file to cache
+            timestamped_file_path = generate_timestamped_file_path(cb_speeches_file_path)
+            Path(cb_speeches_file_path).parent.mkdir(exist_ok=True)  # Ensure parent dir exists
+            cb_speeches_year_df.to_csv(timestamped_file_path, index=False)
+
+        # Verify that the file in the cache is valid
+        try:
+            timestamped_file_path = get_latest_timestamped_file_path(cb_speeches_file_path)
+            verify_df = pd.read_csv(timestamped_file_path)
+            assert len(verify_df) > 0, f'CB speeches dataset at {timestamped_file_path} is empty.'
+        except Exception as ex:
+            raise RuntimeError('Verification error. See previous exception.') from ex
+
+        # Add dataframe for year to aggregated list of dataframes
+        cb_speeches_dfs.append(cb_speeches_year_df)
+
+    # Concat all dataframes into single dataframe and return
+    return pd.concat(cb_speeches_dfs)
+
 
 def make_causal_effect(
     n_samples:int=100,

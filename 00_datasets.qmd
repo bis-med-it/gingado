@@ -21,7 +21,7 @@ from fastcore.test import test_fail
 import matplotlib.pyplot as plt
 import pandas as pd
 from utils import show_doc
-from gingado.datasets import load_BarroLee_1994
+from gingado.datasets import load_BarroLee_1994, load_CB_speeches
 ```
 
 ## Real datasets
@@ -62,6 +62,35 @@ X.head()
 ```{python}
 
 y.plot.hist(title='GDP growth', bins=30)
+```
+
+<!-- load_CB_speeches -->
+```{python}
+#| output: asis
+#| echo: false
+show_doc(load_CB_speeches)
+```
+
+This function downloads the Central bankers speeches dataset from the
+BIS website (www.bis.org). More information on the dataset can be found
+on the BIS website.
+
+If you use this data in your work, please cite the BIS central bank speeches
+dataset, as follows (Please substitute YYYY for the relevant years):
+
+```
+@misc{biscbspeeches
+    author = {Bank for International Settlements},
+    title = {Central bank speeches, YYYY-YYYY},
+    year = {2024},
+    url = {https://www.bis.org/cbspeeches/download.htm}
+}
+```
+
+```{python}
+# Load speeches for 2020
+speeches = load_CB_speeches(2020)
+speeches.head()
 ```
 
 ## Simulated datasets

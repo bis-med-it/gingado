@@ -1,3 +1,5 @@
+from __future__ import annotations  # Allows forward annotations in Python < 3.10
+
 from io import BytesIO
 import os
 from pathlib import Path

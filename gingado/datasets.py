@@ -101,8 +101,8 @@ def load_CB_speeches(
             with requests.get(zip_url, timeout=timeout) as response:
                 zip_file_content = response.content
                 speeches_zip = ZipFile(BytesIO(zip_file_content))
-                speeches_zip_file = speeches_zip.open(filename_no_extension + '.csv', 'r')
-                cb_speeches_year_df = pd.read_csv(speeches_zip_file, **kwargs)
+                with speeches_zip.open(filename_no_extension + '.csv', 'r') as speeches_zip_file:
+                    cb_speeches_year_df = pd.read_csv(speeches_zip_file, **kwargs)
 
             # Write file to cache
             timestamped_file_path = generate_timestamped_file_path(cb_speeches_file_path)

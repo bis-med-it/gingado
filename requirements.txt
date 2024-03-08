@@ -4,3 +4,4 @@ pandasdmx>=1.8.1
 scikit-learn>=1.0.2
 requests_cache>=0.9.1
 matplotlib>=3.5
+requests>=2.31.0

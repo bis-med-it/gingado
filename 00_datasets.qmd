@@ -71,9 +71,9 @@ y.plot.hist(title='GDP growth', bins=30)
 show_doc(load_CB_speeches)
 ```
 
-This function downloads the Central bankers speeches dataset from the
+This function downloads the Central bankers speeches dataset [-@biscbspeeches] from the
 BIS website (www.bis.org). More information on the dataset can be found
-on the BIS website.
+on the [BIS website](https://www.bis.org/cbspeeches/download.htm).
 
 If you use this data in your work, please cite the BIS central bank speeches
 dataset, as follows (Please substitute YYYY for the relevant years):

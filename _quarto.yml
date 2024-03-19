@@ -24,6 +24,7 @@ website:
   navbar:
     background: primary
     search: true
+    title: "<img src='resources/gingado_logo_CMYK_white.png' alt='gingado' style='height:40px;' />"
     left:
       - text: "Examples"
         menu:

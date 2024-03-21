@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="A machine learning library for economics and finance">
 
-<title>gingado - Welcome to gingado!</title>
+<title>gingado</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,27 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -92,8 +71,7 @@ div.csl-indent {
 
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="gingado - Welcome to gingado!">
-<meta property="og:description" content="A machine learning library for economics and finance">
+<meta property="og:title" content="gingado">
 <meta property="og:site_name" content="gingado">
 </head>
 
@@ -198,137 +176,57 @@ div.csl-indent {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#install" id="toc-install" class="nav-link" data-scroll-target="#install">Install</a></li>
-  <li><a href="#attribution" id="toc-attribution" class="nav-link" data-scroll-target="#attribution">Attribution</a></li>
-  <li><a href="#design-principles" id="toc-design-principles" class="nav-link" data-scroll-target="#design-principles">Design principles</a></li>
-  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#security-policy" id="toc-security-policy" class="nav-link active" data-scroll-target="#security-policy">Security Policy</a>
+  <ul>
+  <li><a href="#supported-versions" id="toc-supported-versions" class="nav-link" data-scroll-target="#supported-versions">Supported Versions</a></li>
+  <li><a href="#reporting-a-vulnerability" id="toc-reporting-a-vulnerability" class="nav-link" data-scroll-target="#reporting-a-vulnerability">Reporting a Vulnerability</a></li>
+  <li><a href="#security-patch-release-process" id="toc-security-patch-release-process" class="nav-link" data-scroll-target="#security-patch-release-process">Security Patch Release Process</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Welcome to gingado!</h1>
-</div>
-
-<div>
-  <div class="description">
-    A machine learning library for economics and finance
-  </div>
-</div>
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<p><code>gingado</code> seeks to facilitate the use of machine learning in economic and finance use cases, while promoting good practices. This package aims to be suitable for beginners and advanced users alike. Use cases may range from simple data retrievals to experimentation with machine learning algorithms to more complex model pipelines used in production.</p>
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p><code>gingado</code> is a free, open source library built different functionalities:</p>
+<section id="security-policy" class="level1">
+<h1>Security Policy</h1>
+<section id="supported-versions" class="level2">
+<h2 class="anchored" data-anchor-id="supported-versions">Supported Versions</h2>
+<p>We are committed to maintaining the security of our software. However, our resources are limited to providing security patches only for the latest combination of minor and major versions of our software.</p>
+</section>
+<section id="reporting-a-vulnerability" class="level2">
+<h2 class="anchored" data-anchor-id="reporting-a-vulnerability">Reporting a Vulnerability</h2>
+<p>We take the security of our software seriously. If you believe you have found a security vulnerability in our software, we encourage you to report it to us as soon as possible. Please follow these steps:</p>
+<ol type="1">
+<li><p><strong>Do Not Publish the Vulnerability</strong>: Publicly disclosing a vulnerability can put the entire community at risk. We ask that you do not share or publicize an unresolved vulnerability to/with third parties.</p></li>
+<li><p><strong>Report Confidentially</strong>: Please email us at <a href="mailto:contact.sdmx.io@bis.org">contact.sdmx.io@bis.org</a> with the details of the vulnerability. The report should include:</p>
 <ul>
-<li><p><a href="https://bis-med-it.github.io/gingado/augmentation.html"><strong>data augmentation</strong></a>, to add data from official sources, improving the machine models being trained by the user;</p></li>
-<li><p><strong>relevant</strong> <a href="https://bis-med-it.github.io/gingado/datasets.html"><strong>datasets</strong></a>, both real and simulated, to allow for easier model development and comparison;</p></li>
-<li><p><strong>automatic</strong> <a href="https://bis-med-it.github.io/gingado/benchmark.html"><strong>benchmark model</strong></a>, to assess candidate models against a reasonably well-performant model;</p></li>
-<li><p><strong>machine learning-based</strong> <a href="https://bis-med-it.github.io/gingado/estimators.html"><strong>estimators</strong></a>, to help answer questions of academic or practical importance;</p></li>
-<li><p><strong>support for</strong> <a href="https://bis-med-it.github.io/gingado/documentation.html"><strong>model documentation</strong></a>, to embed documentation and ethical considerations in the model development phase; and</p></li>
-<li><p><a href="https://bis-med-it.github.io/gingado/utils.html"><strong>utilities</strong></a>, including tools to allow for lagging variables in a straightforward way.</p></li>
-</ul>
-<p>Each of these functionalities builds on top of the previous one. They can be used on a stand-alone basis, together, or even as part of a larger pipeline from data input to model training to documentation!</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>New functionalities are planned over time, so consider checking frequently on <code>gingado</code> for the latest toolsets.</p>
-</div>
-</div>
+<li>A description of the vulnerability and its potential impact.</li>
+<li>Steps to reproduce or proof-of-concept (PoC).</li>
+<li>Any relevant screenshots or output.</li>
+</ul></li>
+<li><p><strong>Response and Collaboration</strong>: Our security team will review your report and may contact you for further information. Once the vulnerability is confirmed, we will work with you to assess and understand its impact and develop a mitigation or fix.</p></li>
+<li><p><strong>Acknowledgment</strong>: After the vulnerability has been resolved, we will acknowledge your contribution in our release notes, unless you prefer to remain anonymous.</p></li>
+</ol>
 </section>
-<section id="install" class="level2">
-<h2 class="anchored" data-anchor-id="install">Install</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Please make sure you have read and understood the license disclaimer in the NOTES.md file in our <a href="https://github.com/bis-med-it/gingado">GitHub repository</a> before using gingado.</p>
-</div>
-</div>
-<p>To install <code>gingado</code>, simply run the following code on the terminal:</p>
-<p><code>$ pip install gingado</code></p>
-</section>
-<section id="attribution" class="level2">
-<h2 class="anchored" data-anchor-id="attribution">Attribution</h2>
-<p>If you use this package in your work, please consider citing <span class="citation" data-cites="gingado">Araujo (<a href="#ref-gingado" role="doc-biblioref">2023</a>)</span>.</p>
-<p>In BibTeX format:</p>
-<pre><code>@techreport{gingado,
-    author = {Araujo, Douglas KG},
-    title = {gingado: a machine learning library focused on economics and finance},
-    series = {BIS Working Paper},
-    type = {Working Paper},
-    institution = {Bank for International Settlements},
-    year = {2023},
-    number = {1122}
-}</code></pre>
-<p>Over time, new tools that are described in specific papers might be added (eg, a machine learning-based econometric estimator). Please consider citing them as well if used in your work. Specific information, if any, can be found in the documentation.</p>
-</section>
-<section id="design-principles" class="level2">
-<h2 class="anchored" data-anchor-id="design-principles">Design principles</h2>
-<p>The choices made during development of <code>gingado</code> derive from the following principles, in no particular order:</p>
-<ul>
-<li><p><strong>flexibility</strong>: users can use <code>gingado</code> out of the box or build custom processes on top of it;</p></li>
-<li><p><strong>compatibility</strong>: <code>gingado</code> works well with other widely used libraries in machine learning, such as <code>scikit-learn</code> and <code>pandas</code>; and</p></li>
-<li><p><strong>responsibility</strong>: <code>gingado</code> facilitates and promotes model documentation, including ethical considerations, as part of the machine learning development workflow.</p></li>
-</ul>
-<p>For more information about <code>gingado</code>, please read the <a href="https://www.bis.org/publ/work1122.pdf">paper</a>.</p>
-</section>
-<section id="acknowledgements" class="level2">
-<h2 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
-<p><code>gingado</code>’s API is inspired on the following libraries:</p>
-<ul>
-<li><p><code>scikit-learn</code> <span class="citation" data-cites="sklearnAPI">(<a href="#ref-sklearnAPI" role="doc-biblioref">Buitinck et al. 2013</a>)</span></p></li>
-<li><p><code>keras</code> (website <a href="https://keras.io/about/">here</a> and also, <a href="https://medium.com/s/story/notes-to-myself-on-software-engineering-c890f16f4e4d">this essay</a>)</p></li>
-<li><p><code>fastai</code> <span class="citation" data-cites="fastaiAPI">(<a href="#ref-fastaiAPI" role="doc-biblioref">Howard and Gugger 2020</a>)</span></p></li>
-</ul>
-<p>In addition, <code>gingado</code> is developed and maintained using <a href="https://quarto.org/"><code>quarto</code></a>.</p>
-</section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-gingado" class="csl-entry" role="listitem">
-Araujo, Douglas KG. 2023. <span>“Gingado: A Machine Learning Library Focused on Economics and Finance.”</span> Working Paper 1122. BIS Working Paper. Bank for International Settlements.
-</div>
-<div id="ref-sklearnAPI" class="csl-entry" role="listitem">
-Buitinck, Lars, Gilles Louppe, Mathieu Blondel, Fabian Pedregosa, Andreas Mueller, Olivier Grisel, Vlad Niculae, et al. 2013. <span>“<span>API</span> Design for Machine Learning Software: Experiences from the Scikit-Learn Project.”</span> <em>CoRR</em> abs/1309.0238. <a href="http://arxiv.org/abs/1309.0238">http://arxiv.org/abs/1309.0238</a>.
-</div>
-<div id="ref-fastaiAPI" class="csl-entry" role="listitem">
-Howard, Jeremy, and Sylvain Gugger. 2020. <span>“Fastai: A Layered API for Deep Learning.”</span> <em>Information</em> 11 (2). <a href="https://doi.org/10.3390/info11020108">https://doi.org/10.3390/info11020108</a>.
-</div>
-</div>
+<section id="security-patch-release-process" class="level2">
+<h2 class="anchored" data-anchor-id="security-patch-release-process">Security Patch Release Process</h2>
+<p>When a vulnerability is discovered, either through internal processes or via an external report, the following process will be followed:</p>
+<ol type="1">
+<li><p><strong>Vulnerability Assessment</strong>: Our security team will assess the severity and impact of the vulnerability.</p></li>
+<li><p><strong>Patch Development</strong>: A patch will be developed for the latest supported version.</p></li>
+<li><p><strong>Release and Notification</strong>: Once the patch is ready, it will be released as part of a new version. We will notify users of the need to update through our communication channels (e.g., repository release notes).</p></li>
+<li><p><strong>Backporting</strong>: In exceptional cases, where a vulnerability has a high impact, we may consider backporting the patch to earlier versions. This decision will be made on a case-by-case basis.</p></li>
+</ol>
+<p>Thank you for helping us keep our software secure.</p>
+<hr>
+<p>This policy is subject to change at the discretion of the project maintainers.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

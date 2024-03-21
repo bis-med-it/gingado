@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.4.551">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,6 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -78,7 +79,7 @@ div.csl-indent {
 }</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -102,7 +103,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -111,31 +118,32 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="gingado - Using gingado to forecast financial series">
 <meta property="og:description" content="A beginning-to-end illustration with foreign exchange rates inspired by Rossi (2013)">
-<meta property="og:image" content="01_forecast_files/figure-html/cell-7-output-2.png">
-<meta property="og:site-name" content="gingado">
+<meta property="og:site_name" content="gingado">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">gingado</span>
+    <span class="navbar-title"><img src="../resources/gingado_logo_CMYK_white.png" alt="gingado" style="height:40px;"></span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -145,51 +153,51 @@ div.csl-indent {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Examples</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-examples">    
         <li>
-    <a class="dropdown-item" href="./barrolee1994.html" rel="" target="">
+    <a class="dropdown-item" href="./barrolee1994.html">
  <span class="dropdown-text">Economic growth</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./forecast.html" rel="" target="">
+    <a class="dropdown-item" href="./forecast.html">
  <span class="dropdown-text">Forecasting FX rates</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./machine_controls.html" rel="" target="">
+    <a class="dropdown-item" href="./machine_controls.html">
  <span class="dropdown-text">Effects of labour reform</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Reference</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-reference">    
         <li>
-    <a class="dropdown-item" href="./augmentation.html" rel="" target="">
+    <a class="dropdown-item" href="./augmentation.html">
  <span class="dropdown-text">gingado.augmentation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./datasets.html" rel="" target="">
+    <a class="dropdown-item" href="./datasets.html">
  <span class="dropdown-text">gingado.datasets</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./benchmark.html" rel="" target="">
+    <a class="dropdown-item" href="./benchmark.html">
  <span class="dropdown-text">gingado.benchmark</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./estimators.html" rel="" target="">
+    <a class="dropdown-item" href="./estimators.html">
  <span class="dropdown-text">gingado.estimators</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./documentation.html" rel="" target="">
+    <a class="dropdown-item" href="./documentation.html">
  <span class="dropdown-text">gingado.model_documentation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./utils.html" rel="" target="">
+    <a class="dropdown-item" href="./utils.html">
  <span class="dropdown-text">gingado.utils</span></a>
   </li>  
     </ul>
@@ -197,17 +205,18 @@ div.csl-indent {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/bis-med-it/gingado" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/bis-med-it/gingado"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.sdmx.io" rel="" target=""><i class="bi bi-house-fill" role="img">
+    <a class="nav-link" href="https://www.sdmx.io"> <i class="bi bi-house-fill" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -215,7 +224,6 @@ div.csl-indent {
   </div>
 </a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -238,7 +246,7 @@ div.csl-indent {
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -269,7 +277,9 @@ div.csl-indent {
   </div>
   
 
+
 </header>
+
 
 <p>This notebook illustrates the use of <code>gingado</code> to build models for forecasting, using foreign exchange (FX) rate movements as an example. Please note that the results or the model should not be taken as investment advice.</p>
 <p>Forecasting exchange rates is notoriously difficult (<span class="citation" data-cites="rossi2013exchange">Rossi (<a href="#ref-rossi2013exchange" role="doc-biblioref">2013</a>)</span> and references therein).</p>
@@ -299,14 +309,14 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="downloading-fx-rates">Downloading FX rates</h2>
 <p>In this exercise, we will concentrate on the bilateral FX rates between the 🇺🇸 US Dollar (USD) and the 🇧🇷 Brazilian Real (BRL), 🇨🇦 Canadian Dollar (CAD), 🇨🇭 Swiss Franc (CHF), 🇪🇺 Euro (EUR), 🇬🇧 British Pound (GBP), 🇯🇵 Japanese Yen (JPY) and 🇲🇽 Mexican Peso (MXN).</p>
 <p>The rates are standardised to measure the units in foreign currency bought by one USD. Therefore, positive returns represent USD is more valued compared to the other currency, and vice-versa.</p>
-<div class="cell" data-execution_count="1">
-<details open="">
+<div id="a2d4b268" class="cell" data-execution_count="1">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> load_SDMX_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="2">
-<details open="">
+<div id="6a32dda9" class="cell" data-execution_count="2">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> load_SDMX_data(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    sources<span class="op">=</span>{<span class="st">'BIS'</span>: <span class="st">'WS_XRU_D'</span>},</span>
@@ -325,8 +335,8 @@ Querying data from BIS's dataflow 'WS_XRU_D' - US dollar exchange rates, daily..
 </div>
 </div>
 <p>The code below simplifies the column names by removing the identification of the SDMX sources, dataflows and keys and replacing it with the usual code for the bilateral exchange rates.</p>
-<div class="cell" data-execution_count="3">
-<details open="">
+<div id="e8bb6348" class="cell" data-execution_count="3">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Original column names:"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.columns)</span>
@@ -338,22 +348,23 @@ Querying data from BIS's dataflow 'WS_XRU_D' - US dollar exchange rates, daily..
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Original column names:
-Index(['BIS__WS_XRU_D_D__MX__MXN__A', 'BIS__WS_XRU_D_D__JP__JPY__A',
-       'BIS__WS_XRU_D_D__XM__EUR__A', 'BIS__WS_XRU_D_D__CH__CHF__A',
-       'BIS__WS_XRU_D_D__BR__BRL__A', 'BIS__WS_XRU_D_D__GB__GBP__A',
-       'BIS__WS_XRU_D_D__CA__CAD__A'],
+Index(['BIS__WS_XRU_D_D__BR__BRL__A', 'BIS__WS_XRU_D_D__JP__JPY__A',
+       'BIS__WS_XRU_D_D__MX__MXN__A', 'BIS__WS_XRU_D_D__CA__CAD__A',
+       'BIS__WS_XRU_D_D__GB__GBP__A', 'BIS__WS_XRU_D_D__CH__CHF__A',
+       'BIS__WS_XRU_D_D__XM__EUR__A'],
       dtype='object')
 New column names:
-Index(['USDMXN', 'USDJPY', 'USDEUR', 'USDCHF', 'USDBRL', 'USDGBP', 'USDCAD'], dtype='object')</code></pre>
+Index(['USDBRL', 'USDJPY', 'USDMXN', 'USDCAD', 'USDGBP', 'USDCHF', 'USDEUR'], dtype='object')</code></pre>
 </div>
 </div>
 <p>The dataset looks like this so far (most recent 5 rows displayed only):</p>
-<div class="cell" data-execution_count="4">
-<details open="">
+<div id="fbd2ddf9" class="cell" data-execution_count="4">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="4">
+<div>
 <div>
 
 
@@ -361,13 +372,13 @@ Index(['USDMXN', 'USDJPY', 'USDEUR', 'USDCHF', 'USDBRL', 'USDGBP', 'USDCAD'], dt
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">USDMXN</th>
-<th data-quarto-table-cell-role="th">USDJPY</th>
-<th data-quarto-table-cell-role="th">USDEUR</th>
-<th data-quarto-table-cell-role="th">USDCHF</th>
 <th data-quarto-table-cell-role="th">USDBRL</th>
-<th data-quarto-table-cell-role="th">USDGBP</th>
+<th data-quarto-table-cell-role="th">USDJPY</th>
+<th data-quarto-table-cell-role="th">USDMXN</th>
 <th data-quarto-table-cell-role="th">USDCAD</th>
+<th data-quarto-table-cell-role="th">USDGBP</th>
+<th data-quarto-table-cell-role="th">USDCHF</th>
+<th data-quarto-table-cell-role="th">USDEUR</th>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">TIME_PERIOD</th>
@@ -382,54 +393,54 @@ Index(['USDMXN', 'USDJPY', 'USDEUR', 'USDCHF', 'USDBRL', 'USDGBP', 'USDCAD'], dt
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2024-02-13</td>
-<td>17.073288</td>
-<td>149.328268</td>
-<td>0.926526</td>
-<td>0.878440</td>
-<td>4.953674</td>
-<td>0.788455</td>
-<td>1.344483</td>
+<td data-quarto-table-cell-role="th">2024-03-12</td>
+<td>4.985801</td>
+<td>147.847197</td>
+<td>16.826035</td>
+<td>1.350220</td>
+<td>0.782869</td>
+<td>0.878344</td>
+<td>0.916086</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">2024-02-14</td>
-<td>17.134229</td>
-<td>150.546066</td>
-<td>0.933445</td>
-<td>0.886120</td>
-<td>4.953701</td>
-<td>0.795837</td>
-<td>1.354336</td>
+<td data-quarto-table-cell-role="th">2024-03-13</td>
+<td>4.982722</td>
+<td>147.938568</td>
+<td>16.772283</td>
+<td>1.348935</td>
+<td>0.781159</td>
+<td>0.877503</td>
+<td>0.914160</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2024-02-15</td>
-<td>17.086661</td>
-<td>150.107046</td>
-<td>0.930839</td>
-<td>0.882807</td>
-<td>4.970772</td>
-<td>0.797124</td>
-<td>1.354091</td>
+<td data-quarto-table-cell-role="th">2024-03-14</td>
+<td>4.964485</td>
+<td>148.009153</td>
+<td>16.687231</td>
+<td>1.347826</td>
+<td>0.781876</td>
+<td>0.880183</td>
+<td>0.915332</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">2024-02-16</td>
-<td>17.044577</td>
-<td>150.334324</td>
-<td>0.928678</td>
-<td>0.881408</td>
-<td>4.973161</td>
-<td>0.794994</td>
-<td>1.348254</td>
+<td data-quarto-table-cell-role="th">2024-03-15</td>
+<td>5.000092</td>
+<td>148.760558</td>
+<td>16.701708</td>
+<td>1.352461</td>
+<td>0.784154</td>
+<td>0.882574</td>
+<td>0.918105</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2024-02-19</td>
-<td>17.046956</td>
-<td>149.953601</td>
-<td>0.927988</td>
-<td>0.880846</td>
-<td>4.958519</td>
-<td>0.792947</td>
-<td>1.347624</td>
+<td data-quarto-table-cell-role="th">2024-03-18</td>
+<td>4.992839</td>
+<td>149.201249</td>
+<td>16.728516</td>
+<td>1.353746</td>
+<td>0.785209</td>
+<td>0.884135</td>
+<td>0.918105</td>
 </tr>
 </tbody>
 </table>
@@ -437,16 +448,17 @@ Index(['USDMXN', 'USDJPY', 'USDEUR', 'USDCHF', 'USDBRL', 'USDGBP', 'USDCAD'], dt
 </div>
 </div>
 </div>
+</div>
 <p>We are interested in the percentage change from the previous day.</p>
-<div class="cell" data-execution_count="5">
-<details open="">
+<div id="64cc9303" class="cell" data-execution_count="5">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>FX_rate_changes <span class="op">=</span> df.pct_change()</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>FX_rate_changes.dropna(inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="6">
-<details open="">
+<div id="fe7005c0" class="cell" data-execution_count="6">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>FX_rate_changes.plot(subplots<span class="op">=</span><span class="va">True</span>, layout<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">2</span>), figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">15</span>), sharex<span class="op">=</span><span class="va">True</span>, title<span class="op">=</span><span class="st">'Selected daily FX rate changes'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -458,7 +470,11 @@ Index(['USDMXN', 'USDJPY', 'USDEUR', 'USDCHF', 'USDBRL', 'USDGBP', 'USDCAD'], dt
       dtype=object)</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="01_forecast_files/figure-html/cell-7-output-2.png" width="1185" height="1198"></p>
+<div>
+<figure class="figure">
+<p><img src="01_forecast_files/figure-html/cell-7-output-2.png" width="1185" height="1198" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -469,14 +485,14 @@ Index(['USDMXN', 'USDJPY', 'USDEUR', 'USDCHF', 'USDBRL', 'USDGBP', 'USDCAD'], dt
 <li><p>daily central bank policy rates from the Bank for International Settlements (BIS) <span class="citation" data-cites="BISstatQR2017">(<a href="#ref-BISstatQR2017" role="doc-biblioref">2017</a>)</span>, and</p></li>
 <li><p>the daily Composite Indicator of Systemic Stress (CISS), created by <span class="citation" data-cites="hollo2012ciss">Hollo, Kremer, and Lo Duca (<a href="#ref-hollo2012ciss" role="doc-biblioref">2012</a>)</span> and updated by the European Central Bank (ECB).</p></li>
 </ul>
-<div class="cell" data-execution_count="7">
-<details open="">
+<div id="f4b2346c" class="cell" data-execution_count="7">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.augmentation <span class="im">import</span> AugmentSDMX</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="8">
-<details open="">
+<div id="6756db6c" class="cell" data-execution_count="8">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> AugmentSDMX(sources<span class="op">=</span>{<span class="st">'BIS'</span>: <span class="st">'WS_CBPOL_D'</span>, <span class="st">'ECB'</span>: <span class="st">'CISS'</span>}).fit_transform(FX_rate_changes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -499,24 +515,15 @@ Note
 </div>
 </div>
 <p>You can see below that the column names for the newly added columns reflect the source (BIS or ECB), the dataflow (separated from the source by a double underline), and then the specific keys to the series, which are specific to each dataflow.</p>
-<div class="cell" data-execution_count="9">
-<details open="">
+<div id="b93d2911" class="cell" data-execution_count="9">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>X.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="9">
-<pre><code>Index(['USDMXN', 'USDJPY', 'USDEUR', 'USDCHF', 'USDBRL', 'USDGBP', 'USDCAD',
-       'BIS__WS_CBPOL_D_D__CH', 'BIS__WS_CBPOL_D_D__CL',
-       'BIS__WS_CBPOL_D_D__CN', 'BIS__WS_CBPOL_D_D__CO',
-       'BIS__WS_CBPOL_D_D__CZ', 'BIS__WS_CBPOL_D_D__DK',
-       'BIS__WS_CBPOL_D_D__GB', 'BIS__WS_CBPOL_D_D__HK',
-       'BIS__WS_CBPOL_D_D__HR', 'BIS__WS_CBPOL_D_D__HU',
-       'BIS__WS_CBPOL_D_D__ID', 'BIS__WS_CBPOL_D_D__IL',
-       'BIS__WS_CBPOL_D_D__IN', 'BIS__WS_CBPOL_D_D__IS',
-       'BIS__WS_CBPOL_D_D__JP', 'BIS__WS_CBPOL_D_D__AR',
-       'BIS__WS_CBPOL_D_D__KR', 'BIS__WS_CBPOL_D_D__MA',
+<pre><code>Index(['USDBRL', 'USDJPY', 'USDMXN', 'USDCAD', 'USDGBP', 'USDCHF', 'USDEUR',
        'BIS__WS_CBPOL_D_D__MK', 'BIS__WS_CBPOL_D_D__MX',
-       'BIS__WS_CBPOL_D_D__BR', 'BIS__WS_CBPOL_D_D__MY',
+       'BIS__WS_CBPOL_D_D__MY', 'BIS__WS_CBPOL_D_D__BR',
        'BIS__WS_CBPOL_D_D__NO', 'BIS__WS_CBPOL_D_D__NZ',
        'BIS__WS_CBPOL_D_D__PE', 'BIS__WS_CBPOL_D_D__PH',
        'BIS__WS_CBPOL_D_D__CA', 'BIS__WS_CBPOL_D_D__PL',
@@ -525,7 +532,16 @@ Note
        'BIS__WS_CBPOL_D_D__SA', 'BIS__WS_CBPOL_D_D__SE',
        'BIS__WS_CBPOL_D_D__TH', 'BIS__WS_CBPOL_D_D__TR',
        'BIS__WS_CBPOL_D_D__US', 'BIS__WS_CBPOL_D_D__XM',
-       'BIS__WS_CBPOL_D_D__ZA', 'ECB__CISS_D__AT__Z0Z__4F__EC__SS_CIN__IDX',
+       'BIS__WS_CBPOL_D_D__ZA', 'BIS__WS_CBPOL_D_D__AR',
+       'BIS__WS_CBPOL_D_D__CH', 'BIS__WS_CBPOL_D_D__CL',
+       'BIS__WS_CBPOL_D_D__CN', 'BIS__WS_CBPOL_D_D__CO',
+       'BIS__WS_CBPOL_D_D__CZ', 'BIS__WS_CBPOL_D_D__DK',
+       'BIS__WS_CBPOL_D_D__GB', 'BIS__WS_CBPOL_D_D__HK',
+       'BIS__WS_CBPOL_D_D__HR', 'BIS__WS_CBPOL_D_D__HU',
+       'BIS__WS_CBPOL_D_D__ID', 'BIS__WS_CBPOL_D_D__IL',
+       'BIS__WS_CBPOL_D_D__IN', 'BIS__WS_CBPOL_D_D__IS',
+       'BIS__WS_CBPOL_D_D__JP', 'BIS__WS_CBPOL_D_D__KR',
+       'BIS__WS_CBPOL_D_D__MA', 'ECB__CISS_D__AT__Z0Z__4F__EC__SS_CIN__IDX',
        'ECB__CISS_D__BE__Z0Z__4F__EC__SS_CIN__IDX',
        'ECB__CISS_D__CN__Z0Z__4F__EC__SS_CIN__IDX',
        'ECB__CISS_D__DE__Z0Z__4F__EC__SS_CIN__IDX',
@@ -551,14 +567,14 @@ Note
 </div>
 </div>
 <p>Before proceeding, we also include a differentiated version of the central bank policy data. It will be sparse, since these changes occur infrequently for most central banks, but it can help the model uncover how FX rate changes respond to central bank policy changes.</p>
-<div class="cell" data-execution_count="10">
-<details open="">
+<div id="f8904b81" class="cell" data-execution_count="10">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="11">
-<details open="">
+<div id="22409a46" class="cell" data-execution_count="11">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>X_diff <span class="op">=</span> X.loc[:, X.columns.<span class="bu">str</span>.contains(<span class="st">"BIS__WS_CBPOL_D"</span>, case<span class="op">=</span><span class="va">False</span>)].diff()</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>X_diff.columns <span class="op">=</span> [col <span class="op">+</span> <span class="st">"_diff"</span> <span class="cf">for</span> col <span class="kw">in</span> X_diff.columns]</span>
@@ -567,12 +583,13 @@ Note
 </div>
 <p>This is how the data looks like now. Note that the names of the added columns reflect the source, dataflow and keys, all separated by underlines (the source is separated from the dataflow by two underlines at all cases). For example, the last key is the jurisdiction of the central bank.</p>
 <p>We will keep all the newly added variables - even those that are from countries not in the currency list. This is because the model may uncover any relationship of interest between central bank policies from other countries and each particular currency pair.</p>
-<div class="cell" data-execution_count="12">
-<details open="">
+<div id="8706825d" class="cell" data-execution_count="12">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>X.describe().transpose()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="12">
+<div>
 <div>
 
 
@@ -592,59 +609,59 @@ Note
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">USDMXN</td>
-<td>5461.0</td>
-<td>0.000124</td>
-<td>0.008089</td>
-<td>-0.070532</td>
-<td>-0.003982</td>
-<td>-0.000213</td>
-<td>0.003857</td>
-<td>0.118877</td>
+<td data-quarto-table-cell-role="th">USDBRL</td>
+<td>5481.0</td>
+<td>0.000118</td>
+<td>0.010460</td>
+<td>-0.080226</td>
+<td>-0.005684</td>
+<td>-0.000061</td>
+<td>0.005338</td>
+<td>0.120503</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">USDJPY</td>
-<td>5461.0</td>
-<td>0.000061</td>
-<td>0.006081</td>
+<td>5481.0</td>
+<td>0.000060</td>
+<td>0.006075</td>
 <td>-0.044831</td>
-<td>-0.003006</td>
+<td>-0.003002</td>
 <td>0.000151</td>
-<td>0.003205</td>
+<td>0.003199</td>
 <td>0.032901</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">USDEUR</td>
-<td>5461.0</td>
-<td>0.000011</td>
-<td>0.005712</td>
-<td>-0.039574</td>
-<td>-0.003121</td>
-<td>0.000000</td>
-<td>0.003042</td>
-<td>0.048493</td>
+<td data-quarto-table-cell-role="th">USDMXN</td>
+<td>5481.0</td>
+<td>0.000120</td>
+<td>0.008075</td>
+<td>-0.070532</td>
+<td>-0.003979</td>
+<td>-0.000219</td>
+<td>0.003848</td>
+<td>0.118877</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">USDCHF</td>
-<td>5461.0</td>
-<td>-0.000063</td>
-<td>0.006389</td>
-<td>-0.139149</td>
-<td>-0.003251</td>
-<td>0.000011</td>
-<td>0.003225</td>
-<td>0.085326</td>
+<td data-quarto-table-cell-role="th">USDCAD</td>
+<td>5481.0</td>
+<td>-0.000011</td>
+<td>0.005763</td>
+<td>-0.043367</td>
+<td>-0.003161</td>
+<td>-0.000121</td>
+<td>0.003035</td>
+<td>0.036864</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">USDBRL</td>
-<td>5461.0</td>
-<td>0.000117</td>
-<td>0.010476</td>
-<td>-0.080226</td>
-<td>-0.005706</td>
-<td>-0.000047</td>
-<td>0.005351</td>
-<td>0.120503</td>
+<td data-quarto-table-cell-role="th">USDGBP</td>
+<td>5481.0</td>
+<td>0.000060</td>
+<td>0.006038</td>
+<td>-0.038140</td>
+<td>-0.003282</td>
+<td>-0.000028</td>
+<td>0.003223</td>
+<td>0.085019</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">...</td>
@@ -658,10 +675,10 @@ Note
 <td>...</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__TH_diff</td>
-<td>5460.0</td>
-<td>0.000137</td>
-<td>0.033666</td>
+<td data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__IN_diff</td>
+<td>5480.0</td>
+<td>-0.000182</td>
+<td>0.043745</td>
 <td>-1.000000</td>
 <td>0.000000</td>
 <td>0.000000</td>
@@ -669,48 +686,48 @@ Note
 <td>0.500000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__TR_diff</td>
-<td>5460.0</td>
-<td>0.000183</td>
-<td>0.309450</td>
-<td>-4.250000</td>
+<td data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__IS_diff</td>
+<td>5480.0</td>
+<td>0.000661</td>
+<td>0.129101</td>
+<td>-3.500000</td>
 <td>0.000000</td>
 <td>0.000000</td>
 <td>0.000000</td>
-<td>8.500000</td>
+<td>6.000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__US_diff</td>
-<td>5460.0</td>
-<td>0.000755</td>
-<td>0.041192</td>
+<td data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__JP_diff</td>
+<td>4651.0</td>
+<td>-0.000022</td>
+<td>0.007033</td>
+<td>-0.200000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.250000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__KR_diff</td>
+<td>5480.0</td>
+<td>-0.000137</td>
+<td>0.031138</td>
 <td>-1.000000</td>
 <td>0.000000</td>
 <td>0.000000</td>
 <td>0.000000</td>
-<td>0.750000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__XM_diff</td>
-<td>5460.0</td>
-<td>0.000321</td>
-<td>0.031443</td>
-<td>-0.750000</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0.750000</td>
+<td>0.500000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__ZA_diff</td>
-<td>5460.0</td>
-<td>-0.000962</td>
-<td>0.062475</td>
-<td>-1.500000</td>
+<td data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__MA_diff</td>
+<td>5480.0</td>
+<td>-0.000046</td>
+<td>0.016198</td>
+<td>-0.500000</td>
 <td>0.000000</td>
 <td>0.000000</td>
 <td>0.000000</td>
-<td>0.750000</td>
+<td>0.500000</td>
 </tr>
 </tbody>
 </table>
@@ -719,10 +736,11 @@ Note
 </div>
 </div>
 </div>
+</div>
 <p>The policy rates for some central banks have less observations than the others, as seen above.</p>
 <p>Because some data are missing, we will impute data for the missing dates, by simply propagating the last valid observation, and when that is not possible, replacing the missing information with a “0”.</p>
-<div class="cell" data-execution_count="13">
-<details open="">
+<div id="f8e01eb9" class="cell" data-execution_count="13">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>X.fillna(method<span class="op">=</span><span class="st">'pad'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>X.fillna(value<span class="op">=</span><span class="dv">0</span>, inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -730,14 +748,14 @@ Note
 </div>
 <p>Now is a good time to start the model documentation. For this, we can use the standard model card that already comes with <code>gingado</code>.</p>
 <p>The goal is to facilitate economists who want to make model documentation a part of their normal workflow.</p>
-<div class="cell" data-execution_count="14">
-<details open="">
+<div id="ebe6e272" class="cell" data-execution_count="14">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.model_documentation <span class="im">import</span> ModelCard</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="15">
-<details open="">
+<div id="72157152" class="cell" data-execution_count="15">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>model_doc <span class="op">=</span> ModelCard()</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>model_doc.open_questions()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -776,8 +794,8 @@ Note
 </div>
 </div>
 <p>As an example, we can add the following information to the model:</p>
-<div class="cell" data-execution_count="16">
-<details open="">
+<div id="a7165c1b" class="cell" data-execution_count="16">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>model_doc.fill_info({</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'intended_use'</span>: {</span>
@@ -800,14 +818,14 @@ Note
 <h2 class="anchored" data-anchor-id="lagging-the-regressors">Lagging the regressors</h2>
 <p>This model will not include any contemporaneous variable. Therefore, all regresors must be lagged.</p>
 <p>For illustration purposes, we use 5 lags in this exercise.</p>
-<div class="cell" data-execution_count="17">
-<details open="">
+<div id="a56d96ca" class="cell" data-execution_count="17">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> Lag</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="18">
-<details open="">
+<div id="a27e579c" class="cell" data-execution_count="18">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>n_lags <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -818,8 +836,8 @@ Note
 </details>
 </div>
 <p>Now is a good opportunity to check by how much we have increased our regressor space:</p>
-<div class="cell" data-execution_count="19">
-<details open="">
+<div id="ed210a72" class="cell" data-execution_count="19">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pd.Series({</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"FX rates only"</span>: y.shape[<span class="dv">1</span>],</span>
@@ -839,8 +857,8 @@ dtype: int64</code></pre>
 <h2 class="anchored" data-anchor-id="training-the-models">Training the models</h2>
 <p>Our dataset is now complete. Before using it to train the models, we hold out the most recent data to serve as our testing dataset, so we can compare our models with real out-of-sample information.</p>
 <p>We can choose, say, 1st January 2022.</p>
-<div class="cell" data-execution_count="20">
-<details open="">
+<div id="470769f5" class="cell" data-execution_count="20">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>cutoff <span class="op">=</span> <span class="st">'2020-01-01'</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -848,8 +866,8 @@ dtype: int64</code></pre>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>y_train, y_test <span class="op">=</span> y[:cutoff], y[cutoff:]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="21">
-<details open="">
+<div id="daa1b81c" class="cell" data-execution_count="21">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>model_doc.fill_info({</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'training_data'</span>: </span>
@@ -865,8 +883,8 @@ dtype: int64</code></pre>
 </details>
 </div>
 <p>The current status of the documentation is:</p>
-<div class="cell" data-execution_count="22">
-<details open="">
+<div id="5012f252" class="cell" data-execution_count="22">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pd.Series(model_doc.show_json())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -906,8 +924,8 @@ dtype: object</code></pre>
 <li><code>score</code></li>
 </ul></li>
 </ul>
-<div class="cell" data-execution_count="23">
-<details open="">
+<div id="b7677bd9" class="cell" data-execution_count="23">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.benchmark <span class="im">import</span> ggdBenchmark</span>
@@ -916,8 +934,8 @@ dtype: object</code></pre>
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> TimeSeriesSplit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="24">
-<details open="">
+<div id="507e5cfb" class="cell" data-execution_count="24">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RandomWalkEstimator(BaseEstimator):</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, scoring<span class="op">=</span><span class="st">'neg_root_mean_squared_error'</span>):</span>
@@ -965,16 +983,16 @@ dtype: object</code></pre>
 <p>Now that we have a benchmark, we can create candidate models that will try to beat it.</p>
 <p>In this simplified example, we will choose only two: a random forest, an AdaBoost regressor and a Lasso model. Their hyperparameters are not particularly important for the example, but of course they could be fine-tuned as well.</p>
 <p>In the language of <span class="citation" data-cites="rossi2013exchange">Rossi (<a href="#ref-rossi2013exchange" role="doc-biblioref">2013</a>)</span>, the models below are one <em>“single-equation, lagged fundamental model”</em> for each currency.</p>
-<div class="cell" data-execution_count="25">
-<details open="">
+<div id="de705130" class="cell" data-execution_count="25">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> AdaBoostRegressor</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Lasso</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="26">
-<details open="">
+<div id="3b1f669b" class="cell" data-execution_count="26">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>forest <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">250</span>, max_features<span class="op">=</span><span class="st">'log2'</span>).fit(X_train, y_train[<span class="st">'USDBRL'</span>])</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>adaboost <span class="op">=</span> AdaBoostRegressor(n_estimators<span class="op">=</span><span class="dv">150</span>).fit(X_train, y_train[<span class="st">'USDBRL'</span>])</span>
@@ -985,14 +1003,14 @@ dtype: object</code></pre>
 </div>
 <p>We can now compare the model results, using the test dataset we held out previously.</p>
 <p>Note that we must pass the criterion against which we are comparing the forecasts.</p>
-<div class="cell" data-execution_count="27">
-<details open="">
+<div id="83294c27" class="cell" data-execution_count="27">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="28">
-<details open="">
+<div id="ca2c79f8" class="cell" data-execution_count="28">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> rw.compare_fitted_candidates(</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    X_test, y_test[<span class="st">'USDBRL'</span>],</span>
@@ -1002,17 +1020,17 @@ dtype: object</code></pre>
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>pd.Series(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="28">
-<pre><code>RandomWalkEstimator()                                           0.000109
-RandomForestRegressor(max_features='log2', n_estimators=250)    0.000113
-AdaBoostRegressor(n_estimators=150)                             0.000112
-Lasso(alpha=0.1)                                                0.000109
+<pre><code>RandomWalkEstimator()                                           0.000107
+RandomForestRegressor(max_features='log2', n_estimators=250)    0.000109
+AdaBoostRegressor(n_estimators=150)                             0.000113
+Lasso(alpha=0.1)                                                0.000107
 dtype: float64</code></pre>
 </div>
 </div>
 <p>As mentioned above, benchmarks can facilitate the model documentation. In addition to the broader documentation that is already ongoing, each benchmark object create their own where they store model information. We can use that for the broader documentation.</p>
 <p>In our case, the only parameter we created above during fit is the number of samples: not a particularly informative variable but it was included just for illustration purposes. In any case, the parameter appears in the “model_details” section, item “info”, of the benchmark’s <code>rw</code> documentation. Similarly, the parameters of more fully-fledged estimators also appear in that section.</p>
-<div class="cell" data-execution_count="29">
-<details open="">
+<div id="fdd62641" class="cell" data-execution_count="29">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>rw.document()</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1022,22 +1040,22 @@ dtype: float64</code></pre>
 <pre><code>{'n_samples_': 4394}</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="30">
-<details open="">
+<div id="6f7e220d" class="cell" data-execution_count="30">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>model_doc.fill_info({</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'model_details'</span>: {<span class="st">'info'</span>: rw.model_documentation.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>]}</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="31">
-<details open="">
+<div id="721b1a32" class="cell" data-execution_count="31">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>model_doc.show_json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="31">
 <pre><code>{'model_details': {'developer': 'Person or organisation developing the model',
-  'datetime': '2024-02-27 09:09:35 ',
+  'datetime': '2024-03-21 09:47:37 ',
   'version': 'Model version',
   'type': 'Model type',
   'info': {'n_samples_': 4394},
@@ -1074,7 +1092,7 @@ dtype: float64</code></pre>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-BISstatQR2017" class="csl-entry" role="listitem">
 Bank for International Settlements. 2017. <span>“Recent Enhancements to the BIS Statistics.”</span> <em>BIS Quarterly Review</em>. Vol. September. <a href="https://www.bis.org/publ/qtrpdf/r_qt1709c.htm">https://www.bis.org/publ/qtrpdf/r_qt1709c.htm</a>.
 </div>
@@ -1133,6 +1151,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -1201,13 +1246,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1337,10 +1384,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1350,8 +1416,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1363,7 +1438,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1407,6 +1605,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1432,6 +1631,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1489,20 +1714,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb43" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
@@ -1890,4 +2101,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-</body></html>
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

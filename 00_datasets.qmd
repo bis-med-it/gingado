@@ -21,7 +21,7 @@ from fastcore.test import test_fail
 import matplotlib.pyplot as plt
 import pandas as pd
 from utils import show_doc
-from gingado.datasets import load_BarroLee_1994, load_CB_speeches
+from gingado.datasets import load_BarroLee_1994, load_CB_speeches, load_monopol_statements
 ```
 
 ## Real datasets
@@ -63,6 +63,7 @@ X.head()
 
 y.plot.hist(title='GDP growth', bins=30)
 ```
+
 
 <!-- load_CB_speeches -->
 ```{python}

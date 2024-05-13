@@ -93,6 +93,39 @@ speeches = load_CB_speeches(2020)
 speeches.head()
 ```
 
+
+<!-- load_monopol_statements -->
+```{python}
+#| output: asis
+#| echo: false
+show_doc(load_monopol_statements)
+```
+
+This function downloads monetary policy statements for 26 EM central banks
+(Armenia, Brazil, Chile, Colombia, Czech Republic, Egypt, Georgia, Hungary,
+Israel, India, Kazakhstan, Malaysia, Mongolia, Mexico, Nigeria, Pakistan, Peru,
+Philippines, Poland, Romania, Russia, South Africa, South Korea, Thailand,
+Türkiye, Ukraine) as well as the Fed and the ECB (press-conference introductory statements).
+The dataset includes official English versions of statements for 1998-2023
+(starting date varies depending on data availability).
+If you use this data in your work, please cite the dataset, as follows:
+
+```
+@article{emcbcom,
+    author = {Tatiana Evdokimova and Piroska Nagy Mohácsi and Olga Ponomarenko and Elina Ribakova},
+    title = {Central banks and policy communication: How emerging markets have outperformed the Fed and ECB},
+    year = {2023},
+    institution = {Peterson Institute for International Economics}
+    url = {https://www.piie.com/publications/working-papers/central-banks-and-policy-communication-how-emerging-markets-have}
+}
+```
+
+```{python}
+# Load monopol statements for 2020
+speeches = load_monopol_statements(2020)
+speeches.head()
+```
+
 ## Simulated datasets
 
 :::{.callout-note}

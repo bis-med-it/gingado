@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="A machine learning library for economics and finance">
 
-<title>gingado - Welcome to gingado!</title>
+<title>gingado</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,27 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -92,8 +71,8 @@ div.csl-indent {
 
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="gingado - Welcome to gingado!">
-<meta property="og:description" content="A machine learning library for economics and finance">
+<meta property="og:title" content="gingado">
+<meta property="og:description" content="">
 <meta property="og:site_name" content="gingado">
 </head>
 
@@ -198,135 +177,21 @@ div.csl-indent {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#install" id="toc-install" class="nav-link" data-scroll-target="#install">Install</a></li>
-  <li><a href="#attribution" id="toc-attribution" class="nav-link" data-scroll-target="#attribution">Attribution</a></li>
-  <li><a href="#design-principles" id="toc-design-principles" class="nav-link" data-scroll-target="#design-principles">Design principles</a></li>
-  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#license-disclaimer" id="toc-license-disclaimer" class="nav-link active" data-scroll-target="#license-disclaimer">License disclaimer</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Welcome to gingado!</h1>
-</div>
-
-<div>
-  <div class="description">
-    A machine learning library for economics and finance
-  </div>
-</div>
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<p><code>gingado</code> seeks to facilitate the use of machine learning in economic and finance use cases, while promoting good practices. This package aims to be suitable for beginners and advanced users alike. Use cases may range from simple data retrievals to experimentation with machine learning algorithms to more complex model pipelines used in production.</p>
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p><code>gingado</code> is a free, open source library built different functionalities:</p>
-<ul>
-<li><p><a href="https://bis-med-it.github.io/gingado/augmentation.html"><strong>data augmentation</strong></a>, to add data from official sources, improving the machine models being trained by the user;</p></li>
-<li><p><strong>relevant</strong> <a href="https://bis-med-it.github.io/gingado/datasets.html"><strong>datasets</strong></a>, both real and simulated, to allow for easier model development and comparison;</p></li>
-<li><p><strong>automatic</strong> <a href="https://bis-med-it.github.io/gingado/benchmark.html"><strong>benchmark model</strong></a>, to assess candidate models against a reasonably well-performant model;</p></li>
-<li><p><strong>machine learning-based</strong> <a href="https://bis-med-it.github.io/gingado/estimators.html"><strong>estimators</strong></a>, to help answer questions of academic or practical importance;</p></li>
-<li><p><strong>support for</strong> <a href="https://bis-med-it.github.io/gingado/documentation.html"><strong>model documentation</strong></a>, to embed documentation and ethical considerations in the model development phase; and</p></li>
-<li><p><a href="https://bis-med-it.github.io/gingado/utils.html"><strong>utilities</strong></a>, including tools to allow for lagging variables in a straightforward way.</p></li>
-</ul>
-<p>Each of these functionalities builds on top of the previous one. They can be used on a stand-alone basis, together, or even as part of a larger pipeline from data input to model training to documentation!</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>New functionalities are planned over time, so consider checking frequently on <code>gingado</code> for the latest toolsets.</p>
-</div>
-</div>
-</section>
-<section id="install" class="level2">
-<h2 class="anchored" data-anchor-id="install">Install</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Please make sure you have read and understood the license disclaimer in the NOTES.md file in our <a href="https://github.com/bis-med-it/gingado">GitHub repository</a> before using gingado.</p>
-</div>
-</div>
-<p>To install <code>gingado</code>, simply run the following code on the terminal:</p>
-<p><code>$ pip install gingado</code></p>
-</section>
-<section id="attribution" class="level2">
-<h2 class="anchored" data-anchor-id="attribution">Attribution</h2>
-<p>If you use this package in your work, please consider citing <span class="citation" data-cites="gingado">Araujo (<a href="#ref-gingado" role="doc-biblioref">2023</a>)</span>.</p>
-<p>In BibTeX format:</p>
-<pre><code>@techreport{gingado,
-    author = {Araujo, Douglas KG},
-    title = {gingado: a machine learning library focused on economics and finance},
-    series = {BIS Working Paper},
-    type = {Working Paper},
-    institution = {Bank for International Settlements},
-    year = {2023},
-    number = {1122}
-}</code></pre>
-<p>Over time, new tools that are described in specific papers might be added (eg, a machine learning-based econometric estimator). Please consider citing them as well if used in your work. Specific information, if any, can be found in the documentation.</p>
-</section>
-<section id="design-principles" class="level2">
-<h2 class="anchored" data-anchor-id="design-principles">Design principles</h2>
-<p>The choices made during development of <code>gingado</code> derive from the following principles, in no particular order:</p>
-<ul>
-<li><p><strong>flexibility</strong>: users can use <code>gingado</code> out of the box or build custom processes on top of it;</p></li>
-<li><p><strong>compatibility</strong>: <code>gingado</code> works well with other widely used libraries in machine learning, such as <code>scikit-learn</code> and <code>pandas</code>; and</p></li>
-<li><p><strong>responsibility</strong>: <code>gingado</code> facilitates and promotes model documentation, including ethical considerations, as part of the machine learning development workflow.</p></li>
-</ul>
-<p>For more information about <code>gingado</code>, please read the <a href="https://www.bis.org/publ/work1122.pdf">paper</a>.</p>
-</section>
-<section id="acknowledgements" class="level2">
-<h2 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
-<p><code>gingado</code>’s API is inspired on the following libraries:</p>
-<ul>
-<li><p><code>scikit-learn</code> <span class="citation" data-cites="sklearnAPI">(<a href="#ref-sklearnAPI" role="doc-biblioref">Buitinck et al. 2013</a>)</span></p></li>
-<li><p><code>keras</code> (website <a href="https://keras.io/about/">here</a> and also, <a href="https://medium.com/s/story/notes-to-myself-on-software-engineering-c890f16f4e4d">this essay</a>)</p></li>
-<li><p><code>fastai</code> <span class="citation" data-cites="fastaiAPI">(<a href="#ref-fastaiAPI" role="doc-biblioref">Howard and Gugger 2020</a>)</span></p></li>
-</ul>
-<p>In addition, <code>gingado</code> is developed and maintained using <a href="https://quarto.org/"><code>quarto</code></a>.</p>
-</section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-gingado" class="csl-entry" role="listitem">
-Araujo, Douglas KG. 2023. <span>“Gingado: A Machine Learning Library Focused on Economics and Finance.”</span> Working Paper 1122. BIS Working Paper. Bank for International Settlements.
-</div>
-<div id="ref-sklearnAPI" class="csl-entry" role="listitem">
-Buitinck, Lars, Gilles Louppe, Mathieu Blondel, Fabian Pedregosa, Andreas Mueller, Olivier Grisel, Vlad Niculae, et al. 2013. <span>“<span>API</span> Design for Machine Learning Software: Experiences from the Scikit-Learn Project.”</span> <em>CoRR</em> abs/1309.0238. <a href="http://arxiv.org/abs/1309.0238">http://arxiv.org/abs/1309.0238</a>.
-</div>
-<div id="ref-fastaiAPI" class="csl-entry" role="listitem">
-Howard, Jeremy, and Sylvain Gugger. 2020. <span>“Fastai: A Layered API for Deep Learning.”</span> <em>Information</em> 11 (2). <a href="https://doi.org/10.3390/info11020108">https://doi.org/10.3390/info11020108</a>.
-</div>
-</div>
+<section id="license-disclaimer" class="level2">
+<h2 class="anchored" data-anchor-id="license-disclaimer">License disclaimer</h2>
+<p>Our software is provided under the Apache 2.0 License, specifically applying to the code we have authored. Dependencies are listed as information only, to facilitate installation and operation by the end user. While we strive to ensure all our dependencies are compliant with the Apache 2.0 license, given the dynamic nature of software licensing—where packages may change licenses across versions—and particularly with the use of open-ended version ranges (&gt;=), we cannot ensure perpetual license compliance of these dependencies.</p>
+<p>Users are responsible for verifying the compliance of each dependency’s license in relation to their project requirements. This includes conducting due diligence on the licensing of dependencies, especially considering potential changes in license terms with version updates. The onus to ensure full legal compliance with the licenses of all dependencies used lies with the user. We recommend consulting with legal expertise for any license compatibility concerns.</p>
+<p>We commit to the open-source ethos of transparent and responsible software development. Should you have questions or need clarification regarding the licensing of dependencies, feel free to reach out.</p>
 
 
 </section>

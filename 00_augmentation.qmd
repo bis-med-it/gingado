@@ -226,8 +226,8 @@ dflows = list_all_dataflows()
 dflows
 ```
 
-For example, the dataflows from the World Bank are:
+For example, the dataflows from the European Central Bank are:
 
 ```{python}
-dflows['WB']
+dflows['ECB']
 ```

@@ -14,8 +14,8 @@ from gingado.settings import (
     CB_SPEECHES_CSV_BASE_FILENAME,
     CB_SPEECHES_BASE_URL,
     CB_SPEECHES_ZIP_BASE_FILENAME,
-    MONOPOL_STATEMENTS_BASE_URL,
-    MONOPOL_STATEMENTS_CSV_BASE_FILENAME
+    MONPOL_STATEMENTS_BASE_URL,
+    MONPOL_STATEMENTS_CSV_BASE_FILENAME
 )
 
 __all__ = ['load_BarroLee_1994', 'make_causal_effect']
@@ -120,7 +120,7 @@ def load_CB_speeches(
     return pd.concat(cb_speeches_dfs)
 
 
-def load_monopol_statements(
+def load_monpol_statements(
     year: str | int | list = 'all',
     cache: bool = True,
     timeout: float | None = 120,
@@ -141,11 +141,11 @@ def load_monopol_statements(
         A pandas DataFrame containing the dataset.
 
     Usage:
-        >>> load_monopol_statements()
+        >>> load_monpol_statements()
 
-        >>> load_monopol_statements('2020')
+        >>> load_monpol_statements('2020')
 
-        >>> load_monopol_statements([2020, 2021, 2022])
+        >>> load_monpol_statements([2020, 2021, 2022])
     """
     # Ensure year is list[str] for uniform handling
     if not isinstance(year, list):
@@ -153,43 +153,43 @@ def load_monopol_statements(
     year = [str(y) for y in year]
 
     # Load data for each year
-    monopol_statements_dfs = []
+    monpol_statements_dfs = []
     for y in year:
         # Get expected filename
         if y == 'all':
-            filename_csv = MONOPOL_STATEMENTS_CSV_BASE_FILENAME + '_all' + '.csv'
+            filename_csv = MONPOL_STATEMENTS_CSV_BASE_FILENAME + '_all' + '.csv'
         else:
-            filename_csv = MONOPOL_STATEMENTS_CSV_BASE_FILENAME + f'_{y}' + '.csv'
+            filename_csv = MONPOL_STATEMENTS_CSV_BASE_FILENAME + f'_{y}' + '.csv'
 
         # Get the file path of the CSV
-        monopol_statements_file_path = str(Path(CACHE_DIRECTORY) / filename_csv)
+        monpol_statements_file_path = str(Path(CACHE_DIRECTORY) / filename_csv)
 
         # Try to read the CSV file from cache
-        monopol_statements_year_df: pd.DataFrame | None = None
+        monpol_statements_year_df: pd.DataFrame | None = None
         if cache:
-            monopol_statements_year_df = try_read_cached_csv(monopol_statements_file_path, **kwargs)
+            monpol_statements_year_df = try_read_cached_csv(monpol_statements_file_path, **kwargs)
 
         # Download the CSV file, if it could not be loaded from cache
-        if monopol_statements_year_df is None:
+        if monpol_statements_year_df is None:
             # Get CSV file URL
-            file_url = MONOPOL_STATEMENTS_BASE_URL + filename_csv
+            file_url = MONPOL_STATEMENTS_BASE_URL + filename_csv
 
             # Download CSV
-            monopol_statements_year_df = download_csv(
+            monpol_statements_year_df = download_csv(
                 file_url,
-                cache_filename=monopol_statements_file_path,
+                cache_filename=monpol_statements_file_path,
                 timeout=timeout,
                 **kwargs
             )
 
         # Verify that the file in the cache is valid
-        verify_cached_csv(monopol_statements_file_path)
+        verify_cached_csv(monpol_statements_file_path)
 
         # Add dataframe for year to aggregated list of dataframes
-        monopol_statements_dfs.append(monopol_statements_year_df)
+        monpol_statements_dfs.append(monpol_statements_year_df)
 
     # Concat all dataframes into single dataframe and return
-    return pd.concat(monopol_statements_dfs)
+    return pd.concat(monpol_statements_dfs)
 
 
 def make_causal_effect(

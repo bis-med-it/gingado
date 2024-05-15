@@ -16,10 +16,10 @@ CB_SPEECHES_ZIP_BASE_FILENAME = 'speeches'
 # Base path used for storing the speeches files on disk
 CB_SPEECHES_CSV_BASE_FILENAME = 'cb_speeches'
 
-## MONOPOL STATEMENTS SETTINGS
+## MONPOL STATEMENTS SETTINGS
 
 # Base URL of CB speeches files (should end in a slash)
-MONOPOL_STATEMENTS_BASE_URL = 'https://raw.githubusercontent.com/bis-med-it/gingado/main/assets/'
+MONPOL_STATEMENTS_BASE_URL = 'https://raw.githubusercontent.com/bis-med-it/gingado/main/assets/'
 
 # Base path used for storing the speeches files on disk
-MONOPOL_STATEMENTS_CSV_BASE_FILENAME = 'monpol_statements'
+MONPOL_STATEMENTS_CSV_BASE_FILENAME = 'monpol_statements'

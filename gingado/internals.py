@@ -1,4 +1,6 @@
 """Functions intended for library internal use."""
+from __future__ import annotations  # Allows forward annotations in Python < 3.10
+
 import io
 import os
 from pathlib import Path

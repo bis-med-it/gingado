@@ -102,7 +102,7 @@ speeches.head()
 show_doc(load_monpol_statements)
 ```
 
-This function downloads monetary policy statements for 26 EM central banks
+This function downloads monetary policy statements from 26 emerging market central banks
 (Armenia, Brazil, Chile, Colombia, Czech Republic, Egypt, Georgia, Hungary,
 Israel, India, Kazakhstan, Malaysia, Mongolia, Mexico, Nigeria, Pakistan, Peru,
 Philippines, Poland, Romania, Russia, South Africa, South Korea, Thailand,

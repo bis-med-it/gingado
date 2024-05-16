@@ -126,7 +126,7 @@ def load_monpol_statements(
     timeout: float | None = 120,
     **kwargs
 ) -> pd.DataFrame:
-    """Load monetary policy statements for 26 EM central banks.
+    """Load monetary policy statements from multiple central banks.
 
     Args:
         year: Either 'all' to download all available central bank speeches or the year(s)

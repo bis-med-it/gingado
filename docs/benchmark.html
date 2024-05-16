@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.551">
+<meta name="generator" content="quarto-1.3.353">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -23,7 +23,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -58,7 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -82,13 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -97,32 +91,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-submit-button-title": "Submit"
   }
 }</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="gingado - Automatic benchmark model">
 <meta property="og:description" content="Functions to create a relevant, fast and reasonably well-performing benchmark">
-<meta property="og:site_name" content="gingado">
+<meta property="og:site-name" content="gingado">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title"><img src="../resources/gingado_logo_CMYK_white.png" alt="gingado" style="height:40px;"></span>
+    <span class="navbar-title">gingado</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -132,51 +124,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Examples</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-examples">    
         <li>
-    <a class="dropdown-item" href="./barrolee1994.html">
+    <a class="dropdown-item" href="./barrolee1994.html" rel="" target="">
  <span class="dropdown-text">Economic growth</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./forecast.html">
+    <a class="dropdown-item" href="./forecast.html" rel="" target="">
  <span class="dropdown-text">Forecasting FX rates</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./machine_controls.html">
+    <a class="dropdown-item" href="./machine_controls.html" rel="" target="">
  <span class="dropdown-text">Effects of labour reform</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Reference</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-reference">    
         <li>
-    <a class="dropdown-item" href="./augmentation.html">
+    <a class="dropdown-item" href="./augmentation.html" rel="" target="">
  <span class="dropdown-text">gingado.augmentation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./datasets.html">
+    <a class="dropdown-item" href="./datasets.html" rel="" target="">
  <span class="dropdown-text">gingado.datasets</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./benchmark.html">
+    <a class="dropdown-item" href="./benchmark.html" rel="" target="">
  <span class="dropdown-text">gingado.benchmark</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./estimators.html">
+    <a class="dropdown-item" href="./estimators.html" rel="" target="">
  <span class="dropdown-text">gingado.estimators</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./documentation.html">
+    <a class="dropdown-item" href="./documentation.html" rel="" target="">
  <span class="dropdown-text">gingado.model_documentation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./utils.html">
+    <a class="dropdown-item" href="./utils.html" rel="" target="">
  <span class="dropdown-text">gingado.utils</span></a>
   </li>  
     </ul>
@@ -184,18 +176,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/bis-med-it/gingado"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/bis-med-it/gingado" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.sdmx.io"> <i class="bi bi-house-fill" role="img">
+    <a class="nav-link" href="https://www.sdmx.io" rel="" target=""><i class="bi bi-house-fill" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -203,6 +194,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </a>
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -252,7 +244,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#custom-benchmarks" id="toc-custom-benchmarks" class="nav-link" data-scroll-target="#custom-benchmarks">Custom benchmarks</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -277,9 +269,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-
 </header>
-
 
 <p>A Benchmark object has a similar API to a <code>sciki-learn</code> estimator: you build an instance with the desired arguments, and fit it to the data at a later moment. Benchmarks is a convenience wrapper for reading the training data, passing it through a simplified pipeline consisting of data imputation and a standard scalar, and then the benchmark function calibrated with a grid search.</p>
 <p>A <code>gingado</code> Benchmark object seeks to automatise a significant part of creating a benchmark model. Importantly, the Benchmark object also has a <code>compare</code> method that helps users evaluate if candidate models are better than the benchmark, and if one of them is, it becomes the new benchmark. This <code>compare</code> method takes as argument another fitted estimator (which could be itself a solo estimator or a whole pipeline) or a list of fitted estimators.</p>
@@ -401,10 +391,10 @@ Args:
 
 Returns:
     ClassificationBenchmark: The instance of the model after fitting.</pre>
-<div id="cb9e50f5" class="cell" data-execution_count="17">
+<div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_classification</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ef077c0c" class="cell" data-execution_count="18">
+<div class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># some mock up data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_classification()</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -425,16 +415,16 @@ Returns:
 [CV] END ................max_features=sqrt, n_estimators=100; total time=   0.1s
 [CV] END ................max_features=sqrt, n_estimators=100; total time=   0.1s
 [CV] END ................max_features=sqrt, n_estimators=100; total time=   0.1s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.2s
 [CV] END ................max_features=sqrt, n_estimators=250; total time=   0.3s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.2s
 [CV] END ................max_features=sqrt, n_estimators=250; total time=   0.3s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.2s
 [CV] END ................max_features=sqrt, n_estimators=250; total time=   0.3s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.2s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.3s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.3s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.3s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.3s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.3s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.3s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.3s
 [CV] END ................max_features=log2, n_estimators=100; total time=   0.1s
 [CV] END ................max_features=log2, n_estimators=100; total time=   0.1s
 [CV] END ................max_features=log2, n_estimators=100; total time=   0.1s
@@ -448,57 +438,57 @@ Returns:
 [CV] END ................max_features=log2, n_estimators=250; total time=   0.3s
 [CV] END ................max_features=log2, n_estimators=250; total time=   0.3s
 [CV] END ................max_features=log2, n_estimators=250; total time=   0.3s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.2s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.2s
 [CV] END ................max_features=log2, n_estimators=250; total time=   0.3s
 [CV] END ................max_features=log2, n_estimators=250; total time=   0.3s
 [CV] END ................max_features=log2, n_estimators=250; total time=   0.3s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.2s
 [CV] END ................max_features=log2, n_estimators=250; total time=   0.3s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.3s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.3s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.3s
 [CV] END ................max_features=None, n_estimators=100; total time=   0.1s
 [CV] END ................max_features=None, n_estimators=100; total time=   0.1s
 [CV] END ................max_features=None, n_estimators=100; total time=   0.1s
 [CV] END ................max_features=None, n_estimators=100; total time=   0.1s
 [CV] END ................max_features=None, n_estimators=100; total time=   0.1s
 [CV] END ................max_features=None, n_estimators=100; total time=   0.1s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
 [CV] END ................max_features=None, n_estimators=100; total time=   0.1s
 [CV] END ................max_features=None, n_estimators=100; total time=   0.1s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.3s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.3s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.3s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.4s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.3s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.1s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.1s
 [CV] END ................max_features=None, n_estimators=250; total time=   0.4s
 [CV] END ................max_features=None, n_estimators=250; total time=   0.4s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.3s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.3s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.4s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.4s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.5s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.4s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.4s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.4s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.4s
 [CV] END ................max_features=None, n_estimators=250; total time=   0.4s</code></pre>
 </div>
 </div>
 <p>Importantly, <code>gingado</code> automatically provides some information to help the user documentat the benchmark model. More specifically, <code>ggdBenchmark</code> objects collect model information and pass it to a dictionary with key <code>info</code> in a field called <code>model_details</code>.</p>
-<div id="ced0052a" class="cell" data-execution_count="19">
+<div class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bm.model_documentation.show_json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>{'model_details': {'developer': 'Person or organisation developing the model',
-  'datetime': '2024-03-21 09:43:38 ',
+  'datetime': '2024-02-27 08:46:02 ',
   'version': 'Model version',
   'type': 'Model type',
   'info': {'_estimator_type': 'classifier',
-   'best_estimator_': RandomForestClassifier(max_features=None, oob_score=True),
-   'best_index_': 4,
-   'best_params_': {'max_features': None, 'n_estimators': 100},
-   'best_score_': 0.9,
+   'best_estimator_': RandomForestClassifier(n_estimators=250, oob_score=True),
+   'best_index_': 1,
+   'best_params_': {'max_features': 'sqrt', 'n_estimators': 250},
+   'best_score_': 0.9099999999999999,
    'classes_': array([0, 1]),
-   'cv_results_': {'mean_fit_time': array([0.09749894, 0.24181252, 0.1063189 , 0.2741596 , 0.13504624,
-           0.33822794]),
-    'std_fit_time': array([0.00633348, 0.00858499, 0.01475186, 0.0249868 , 0.01445055,
-           0.02453965]),
-    'mean_score_time': array([0.0025661 , 0.0056021 , 0.00303073, 0.00553203, 0.0028136 ,
-           0.00610991]),
-    'std_score_time': array([0.00015403, 0.00024271, 0.0005137 , 0.00137553, 0.00114309,
-           0.00150428]),
+   'cv_results_': {'mean_fit_time': array([0.16831033, 0.40782504, 0.1743125 , 0.4175287 , 0.20241308,
+           0.50713124]),
+    'std_fit_time': array([0.00736164, 0.00666136, 0.01074318, 0.00859337, 0.00805402,
+           0.0237054 ]),
+    'mean_score_time': array([0.00460141, 0.01029866, 0.00470245, 0.01060193, 0.00510144,
+           0.01010041]),
+    'std_score_time': array([0.00049238, 0.00064036, 0.00089892, 0.0009187 , 0.00104573,
+           0.00070105]),
     'param_max_features': masked_array(data=['sqrt', 'sqrt', 'log2', 'log2', None, None],
                  mask=[False, False, False, False, False, False],
            fill_value='?',
@@ -513,25 +503,25 @@ Returns:
      {'max_features': 'log2', 'n_estimators': 250},
      {'max_features': None, 'n_estimators': 100},
      {'max_features': None, 'n_estimators': 250}],
-    'split0_test_score': array([0.9, 0.7, 0.7, 0.7, 0.9, 0.9]),
-    'split1_test_score': array([1. , 1. , 1. , 1. , 0.9, 0.8]),
-    'split2_test_score': array([0.8, 0.8, 0.8, 0.8, 0.8, 0.8]),
-    'split3_test_score': array([1. , 1. , 1. , 1. , 0.9, 0.9]),
-    'split4_test_score': array([0.9, 0.9, 1. , 0.9, 1. , 1. ]),
-    'split5_test_score': array([0.7, 0.6, 0.6, 0.6, 0.7, 0.7]),
-    'split6_test_score': array([1. , 1. , 1. , 1. , 1. , 0.9]),
+    'split0_test_score': array([0.9, 1. , 0.9, 0.9, 0.9, 0.9]),
+    'split1_test_score': array([1., 1., 1., 1., 1., 1.]),
+    'split2_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
+    'split3_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
+    'split4_test_score': array([1. , 1. , 0.8, 0.9, 1. , 1. ]),
+    'split5_test_score': array([0.9, 0.9, 0.9, 0.8, 0.9, 0.9]),
+    'split6_test_score': array([0.8, 0.9, 0.9, 0.9, 0.8, 0.8]),
     'split7_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
-    'split8_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
-    'split9_test_score': array([0.8, 0.8, 0.9, 0.8, 1. , 0.9]),
-    'mean_test_score': array([0.89, 0.86, 0.88, 0.86, 0.9 , 0.87]),
-    'std_test_score': array([0.09433981, 0.12806248, 0.13266499, 0.12806248, 0.08944272,
-           0.0781025 ]),
-    'rank_test_score': array([2, 5, 3, 5, 1, 4], dtype=int32)},
+    'split8_test_score': array([1., 1., 1., 1., 1., 1.]),
+    'split9_test_score': array([0.6, 0.6, 0.6, 0.6, 0.7, 0.7]),
+    'mean_test_score': array([0.89, 0.91, 0.88, 0.88, 0.9 , 0.9 ]),
+    'std_test_score': array([0.11357817, 0.11357817, 0.1077033 , 0.1077033 , 0.08944272,
+           0.08944272]),
+    'rank_test_score': array([4, 1, 5, 5, 2, 2])},
    'multimetric_': False,
    'n_features_in_': 20,
    'n_splits_': 10,
-   'refit_time_': 0.13322663307189941,
-   'scorer_': &lt;sklearn.metrics._scorer._PassthroughScorer at 0x7f496e854070&gt;},
+   'refit_time_': 0.4070253372192383,
+   'scorer_': &lt;sklearn.metrics._scorer._PassthroughScorer at 0x23f75502400&gt;},
   'paper': 'Paper or other resource for more information',
   'citation': 'Citation details',
   'license': 'License',
@@ -561,10 +551,10 @@ Returns:
 </div>
 </div>
 <p>It is also simple to define as benchmark a model that you already fitted and still benefit from the other functionalities provided by <code>Benchmark</code> class. This can also be done in case you are using a saved version of a fitted model (eg, the model you are using in production) and want to have that as the benchmark.</p>
-<div id="40f2c4e4" class="cell" data-execution_count="20">
+<div class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ed5c63d3" class="cell" data-execution_count="21">
+<div class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>forest <span class="op">=</span> RandomForestClassifier().fit(X, y)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>bm.set_benchmark(estimator<span class="op">=</span>forest)</span>
@@ -598,11 +588,11 @@ Args:
 
 Returns:
     RegressionBenchmark: The instance of the model.</pre>
-<div id="b9f0c915" class="cell" data-execution_count="24">
+<div class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_regression</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> AdaBoostRegressor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="0a6725a3" class="cell" data-execution_count="25">
+<div class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># some mock up data</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_regression()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -621,11 +611,11 @@ Returns:
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bm.predict(X).shape <span class="op">==</span> y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below we compare the benchmark (set above manually to be the adaboost algorithm) with two other candidate models: a Gaussian process and a linear Support Vector Machine (SVM).</p>
-<div id="3d2cdb24" class="cell" data-execution_count="26">
+<div class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.gaussian_process <span class="im">import</span> GaussianProcessRegressor</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> LinearSVR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="7554f193" class="cell" data-execution_count="27">
+<div class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>gauss_reg <span class="op">=</span> GaussianProcessRegressor().fit(X, y)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>svm_reg <span class="op">=</span> LinearSVR().fit(X, y)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -638,10 +628,9 @@ Pipeline(steps=[('candidate_estimator', LinearSVR())])</code></pre>
 </div>
 <p>Note that when the benchmark object finds a model that performs better than it does, the user is informed that the benchmark is updated and the new benchmark model is shown. This only happens when the argument <code>update_benchmark</code> is set to True (as default).</p>
 <p>Below we can see by how much it outperformed the other candidates, including the previous benchmark model and an ensemble of the previous benchmark and all the candidates. It is also a good opportunity to see how stable the performance of each model was, as judged by the standard deviation of the scores across the validation folds.</p>
-<div id="3f0a9d55" class="cell" data-execution_count="28">
+<div class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(bm.benchmark.cv_results_)[[<span class="st">'params'</span>, <span class="st">'mean_test_score'</span>, <span class="st">'std_test_score'</span>, <span class="st">'rank_test_score'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
-<div>
 <div>
 
 
@@ -659,35 +648,34 @@ Pipeline(steps=[('candidate_estimator', LinearSVR())])</code></pre>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>{'candidate_estimator': (DecisionTreeRegressor...</td>
-<td>0.292627</td>
-<td>0.414700</td>
-<td>2</td>
+<td>0.170141</td>
+<td>0.280727</td>
+<td>3</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>{'candidate_estimator': GaussianProcessRegress...</td>
-<td>-0.263397</td>
-<td>0.258950</td>
+<td>-0.200690</td>
+<td>0.286986</td>
 <td>4</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>{'candidate_estimator': LinearSVR(), 'candidat...</td>
-<td>0.409503</td>
-<td>0.366062</td>
+<td>0.182895</td>
+<td>0.319559</td>
 <td>1</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>{'candidate_estimator': VotingRegressor(estima...</td>
-<td>0.235056</td>
-<td>0.381311</td>
-<td>3</td>
+<td>0.178615</td>
+<td>0.209465</td>
+<td>2</td>
 </tr>
 </tbody>
 </table>
 
-</div>
 </div>
 </div>
 </div>
@@ -704,7 +692,7 @@ Pipeline(steps=[('candidate_estimator', LinearSVR())])</code></pre>
 <h2 class="anchored" data-anchor-id="data-split">Data split</h2>
 <p><code>gingado</code> benchmarks rely on hyperparameter tuning to discover the benchmark specification that is most likely to perform better with the user data. This tuning in turn depends on a data splitting strategy for the cross-validation. By default, <code>gingado</code> uses <code>StratifiedShuffleSplit</code> (in classification problems) or <code>ShuffleSplit</code> (in regression problems) if the data is not time series and <code>TimeSeriesSplit</code> otherwise.</p>
 <p>The user may overrun these defaults either by directly setting the parameter <code>cv</code> or <code>default_cv</code> when instanciating the <code>gingado</code> benchmark class. The difference is that <code>default_cv</code> is only used after <code>gingado</code> checks that the data is not a time series (if a time dimension exists, then <code>TimeSeriesSplit</code> is used).</p>
-<div id="69965ee5" class="cell" data-execution_count="29">
+<div class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_classification()</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>bm_cls <span class="op">=</span> ClassificationBenchmark(cv<span class="op">=</span>TimeSeriesSplit(n_splits<span class="op">=</span><span class="dv">3</span>)).fit(X, y)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bm_cls.benchmark.n_splits_ <span class="op">==</span> <span class="dv">3</span></span>
@@ -775,33 +763,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
   }
-  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-    let newTheme = '';
-    if(darkModeDefault) {
-      newTheme = isAlternate ? baseTheme : alternateTheme;
-    } else {
-      newTheme = isAlternate ? alternateTheme : baseTheme;
-    }
-    const changeGiscusTheme = () => {
-      // From: https://github.com/giscus/giscus/issues/336
-      const sendMessage = (message) => {
-        const iframe = document.querySelector('iframe.giscus-frame');
-        if (!iframe) return;
-        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-      }
-      sendMessage({
-        setConfig: {
-          theme: newTheme
-        }
-      });
-    }
-    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-    if (isGiscussLoaded) {
-      changeGiscusTheme();
-    }
-  }
   const toggleColorMode = (alternate) => {
     // Switch the stylesheets
     const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
@@ -868,15 +829,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  const darkModeDefault = false;
-  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
-    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -955,29 +914,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-          // default icon
-          link.classList.add("external");
-      }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -987,17 +927,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1009,130 +940,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
-      }
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
+      return note.innerHTML;
     });
   }
       let selectedAnnoteEl;
@@ -1176,7 +984,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1202,32 +1009,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1285,11 +1066,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // default icon
+          link.classList.add("external");
+      }
+    }
 });
 </script>
 </div> <!-- /content -->
 
 
 
-
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+</body></html>

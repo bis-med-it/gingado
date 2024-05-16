@@ -1,8 +1,13 @@
 """Functions intended for library internal use."""
+import io
 import os
 from pathlib import Path
 import re
 import time
+from zipfile import ZipFile
+
+import pandas as pd
+import requests
 
 
 def get_latest_timestamped_file_path(file_path: str) -> str:
@@ -79,3 +84,86 @@ def generate_timestamped_file_path(file_path: str, exists_ok: bool = True) -> st
 
     return timestamped_file_path
 
+
+def try_read_cached_csv(filename: str, **kwargs) -> pd.DataFrame | None:
+    """Try to read a CSV from cache.
+
+    Args:
+        filename: The name of the file (NOT the name of the cache file!).
+
+    Returns:
+        The contents of the CSV as a dataframe or None if the file is not found in cache.
+    """
+    try:
+        timestamped_file_path = get_latest_timestamped_file_path(filename)
+        df = pd.read_csv(timestamped_file_path, **kwargs)
+    except FileNotFoundError:
+        # File is not in cache
+        df = None
+
+    return df
+
+
+def download_csv(
+    url: str,
+    cache_filename: str | None = None,
+    zipped_filename: str | None = None,
+    timeout: int = 120, **kwargs
+) -> pd.DataFrame:
+    """Download a CSV and load it into a dataframe.
+
+    Args:
+        url: The full HTTP(S) URL of the CSV file.
+        cache_filename: The name of the file the downloaded CSV should be cached to. \
+            If None, no caching is performed. Defaults to None.
+        zipped_filename: If the given file is a zip, this should be set to the file \
+            path of the desired CSV in the zip. Defaults to None.
+        timeout: The timeout (in seconds) for the HTTP request. Defaults to 120.
+
+    Returns:
+        The CSV data as a pandas DataFrame.
+    """
+    # Get CSV file from URL
+    with requests.get(url, timeout=timeout) as response:
+        if zipped_filename is not None:
+            # CSV file is in a zip, get zip file and extract CSV file in memory
+            zip_file_content = response.content
+            speeches_zip = ZipFile(io.BytesIO(zip_file_content))
+            csv_io = speeches_zip.open(zipped_filename, 'r')
+        else:
+            # Read CSV file
+            # WORKAROUND: File may contain characters not compatible with utf8 encoding. "Fix" them
+            # by ignoring them during decode.
+            csv_io = io.StringIO(response.content.decode("utf8", errors="ignore"))
+
+        # Read CSV into dataframe
+        with csv_io as csv_file:
+            df = pd.read_csv(csv_file, **kwargs)
+
+    # Write file to cache
+    if cache_filename is not None:
+        timestamped_file_path = generate_timestamped_file_path(cache_filename)
+        Path(timestamped_file_path).parent.mkdir(exist_ok=True)  # Ensure parent dir exists
+        df.to_csv(timestamped_file_path, index=False)
+
+    return df
+
+
+def verify_cached_csv(file_path: str) -> None:
+    """Verify that a given file exists in the cache and can be read as CSV.
+
+    Args:
+        file_path: The name of the file (NOT the name of the cache file!)
+
+    Raises:
+        RuntimeError: Raised if verification fails.
+    """
+    try:
+        timestamped_file_path = get_latest_timestamped_file_path(file_path)
+        verify_df = pd.read_csv(timestamped_file_path)
+        assert len(verify_df) > 0, (
+            f'Cached CSV at {timestamped_file_path} is empty. '
+            'Manually remove the file or replace with correct dataset.'
+        )
+    except Exception as ex:
+        raise RuntimeError('Verification error. See previous exception.') from ex

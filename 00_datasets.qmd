@@ -21,7 +21,7 @@ from fastcore.test import test_fail
 import matplotlib.pyplot as plt
 import pandas as pd
 from utils import show_doc
-from gingado.datasets import load_BarroLee_1994, load_CB_speeches
+from gingado.datasets import load_BarroLee_1994, load_CB_speeches, load_monpol_statements
 ```
 
 ## Real datasets
@@ -64,6 +64,7 @@ X.head()
 y.plot.hist(title='GDP growth', bins=30)
 ```
 
+
 <!-- load_CB_speeches -->
 ```{python}
 #| output: asis
@@ -90,6 +91,39 @@ dataset, as follows (Please substitute YYYY for the relevant years):
 ```{python}
 # Load speeches for 2020
 speeches = load_CB_speeches(2020)
+speeches.head()
+```
+
+
+<!-- load_monpol_statements -->
+```{python}
+#| output: asis
+#| echo: false
+show_doc(load_monpol_statements)
+```
+
+This function downloads monetary policy statements from 26 emerging market central banks
+(Armenia, Brazil, Chile, Colombia, Czech Republic, Egypt, Georgia, Hungary,
+Israel, India, Kazakhstan, Malaysia, Mongolia, Mexico, Nigeria, Pakistan, Peru,
+Philippines, Poland, Romania, Russia, South Africa, South Korea, Thailand,
+Türkiye, Ukraine) as well as the Fed and the ECB (press-conference introductory statements).
+The dataset includes official English versions of statements for 1998-2023
+(starting date varies depending on data availability).
+If you use this data in your work, please cite the dataset, as follows:
+
+```
+@article{emcbcom,
+    author = {Tatiana Evdokimova and Piroska Nagy Mohácsi and Olga Ponomarenko and Elina Ribakova},
+    title = {Central banks and policy communication: How emerging markets have outperformed the Fed and ECB},
+    year = {2023},
+    institution = {Peterson Institute for International Economics}
+    url = {https://www.piie.com/publications/working-papers/central-banks-and-policy-communication-how-emerging-markets-have}
+}
+```
+
+```{python}
+# Load monpol statements for 2020
+speeches = load_monpol_statements(2020)
 speeches.head()
 ```
 

@@ -81,7 +81,7 @@ dataset, as follows (Please substitute YYYY for the relevant years):
 
 ```
 @misc{biscbspeeches
-    author = {Bank for International Settlements},
+    author = {{Bank for International Settlements}},
     title = {Central bank speeches, YYYY-YYYY},
     year = {2024},
     url = {https://www.bis.org/cbspeeches/download.htm}

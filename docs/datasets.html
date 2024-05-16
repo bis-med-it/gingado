@@ -699,7 +699,7 @@ Note
 <section id="make_causal_effect" class="level3">
 <h3 class="anchored" data-anchor-id="make_causal_effect"><a id="make_causal_effect">make_causal_effect</a></h3>
 <blockquote class="blockquote">
-<p>make_causal_effect <code>(n_samples: 'int' = 100, n_features: 'int' = 100, pretreatment_outcome=&lt;function &lt;lambda&gt; at 0x00000275DE6BFDC0&gt;, treatment_propensity=&lt;function &lt;lambda&gt; at 0x00000275DE6BFE50&gt;, treatment_assignment=&lt;function &lt;lambda&gt; at 0x00000275DE6BFEE0&gt;, treatment=&lt;function &lt;lambda&gt; at 0x00000275DE6BFF70&gt;, treatment_effect=&lt;function &lt;lambda&gt; at 0x00000275DE6C3040&gt;, bias: 'float' = 0, noise: 'float' = 0, random_state=None, return_propensity: 'bool' = False, return_assignment: 'bool' = False, return_treatment_value: 'bool' = False, return_treatment_effect: 'bool' = True, return_pretreatment_y: 'bool' = False, return_as_dict: 'bool' = False)</code></p>
+<p>make_causal_effect <code>(n_samples: 'int' = 100, n_features: 'int' = 100, pretreatment_outcome=&lt;function &lt;lambda&gt; at 0x0000021DAF1F8820&gt;, treatment_propensity=&lt;function &lt;lambda&gt; at 0x0000021DAF1F88B0&gt;, treatment_assignment=&lt;function &lt;lambda&gt; at 0x0000021DAF1F8940&gt;, treatment=&lt;function &lt;lambda&gt; at 0x0000021DAF1F89D0&gt;, treatment_effect=&lt;function &lt;lambda&gt; at 0x0000021DAF1F8A60&gt;, bias: 'float' = 0, noise: 'float' = 0, random_state=None, return_propensity: 'bool' = False, return_assignment: 'bool' = False, return_treatment_value: 'bool' = False, return_treatment_effect: 'bool' = True, return_pretreatment_y: 'bool' = False, return_as_dict: 'bool' = False)</code></p>
 </blockquote>
 <pre>Generates a simulated dataset to analyze causal effects of a treatment on an outcome variable.
 
@@ -870,53 +870,53 @@ Returns:
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>0.157100</td>
+<td data-quarto-table-cell-role="th">1</td>
+<td>0.096859</td>
 <td>0.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>0.204248</td>
+<td data-quarto-table-cell-role="th">9</td>
+<td>0.214662</td>
 <td>0.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">5</td>
-<td>0.216077</td>
+<td>0.274574</td>
 <td>0.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">4</td>
-<td>0.458077</td>
-<td>0.0</td>
-</tr>
-<tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
-<td>0.472470</td>
-<td>0.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
-<td>0.497516</td>
+<td>0.327766</td>
 <td>0.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">3</td>
-<td>0.581266</td>
+<td>0.340469</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>0.448527</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>0.692757</td>
 <td>0.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">8</td>
-<td>0.608624</td>
+<td>0.699199</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>0.746510</td>
+<td data-quarto-table-cell-role="th">4</td>
+<td>0.699470</td>
 <td>1.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
-<td>0.813463</td>
+<td data-quarto-table-cell-role="th">0</td>
+<td>0.752914</td>
 <td>1.0</td>
 </tr>
 </tbody>
@@ -958,31 +958,37 @@ Returns:
 </div>
 <p>In contrast to the function above, in the chunk below the function <code>make_causal_effect</code> fails because a treatment value is also assigned to observations that were not assigned for treatment.</p>
 <div class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>test_fail(</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    make_causal_effect, </span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    kwargs<span class="op">=</span><span class="bu">dict</span>(treatment<span class="op">=</span><span class="kw">lambda</span> assignment, X: assignment <span class="op">+</span> np.random.uniform(size<span class="op">=</span>X.shape[<span class="dv">0</span>]))</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    make_causal_effect(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>        treatment<span class="op">=</span><span class="kw">lambda</span> assignment, X: assignment <span class="op">+</span> np.random.uniform(size<span class="op">=</span>X.shape[<span class="dv">0</span>])</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ValueError</span> <span class="im">as</span> e:</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Argument `treatment` must be a function that returns 0 for observations with `assignment` == 0.
+One suggestion is to multiply the desired treatment value with `assignment`.</code></pre>
+</div>
 </div>
 </section>
 <section id="treatment-effect" class="level4">
 <h4 class="anchored" data-anchor-id="treatment-effect">Treatment effect</h4>
 <p>The treatment effect can be homogenous, ie, is doesn’t depend on any other characteristic of the individual observations (in other words, does not depend on <span class="math inline">\(X_i\)</span>), or heterogenous (where the treatment effect on <span class="math inline">\(Y_i\)</span> does depend on each observation’s <span class="math inline">\(X_i\)</span>). This can be done by specifying the causal relationship through a lambda function, as below:</p>
 <div class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>homogenous_effects_sim <span class="op">=</span> make_causal_effect(</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>        treatment_effect<span class="op">=</span><span class="kw">lambda</span> treatment_value: treatment_value,</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>        return_treatment_value<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>        return_as_dict<span class="op">=</span><span class="va">True</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (homogenous_effects_sim[<span class="st">'treatment_effect'</span>] <span class="op">==</span> homogenous_effects_sim[<span class="st">'treatment_value'</span>]).<span class="bu">all</span>()</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>heterogenous_effects_sim <span class="op">=</span> make_causal_effect(</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>        treatment_effect<span class="op">=</span><span class="kw">lambda</span> treatment_value, X: np.maximum(X[:, <span class="dv">1</span>], <span class="dv">0</span>) <span class="op">*</span> treatment_value,</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>        return_treatment_value<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>        return_as_dict<span class="op">=</span><span class="va">True</span></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (heterogenous_effects_sim[<span class="st">'treatment_effect'</span>] <span class="op">!=</span> heterogenous_effects_sim[<span class="st">'treatment_value'</span>]).<span class="bu">any</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>homogenous_effects_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>        treatment_effect<span class="op">=</span><span class="kw">lambda</span> treatment_value: treatment_value,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>        return_treatment_value<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>        return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (homogenous_effects_sim[<span class="st">'treatment_effect'</span>] <span class="op">==</span> homogenous_effects_sim[<span class="st">'treatment_value'</span>]).<span class="bu">all</span>()</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>heterogenous_effects_sim <span class="op">=</span> make_causal_effect(</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        treatment_effect<span class="op">=</span><span class="kw">lambda</span> treatment_value, X: np.maximum(X[:, <span class="dv">1</span>], <span class="dv">0</span>) <span class="op">*</span> treatment_value,</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>        return_treatment_value<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        return_as_dict<span class="op">=</span><span class="va">True</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (heterogenous_effects_sim[<span class="st">'treatment_effect'</span>] <span class="op">!=</span> heterogenous_effects_sim[<span class="st">'treatment_value'</span>]).<span class="bu">any</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>

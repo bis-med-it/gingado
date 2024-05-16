@@ -159,3 +159,7 @@ nbs_workinprogress/
 /qmd
 /site_libs
 scratchpad.py
+
+# data downloaded as part of rendering 00_datasets.qmd
+gingado/cb_speeches_*.csv
+gingado/monpol_statements_*.csv

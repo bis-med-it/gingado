@@ -17,7 +17,6 @@ warning: false
 #| echo: false
 #| output: false
 import numpy as np
-from fastcore.test import test_fail
 import matplotlib.pyplot as plt
 import pandas as pd
 from utils import show_doc
@@ -346,11 +345,12 @@ hetereogenous_treatment_sim = make_causal_effect(
 In contrast to the function above, in the chunk below the function `make_causal_effect` fails because a treatment value is also assigned to observations that were not assigned for treatment.
 
 ```{python}
-
-test_fail(
-    make_causal_effect, 
-    kwargs=dict(treatment=lambda assignment, X: assignment + np.random.uniform(size=X.shape[0]))
-)
+try:
+    make_causal_effect(
+        treatment=lambda assignment, X: assignment + np.random.uniform(size=X.shape[0])
+    )
+except ValueError as e:
+    print(e)
 ```
 
 #### Treatment effect

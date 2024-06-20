@@ -20,7 +20,7 @@ warning: false
 from __future__ import annotations
 import numpy as np
 import pandas as pd
-import pandasdmx as sdmx
+
 from utils import show_doc
 ```
 
@@ -222,6 +222,8 @@ from gingado.utils import list_all_dataflows
 ```
 
 ```{python}
+#| warning: false
+
 dflows = list_all_dataflows()
 dflows
 ```

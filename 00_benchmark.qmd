@@ -19,7 +19,6 @@ warning: false
 from __future__ import annotations
 import numpy as np
 import pandas as pd
-import pandasdmx as sdmx
 from utils import show_doc
 from gingado.benchmark import ggdBenchmark, ClassificationBenchmark, RegressionBenchmark, TimeSeriesSplit, ShuffleSplit
 

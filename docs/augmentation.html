@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -23,7 +23,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -58,7 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -82,7 +82,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -91,28 +97,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="gingado - Data augmentation">
 <meta property="og:description" content="Functions to augment the user’s dataset with information from official sources.">
-<meta property="og:site-name" content="gingado">
+<meta property="og:site_name" content="gingado">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">gingado</span>
     </a>
@@ -124,51 +132,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Examples</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-examples">    
         <li>
-    <a class="dropdown-item" href="./barrolee1994.html" rel="" target="">
+    <a class="dropdown-item" href="./barrolee1994.html">
  <span class="dropdown-text">Economic growth</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./forecast.html" rel="" target="">
+    <a class="dropdown-item" href="./forecast.html">
  <span class="dropdown-text">Forecasting FX rates</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./machine_controls.html" rel="" target="">
+    <a class="dropdown-item" href="./machine_controls.html">
  <span class="dropdown-text">Effects of labour reform</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Reference</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-reference">    
         <li>
-    <a class="dropdown-item" href="./augmentation.html" rel="" target="">
+    <a class="dropdown-item" href="./augmentation.html">
  <span class="dropdown-text">gingado.augmentation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./datasets.html" rel="" target="">
+    <a class="dropdown-item" href="./datasets.html">
  <span class="dropdown-text">gingado.datasets</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./benchmark.html" rel="" target="">
+    <a class="dropdown-item" href="./benchmark.html">
  <span class="dropdown-text">gingado.benchmark</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./estimators.html" rel="" target="">
+    <a class="dropdown-item" href="./estimators.html">
  <span class="dropdown-text">gingado.estimators</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./documentation.html" rel="" target="">
+    <a class="dropdown-item" href="./documentation.html">
  <span class="dropdown-text">gingado.model_documentation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./utils.html" rel="" target="">
+    <a class="dropdown-item" href="./utils.html">
  <span class="dropdown-text">gingado.utils</span></a>
   </li>  
     </ul>
@@ -176,17 +184,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/bis-med-it/gingado" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/bis-med-it/gingado"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.sdmx.io" rel="" target=""><i class="bi bi-house-fill" role="img">
+    <a class="nav-link" href="https://www.sdmx.io"> <i class="bi bi-house-fill" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -194,7 +203,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -221,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#sources-of-data" id="toc-sources-of-data" class="nav-link" data-scroll-target="#sources-of-data">Sources of data</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -246,7 +254,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <p><code>gingado</code> provides data augmentation functionalities that can help users to augment their datasets with a time series dimension. This can be done both on a stand-alone basis as the user incorporates new data on top of the original dataset, or as part of a <code>scikit-learn</code> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html"><code>Pipeline</code></a> that also includes other steps like data transformation and model estimation.</p>
 <section id="data-augmentation-with-sdmx" class="level1">
@@ -263,7 +273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>For example, the code below is a simple illustration of <code>AugmentSDMX</code> augmentation under two scenarios: without a variance threshold (ie, including all data regardless if they are constants) or with a relatively high variance threshold (such that no data is actually added).</p>
 <p>In both cases, the object is using the default data flow, which is the daily series of monetary policy rates set by central banks.</p>
 <p>These <code>AugmentSDMX</code> objects are used to augment a data frame with simulated data for illustrative purposes. In real life, this data would be the user’s original data.</p>
-<div class="cell" data-execution_count="3">
+<div id="6e506679" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span><span class="dv">42</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>periods <span class="op">=</span> <span class="dv">15</span></span>
@@ -271,6 +281,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>orig_data <span class="op">=</span> pd.DataFrame({<span class="st">'orig_col'</span>: rng.standard_normal(periods)}, index<span class="op">=</span>idx)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>orig_data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
+<div>
 <div>
 
 
@@ -308,15 +319,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="4">
+</div>
+<div id="c9be528f" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.augmentation <span class="im">import</span> AugmentSDMX</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>aug_NoVarThresh <span class="op">=</span> AugmentSDMX(variance_threshold<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>aug_data <span class="op">=</span> aug_NoVarThresh.fit_transform(orig_data)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>aug_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></pre>
+<pre><code>Querying data from BIS's dataflow 'WS_CBPOL' - Policy rate...</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="4">
+<div>
 <div>
 
 
@@ -325,26 +338,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">orig_col</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__CH</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__CL</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__CN</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__CO</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__CZ</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__DK</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__GB</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__HK</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__HU</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CH</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CL</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CN</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CO</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CZ</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__DK</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__GB</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__HK</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__HU</th>
 <th data-quarto-table-cell-role="th">...</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__RO</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__RS</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__RU</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__SA</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__SE</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__TH</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__TR</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__US</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__XM</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__ZA</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__RU</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__SA</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__SE</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__TH</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__TR</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__US</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__XM</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__ZA</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__AU</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__AR</th>
 </tr>
 </thead>
 <tbody>
@@ -364,13 +377,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>NaN</td>
 <td>2.25</td>
 <td>NaN</td>
-<td>2.25</td>
-<td>NaN</td>
 <td>NaN</td>
 <td>NaN</td>
 <td>1.625</td>
 <td>0.0</td>
 <td>NaN</td>
+<td>NaN</td>
+<td>55.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2020-01-02</td>
@@ -387,14 +400,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>...</td>
 <td>NaN</td>
 <td>2.25</td>
-<td>NaN</td>
-<td>2.25</td>
 <td>-0.25</td>
 <td>1.25</td>
 <td>12.0</td>
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>55.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2020-01-03</td>
@@ -409,8 +422,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.68</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>NaN</td>
 <td>2.25</td>
 <td>-0.25</td>
@@ -419,6 +430,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>55.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2020-01-04</td>
@@ -433,8 +446,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.68</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>NaN</td>
 <td>2.25</td>
 <td>-0.25</td>
@@ -443,6 +454,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>55.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2020-01-05</td>
@@ -457,8 +470,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.68</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>NaN</td>
 <td>2.25</td>
 <td>-0.25</td>
@@ -467,6 +478,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>55.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2020-01-06</td>
@@ -481,8 +494,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.55</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>6.25</td>
 <td>2.25</td>
 <td>-0.25</td>
@@ -491,6 +502,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>55.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2020-01-07</td>
@@ -505,8 +518,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.41</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>6.25</td>
 <td>2.25</td>
 <td>-0.25</td>
@@ -515,6 +526,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>55.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2020-01-08</td>
@@ -529,8 +542,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.28</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>6.25</td>
 <td>2.25</td>
 <td>0.00</td>
@@ -539,6 +550,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>55.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2020-01-09</td>
@@ -553,8 +566,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.00</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>6.25</td>
 <td>2.25</td>
 <td>0.00</td>
@@ -563,6 +574,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>55.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2020-01-10</td>
@@ -577,8 +590,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.00</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>6.25</td>
 <td>2.25</td>
 <td>0.00</td>
@@ -587,6 +598,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>52.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2020-01-11</td>
@@ -601,8 +614,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.00</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>6.25</td>
 <td>2.25</td>
 <td>0.00</td>
@@ -611,6 +622,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>52.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2020-01-12</td>
@@ -625,8 +638,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.00</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>6.25</td>
 <td>2.25</td>
 <td>0.00</td>
@@ -635,6 +646,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>52.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2020-01-13</td>
@@ -649,8 +662,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.00</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>6.25</td>
 <td>2.25</td>
 <td>0.00</td>
@@ -659,6 +670,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>52.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2020-01-14</td>
@@ -673,8 +686,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.00</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>6.25</td>
 <td>2.25</td>
 <td>0.00</td>
@@ -683,6 +694,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>52.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2020-01-15</td>
@@ -697,8 +710,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>2.00</td>
 <td>0.9</td>
 <td>...</td>
-<td>2.5</td>
-<td>2.25</td>
 <td>6.25</td>
 <td>2.25</td>
 <td>0.00</td>
@@ -707,6 +718,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1.625</td>
 <td>0.0</td>
 <td>6.5</td>
+<td>0.75</td>
+<td>52.0</td>
 </tr>
 </tbody>
 </table>
@@ -715,15 +728,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="5">
+</div>
+<div id="fc72707c" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>aug_StrictVarThresh <span class="op">=</span> AugmentSDMX(variance_threshold<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>aug_data <span class="op">=</span> aug_StrictVarThresh.fit_transform(orig_data)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>aug_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...
+<pre><code>Querying data from BIS's dataflow 'WS_CBPOL' - Policy rate...
 No columns added to original data because no feature in x meets the variance threshold 10.00000</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="5">
+<div>
 <div>
 
 
@@ -798,6 +813,7 @@ No columns added to original data because no feature in x meets the variance thr
 </tbody>
 </table>
 
+</div>
 </div>
 </div>
 </div>
@@ -862,11 +878,11 @@ Returns:
 <h2 class="anchored" data-anchor-id="compatibility-with-scikit-learn">Compatibility with <code>scikit-learn</code></h2>
 <p>As mentioned above, <code>gingado</code>’s transformers are built to be compatible with <code>scikit-learn</code>. The code below demonstrates this compatibility.</p>
 <p>First, we create the example dataset. In this case, it comprises the daily foreign exchange rate of selected currencies to the Euro. The Brazilian Real (BRL) is chosen for this example as the dependent variable.</p>
-<div class="cell" data-execution_count="10">
+<div id="baebd04f" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> load_SDMX_data, Lag</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> TimeSeriesSplit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="11">
+<div id="f5202d7d" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> load_SDMX_data(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    sources<span class="op">=</span>{<span class="st">'ECB'</span>: <span class="st">'EXR'</span>}, </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    keys<span class="op">=</span>{<span class="st">'FREQ'</span>: <span class="st">'D'</span>, <span class="st">'CURRENCY'</span>: [<span class="st">'EUR'</span>, <span class="st">'AUD'</span>, <span class="st">'BRL'</span>, <span class="st">'CAD'</span>, <span class="st">'CHF'</span>, <span class="st">'GBP'</span>, <span class="st">'JPY'</span>, <span class="st">'SGD'</span>, <span class="st">'USD'</span>]},</span>
@@ -885,17 +901,17 @@ Returns:
 <pre><code>Querying data from ECB's dataflow 'EXR' - Exchange Rates...</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="12">
+<div id="ac651294" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>X_train, X_test <span class="op">=</span> X.iloc[:<span class="op">-</span><span class="dv">1</span>], X.tail(<span class="dv">1</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>y_train, y_test <span class="op">=</span> y.iloc[:<span class="op">-</span><span class="dv">1</span>], y.tail(<span class="dv">1</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>X_train.shape, y_train.shape, X_test.shape, y_test.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
-<pre><code>((5417, 8), (5417,), (1, 8), (1,))</code></pre>
+<pre><code>((5497, 8), (5497,), (1, 8), (1,))</code></pre>
 </div>
 </div>
 <p>Next, the data augmentation object provided by <code>gingado</code> adds more data. In this case, for brevity only one dataflow from one source is listed. If users want to add more SDMX sources, simply add more keys to the dictionary. And if users want data from all dataflows from a given source provided the keys and parameters such as frequency and dates match, the value should be set to <code>'all'</code>, as in <code>{'ECB': ['CISS'], 'BIS': 'all'}</code>.</p>
-<div class="cell" data-execution_count="13">
+<div id="fb9d487a" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>test_src <span class="op">=</span> {<span class="st">'ECB'</span>: [<span class="st">'CISS'</span>], <span class="st">'BIS'</span>: [<span class="st">'WS_CBPOL_D'</span>]}</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>X_train__fit_transform <span class="op">=</span> AugmentSDMX(sources<span class="op">=</span>test_src).fit_transform(X<span class="op">=</span>X_train)</span>
@@ -904,17 +920,15 @@ Returns:
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> X_train__fit_transform.shape <span class="op">==</span> X_train__fit_then_transform.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...
-Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></pre>
+Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...</code></pre>
 </div>
 </div>
 <p>This is the dataset now after this particular augmentation:</p>
-<div class="cell" data-execution_count="14">
+<div id="af26cf25" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"No of columns: </span><span class="sc">{</span><span class="bu">len</span>(X_train__fit_transform.columns)<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>X_train__fit_transform<span class="sc">.</span>columns<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>X_train__fit_transform</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>No of columns: 69 Index(['AUD_lag_1', 'BRL_lag_1', 'CAD_lag_1', 'CHF_lag_1', 'GBP_lag_1',
+<pre><code>No of columns: 30 Index(['AUD_lag_1', 'BRL_lag_1', 'CAD_lag_1', 'CHF_lag_1', 'GBP_lag_1',
        'JPY_lag_1', 'SGD_lag_1', 'USD_lag_1',
        'ECB__CISS_D__AT__Z0Z__4F__EC__SS_CIN__IDX',
        'ECB__CISS_D__BE__Z0Z__4F__EC__SS_CIN__IDX',
@@ -937,29 +951,11 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
        'ECB__CISS_D__U2__Z0Z__4F__EC__SS_FX__CON',
        'ECB__CISS_D__U2__Z0Z__4F__EC__SS_MM__CON',
        'ECB__CISS_D__US__Z0Z__4F__EC__SS_CI__IDX',
-       'ECB__CISS_D__US__Z0Z__4F__EC__SS_CIN__IDX', 'BIS__WS_CBPOL_D_D__CH',
-       'BIS__WS_CBPOL_D_D__CL', 'BIS__WS_CBPOL_D_D__CN',
-       'BIS__WS_CBPOL_D_D__CO', 'BIS__WS_CBPOL_D_D__CZ',
-       'BIS__WS_CBPOL_D_D__DK', 'BIS__WS_CBPOL_D_D__GB',
-       'BIS__WS_CBPOL_D_D__HK', 'BIS__WS_CBPOL_D_D__HR',
-       'BIS__WS_CBPOL_D_D__HU', 'BIS__WS_CBPOL_D_D__ID',
-       'BIS__WS_CBPOL_D_D__IL', 'BIS__WS_CBPOL_D_D__IN',
-       'BIS__WS_CBPOL_D_D__IS', 'BIS__WS_CBPOL_D_D__JP',
-       'BIS__WS_CBPOL_D_D__AR', 'BIS__WS_CBPOL_D_D__KR',
-       'BIS__WS_CBPOL_D_D__MA', 'BIS__WS_CBPOL_D_D__MK',
-       'BIS__WS_CBPOL_D_D__MX', 'BIS__WS_CBPOL_D_D__BR',
-       'BIS__WS_CBPOL_D_D__MY', 'BIS__WS_CBPOL_D_D__NO',
-       'BIS__WS_CBPOL_D_D__NZ', 'BIS__WS_CBPOL_D_D__PE',
-       'BIS__WS_CBPOL_D_D__PH', 'BIS__WS_CBPOL_D_D__CA',
-       'BIS__WS_CBPOL_D_D__PL', 'BIS__WS_CBPOL_D_D__AU',
-       'BIS__WS_CBPOL_D_D__RO', 'BIS__WS_CBPOL_D_D__RS',
-       'BIS__WS_CBPOL_D_D__RU', 'BIS__WS_CBPOL_D_D__SA',
-       'BIS__WS_CBPOL_D_D__SE', 'BIS__WS_CBPOL_D_D__TH',
-       'BIS__WS_CBPOL_D_D__TR', 'BIS__WS_CBPOL_D_D__US',
-       'BIS__WS_CBPOL_D_D__XM', 'BIS__WS_CBPOL_D_D__ZA'],
+       'ECB__CISS_D__US__Z0Z__4F__EC__SS_CIN__IDX'],
       dtype='object')</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="14">
+<div>
 <div>
 
 
@@ -978,16 +974,16 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
 <th data-quarto-table-cell-role="th">ECB__CISS_D__AT__Z0Z__4F__EC__SS_CIN__IDX</th>
 <th data-quarto-table-cell-role="th">ECB__CISS_D__BE__Z0Z__4F__EC__SS_CIN__IDX</th>
 <th data-quarto-table-cell-role="th">...</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__RO</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__RS</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__RU</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__SA</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__SE</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__TH</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__TR</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__US</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__XM</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D_D__ZA</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__U2__Z0Z__4F__EC__SS_BM__CON</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__U2__Z0Z__4F__EC__SS_CI__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__U2__Z0Z__4F__EC__SS_CIN__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__U2__Z0Z__4F__EC__SS_CO__CON</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__U2__Z0Z__4F__EC__SS_EM__CON</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__U2__Z0Z__4F__EC__SS_FI__CON</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__U2__Z0Z__4F__EC__SS_FX__CON</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__U2__Z0Z__4F__EC__SS_MM__CON</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__US__Z0Z__4F__EC__SS_CI__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__US__Z0Z__4F__EC__SS_CIN__IDX</th>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">TIME_PERIOD</th>
@@ -1028,16 +1024,16 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
 <td>0.021899</td>
 <td>0.043292</td>
 <td>...</td>
-<td>NaN</td>
-<td>9.5</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>3.75</td>
-<td>1.75</td>
-<td>44.0</td>
-<td>1.250</td>
-<td>2.75</td>
-<td>13.50</td>
+<td>0.033001</td>
+<td>0.192056</td>
+<td>0.088186</td>
+<td>-0.243567</td>
+<td>0.150383</td>
+<td>0.139864</td>
+<td>0.036917</td>
+<td>0.075458</td>
+<td>0.249733</td>
+<td>0.133170</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2003-01-06</td>
@@ -1052,16 +1048,16 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
 <td>0.020801</td>
 <td>0.039924</td>
 <td>...</td>
-<td>19.75</td>
-<td>9.5</td>
-<td>NaN</td>
-<td>2.0</td>
-<td>3.75</td>
-<td>1.75</td>
-<td>44.0</td>
-<td>1.250</td>
-<td>2.75</td>
-<td>13.50</td>
+<td>0.033001</td>
+<td>0.192056</td>
+<td>0.091836</td>
+<td>-0.243567</td>
+<td>0.150383</td>
+<td>0.139864</td>
+<td>0.036917</td>
+<td>0.075458</td>
+<td>0.249733</td>
+<td>0.145225</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2003-01-07</td>
@@ -1076,16 +1072,16 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
 <td>0.019738</td>
 <td>0.038084</td>
 <td>...</td>
-<td>19.75</td>
-<td>9.5</td>
-<td>NaN</td>
-<td>2.0</td>
-<td>3.75</td>
-<td>1.75</td>
-<td>44.0</td>
-<td>1.250</td>
-<td>2.75</td>
-<td>13.50</td>
+<td>0.033001</td>
+<td>0.192056</td>
+<td>0.094332</td>
+<td>-0.243567</td>
+<td>0.150383</td>
+<td>0.139864</td>
+<td>0.036917</td>
+<td>0.075458</td>
+<td>0.249733</td>
+<td>0.151298</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2003-01-08</td>
@@ -1100,16 +1096,16 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
 <td>0.019947</td>
 <td>0.040338</td>
 <td>...</td>
-<td>19.75</td>
-<td>9.5</td>
-<td>21.0</td>
-<td>2.0</td>
-<td>3.75</td>
-<td>1.75</td>
-<td>44.0</td>
-<td>1.250</td>
-<td>2.75</td>
-<td>13.50</td>
+<td>0.033001</td>
+<td>0.192056</td>
+<td>0.098529</td>
+<td>-0.243567</td>
+<td>0.150383</td>
+<td>0.139864</td>
+<td>0.036917</td>
+<td>0.075458</td>
+<td>0.249733</td>
+<td>0.160782</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2003-01-09</td>
@@ -1124,16 +1120,16 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
 <td>0.017026</td>
 <td>0.040535</td>
 <td>...</td>
-<td>19.75</td>
-<td>9.5</td>
-<td>21.0</td>
-<td>2.0</td>
-<td>3.75</td>
-<td>1.75</td>
-<td>44.0</td>
-<td>1.250</td>
-<td>2.75</td>
-<td>13.50</td>
+<td>0.033001</td>
+<td>0.192056</td>
+<td>0.101165</td>
+<td>-0.243567</td>
+<td>0.150383</td>
+<td>0.139864</td>
+<td>0.036917</td>
+<td>0.075458</td>
+<td>0.249733</td>
+<td>0.178999</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">...</td>
@@ -1160,143 +1156,144 @@ Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></p
 <td>...</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2024-02-19</td>
-<td>1.6517</td>
-<td>5.3551</td>
-<td>1.4518</td>
-<td>0.9491</td>
-<td>0.85605</td>
-<td>161.88</td>
-<td>1.4500</td>
-<td>1.0768</td>
-<td>0.101870</td>
-<td>0.089907</td>
+<td data-quarto-table-cell-role="th">2024-06-13</td>
+<td>1.6280</td>
+<td>5.7912</td>
+<td>1.4795</td>
+<td>0.9641</td>
+<td>0.84365</td>
+<td>169.35</td>
+<td>1.4553</td>
+<td>1.0765</td>
+<td>0.067120</td>
+<td>0.044007</td>
 <td>...</td>
-<td>7.00</td>
-<td>6.5</td>
-<td>16.0</td>
-<td>6.0</td>
-<td>4.00</td>
-<td>2.50</td>
-<td>45.0</td>
-<td>5.375</td>
-<td>4.50</td>
-<td>8.25</td>
+<td>0.047971</td>
+<td>0.062167</td>
+<td>0.025347</td>
+<td>-0.175750</td>
+<td>0.042737</td>
+<td>0.097854</td>
+<td>0.025751</td>
+<td>0.023605</td>
+<td>0.076653</td>
+<td>0.028596</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">2024-02-20</td>
-<td>1.6479</td>
-<td>5.3433</td>
-<td>1.4522</td>
-<td>0.9492</td>
-<td>0.85448</td>
-<td>161.59</td>
-<td>1.4503</td>
-<td>1.0776</td>
-<td>0.102998</td>
-<td>0.087479</td>
+<td data-quarto-table-cell-role="th">2024-06-14</td>
+<td>1.6232</td>
+<td>5.8261</td>
+<td>1.4823</td>
+<td>0.9668</td>
+<td>0.84468</td>
+<td>169.58</td>
+<td>1.4557</td>
+<td>1.0784</td>
+<td>0.065084</td>
+<td>0.046021</td>
 <td>...</td>
-<td>7.00</td>
-<td>6.5</td>
-<td>16.0</td>
-<td>6.0</td>
-<td>4.00</td>
-<td>2.50</td>
-<td>45.0</td>
-<td>5.375</td>
-<td>4.50</td>
-<td>8.25</td>
+<td>0.058594</td>
+<td>0.069012</td>
+<td>0.049797</td>
+<td>-0.222608</td>
+<td>0.068237</td>
+<td>0.106395</td>
+<td>0.032912</td>
+<td>0.025483</td>
+<td>0.065012</td>
+<td>0.026324</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2024-02-21</td>
-<td>1.6457</td>
-<td>5.3521</td>
-<td>1.4562</td>
-<td>0.9526</td>
-<td>0.85660</td>
-<td>162.18</td>
-<td>1.4525</td>
-<td>1.0802</td>
-<td>0.107851</td>
-<td>0.088532</td>
+<td data-quarto-table-cell-role="th">2024-06-17</td>
+<td>1.6156</td>
+<td>5.7321</td>
+<td>1.4704</td>
+<td>0.9534</td>
+<td>0.84205</td>
+<td>167.80</td>
+<td>1.4464</td>
+<td>1.0686</td>
+<td>0.067882</td>
+<td>0.050889</td>
 <td>...</td>
-<td>7.00</td>
-<td>6.5</td>
-<td>16.0</td>
-<td>6.0</td>
-<td>4.00</td>
-<td>2.50</td>
-<td>45.0</td>
-<td>5.375</td>
-<td>4.50</td>
-<td>8.25</td>
+<td>0.058594</td>
+<td>0.069012</td>
+<td>0.058923</td>
+<td>-0.222608</td>
+<td>0.068237</td>
+<td>0.106395</td>
+<td>0.032912</td>
+<td>0.025483</td>
+<td>0.065012</td>
+<td>0.021923</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">2024-02-22</td>
-<td>1.6486</td>
-<td>5.3253</td>
-<td>1.4618</td>
-<td>0.9510</td>
-<td>0.85619</td>
-<td>162.12</td>
-<td>1.4524</td>
-<td>1.0809</td>
-<td>0.103062</td>
-<td>0.086758</td>
+<td data-quarto-table-cell-role="th">2024-06-18</td>
+<td>1.6246</td>
+<td>5.7841</td>
+<td>1.4726</td>
+<td>0.9561</td>
+<td>0.84573</td>
+<td>169.11</td>
+<td>1.4497</td>
+<td>1.0712</td>
+<td>0.071435</td>
+<td>0.053666</td>
 <td>...</td>
-<td>7.00</td>
-<td>6.5</td>
-<td>16.0</td>
-<td>6.0</td>
-<td>4.00</td>
-<td>2.50</td>
-<td>45.0</td>
-<td>5.375</td>
-<td>4.50</td>
-<td>8.25</td>
+<td>0.058594</td>
+<td>0.069012</td>
+<td>0.064863</td>
+<td>-0.222608</td>
+<td>0.068237</td>
+<td>0.106395</td>
+<td>0.032912</td>
+<td>0.025483</td>
+<td>0.065012</td>
+<td>0.018536</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2024-02-23</td>
-<td>1.6515</td>
-<td>5.3499</td>
-<td>1.4618</td>
-<td>0.9535</td>
-<td>0.85625</td>
-<td>163.12</td>
-<td>1.4552</td>
-<td>1.0844</td>
-<td>0.097974</td>
-<td>0.089931</td>
+<td data-quarto-table-cell-role="th">2024-06-19</td>
+<td>1.6207</td>
+<td>5.8275</td>
+<td>1.4731</td>
+<td>0.9512</td>
+<td>0.84540</td>
+<td>169.41</td>
+<td>1.4510</td>
+<td>1.0715</td>
+<td>0.068695</td>
+<td>0.052024</td>
 <td>...</td>
-<td>7.00</td>
-<td>6.5</td>
-<td>16.0</td>
-<td>6.0</td>
-<td>4.00</td>
-<td>2.50</td>
-<td>45.0</td>
-<td>5.375</td>
-<td>4.50</td>
-<td>8.25</td>
+<td>0.058594</td>
+<td>0.069012</td>
+<td>0.067859</td>
+<td>-0.222608</td>
+<td>0.068237</td>
+<td>0.106395</td>
+<td>0.032912</td>
+<td>0.025483</td>
+<td>0.065012</td>
+<td>0.015635</td>
 </tr>
 </tbody>
 </table>
 
-<p>5417 rows × 69 columns</p>
+<p>5497 rows × 30 columns</p>
+</div>
 </div>
 </div>
 </div>
 <section id="pipeline" class="level3">
 <h3 class="anchored" data-anchor-id="pipeline">Pipeline</h3>
 <p><code>AugmentSDMX</code> can also be part of a <code>Pipeline</code> object, which minimises operational errors during modelling and avoids using testing data during training:</p>
-<div class="cell" data-execution_count="15">
+<div id="b09a45a1" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.experimental <span class="im">import</span> enable_iterative_imputer</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> IterativeImputer</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="16">
+<div id="f2e47804" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> Pipeline([</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'augmentation'</span>, AugmentSDMX(sources<span class="op">=</span>{<span class="st">'BIS'</span>: <span class="st">'WS_CBPOL_D'</span>})),</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'imp'</span>, IterativeImputer(max_iter<span class="op">=</span><span class="dv">10</span>)),</span>
@@ -1320,7 +1317,7 @@ Tip
 <p>Users can cache the data augmentation step to avoid repeating potentially lengthy data downloads. See the <code>memory</code> argument in the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html"><code>sklearn.pipeline.Pipeline</code> documentation</a>.</p>
 </div>
 </div>
-<div class="cell" data-execution_count="17">
+<div id="c486d381" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>grid <span class="op">=</span> GridSearchCV(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    estimator<span class="op">=</span>pipeline,</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    param_grid<span class="op">=</span>{</span>
@@ -1334,46 +1331,46 @@ Tip
 <div class="cell-output cell-output-stdout">
 <pre><code>Fitting 2 folds for each of 2 candidates, totalling 4 fits
 [Pipeline] ...... (step 1 of 3) Processing augmentation, total=   0.0s
-[Pipeline] ............... (step 2 of 3) Processing imp, total=   0.1s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=   1.8s
-[CV] END ...........................augmentation=passthrough; total time=   1.8s
+[Pipeline] ............... (step 2 of 3) Processing imp, total=   0.0s
+[Pipeline] ............ (step 3 of 3) Processing forest, total=   1.6s
+[CV] END ...........................augmentation=passthrough; total time=   1.6s
 [Pipeline] ...... (step 1 of 3) Processing augmentation, total=   0.0s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.0s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=   3.7s
-[CV] END ...........................augmentation=passthrough; total time=   3.7s
+[Pipeline] ............ (step 3 of 3) Processing forest, total=   3.4s
+[CV] END ...........................augmentation=passthrough; total time=   3.5s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[Pipeline] ...... (step 1 of 3) Processing augmentation, total=  27.9s
-[Pipeline] ............... (step 2 of 3) Processing imp, total=   0.5s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=   4.7s
+[Pipeline] ...... (step 1 of 3) Processing augmentation, total=   8.1s
+[Pipeline] ............... (step 2 of 3) Processing imp, total=   0.4s
+[Pipeline] ............ (step 3 of 3) Processing forest, total=   4.9s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time=  48.3s
+[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time=  20.5s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[Pipeline] ...... (step 1 of 3) Processing augmentation, total=  32.1s
+[Pipeline] ...... (step 1 of 3) Processing augmentation, total=  15.9s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.6s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=  10.2s
+[Pipeline] ............ (step 3 of 3) Processing forest, total=  11.0s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time= 1.2min
+[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time=  41.9s
 [Pipeline] ...... (step 1 of 3) Processing augmentation, total=   0.0s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.0s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=   5.0s</code></pre>
+[Pipeline] ............ (step 3 of 3) Processing forest, total=   5.3s</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="18">
+<div id="fd35554e" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>grid.best_params_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>{'augmentation': 'passthrough'}</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="19">
+<div id="9de64c93" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"In this particular case, the best model was achieved by </span><span class="sc">{</span><span class="st">'not '</span> <span class="cf">if</span> grid<span class="sc">.</span>best_params_[<span class="st">'augmentation'</span>] <span class="op">==</span> <span class="st">'passthrough'</span> <span class="cf">else</span> <span class="st">''</span><span class="sc">}</span><span class="ss">using the data augmentation."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>In this particular case, the best model was achieved by not using the data augmentation.</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="20">
+<div id="a05e7591" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The last value in the training dataset was </span><span class="sc">{</span>y_train<span class="sc">.</span>tail(<span class="dv">1</span>)<span class="sc">.</span>to_numpy()<span class="sc">}</span><span class="ss">. The predicted value was </span><span class="sc">{</span>y_pred_grid<span class="sc">}</span><span class="ss">, and the actual value was </span><span class="sc">{</span>y_test<span class="sc">.</span>to_numpy()<span class="sc">}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The last value in the training dataset was [5.3831]. The predicted value was [5.36024], and the actual value was [5.4111].</code></pre>
+<pre><code>The last value in the training dataset was [5.8479]. The predicted value was [5.907591], and the actual value was [5.7921].</code></pre>
 </div>
 </div>
 </section>
@@ -1383,22 +1380,23 @@ Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stres
 <h1>Sources of data</h1>
 <p><code>gingado</code> seeks to only lists realiable data sources by choice, with a focus on official sources. This is meant to provide users with the trust that their dataset will be complemented by reliable sources. Unfortunately, it is not possible at this stage to include <em>all</em> official sources given the substantial manual and maintenance work. <code>gingado</code> leverages the existence of the <a href="https://sdmx.org">Statistical Data and Metadata eXchange (SDMX)</a>, an organisation of official data sources that establishes common data and metadata formats, to download data that is relevant (and hopefully also useful) to users.</p>
 <p>The function <code>list_SDMX_sources</code> returns a list of codes corresponding to the data sources available to provide <code>gingado</code> users with data through SDMX.</p>
-<div class="cell" data-execution_count="21">
+<div id="08aaf656" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> list_SDMX_sources</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="22">
+<div id="ff56fd38" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>list_SDMX_sources()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>['ABS',
- 'ABS_XML',
+ 'ABS_JSON',
  'BBK',
  'BIS',
- 'CD2030',
+ 'COMP',
  'ECB',
- 'EC_COMP',
- 'EC_EMPL',
- 'EC_GROW',
+ 'EMPL',
  'ESTAT',
+ 'ESTAT3',
+ 'ESTAT_COMEXT',
+ 'GROW',
  'ILO',
  'IMF',
  'INEGI',
@@ -1408,9 +1406,11 @@ Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stres
  'NB',
  'NBB',
  'OECD',
+ 'OECD_JSON',
  'SGR',
  'SPC',
  'STAT_EE',
+ 'UNESCO',
  'UNICEF',
  'UNSD',
  'WB',
@@ -1418,29 +1418,29 @@ Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stres
 </div>
 </div>
 <p>You can also see what the available dataflows are. The code below returns a dictionary where each key is the code for an SDMX source, and the values associated with each key are the code and name for the respective dataflows.</p>
-<div class="cell" data-execution_count="23">
+<div id="70e1eaec" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> list_all_dataflows</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="24">
+<div id="c33aa867" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows()</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>dflows</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
-<pre><code>ABS_XML  ABORIGINAL_POP_PROJ                 Projected population, Aboriginal and Torres St...
-         ABORIGINAL_POP_PROJ_REMOTE          Projected population, Aboriginal and Torres St...
-         ABS_ABORIGINAL_POPPROJ_INDREGION    Projected population, Aboriginal and Torres St...
-         ABS_ACLD_LFSTATUS                   Australian Census Longitudinal Dataset (ACLD):...
-         ABS_ACLD_TENURE                     Australian Census Longitudinal Dataset (ACLD):...
-                                                                   ...                        
-UNSD     DF_UNData_UNFCC                                                       SDMX_GHG_UNDATA
-WB       DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAINS Tariff Data
-         DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
-         DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
-         DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
-Name: dataflow, Length: 11082, dtype: object</code></pre>
+<pre><code>ABS   ABORIGINAL_POP_PROJ                 Projected population, Aboriginal and Torres St...
+      ABORIGINAL_POP_PROJ_REMOTE          Projected population, Aboriginal and Torres St...
+      ABS_ABORIGINAL_POPPROJ_INDREGION    Projected population, Aboriginal and Torres St...
+      ABS_ACLD_LFSTATUS                   Australian Census Longitudinal Dataset (ACLD):...
+      ABS_ACLD_TENURE                     Australian Census Longitudinal Dataset (ACLD):...
+                                                                ...                        
+UNSD  DF_UNData_UNFCC                                                       SDMX_GHG_UNDATA
+WB    DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAINS Tariff Data
+      DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
+      DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
+      DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
+Name: dataflow, Length: 23917, dtype: object</code></pre>
 </div>
 </div>
 <p>For example, the dataflows from the World Bank are:</p>
-<div class="cell" data-execution_count="25">
+<div id="ef92ea76" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dflows[<span class="st">'WB'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>DF_WITS_Tariff_TRAINS             WITS - UNCTAD TRAINS Tariff Data
@@ -1496,6 +1496,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -1564,13 +1591,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1649,10 +1678,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1662,8 +1705,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1676,6 +1728,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1719,6 +1890,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1744,6 +1916,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1801,24 +1999,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script>
 </div> <!-- /content -->
 
 
 
-</body></html>
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

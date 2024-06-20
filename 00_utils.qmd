@@ -194,7 +194,7 @@ Or the user can search dataflows by their human-readable name instead of their c
 
 ```{python}
 
-dflows[dflows.str.contains('Interest rates', case=False)]
+dflows[dflows.str.contains('Interest rate', case=False)]
 ```
 
 The function `load_SDMX_data` is a convenience function that downloads data from SDMX sources (and any specific dataflows passed as arguments) if they match the key and parameters set by the user.

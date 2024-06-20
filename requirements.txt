@@ -1,6 +1,6 @@
 numpy>=1.21
 pandas>=1.3.5
-pandasdmx>=1.8.1
+sdmx1>=2.15.0
 scikit-learn>=1.0.2
 requests_cache>=0.9.1
 matplotlib>=3.5

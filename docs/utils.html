@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -23,7 +23,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -82,7 +82,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -91,8 +97,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -100,16 +108,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="gingado - Utils">
 <meta property="og:description" content="Functions to support the use of gingado">
-<meta property="og:site-name" content="gingado">
+<meta property="og:site_name" content="gingado">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">gingado</span>
     </a>
@@ -121,51 +129,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Examples</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-examples">    
         <li>
-    <a class="dropdown-item" href="./barrolee1994.html" rel="" target="">
+    <a class="dropdown-item" href="./barrolee1994.html">
  <span class="dropdown-text">Economic growth</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./forecast.html" rel="" target="">
+    <a class="dropdown-item" href="./forecast.html">
  <span class="dropdown-text">Forecasting FX rates</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./machine_controls.html" rel="" target="">
+    <a class="dropdown-item" href="./machine_controls.html">
  <span class="dropdown-text">Effects of labour reform</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Reference</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-reference">    
         <li>
-    <a class="dropdown-item" href="./augmentation.html" rel="" target="">
+    <a class="dropdown-item" href="./augmentation.html">
  <span class="dropdown-text">gingado.augmentation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./datasets.html" rel="" target="">
+    <a class="dropdown-item" href="./datasets.html">
  <span class="dropdown-text">gingado.datasets</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./benchmark.html" rel="" target="">
+    <a class="dropdown-item" href="./benchmark.html">
  <span class="dropdown-text">gingado.benchmark</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./estimators.html" rel="" target="">
+    <a class="dropdown-item" href="./estimators.html">
  <span class="dropdown-text">gingado.estimators</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./documentation.html" rel="" target="">
+    <a class="dropdown-item" href="./documentation.html">
  <span class="dropdown-text">gingado.model_documentation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./utils.html" rel="" target="">
+    <a class="dropdown-item" href="./utils.html">
  <span class="dropdown-text">gingado.utils</span></a>
   </li>  
     </ul>
@@ -173,17 +181,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/bis-med-it/gingado" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/bis-med-it/gingado"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.sdmx.io" rel="" target=""><i class="bi bi-house-fill" role="img">
+    <a class="nav-link" href="https://www.sdmx.io"> <i class="bi bi-house-fill" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -191,7 +200,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -223,7 +231,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#load_sdmx_data" id="toc-load_sdmx_data" class="nav-link" data-scroll-target="#load_sdmx_data"></a><a id="load_sdmx_data" class="nav-link" data-scroll-target="undefined">load_SDMX_data</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -248,7 +256,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <section id="support-for-model-documentation" class="level2">
 <h2 class="anchored" data-anchor-id="support-for-model-documentation">Support for model documentation</h2>
@@ -258,7 +268,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>get_datetime <code>()</code></p>
 </blockquote>
 <pre>Returns the time now</pre>
-<div class="cell" data-execution_count="4">
+<div id="77f4189f" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> get_datetime()</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(d, <span class="bu">str</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(d) <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -276,22 +286,24 @@ Args:
 <p>Function <code>read_attr</code> helps gingado Documenters to read the object behind the scenes.</p>
 <p>It collects the type of estimator, and any attributes resulting from fitting an object (in ie, those that end in “_” without being double underscores).</p>
 <p>For example, the attributes of an untrained and a trained random forest are, in sequence:</p>
-<div class="cell" data-execution_count="6">
+<div id="cd308383" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="7">
+<div id="545de8b1" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rf_unfit <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>rf_fit <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">3</span>)<span class="op">\</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    .fit([[<span class="dv">1</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">1</span>]], [[<span class="fl">0.5</span>], [<span class="fl">0.5</span>]]) <span class="co"># random numbers</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(read_attr(rf_unfit)), <span class="bu">list</span>(read_attr(rf_fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>([{'_estimator_type': 'regressor'}],
  [{'_estimator_type': 'regressor'},
   {'estimator_': DecisionTreeRegressor()},
-  {'estimators_': [DecisionTreeRegressor(max_features=1.0, random_state=1283971169),
-    DecisionTreeRegressor(max_features=1.0, random_state=926731869),
-    DecisionTreeRegressor(max_features=1.0, random_state=2118836830)]},
-  {'estimators_samples_': [array([1, 1]), array([0, 0]), array([0, 1])]},
+  {'estimators_': [DecisionTreeRegressor(max_features=1.0, random_state=662456808),
+    DecisionTreeRegressor(max_features=1.0, random_state=2115260158),
+    DecisionTreeRegressor(max_features=1.0, random_state=1570210276)]},
+  {'estimators_samples_': [array([0, 1], dtype=int32),
+    array([1, 1], dtype=int32),
+    array([1, 1], dtype=int32)]},
   {'feature_importances_': array([0., 0.])},
   {'n_features_in_': 2},
   {'n_outputs_': 1}])</code></pre>
@@ -367,11 +379,11 @@ Returns
 X_new : ndarray array of shape (n_samples, n_features_new)
     Transformed array.</pre>
 <p>The code below demonstrates how <code>Lag</code> works in practice. Note in particular that, because <code>Lag</code> is a transformer, it can be used as part of a <code>scikit-learn</code>’s <code>Pipeline</code>.</p>
-<div class="cell" data-execution_count="12">
+<div id="b73882b6" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="13">
+<div id="61f3f7ef" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>randomX <span class="op">=</span> np.random.rand(<span class="dv">15</span>, <span class="dv">2</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>randomY <span class="op">=</span> np.random.rand(<span class="dv">15</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -384,7 +396,7 @@ X_new : ndarray array of shape (n_samples, n_features_new)
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>]).fit_transform(randomX, randomY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below we confirm that the lagger removes the correct number of rows corresponding to the lagged observations:</p>
-<div class="cell" data-execution_count="14">
+<div id="3b2e129e" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> randomX.shape[<span class="dv">0</span>] <span class="op">-</span> lags <span class="op">-</span> jump <span class="op">==</span> pipe.shape[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And because <code>Lag</code> is a transformer, its parameters (<code>lags</code> and <code>jump</code>) can be calibrated using hyperparameter tuning to achieve the best performance for a model.</p>
@@ -414,7 +426,7 @@ Note
 
 Returns:
     The list of codes representing the SDMX sources available for data download.</pre>
-<div class="cell" data-execution_count="16">
+<div id="075681ed" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sources <span class="op">=</span> list_SDMX_sources()</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sources)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -422,7 +434,7 @@ Returns:
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># all elements are of type 'str'</span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>([<span class="bu">isinstance</span>(src, <span class="bu">str</span>) <span class="cf">for</span> src <span class="kw">in</span> sources]) <span class="op">==</span> <span class="bu">len</span>(sources)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>['ABS', 'ABS_XML', 'BBK', 'BIS', 'CD2030', 'ECB', 'EC_COMP', 'EC_EMPL', 'EC_GROW', 'ESTAT', 'ILO', 'IMF', 'INEGI', 'INSEE', 'ISTAT', 'LSD', 'NB', 'NBB', 'OECD', 'SGR', 'SPC', 'STAT_EE', 'UNICEF', 'UNSD', 'WB', 'WB_WDI']</code></pre>
+<pre><code>['ABS', 'ABS_JSON', 'BBK', 'BIS', 'COMP', 'ECB', 'EMPL', 'ESTAT', 'ESTAT3', 'ESTAT_COMEXT', 'GROW', 'ILO', 'IMF', 'INEGI', 'INSEE', 'ISTAT', 'LSD', 'NB', 'NBB', 'OECD', 'OECD_JSON', 'SGR', 'SPC', 'STAT_EE', 'UNESCO', 'UNICEF', 'UNSD', 'WB', 'WB_WDI']</code></pre>
 </div>
 </div>
 </section>
@@ -440,7 +452,7 @@ Args:
     
 Returns:
     All available dataflows for all SDMX sources.</pre>
-<div class="cell" data-execution_count="18">
+<div id="b2495abf" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(dflows, <span class="bu">dict</span>)</span>
@@ -448,92 +460,106 @@ Returns:
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>([s <span class="cf">for</span> s <span class="kw">in</span> dflows.keys() <span class="cf">if</span> s <span class="kw">in</span> all_sources]) <span class="op">==</span> <span class="bu">len</span>(dflows.keys())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><code>list_all_dataflows</code> returns by default a pandas Series, facilitating data discovery by users like so:</p>
-<div class="cell" data-execution_count="19">
+<div id="0ef2a27b" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(dflows) <span class="op">==</span> pd.core.series.Series</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>dflows</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
-<pre><code>ABS_XML  ABORIGINAL_POP_PROJ                 Projected population, Aboriginal and Torres St...
-         ABORIGINAL_POP_PROJ_REMOTE          Projected population, Aboriginal and Torres St...
-         ABS_ABORIGINAL_POPPROJ_INDREGION    Projected population, Aboriginal and Torres St...
-         ABS_ACLD_LFSTATUS                   Australian Census Longitudinal Dataset (ACLD):...
-         ABS_ACLD_TENURE                     Australian Census Longitudinal Dataset (ACLD):...
-                                                                   ...                        
-UNSD     DF_UNData_UNFCC                                                       SDMX_GHG_UNDATA
-WB       DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAINS Tariff Data
-         DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
-         DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
-         DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
-Name: dataflow, Length: 11082, dtype: object</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="41">
+<pre><code>ABS   ABORIGINAL_POP_PROJ                 Projected population, Aboriginal and Torres St...
+      ABORIGINAL_POP_PROJ_REMOTE          Projected population, Aboriginal and Torres St...
+      ABS_ABORIGINAL_POPPROJ_INDREGION    Projected population, Aboriginal and Torres St...
+      ABS_ACLD_LFSTATUS                   Australian Census Longitudinal Dataset (ACLD):...
+      ABS_ACLD_TENURE                     Australian Census Longitudinal Dataset (ACLD):...
+                                                                ...                        
+UNSD  DF_UNData_UNFCC                                                       SDMX_GHG_UNDATA
+WB    DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAINS Tariff Data
+      DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
+      DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
+      DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
+Name: dataflow, Length: 31499, dtype: object</code></pre>
 </div>
 </div>
 <p>This format allows for more easily searching <code>dflows</code> by source:</p>
-<div class="cell" data-execution_count="20">
+<div id="14a54877" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>list_all_dataflows(codes_only<span class="op">=</span><span class="va">True</span>, return_pandas<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
-<pre><code>ABS_XML  0                 ABORIGINAL_POP_PROJ
-         1          ABORIGINAL_POP_PROJ_REMOTE
-         2    ABS_ABORIGINAL_POPPROJ_INDREGION
-         3                   ABS_ACLD_LFSTATUS
-         4                     ABS_ACLD_TENURE
-                            ...               
-UNSD     3                     DF_UNData_UNFCC
-WB       0               DF_WITS_Tariff_TRAINS
-         1      DF_WITS_TradeStats_Development
-         2           DF_WITS_TradeStats_Tariff
-         3            DF_WITS_TradeStats_Trade
-Name: dataflow, Length: 11082, dtype: object</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="42">
+<pre><code>ABS   0                 ABORIGINAL_POP_PROJ
+      1          ABORIGINAL_POP_PROJ_REMOTE
+      2    ABS_ABORIGINAL_POPPROJ_INDREGION
+      3                   ABS_ACLD_LFSTATUS
+      4                     ABS_ACLD_TENURE
+                         ...               
+UNSD  3                     DF_UNData_UNFCC
+WB    0               DF_WITS_Tariff_TRAINS
+      1      DF_WITS_TradeStats_Development
+      2           DF_WITS_TradeStats_Tariff
+      3            DF_WITS_TradeStats_Trade
+Name: dataflow, Length: 31499, dtype: object</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="21">
+<div id="c177fd11" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dflows[<span class="st">'BIS'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
-<pre><code>WS_CBPOL_D                                    Policy rates daily
-WS_CBPOL_M                                  Policy rates monthly
-WS_CBS_PUB                              BIS consolidated banking
-WS_CPMI_CASHLESS                   CPMI cashless payments (T5-6)
-WS_CPMI_CT1                       CPMI comparative tables type 1
-WS_CPMI_CT2                       CPMI comparative tables type 2
-WS_CPMI_DEVICES                             CPMI payment devices
-WS_CPMI_INSTITUTIONS                           CPMI institutions
-WS_CPMI_MACRO                                         CPMI Macro
-WS_CPMI_PARTICIPANTS                           CPMI participants
-WS_CPMI_SYSTEMS         CPMI systems (T8-9-11-13-14-16-17-18-19)
-WS_CPP                                Commercial property prices
-WS_CREDIT_GAP                             BIS credit-to-GDP gaps
-WS_DEBT_SEC2_PUB                             BIS debt securities
-WS_DER_OTC_TOV                          OTC derivatives turnover
-WS_DPP                      Detailed residential property prices
-WS_DSR                                    BIS debt service ratio
-WS_EER_D                      BIS effective exchange rates daily
-WS_EER_M                    BIS effective exchange rates monthly
-WS_GLI                               Global liquidity indicators
-WS_LBS_D_PUB                              BIS locational banking
-WS_LONG_CPI                             BIS long consumer prices
-WS_NA_SEC_DSS                         Debt securities statistics
-WS_OTC_DERIV2                        OTC derivatives outstanding
-WS_SPP                      BIS property prices: selected series
-WS_TC                            BIS long series on total credit
-WS_XRU                           US dollar exchange rates, m,q,a
-WS_XRU_D                         US dollar exchange rates, daily
-WS_XTD_DERIV                         Exchange traded derivatives
+<div class="cell-output cell-output-display" data-execution_count="43">
+<pre><code>BIS_REL_CAL                                     BIS_RELEASE_CALENDAR
+WS_CBPOL                                                 Policy rate
+WS_CBS_PUB                                  BIS consolidated banking
+WS_CPMI_CASHLESS                      CPMI cashless payments (T5,T6)
+WS_CPMI_CT1                           CPMI comparative tables type 1
+WS_CPMI_CT2                           CPMI comparative tables type 2
+WS_CPMI_DEVICES                            CPMI payment devices (T4)
+WS_CPMI_INSTITUT                              CPMI institutions (T3)
+WS_CPMI_MACRO                                     CPMI macro (T1,T2)
+WS_CPMI_PARTICIP                  CPMI participants (T7,T10,T12,T15)
+WS_CPMI_SYSTEMS     CPMI systems (T8,T9,T11,T13,T14,T16,T17,T18,T19)
+WS_CPP                                    Commercial property prices
+WS_CREDIT_GAP                                 BIS credit-to-GDP gaps
+WS_DEBT_SEC2_PUB    BIS international debt securities (BIS-compiled)
+WS_DER_OTC_TOV                              OTC derivatives turnover
+WS_DPP                          Detailed residential property prices
+WS_DSR                                        BIS debt service ratio
+WS_EER                                  BIS effective exchange rates
+WS_GLI                                   Global liquidity indicators
+WS_LBS_D_PUB                                  BIS locational banking
+WS_LONG_CPI                                 BIS long consumer prices
+WS_NA_SEC_C3                          BIS debt securities statistics
+WS_NA_SEC_DSS                         BIS Debt securities statistics
+WS_OTC_DERIV2                            OTC derivatives outstanding
+WS_SPP                          Selected residential property prices
+WS_TC                                BIS long series on total credit
+WS_XRU                                      US dollar exchange rates
+WS_XTD_DERIV                             Exchange traded derivatives
 Name: dataflow, dtype: object</code></pre>
 </div>
 </div>
 <p>Or the user can search dataflows by their human-readable name instead of their code. For example, this is one way to see if any dataflow has information on interest rates:</p>
-<div class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'Interest rates'</span>, case<span class="op">=</span><span class="va">False</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
-<pre><code>BBK    BBSDI          Discount interest rates pursuant to section 25...
-       BBSEI          Expectation of inflation rate and expected rea...
-ECB    RIR                                        Retail Interest Rates
-ESTAT  EI_MFIR_M                          Interest rates - monthly data
-       ENPE_IRT_ST                          Money market interest rates
-       IRT_ST_A               Money market interest rates - annual data
-       IRT_ST_M              Money market interest rates - monthly data
-       IRT_ST_Q            Money market interest rates - quarterly data
-       TEIMF100                  Day-to-day money market interest rates
+<div id="1b61f803" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'Interest rate'</span>, case<span class="op">=</span><span class="va">False</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<pre><code>ECB     IRS                                            Interest rate statistics
+        MIR                                        MFI Interest Rate Statistics
+        RIR                                               Retail Interest Rates
+ESTAT   TEIMF040                                          3-month-interest rate
+        TEIMF100                         Day-to-day money market interest rates
+        IRT_ST_A                      Money market interest rates - annual data
+        IRT_ST_M                     Money market interest rates - monthly data
+        IRT_ST_Q                   Money market interest rates - quarterly data
+        EI_MFIR_M                                 Interest rates - monthly data
+        ENPE_IRT_LD                     Loan and deposit one year interest rate
+        ENPE_IRT_ST                                 Money market interest rates
+ESTAT3  IRT_ST_A                      Money market interest rates - annual data
+        IRT_ST_M                     Money market interest rates - monthly data
+        IRT_ST_Q                   Money market interest rates - quarterly data
+        EI_MFIR_M                                 Interest rates - monthly data
+        ENPE_IRT_LD                     Loan and deposit one year interest rate
+        ENPE_IRT_ST                                 Money market interest rates
+        TEIMF040                                          3-month-interest rate
+        TEIMF100                         Day-to-day money market interest rates
+IMF     6SR                   M&amp;B: Interest Rates and Share Prices (6SR) for...
+        INR                                                      Interest rates
+        INR_NSTD                                    Interest rates_Non-Standard
+NB      GOVT_GENERIC_RATES                               Generic interest rates
+        GOVT_IRS                                            Interest rate swaps
 Name: dataflow, dtype: object</code></pre>
 </div>
 </div>
@@ -554,7 +580,7 @@ Args:
     
 Returns:
     A pandas DataFrame with data from SDMX or None if no data matches the sources, keys, and parameters.</pre>
-<div class="cell" data-execution_count="24">
+<div id="9074ff3c" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> load_SDMX_data(sources<span class="op">=</span>{<span class="st">'ECB'</span>: <span class="st">'CISS'</span>, <span class="st">'BIS'</span>: <span class="st">'WS_CBPOL_D'</span>}, keys<span class="op">=</span>{<span class="st">'FREQ'</span>: <span class="st">'D'</span>}, params<span class="op">=</span>{<span class="st">'startPeriod'</span>: <span class="dv">2003</span>})</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(df) <span class="op">==</span> pd.DataFrame</span>
@@ -562,7 +588,7 @@ Returns:
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> df.shape[<span class="dv">1</span>] <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-Querying data from BIS's dataflow 'WS_CBPOL_D' - Policy rates daily...</code></pre>
+Querying data from BIS's dataflow 'WS_CBPOL' - Policy rate...</code></pre>
 </div>
 </div>
 
@@ -612,6 +638,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -680,13 +733,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -765,10 +820,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -778,8 +847,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -792,6 +870,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -835,6 +1032,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -860,6 +1058,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -917,24 +1141,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script>
 </div> <!-- /content -->
 
 
 
-</body></html>
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

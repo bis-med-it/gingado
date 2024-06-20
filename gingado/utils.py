@@ -1,4 +1,4 @@
-import pandasdmx as sdmx
+import sdmx
 import datetime
 import numpy as np
 import pandas as pd
@@ -135,7 +135,7 @@ def list_all_dataflows(
     dflows = {}
     for src in sources:
         try:
-            dflows[src] = sdmx.to_pandas(sdmx.Request(src).dataflow().dataflow)
+            dflows[src] = sdmx.to_pandas(sdmx.Client(src).dataflow().dataflow)
             dflows[src] = dflows[src].index if codes_only else dflows[src].index.reset_index()
         except:
             pass
@@ -165,15 +165,15 @@ def load_SDMX_data(
         A pandas DataFrame with data from SDMX or None if no data matches the sources, keys, and parameters.
     """
     data_sdmx = {}
-    for source in sources.keys():
-        src_conn = sdmx.Request(source)
+    for source in list(sources.keys()):
+        src_conn = sdmx.Client(source)
         src_dflows = src_conn.dataflow()
         if sources[source] == 'all':
             dflows = {k: v for k, v in src_dflows.dataflow.items()}
         else:
             dflows = {k: v for k, v in src_dflows.dataflow.items() if k in sources[source]}
-        for dflow in dflows.keys():
-            if verbose: print(f"Querying data from {source}'s dataflow '{dflow}' - {dflows[dflow].dict()['name']}...")
+        for dflow in list(dflows.keys()):
+            if verbose: print(f"Querying data from {source}'s dataflow '{dflow}' - {dflows[dflow]._name}...")
             try:
                 data = sdmx.to_pandas(src_conn.data(dflow, key=keys, params=params), datetime='TIME_PERIOD')
             except:

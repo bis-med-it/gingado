@@ -1,0 +1,312 @@
+---
+title: Nowcasting inflation with neural networks
+description: A simple, mixed-frequency example
+output-file: nowcast.html
+author: Douglas K. G. Araujo
+code-fold: show
+code-tools: true
+jupyter: python3
+warning: false
+fig-cap-location: top
+---
+
+This notebook showcases how to set up neural networks to nowcast inflation using data measured in different frequencies. The goal here is to use a very simple dataset containing only two variables, inflation (monthly) and oil prices (daily), to slowly build up a more complex neural network based nowcasting model, the TFT-MF available in `gingado` from its v0.3.0.
+
+Nowcasting is essentially the use of the most current information possible to estimate in real time an economic series of interest such as inflation or GDP before it is actually released. For example, if you could measure all prices every day, you could create on the last day of the month a very accurate nowcast for the headline inflation for that month - which would only be officialy published a few days later. In the case of GDP, this lag between the end of the reference period and actual publication tends to be significant, around 6-10 weeks. For policymakers, investors and other decisionmakers, a lot can happen in this period.
+
+A related use of nowcasting is to estimate what the current period's reading will be as this period rolls out. In other words, as I am writing this in early July 2024, I would like to estimate what the inflation reading for this month (or GDP for this quarter) will likely be as new information is unveiled in real time.
+
+## Roadmap
+
+The nowcasting model available in `gingado` is an adjusted version of the Temporal Fusion Transformer (TFT) of @lim2021temporal. This is what we will get by the end of this notebook. But we will build it up, step by step.
+
+## Loading the data
+
+Let's use our SDMX connectors to find and download data from official sources in a reproducible way.
+
+To abstract from currency issues, we will use US inflation and oil prices, which are denominated in US dollars.
+
+```{python}
+#| label: load packages
+import keras
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import sdmx
+from gingado.utils import load_SDMX_data
+from sklearn.model_selection import TimeSeriesSplit
+```
+
+### Inflation
+
+Since this is a monthly nowcast of inflation, the best way to do this is to use a *monthly change in the consumer price index*, $\pi_t^{(m)}=(\text{CPI}_t - \text{CPI}_{t-1})/\text{CPI}_{t-1}$, not the year-on-year rate, $\pi_t^{(y)}=(\text{CPI}_t - \text{CPI}_{t-12})/\text{CPI}_{t-12}$, which is how people usually think of inflation. This is because we want to nowcast only the value at the margin; all other values are already known. 
+
+Then, only at the end we combine rolling windows of 12 consecutive monthly inflation rates, of which only the last one or two are estimated, to correctly create an annual inflation rate. 
+
+Formally, if we know all values except the current and last month's, then: 
+$$
+\hat{\pi}_t^{(y)}=(\prod_{l=0}^1 (1+\hat{\pi}_{t-l}^{(m)}) \prod_{l=2}^{11} (1+\pi_{t-l}^{(m)}) )-1,
+$$ {#eq-finalnowcast}
+
+where the hat notation means that a particular value was estimated.
+
+For inflation, we take a dataflow from the [BIS](https://data.bis.org/topics/CPI), since we are looking for US data. Let's explore it first and then choose the correct data specifications to download the time series. (See [here](https://sdmx1.readthedocs.io/en/latest/walkthrough.html) for a practical walkthrough showing how to explore data with SDMX.)
+
+```{python}
+#| label: "inflation dataflow"
+BIS = sdmx.Client("BIS")
+cpi_msg = BIS.dataflow('WS_LONG_CPI')
+cpi_dsd = cpi_msg.structure
+```
+
+These are all possible keys:
+
+```{python}
+#| label: "CPI_dimensions"
+cpi_dsd['BIS_LONG_CPI'].dimensions.components
+```
+
+For example, "FREQ" (frequency) takes in these values:
+
+```{python}
+#| label: "FREQ_codelist"
+cl__FREQ = sdmx.to_pandas(cpi_dsd['BIS_LONG_CPI'].dimensions.get("FREQ").local_representation.enumerated)
+cl__FREQ
+```
+
+And "REF_AREA" (reference area) can be set to:
+
+```{python}
+#| label: "REF_AREA_codelist"
+cl__REF_AREA = sdmx.to_pandas(cpi_dsd['BIS_LONG_CPI'].dimensions.get("REF_AREA").local_representation.enumerated)
+cl__REF_AREA
+```
+
+We can check that the US is amongst the reference areas:
+
+```{python}
+#| label: "check US in REF_AREA codelist"
+cl__REF_AREA['US']
+```
+
+Finally, the "UNIT_MEASURE" values can be:
+
+```{python}
+#| label: "codelist for UNIT_MEASURE in dataflow BIS__WS_LONG_CPI"
+cl__UNIT_MEASURE = sdmx.to_pandas(cpi_dsd['BIS_LONG_CPI'].dimensions.get("UNIT_MEASURE").local_representation.enumerated)
+cl__UNIT_MEASURE
+```
+
+In the [BIS website for this data](https://data.bis.org/topics/CPI#faq), we can see that the unit in levels is `Index, 2010 = 100` (the other one is `Year-on-year changes, in per cent`, which as discussed above we don't want for this case.)
+
+```{python}
+#| label: "finding code for index"
+cl__UNIT_MEASURE[cl__UNIT_MEASURE.str.contains("Index, 2010 = 100")]
+```
+
+Armed with this knowledge, we can now download monthly consumer price index data for the US. Let's start after 1985 so that we have a sufficiently long history but without too much influence of the tectonic shift of the US dollar devaluation in the early 1970s and ensuing high inflation:
+
+```{python}
+#| label: fig-CPI
+#| fig-cap: "US consumer price index, 2010 = 100"
+df_infl = load_SDMX_data(
+    sources={"BIS": "'WS_LONG_CPI'"},
+    keys={"FREQ": "M", "REF_AREA": "US", "UNIT_MEASURE": "628"},
+    params={"startPeriod": 1985}
+)
+
+df_infl.plot()
+```
+
+As you can see in @fig-CPI, we downloaded the series $\{\text{CPI}_t\}$. Transforming that into $\{\pi_t\}$, defined above, we have:
+
+```{python}
+#| label: fig-pi
+#| fig-cap: US monthly inflation rate
+fig, ax = plt.subplots()
+plt.axhline(y=0, linewidth=1.5, color="black")
+df_infl_m = df_infl.pct_change()
+df_infl_m.index = df_infl_m.index + pd.offsets.MonthEnd(0) # move to month end
+df_infl_m.plot(ax=ax)
+plt.show()
+```
+
+### Oil prices
+
+Since the focus is on US inflation, below we get WTI oil prices. This data is downloaded from the [St Louis Fed's FRED webpage](https://fred.stlouisfed.org/series/DCOILWTICO).
+
+```{python}
+#| label: fig-oil
+#| fig-cap: WTI oil prices
+df_oil = pd.read_csv("docs/DCOILWTICO.csv")
+df_oil['DCOILWTICO'] = pd.to_numeric(df_oil['DCOILWTICO'], errors='coerce')
+df_oil['DATE'] = pd.to_datetime(df_oil['DATE'])
+df_oil.set_index('DATE', inplace=True)
+
+df_oil.plot()
+```
+
+For the nowcasting, we are interested in the daily variation:
+
+```{python}
+#| label: fig-oilD
+#| fig-cap: Daily change in WTI oil prices
+
+fig, ax = plt.subplots()
+plt.axhline(y=0, linewidth=1.5, color="black")
+df_oil_d = df_oil.pct_change().dropna()
+df_oil_d.plot(ax=ax)
+plt.show()
+```
+
+
+### Temporal features
+
+There is a lot of information encoded in the temporal features of a time series: which day in the month it is, which month of the year, etc. For example, consider how consumers behave differently in response to oil prices over warmer months (when many decide or not to travel, and how far) compared to colder months (when energy prices factor in heating and is thus perhaps less elastic).
+
+In this pedagogical exercise, we will not incorporate these temporal features to keep things simple. But in a more complete version later in this notebook we will incorporate them.
+
+In any case, to simplify notation about time, instead of the usual subscript $t$ as above to denote a time period, for precision we will follow this convention:
+
+- subscript $m$ denotes a given month
+
+- subscript $d$ denotes a given day
+
+- subscript $d(m)$ denotes a given day in a given month; example: $d(m-1)$ is a day in the previous month.
+
+### Splitting the dataset
+
+We will now split the dataset into training data up until end-2020 and validation data afterwards. And the training data will be further split into 5 temporally sequential folds (see [here](https://scikit-learn.org/stable/modules/cross_validation.html#time-series-split) for more information).
+
+To simplify, we will consider valid nowcasting *input* data for a given output in period $m$ as:
+
+- all monthly data up to, and including, $m-1$; and
+
+- all daily data up to, and including, $d(m)$.
+
+```{python}
+#| label: "time series splits"
+
+# Lagging the nowcasted variable
+df_infl_m_L = df_infl_m.shift(1).dropna()
+df_infl_m = df_infl_m.loc[df_infl_m_L.index]
+
+# Training date cutoff
+cutoff = "2020-12-31"
+
+y_train, y_test = df_infl_m[:cutoff], df_infl_m[cutoff:]
+Xm_train, Xm_test = df_infl_m_L[:cutoff], df_infl_m_L[cutoff:]
+Xd_train, Xd_test = df_oil_d[:cutoff], df_oil_d[cutoff:][1:]
+
+# Setting up the temporal folds, using the dependent variable's date
+tscv = TimeSeriesSplit(n_splits=5)
+monthly_cv = tscv.split(y_train)
+monthly_cv_dates = [
+    (y_train.index[m], y_train.index[n]) 
+    for m, n in monthly_cv
+]
+```
+
+Now for every month $m$ in the dependent variable, we can find all $m_{t-l}, l\geq 1$ and all $d(m_{t-s}), s\geq 0$.
+
+```{python}
+#| label: "Auxiliary functions"
+def dates_Xy(X, y, date_list):
+    def get_filtered_data(frame, d):
+        filtered_data = frame.loc[frame.index <= d]
+        return filtered_data if not filtered_data.empty else None
+
+    result = {
+        i: (
+            {
+                freq: get_filtered_data(Xdata, d)
+                for freq, Xdata in X.items()
+            }, 
+            y.loc[d]
+        )
+        for i, d in enumerate(date_list)
+    }
+    return result
+
+def create_Xy(X, y, splits):
+    folds = {}
+    for k, split in enumerate(splits):
+        folds[k] = {}
+        split_train, split_valid = split
+        folds[k]['Xy_train'] = dates_Xy(X, y, split_train)
+        folds[k]['Xy_valid'] = dates_Xy(X, y, split_valid)
+    return folds
+```
+
+Let's see how this time series fold will be structured:
+
+```{python}
+#| label: "Create batches of data"
+
+train_data = create_Xy(
+    X={"m": Xm_train, "d": Xd_train}, 
+    y=y_train, 
+    splits=monthly_cv_dates
+)
+
+for ts_fold in range(len(train_data)):
+    print(f"Fold No {ts_fold + 1}:")
+    print(f"  {len(train_data[ts_fold]['Xy_train'])} training X-y pairs")
+    print(f"  {len(train_data[ts_fold]['Xy_valid'])} validation X-y pairs")
+```
+
+
+## First model: a single layer neural network
+
+The goal of this model is to nowcast $\pi_t$ based on its past values $\pi_{t-1}$ and on current oil prices $o_{d(m-s)}, s \geq 0$. The first model we will train is a very simple neural network:
+
+$$
+\begin{align}
+\xi &= \phi(\mathbf{W}_1 x_t + \mathbf{b}_1) \\
+y_t &= \mathbf{W}_0 \xi + \mathbf{b}_0,
+\end{align}
+$$ {#eq-model0nnlayer}
+
+where $\mathbf{W}_0 \in \mathbb{R}^{1 \times d}$, $b_0 \in \mathbb{R}$, $\mathbf{W}_1 \in \mathbb{R}^{d \times |x_t|}$, $b_1 \in \mathbb{R}^{d}$, $\xi \in \mathbb{R}^d$ and $\phi$ is an activation function. For simplicity, we will use the ReLU activation function, which is simply: $\phi(z) = \text{max}(z, 0)$.
+
+For this neural network, we need a fix dimensionality of the input data. In other words, the network *needs* to know how much data it will take in at any given time, and this should not change throughout training or inference time.
+
+For simplicity, let's fix it at a single lagged inflation (the past month, $\pi_{m-1}$) and the most recent available oil price change, $o_d$.
+
+```{python}
+d = 5 # sort of arbitrary
+
+nn = keras.Sequential([
+    keras.layers.Input(shape=(2,)),
+    keras.layers.Dense(units = d, activation="relu"),
+    keras.layers.Dense(units=1)
+])
+nn.summary()
+```
+
+Checking that it works:
+
+```{python}
+# taking the last day of the training set of the last training fold
+last_day_key = len(train_data[ts_fold]['Xy_train']) - 1
+tmp_X, tmp_y = train_data[ts_fold]['Xy_train'][last_day_key]
+tmp_X = np.concatenate([v.iloc[-1].values for v in tmp_X.values()]).reshape(1, -1)
+
+# checking that the model runs
+nn_pred = nn(tmp_X)
+print(f"Prediction: {nn_pred}")
+print(f"Actual value: {tmp_y.values}")
+nn_loss = keras.losses.MeanSquaredError()(y_true=tmp_y.values, y_pred=nn_pred)
+print(f"Mean squared error: {nn_loss}")
+```
+
+So now let's fit it (very naively).
+
+```{python}
+nn.compile(loss=keras.losses.mean_squared_error)
+```
+
+## References
+
+::: {#refs}
+:::

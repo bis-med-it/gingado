@@ -29,6 +29,9 @@ functionalities:
   [**estimators**](https://bis-med-it.github.io/gingado/estimators.html),
   to help answer questions of academic or practical importance;
 
+- (*New in v.0.3!*) [**forecasters**](https://bis-med-it.github.io/gingado/forecasters.html), 
+  to nowcast and forecast time series;
+
 - **support for** [**model
   documentation**](https://bis-med-it.github.io/gingado/documentation.html),
   to embed documentation and ethical considerations in the model

@@ -1,0 +1,48 @@
+---
+description: Machine learning-based forecasters
+output-file: forecasters.html
+title: Forecasters
+jupyter: python3
+warning: false
+---
+
+```{python}
+#| echo: false
+#| output: false
+%load_ext autoreload
+%autoreload 2
+```
+
+Forecasting time series is one of the most traditional activities in economic practice. Machine learning-based methods are promising techniques across many domains due to their flexibility to fit complex data generation processes and to take up alternative data as input.
+
+In the last years, the field of *nowcasting* has gained attention.
+
+# Temporal Fusion Transformer
+
+The Temporal Fusion Transformer (TFT) due to @lim2021temporal is a neural network architecture that combines several desirable characteristics for nowcasting or forecasting:
+
+- ...
+- ...
+- ...
+
+The current implementation is an adaptation that takes in mixed-frequency data (ie, some input data are measured daily, others monthly, etc). This version, called TFT-MF described in more detail in @sec-TFTMF. The several building blocks of the TFT-MF model are also accessible to the user in the following sections, in case they decide to adapt or create their own forecasting architecture.
+
+## Gated Linear Unit (GLU) {#sec-GLU}
+
+@dauphin2017language
+
+The GLU is a key part of the Gated Residual Network, described in @sec-GRN.
+
+## Gated Residual Network (GRN) {#sec-GRN}
+
+```{python}
+show_doc
+```
+
+## Variable Selection Network (VSN) {#sec-VSN}
+
+## TFT-MF {#sec-TFTMF}
+
+The Temporal Fusion Transformer - Mixed Frequency (TFT-MF) is an adaptation of the original TFT.
+
+# References

@@ -255,7 +255,6 @@ for ts_fold in range(len(train_data)):
     print(f"  {len(train_data[ts_fold]['Xy_valid'])} validation X-y pairs")
 ```
 
-
 ## First model: a single layer neural network
 
 The goal of this model is to nowcast $\pi_t$ based on its past values $\pi_{t-1}$ and on current oil prices $o_{d(m-s)}, s \geq 0$. The first model we will train is a very simple neural network:
@@ -300,11 +299,13 @@ nn_loss = keras.losses.MeanSquaredError()(y_true=tmp_y.values, y_pred=nn_pred)
 print(f"Mean squared error: {nn_loss}")
 ```
 
-So now let's fit it (very naively).
+It does, great!
 
-```{python}
-nn.compile(loss=keras.losses.mean_squared_error)
-```
+> Note that this network **always** needs to take in input of a certain shape (in this case, a 2-columns matrix) to work.
+
+We don't need to bother training this neural network; the goal here is to use it as a building block for a mathematical/econometric intuition of the broader nowcasting model.
+
+## Second model: Long short-term memory
 
 ## References
 

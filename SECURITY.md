@@ -10,7 +10,7 @@ We take the security of our software seriously. If you believe you have found a 
 
 1. **Do Not Publish the Vulnerability**: Publicly disclosing a vulnerability can put the entire community at risk. We ask that you do not share or publicize an unresolved vulnerability to/with third parties.
 
-2. **Report Confidentially**: Please email us at [contact.sdmx.io@bis.org](mailto:contact.sdmx.io@bis.org) with the details of the vulnerability. The report should include:
+2. **Report Confidentially**: Please email us at [contact.gingado@bis.org](mailto:contact.gingado@bis.org) with the details of the vulnerability. The report should include:
     - A description of the vulnerability and its potential impact.
     - Steps to reproduce or proof-of-concept (PoC).
     - Any relevant screenshots or output.

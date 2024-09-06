@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Douglas K. G. Araujo">
+<meta name="author" content="Douglas K. G. Araujo, Johannes Damp">
 <meta name="description" content="A simple, mixed-frequency example">
 
 <title>gingado - Nowcasting inflation with neural networks</title>
@@ -266,14 +266,19 @@ window.Quarto = {
    
   <ul>
   <li><a href="#roadmap" id="toc-roadmap" class="nav-link active" data-scroll-target="#roadmap">Roadmap</a></li>
-  <li><a href="#loading-the-data" id="toc-loading-the-data" class="nav-link" data-scroll-target="#loading-the-data">Loading the data</a>
+  <li><a href="#sec-data" id="toc-sec-data" class="nav-link" data-scroll-target="#sec-data">Loading the data</a>
   <ul>
   <li><a href="#inflation" id="toc-inflation" class="nav-link" data-scroll-target="#inflation">Inflation</a></li>
   <li><a href="#oil-prices" id="toc-oil-prices" class="nav-link" data-scroll-target="#oil-prices">Oil prices</a></li>
   <li><a href="#temporal-features" id="toc-temporal-features" class="nav-link" data-scroll-target="#temporal-features">Temporal features</a></li>
   <li><a href="#splitting-the-dataset" id="toc-splitting-the-dataset" class="nav-link" data-scroll-target="#splitting-the-dataset">Splitting the dataset</a></li>
   </ul></li>
-  <li><a href="#first-model-a-single-layer-neural-network" id="toc-first-model-a-single-layer-neural-network" class="nav-link" data-scroll-target="#first-model-a-single-layer-neural-network">First model: a single layer neural network</a></li>
+  <li><a href="#sec-layer" id="toc-sec-layer" class="nav-link" data-scroll-target="#sec-layer">First model: a single layer neural network</a></li>
+  <li><a href="#sec-lstm" id="toc-sec-lstm" class="nav-link" data-scroll-target="#sec-lstm">Second model: Long short-term memory</a></li>
+  <li><a href="#sec-gates" id="toc-sec-gates" class="nav-link" data-scroll-target="#sec-gates">Introducing… the gatekeepers</a></li>
+  <li><a href="#sec-transf" id="toc-sec-transf" class="nav-link" data-scroll-target="#sec-transf">Now is a(nother) good time to pay attention</a></li>
+  <li><a href="#sec-tftmf" id="toc-sec-tftmf" class="nav-link" data-scroll-target="#sec-tftmf">Complete architecture</a></li>
+  <li><a href="#sec-nowcast" id="toc-sec-nowcast" class="nav-link" data-scroll-target="#sec-nowcast">Nowcasting inflation with a simple model</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
@@ -298,7 +303,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Douglas K. G. Araujo </p>
+             <p>Douglas K. G. Araujo, Johannes Damp </p>
           </div>
   </div>
     
@@ -311,15 +316,16 @@ window.Quarto = {
 </header>
 
 
-<p>This notebook showcases how to set up neural networks to nowcast inflation using data measured in different frequencies. The goal here is to use a very simple dataset containing only two variables, inflation (monthly) and oil prices (daily), to slowly build up a more complex neural network based nowcasting model, the TFT-MF available in <code>gingado</code> from its v0.3.0.</p>
-<p>Nowcasting is essentially the use of the most current information possible to estimate in real time an economic series of interest such as inflation or GDP before it is actually released. For example, if you could measure all prices every day, you could create on the last day of the month a very accurate nowcast for the headline inflation for that month - which would only be officialy published a few days later. In the case of GDP, this lag between the end of the reference period and actual publication tends to be significant, around 6-10 weeks. For policymakers, investors and other decisionmakers, a lot can happen in this period.</p>
-<p>A related use of nowcasting is to estimate what the current period’s reading will be as this period rolls out. In other words, as I am writing this in early July 2024, I would like to estimate what the inflation reading for this month (or GDP for this quarter) will likely be as new information is unveiled in real time.</p>
+<p>This notebook showcases how to set up neural networks to nowcast inflation using data measured in different frequencies. The goal here is to start with a very simple dataset containing only two variables, inflation (monthly) and oil prices (daily), to slowly build up a more complex neural network based nowcasting model, the TFT-MF available in <code>gingado</code> from its v0.3.0.</p>
+<p>Nowcasting is essentially the use of the most current information possible to estimate in real time an economic series of interest such as inflation or GDP before it is actually released<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. For example, if you could measure all prices every day, you could create on the last day of the month a very accurate nowcast for the headline inflation for that month - which would only be officialy published a few days later. In the case of GDP, this lag between the end of the reference period and actual publication tends to be significant, around 6-10 weeks. For policymakers, investors and other decisionmakers, a lot can happen in this period.</p>
+<p>A related use of nowcasting is to estimate what the current period’s reading will be as this period rolls out. In other words, estimating today what the inflation reading for this month (or GDP for this quarter) will likely be as new information is unveiled in real time.</p>
+<p>The nowcasting model available in <code>gingado</code> from v0.3.0 onwards is an adjusted version of the Temporal Fusion Transformer (TFT) of <span class="citation" data-cites="lim2021temporal">Lim et al. (<a href="#ref-lim2021temporal" role="doc-biblioref">2021</a>)</span>. This architecture combines <em>flexibility</em> to take on multiple datasets while learning which information to focus on and <em>interpretability</em> to provide insights on the important variables in each case.</p>
 <section id="roadmap" class="level2">
 <h2 class="anchored" data-anchor-id="roadmap">Roadmap</h2>
-<p>The nowcasting model available in <code>gingado</code> is an adjusted version of the Temporal Fusion Transformer (TFT) of <span class="citation" data-cites="lim2021temporal">Lim et al. (<a href="#ref-lim2021temporal" role="doc-biblioref">2021</a>)</span>. This is what we will get by the end of this notebook. But we will build it up, step by step.</p>
+<p>The TFT model can be a bit complex to understand at first, so we will build it up, step by step. After loading the data in <a href="#sec-data" class="quarto-xref">Section&nbsp;2</a>, the most basic neural network - a neuron layer - is presented in <a href="#sec-layer" class="quarto-xref">Section&nbsp;3</a>. This is followed by an architecture that is more suitable for time series in <a href="#sec-lstm" class="quarto-xref">Section&nbsp;4</a>. Next, these elements are combined in <a href="#sec-gates" class="quarto-xref">Section&nbsp;5</a> to show how the model knows what to focus on. The next individual element is the self-attention layer in <a href="#sec-transf" class="quarto-xref">Section&nbsp;6</a>. Finally, if you want to see the full picture directly, go to <a href="#sec-tftmf" class="quarto-xref">Section&nbsp;7</a> to see how these elements are put together. <a href="#sec-nowcast" class="quarto-xref">Section&nbsp;8</a> then trains the model and presents the results for this simple, illustrative nowcasting.</p>
 </section>
-<section id="loading-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="loading-the-data">Loading the data</h2>
+<section id="sec-data" class="level2">
+<h2 class="anchored" data-anchor-id="sec-data">Loading the data</h2>
 <p>Let’s use our SDMX connectors to find and download data from official sources in a reproducible way.</p>
 <p>To abstract from currency issues, we will use US inflation and oil prices, which are denominated in US dollars.</p>
 <div id="load-packages" class="cell" data-execution_count="1">
@@ -336,13 +342,13 @@ window.Quarto = {
 </div>
 <section id="inflation" class="level3">
 <h3 class="anchored" data-anchor-id="inflation">Inflation</h3>
-<p>Since this is a monthly nowcast of inflation, the best way to do this is to use a <em>monthly change in the consumer price index</em>, <span class="math inline">\(\pi_t^{(m)}=(\text{CPI}_t - \text{CPI}_{t-1})/\text{CPI}_{t-1}\)</span>, not the year-on-year rate, <span class="math inline">\(\pi_t^{(y)}=(\text{CPI}_t - \text{CPI}_{t-12})/\text{CPI}_{t-12}\)</span>, which is how people usually think of inflation. This is because we want to nowcast only the value at the margin; all other values are already known.</p>
+<p>Since this is a monthly nowcast of inflation, the best way to do this is to use a <em>monthly change in the consumer price index</em>, <span class="math inline">\(\pi_t^{(m)}=(\text{CPI}_t - \text{CPI}_{t-1})/\text{CPI}_{t-1}\)</span>, not the year-on-year rate, <span class="math inline">\(\pi_t^{(y)}=(\text{CPI}_t - \text{CPI}_{t-12})/\text{CPI}_{t-12}\)</span>, which is how people usually think of inflation. This is because we want to nowcast only the value at the margin; 11 twelths of <span class="math inline">\(\pi_t^{(y)}\)</span> are already known, since <span class="math inline">\(\pi_t^{(y)} = -1 + \prod_{l=0}^{11} (1+\pi_{t-l})\)</span>.</p>
 <p>Then, only at the end we combine rolling windows of 12 consecutive monthly inflation rates, of which only the last one or two are estimated, to correctly create an annual inflation rate.</p>
 <p>Formally, if we know all values except the current and last month’s, then: <span id="eq-finalnowcast"><span class="math display">\[
 \hat{\pi}_t^{(y)}=(\prod_{l=0}^1 (1+\hat{\pi}_{t-l}^{(m)}) \prod_{l=2}^{11} (1+\pi_{t-l}^{(m)}) )-1,
 \tag{1}\]</span></span></p>
-<p>where the hat notation means that a particular value was estimated.</p>
-<p>For inflation, we take a dataflow from the <a href="https://data.bis.org/topics/CPI">BIS</a>, since we are looking for US data. Let’s explore it first and then choose the correct data specifications to download the time series. (See <a href="https://sdmx1.readthedocs.io/en/latest/walkthrough.html">here</a> for a practical walkthrough showing how to explore data with SDMX.)</p>
+<p>where the hat notation (<span class="math inline">\(\hat{ }\)</span>) means that a particular value was estimated.</p>
+<p>For inflation, we take a dataflow from the <a href="https://data.bis.org/topics/CPI">BIS</a>, since we are looking for US data. Let’s explore it first and then choose the correct data specifications to download the time series.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div id="inflation-dataflow" class="cell" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -357,7 +363,7 @@ window.Quarto = {
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.components</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="cpi_dimensions" class="cell-output cell-output-display" data-execution_count="21">
+<div id="cpi_dimensions" class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>[&lt;Dimension FREQ&gt;,
  &lt;Dimension REF_AREA&gt;,
  &lt;Dimension UNIT_MEASURE&gt;,
@@ -371,7 +377,7 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cl__FREQ <span class="op">=</span> sdmx.to_pandas(cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.get(<span class="st">"FREQ"</span>).local_representation.enumerated)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cl__FREQ</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="freq_codelist" class="cell-output cell-output-display" data-execution_count="22">
+<div id="freq_codelist" class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>CL_FREQ
 A                                   Annual
 B    Daily - business week (not supported)
@@ -391,7 +397,7 @@ Name: Code list for Frequency (FREQ), dtype: object</code></pre>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>cl__REF_AREA <span class="op">=</span> sdmx.to_pandas(cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.get(<span class="st">"REF_AREA"</span>).local_representation.enumerated)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>cl__REF_AREA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="ref_area_codelist" class="cell-output cell-output-display" data-execution_count="23">
+<div id="ref_area_codelist" class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>CL_AREA
 1X                                      ECB
 4T    Emerging market economies (aggregate)
@@ -413,7 +419,7 @@ Name: Reference area code list, Length: 101, dtype: object</code></pre>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cl__REF_AREA[<span class="st">'US'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="check-us-in-ref_area-codelist" class="cell-output cell-output-display" data-execution_count="24">
+<div id="check-us-in-ref_area-codelist" class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>'United States'</code></pre>
 </div>
 <p>:::</p>
@@ -424,7 +430,7 @@ Name: Reference area code list, Length: 101, dtype: object</code></pre>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>cl__UNIT_MEASURE <span class="op">=</span> sdmx.to_pandas(cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.get(<span class="st">"UNIT_MEASURE"</span>).local_representation.enumerated)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cl__UNIT_MEASURE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="codelist-for-unit_measure-in-dataflow-bis__ws_long_cpi" class="cell-output cell-output-display" data-execution_count="25">
+<div id="codelist-for-unit_measure-in-dataflow-bis__ws_long_cpi" class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>CL_BIS_UNIT
 000                     Unknown
 001                 100 - yield
@@ -446,7 +452,7 @@ Name: BIS_Unit, Length: 1051, dtype: object</code></pre>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cl__UNIT_MEASURE[cl__UNIT_MEASURE.<span class="bu">str</span>.contains(<span class="st">"Index, 2010 = 100"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="finding-code-for-index" class="cell-output cell-output-display" data-execution_count="26">
+<div id="finding-code-for-index" class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>CL_BIS_UNIT
 628    Index, 2010 = 100
 Name: BIS_Unit, dtype: object</code></pre>
@@ -474,7 +480,7 @@ Name: BIS_Unit, dtype: object</code></pre>
 Figure&nbsp;1: US consumer price index, 2010 = 100
 </figcaption>
 <div aria-describedby="fig-cpi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="01_nowcast_files/figure-html/fig-cpi-output-2.png" width="587" height="429" class="figure-img">
+<img src="01_nowcast_files/figure-html/fig-cpi-output-2.png" width="585" height="429" class="figure-img">
 </div>
 </figure>
 </div>
@@ -558,17 +564,17 @@ Figure&nbsp;4: Daily change in WTI oil prices
 <section id="temporal-features" class="level3">
 <h3 class="anchored" data-anchor-id="temporal-features">Temporal features</h3>
 <p>There is a lot of information encoded in the temporal features of a time series: which day in the month it is, which month of the year, etc. For example, consider how consumers behave differently in response to oil prices over warmer months (when many decide or not to travel, and how far) compared to colder months (when energy prices factor in heating and is thus perhaps less elastic).</p>
-<p>In this pedagogical exercise, we will not incorporate these temporal features to keep things simple. But in a more complete version later in this notebook we will incorporate them.</p>
-<p>In any case, to simplify notation about time, instead of the usual subscript <span class="math inline">\(t\)</span> as above to denote a time period, for precision we will follow this convention:</p>
+<p>In this pedagogical exercise, we will not incorporate these temporal features to keep things simple. But the more complete version later in this notebook will incorporate them.</p>
+<p>In any case, to simplify notation about time, instead of the usual subscript <span class="math inline">\(t\)</span> as above to denote a time period, for precision about the frequency, we will follow this convention:</p>
 <ul>
-<li><p>subscript <span class="math inline">\(m\)</span> denotes a given month</p></li>
-<li><p>subscript <span class="math inline">\(d\)</span> denotes a given day</p></li>
+<li><p>subscript <span class="math inline">\(m\)</span> denotes a given month;</p></li>
+<li><p>subscript <span class="math inline">\(d\)</span> denotes a given day;</p></li>
 <li><p>subscript <span class="math inline">\(d(m)\)</span> denotes a given day in a given month; example: <span class="math inline">\(d(m-1)\)</span> is a day in the previous month.</p></li>
 </ul>
 </section>
 <section id="splitting-the-dataset" class="level3">
 <h3 class="anchored" data-anchor-id="splitting-the-dataset">Splitting the dataset</h3>
-<p>We will now split the dataset into training data up until end-2020 and validation data afterwards. And the training data will be further split into 5 temporally sequential folds (see <a href="https://scikit-learn.org/stable/modules/cross_validation.html#time-series-split">here</a> for more information).</p>
+<p>We will now split the dataset into training data up until end-2020 and validation data afterwards. The training data will be further split into 5 temporally sequential folds.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <p>To simplify, we will consider valid nowcasting <em>input</em> data for a given output in period <span class="math inline">\(m\)</span> as:</p>
 <ul>
 <li><p>all monthly data up to, and including, <span class="math inline">\(m-1\)</span>; and</p></li>
@@ -663,8 +669,8 @@ Fold No 5:
 </div>
 </section>
 </section>
-<section id="first-model-a-single-layer-neural-network" class="level2">
-<h2 class="anchored" data-anchor-id="first-model-a-single-layer-neural-network">First model: a single layer neural network</h2>
+<section id="sec-layer" class="level2">
+<h2 class="anchored" data-anchor-id="sec-layer">First model: a single layer neural network</h2>
 <p>The goal of this model is to nowcast <span class="math inline">\(\pi_t\)</span> based on its past values <span class="math inline">\(\pi_{t-1}\)</span> and on current oil prices <span class="math inline">\(o_{d(m-s)}, s \geq 0\)</span>. The first model we will train is a very simple neural network:</p>
 <p><span id="eq-model0nnlayer"><span class="math display">\[
 \begin{align}
@@ -675,7 +681,7 @@ y_t &amp;= \mathbf{W}_0 \xi + \mathbf{b}_0,
 <p>where <span class="math inline">\(\mathbf{W}_0 \in \mathbb{R}^{1 \times d}\)</span>, <span class="math inline">\(b_0 \in \mathbb{R}\)</span>, <span class="math inline">\(\mathbf{W}_1 \in \mathbb{R}^{d \times |x_t|}\)</span>, <span class="math inline">\(b_1 \in \mathbb{R}^{d}\)</span>, <span class="math inline">\(\xi \in \mathbb{R}^d\)</span> and <span class="math inline">\(\phi\)</span> is an activation function. For simplicity, we will use the ReLU activation function, which is simply: <span class="math inline">\(\phi(z) = \text{max}(z, 0)\)</span>.</p>
 <p>For this neural network, we need a fix dimensionality of the input data. In other words, the network <em>needs</em> to know how much data it will take in at any given time, and this should not change throughout training or inference time.</p>
 <p>For simplicity, let’s fix it at a single lagged inflation (the past month, <span class="math inline">\(\pi_{m-1}\)</span>) and the most recent available oil price change, <span class="math inline">\(o_d\)</span>.</p>
-<div id="2eb27de9" class="cell" data-execution_count="16">
+<div id="nn-model-simple-layer" class="cell" data-execution_count="16">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="dv">5</span> <span class="co"># sort of arbitrary</span></span>
@@ -687,35 +693,35 @@ y_t &amp;= \mathbf{W}_0 \xi + \mathbf{b}_0,
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>])</span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>nn.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Model: "sequential_1"</span>
+<div id="nn-model-simple-layer-1" class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Model: "sequential"</span>
 </pre>
 </div>
-<div class="cell-output cell-output-display">
+<div id="nn-model-simple-layer-2" class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
 ┃<span style="font-weight: bold"> Layer (type)                    </span>┃<span style="font-weight: bold"> Output Shape           </span>┃<span style="font-weight: bold">       Param # </span>┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
-│ dense_2 (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)                 │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">5</span>)              │            <span style="color: #00af00; text-decoration-color: #00af00">15</span> │
+│ dense (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)                   │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">5</span>)              │            <span style="color: #00af00; text-decoration-color: #00af00">15</span> │
 ├─────────────────────────────────┼────────────────────────┼───────────────┤
-│ dense_3 (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)                 │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">1</span>)              │             <span style="color: #00af00; text-decoration-color: #00af00">6</span> │
+│ dense_1 (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)                 │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">1</span>)              │             <span style="color: #00af00; text-decoration-color: #00af00">6</span> │
 └─────────────────────────────────┴────────────────────────┴───────────────┘
 </pre>
 </div>
-<div class="cell-output cell-output-display">
+<div id="nn-model-simple-layer-3" class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold"> Total params: </span><span style="color: #00af00; text-decoration-color: #00af00">21</span> (84.00 B)
 </pre>
 </div>
-<div class="cell-output cell-output-display">
+<div id="nn-model-simple-layer-4" class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold"> Trainable params: </span><span style="color: #00af00; text-decoration-color: #00af00">21</span> (84.00 B)
 </pre>
 </div>
-<div class="cell-output cell-output-display">
+<div id="nn-model-simple-layer-5" class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold"> Non-trainable params: </span><span style="color: #00af00; text-decoration-color: #00af00">0</span> (0.00 B)
 </pre>
 </div>
 </div>
 <p>Checking that it works:</p>
-<div id="9530c676" class="cell" data-execution_count="17">
+<div id="check-nn-model-works" class="cell" data-execution_count="17">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># taking the last day of the training set of the last training fold</span></span>
@@ -731,22 +737,71 @@ y_t &amp;= \mathbf{W}_0 \xi + \mathbf{b}_0,
 <span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Mean squared error: </span><span class="sc">{</span>nn_loss<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Prediction: [[0.03631394]]
+<pre><code>Prediction: [[-0.14740813]]
 Actual value: [-0.00470589]
-Mean squared error: 0.00168262654915452</code></pre>
+Mean squared error: 0.020363928750157356</code></pre>
 </div>
 </div>
-<p>So now let’s fit it (very naively).</p>
-<div id="915bcf8f" class="cell" data-execution_count="18">
+<p>It does, great!</p>
+<blockquote class="blockquote">
+<p>Note that this network <strong>always</strong> needs to take in input of a certain shape (in this case, a 2-columns matrix) to work.</p>
+</blockquote>
+<p>We don’t need to bother training this very simple neural network; the goal here is to use it as a building block for a mathematical/econometric intuition of the broader nowcasting model.</p>
+</section>
+<section id="sec-lstm" class="level2">
+<h2 class="anchored" data-anchor-id="sec-lstm">Second model: Long short-term memory</h2>
+<p>A marked improvement in how we can model time series data is the use of recurrent neural networks (RNNs). In essence, these are networks that learn to keep a stateful memory, which is updated as the network “visits” each sequential step in time, in turn using both the memory and the new data at that period to predict the output.</p>
+<p>One particular type of RNN that has proven to be very successful in practice is the long short-term memory (LSTM) model, due to <span class="citation" data-cites="hochreiter1997long">Hochreiter (<a href="#ref-hochreiter1997long" role="doc-biblioref">1997</a>)</span>. It is actually a combination of four different layers, similar to <a href="#eq-model0nnlayer" class="quarto-xref">Equation&nbsp;2</a>, but built in a specific way. Here’s how:</p>
+<p><span id="eq-model1lstm"><span class="math display">\[
+\begin{align}
+f_t &amp;= \sigma(W_f x_t + U_f h_{t-1} + b_f) \\
+i_t &amp;= \sigma(W_i x_t + U_i h_{t-1} + b_i) \\
+o_t &amp;= \sigma(W_o x_t + U_o h_{t-1} + b_o) \\
+\tilde{c}_t &amp;= \omega(W_c x_t + U_c h_{t-1} + b_c) \\
+c_t &amp;= \underbrace{f_t \odot c_{t-1}}_{\text{Gated past}} + \underbrace{i_t \odot \tilde{c}_t}_{\text{How much to learn}} \\
+h_t &amp;= o_t \odot \omega(c_t),
+\end{align}
+\tag{3}\]</span></span></p>
+<p>where <span class="math inline">\(\sigma\)</span> is the sigmoid function, and <span class="math inline">\(\omega\)</span> is the hyperbolic function. The hyperbolic is used here because…</p>
+<p>The basic intuition of the LSTM layer is that some of the individual component layers essentially learn to look at the current data and the past memory and then decide how much new information to let through. Note that, because their activation is a sigmoid, the output of layers <span class="math inline">\(f_t\)</span>, <span class="math inline">\(i_t\)</span> and <span class="math inline">\(o_t\)</span> is a number between 0 and 1. This idea is important to bear in mind because it will be used at a much bigger scale by the whole TFT model - and will be one key feature of its interpretability.</p>
+<div id="nn-model-lstm" class="cell" data-execution_count="18">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>nn.<span class="bu">compile</span>(loss<span class="op">=</span>keras.losses.mean_squared_error)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="dv">5</span> <span class="co"># sort of arbitrary</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># nn = keras.Sequential([</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     keras.layers.Input(shape=(2,,)),</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     keras.layers.LSTM(units = d),</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     keras.layers.Dense(units=1)</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ])</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># nn.summary()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="sec-gates" class="level2">
+<h2 class="anchored" data-anchor-id="sec-gates">Introducing… the gatekeepers</h2>
+</section>
+<section id="sec-transf" class="level2">
+<h2 class="anchored" data-anchor-id="sec-transf">Now is a(nother) good time to pay attention</h2>
+</section>
+<section id="sec-tftmf" class="level2">
+<h2 class="anchored" data-anchor-id="sec-tftmf">Complete architecture</h2>
+</section>
+<section id="sec-nowcast" class="level2">
+<h2 class="anchored" data-anchor-id="sec-nowcast">Nowcasting inflation with a simple model</h2>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-bok2018nowcasting" class="csl-entry" role="listitem">
+Bok, Brandyn, Daniele Caratelli, Domenico Giannone, Argia M. Sbordone, and Andrea Tambalotti. 2018. <span>“Macroeconomic Nowcasting and Forecasting with Big Data.”</span> Journal Article. <em>Annual Review of Economics</em> 10 (Volume 10, 2018): 615–43. https://doi.org/<a href="https://doi.org/10.1146/annurev-economics-080217-053214">https://doi.org/10.1146/annurev-economics-080217-053214</a>.
+</div>
+<div id="ref-giannone2008nowcasting" class="csl-entry" role="listitem">
+Giannone, Domenico, Lucrezia Reichlin, and David Small. 2008. <span>“Nowcasting: The Real-Time Informational Content of Macroeconomic Data.”</span> <em>Journal of Monetary Economics</em> 55 (4): 665–76.
+</div>
+<div id="ref-hochreiter1997long" class="csl-entry" role="listitem">
+Hochreiter, S. 1997. <span>“Long Short-Term Memory.”</span> <em>Neural Computation MIT-Press</em>.
+</div>
 <div id="ref-lim2021temporal" class="csl-entry" role="listitem">
 Lim, Bryan, Sercan Ö Arık, Nicolas Loeff, and Tomas Pfister. 2021. <span>“Temporal Fusion Transformers for Interpretable Multi-Horizon Time Series Forecasting.”</span> <em>International Journal of Forecasting</em> 37 (4): 1748–64.
 </div>
@@ -757,7 +812,15 @@ Lim, Bryan, Sercan Ö Arık, Nicolas Loeff, and Tomas Pfister. 2021. <span>“Te
 
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><span class="citation" data-cites="giannone2008nowcasting">Giannone, Reichlin, and Small (<a href="#ref-giannone2008nowcasting" role="doc-biblioref">2008</a>)</span> pioneered nowcasting in macroeconomics. See <span class="citation" data-cites="bok2018nowcasting">Bok et al. (<a href="#ref-bok2018nowcasting" role="doc-biblioref">2018</a>)</span> for a review.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>See <a href="https://sdmx1.readthedocs.io/en/latest/walkthrough.html">here</a> for a practical walkthrough showing how to explore data with SDMX.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>See <a href="https://scikit-learn.org/stable/modules/cross_validation.html#time-series-split">here</a> for more information on time series splitting.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -1359,7 +1422,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Nowcasting inflation with neural networks</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> A simple, mixed-frequency example</span></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="an">output-file:</span><span class="co"> nowcast.html</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> Douglas K. G. Araujo</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> Douglas K. G. Araujo, Johannes Damp</span></span>
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="an">code-fold:</span><span class="co"> show</span></span>
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="an">code-tools:</span><span class="co"> true</span></span>
 <span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
@@ -1367,306 +1430,357 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="an">fig-cap-location:</span><span class="co"> top</span></span>
 <span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>This notebook showcases how to set up neural networks to nowcast inflation using data measured in different frequencies. The goal here is to use a very simple dataset containing only two variables, inflation (monthly) and oil prices (daily), to slowly build up a more complex neural network based nowcasting model, the TFT-MF available in <span class="in">`gingado`</span> from its v0.3.0.</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>This notebook showcases how to set up neural networks to nowcast inflation using data measured in different frequencies. The goal here is to start with a very simple dataset containing only two variables, inflation (monthly) and oil prices (daily), to slowly build up a more complex neural network based nowcasting model, the TFT-MF available in <span class="in">`gingado`</span> from its v0.3.0.</span>
 <span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>Nowcasting is essentially the use of the most current information possible to estimate in real time an economic series of interest such as inflation or GDP before it is actually released. For example, if you could measure all prices every day, you could create on the last day of the month a very accurate nowcast for the headline inflation for that month - which would only be officialy published a few days later. In the case of GDP, this lag between the end of the reference period and actual publication tends to be significant, around 6-10 weeks. For policymakers, investors and other decisionmakers, a lot can happen in this period.</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>Nowcasting is essentially the use of the most current information possible to estimate in real time an economic series of interest such as inflation or GDP before it is actually released<span class="ot">[^review]</span>. For example, if you could measure all prices every day, you could create on the last day of the month a very accurate nowcast for the headline inflation for that month - which would only be officialy published a few days later. In the case of GDP, this lag between the end of the reference period and actual publication tends to be significant, around 6-10 weeks. For policymakers, investors and other decisionmakers, a lot can happen in this period.</span>
 <span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>A related use of nowcasting is to estimate what the current period's reading will be as this period rolls out. In other words, as I am writing this in early July 2024, I would like to estimate what the inflation reading for this month (or GDP for this quarter) will likely be as new information is unveiled in real time.</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="ot">[^review]: </span>@giannone2008nowcasting pioneered nowcasting in macroeconomics. See @bok2018nowcasting for a review.</span>
 <span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Roadmap</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>A related use of nowcasting is to estimate what the current period's reading will be as this period rolls out. In other words, estimating today what the inflation reading for this month (or GDP for this quarter) will likely be as new information is unveiled in real time.</span>
 <span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>The nowcasting model available in <span class="in">`gingado`</span> is an adjusted version of the Temporal Fusion Transformer (TFT) of @lim2021temporal. This is what we will get by the end of this notebook. But we will build it up, step by step.</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>The nowcasting model available in <span class="in">`gingado`</span> from v0.3.0 onwards is an adjusted version of the Temporal Fusion Transformer (TFT) of @lim2021temporal. This architecture combines *flexibility* to take on multiple datasets while learning which information to focus on and *interpretability* to provide insights on the important variables in each case.</span>
 <span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading the data</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Roadmap</span></span>
 <span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>Let's use our SDMX connectors to find and download data from official sources in a reproducible way.</span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>The TFT model can be a bit complex to understand at first, so we will build it up, step by step. After loading the data in @sec-data, the most basic neural network - a neuron layer - is presented in @sec-layer. This is followed by an architecture that is more suitable for time series in @sec-lstm. Next, these elements are combined in @sec-gates to show how the model knows what to focus on. The next individual element is the self-attention layer in @sec-transf. Finally, if you want to see the full picture directly, go to @sec-tftmf to see how these elements are put together. @sec-nowcast then trains the model and presents the results for this simple, illustrative nowcasting.</span>
 <span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>To abstract from currency issues, we will use US inflation and oil prices, which are denominated in US dollars.</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading the data {#sec-data}</span></span>
 <span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load packages</span></span>
-<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> keras</span>
-<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sdmx</span>
-<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> load_SDMX_data</span>
-<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> TimeSeriesSplit</span>
-<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inflation</span></span>
-<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a>Since this is a monthly nowcast of inflation, the best way to do this is to use a *monthly change in the consumer price index*, $\pi_t^{(m)}=(\text{CPI}_t - \text{CPI}_{t-1})/\text{CPI}_{t-1}$, not the year-on-year rate, $\pi_t^{(y)}=(\text{CPI}_t - \text{CPI}_{t-12})/\text{CPI}_{t-12}$, which is how people usually think of inflation. This is because we want to nowcast only the value at the margin; all other values are already known. </span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>Let's use our SDMX connectors to find and download data from official sources in a reproducible way.</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>To abstract from currency issues, we will use US inflation and oil prices, which are denominated in US dollars.</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load packages</span></span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> keras</span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sdmx</span>
+<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> load_SDMX_data</span>
+<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> TimeSeriesSplit</span>
+<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a>Then, only at the end we combine rolling windows of 12 consecutive monthly inflation rates, of which only the last one or two are estimated, to correctly create an annual inflation rate. </span>
+<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inflation</span></span>
 <span id="cb28-47"><a href="#cb28-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a>Formally, if we know all values except the current and last month's, then: </span>
-<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a>\hat{\pi}_t^{(y)}=(\prod_{l=0}^1 (1+\hat{\pi}_{t-l}^{(m)}) \prod_{l=2}^{11} (1+\pi_{t-l}^{(m)}) )-1,</span>
-<span id="cb28-51"><a href="#cb28-51" aria-hidden="true" tabindex="-1"></a>$$ {#eq-finalnowcast}</span>
-<span id="cb28-52"><a href="#cb28-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-53"><a href="#cb28-53" aria-hidden="true" tabindex="-1"></a>where the hat notation means that a particular value was estimated.</span>
-<span id="cb28-54"><a href="#cb28-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-55"><a href="#cb28-55" aria-hidden="true" tabindex="-1"></a>For inflation, we take a dataflow from the <span class="co">[</span><span class="ot">BIS</span><span class="co">](https://data.bis.org/topics/CPI)</span>, since we are looking for US data. Let's explore it first and then choose the correct data specifications to download the time series. (See <span class="co">[</span><span class="ot">here</span><span class="co">](https://sdmx1.readthedocs.io/en/latest/walkthrough.html)</span> for a practical walkthrough showing how to explore data with SDMX.)</span>
+<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a>Since this is a monthly nowcast of inflation, the best way to do this is to use a *monthly change in the consumer price index*, $\pi_t^{(m)}=(\text{CPI}_t - \text{CPI}_{t-1})/\text{CPI}_{t-1}$, not the year-on-year rate, $\pi_t^{(y)}=(\text{CPI}_t - \text{CPI}_{t-12})/\text{CPI}_{t-12}$, which is how people usually think of inflation. This is because we want to nowcast only the value at the margin; 11 twelths of $\pi_t^{(y)}$ are already known, since $\pi_t^{(y)} = -1 + \prod_{l=0}^{11} (1+\pi_{t-l})$. </span>
+<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a>Then, only at the end we combine rolling windows of 12 consecutive monthly inflation rates, of which only the last one or two are estimated, to correctly create an annual inflation rate. </span>
+<span id="cb28-51"><a href="#cb28-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-52"><a href="#cb28-52" aria-hidden="true" tabindex="-1"></a>Formally, if we know all values except the current and last month's, then: </span>
+<span id="cb28-53"><a href="#cb28-53" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb28-54"><a href="#cb28-54" aria-hidden="true" tabindex="-1"></a>\hat{\pi}_t^{(y)}=(\prod_{l=0}^1 (1+\hat{\pi}_{t-l}^{(m)}) \prod_{l=2}^{11} (1+\pi_{t-l}^{(m)}) )-1,</span>
+<span id="cb28-55"><a href="#cb28-55" aria-hidden="true" tabindex="-1"></a>$$ {#eq-finalnowcast}</span>
 <span id="cb28-56"><a href="#cb28-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-59"><a href="#cb28-59" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-60"><a href="#cb28-60" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "inflation dataflow"</span></span>
-<span id="cb28-61"><a href="#cb28-61" aria-hidden="true" tabindex="-1"></a>BIS <span class="op">=</span> sdmx.Client(<span class="st">"BIS"</span>)</span>
-<span id="cb28-62"><a href="#cb28-62" aria-hidden="true" tabindex="-1"></a>cpi_msg <span class="op">=</span> BIS.dataflow(<span class="st">'WS_LONG_CPI'</span>)</span>
-<span id="cb28-63"><a href="#cb28-63" aria-hidden="true" tabindex="-1"></a>cpi_dsd <span class="op">=</span> cpi_msg.structure</span>
-<span id="cb28-64"><a href="#cb28-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-65"><a href="#cb28-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-66"><a href="#cb28-66" aria-hidden="true" tabindex="-1"></a>These are all possible keys:</span>
-<span id="cb28-67"><a href="#cb28-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-70"><a href="#cb28-70" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-71"><a href="#cb28-71" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "CPI_dimensions"</span></span>
-<span id="cb28-72"><a href="#cb28-72" aria-hidden="true" tabindex="-1"></a>cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.components</span>
-<span id="cb28-73"><a href="#cb28-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-74"><a href="#cb28-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-75"><a href="#cb28-75" aria-hidden="true" tabindex="-1"></a>For example, "FREQ" (frequency) takes in these values:</span>
-<span id="cb28-76"><a href="#cb28-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-79"><a href="#cb28-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-80"><a href="#cb28-80" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "FREQ_codelist"</span></span>
-<span id="cb28-81"><a href="#cb28-81" aria-hidden="true" tabindex="-1"></a>cl__FREQ <span class="op">=</span> sdmx.to_pandas(cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.get(<span class="st">"FREQ"</span>).local_representation.enumerated)</span>
-<span id="cb28-82"><a href="#cb28-82" aria-hidden="true" tabindex="-1"></a>cl__FREQ</span>
-<span id="cb28-83"><a href="#cb28-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-84"><a href="#cb28-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-85"><a href="#cb28-85" aria-hidden="true" tabindex="-1"></a>And "REF_AREA" (reference area) can be set to:</span>
-<span id="cb28-86"><a href="#cb28-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-89"><a href="#cb28-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-90"><a href="#cb28-90" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "REF_AREA_codelist"</span></span>
-<span id="cb28-91"><a href="#cb28-91" aria-hidden="true" tabindex="-1"></a>cl__REF_AREA <span class="op">=</span> sdmx.to_pandas(cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.get(<span class="st">"REF_AREA"</span>).local_representation.enumerated)</span>
-<span id="cb28-92"><a href="#cb28-92" aria-hidden="true" tabindex="-1"></a>cl__REF_AREA</span>
-<span id="cb28-93"><a href="#cb28-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-94"><a href="#cb28-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-95"><a href="#cb28-95" aria-hidden="true" tabindex="-1"></a>We can check that the US is amongst the reference areas:</span>
-<span id="cb28-96"><a href="#cb28-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-99"><a href="#cb28-99" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-100"><a href="#cb28-100" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "check US in REF_AREA codelist"</span></span>
-<span id="cb28-101"><a href="#cb28-101" aria-hidden="true" tabindex="-1"></a>cl__REF_AREA[<span class="st">'US'</span>]</span>
-<span id="cb28-102"><a href="#cb28-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-103"><a href="#cb28-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-104"><a href="#cb28-104" aria-hidden="true" tabindex="-1"></a>Finally, the "UNIT_MEASURE" values can be:</span>
-<span id="cb28-105"><a href="#cb28-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-108"><a href="#cb28-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-109"><a href="#cb28-109" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "codelist for UNIT_MEASURE in dataflow BIS__WS_LONG_CPI"</span></span>
-<span id="cb28-110"><a href="#cb28-110" aria-hidden="true" tabindex="-1"></a>cl__UNIT_MEASURE <span class="op">=</span> sdmx.to_pandas(cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.get(<span class="st">"UNIT_MEASURE"</span>).local_representation.enumerated)</span>
-<span id="cb28-111"><a href="#cb28-111" aria-hidden="true" tabindex="-1"></a>cl__UNIT_MEASURE</span>
-<span id="cb28-112"><a href="#cb28-112" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-113"><a href="#cb28-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-114"><a href="#cb28-114" aria-hidden="true" tabindex="-1"></a>In the <span class="co">[</span><span class="ot">BIS website for this data</span><span class="co">](https://data.bis.org/topics/CPI#faq)</span>, we can see that the unit in levels is <span class="in">`Index, 2010 = 100`</span> (the other one is <span class="in">`Year-on-year changes, in per cent`</span>, which as discussed above we don't want for this case.)</span>
-<span id="cb28-115"><a href="#cb28-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-118"><a href="#cb28-118" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-119"><a href="#cb28-119" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "finding code for index"</span></span>
-<span id="cb28-120"><a href="#cb28-120" aria-hidden="true" tabindex="-1"></a>cl__UNIT_MEASURE[cl__UNIT_MEASURE.<span class="bu">str</span>.contains(<span class="st">"Index, 2010 = 100"</span>)]</span>
-<span id="cb28-121"><a href="#cb28-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-122"><a href="#cb28-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-123"><a href="#cb28-123" aria-hidden="true" tabindex="-1"></a>Armed with this knowledge, we can now download monthly consumer price index data for the US. Let's start after 1985 so that we have a sufficiently long history but without too much influence of the tectonic shift of the US dollar devaluation in the early 1970s and ensuing high inflation:</span>
-<span id="cb28-124"><a href="#cb28-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-127"><a href="#cb28-127" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-128"><a href="#cb28-128" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-CPI</span></span>
-<span id="cb28-129"><a href="#cb28-129" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "US consumer price index, 2010 = 100"</span></span>
-<span id="cb28-130"><a href="#cb28-130" aria-hidden="true" tabindex="-1"></a>df_infl <span class="op">=</span> load_SDMX_data(</span>
-<span id="cb28-131"><a href="#cb28-131" aria-hidden="true" tabindex="-1"></a>    sources<span class="op">=</span>{<span class="st">"BIS"</span>: <span class="st">"'WS_LONG_CPI'"</span>},</span>
-<span id="cb28-132"><a href="#cb28-132" aria-hidden="true" tabindex="-1"></a>    keys<span class="op">=</span>{<span class="st">"FREQ"</span>: <span class="st">"M"</span>, <span class="st">"REF_AREA"</span>: <span class="st">"US"</span>, <span class="st">"UNIT_MEASURE"</span>: <span class="st">"628"</span>},</span>
-<span id="cb28-133"><a href="#cb28-133" aria-hidden="true" tabindex="-1"></a>    params<span class="op">=</span>{<span class="st">"startPeriod"</span>: <span class="dv">1985</span>}</span>
-<span id="cb28-134"><a href="#cb28-134" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb28-135"><a href="#cb28-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-136"><a href="#cb28-136" aria-hidden="true" tabindex="-1"></a>df_infl.plot()</span>
-<span id="cb28-137"><a href="#cb28-137" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-138"><a href="#cb28-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-139"><a href="#cb28-139" aria-hidden="true" tabindex="-1"></a>As you can see in @fig-CPI, we downloaded the series $<span class="sc">\{</span>\text{CPI}_t<span class="sc">\}</span>$. Transforming that into $<span class="sc">\{</span>\pi_t<span class="sc">\}</span>$, defined above, we have:</span>
-<span id="cb28-140"><a href="#cb28-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-143"><a href="#cb28-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-144"><a href="#cb28-144" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-pi</span></span>
-<span id="cb28-145"><a href="#cb28-145" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: US monthly inflation rate</span></span>
-<span id="cb28-146"><a href="#cb28-146" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb28-147"><a href="#cb28-147" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, color<span class="op">=</span><span class="st">"black"</span>)</span>
-<span id="cb28-148"><a href="#cb28-148" aria-hidden="true" tabindex="-1"></a>df_infl_m <span class="op">=</span> df_infl.pct_change()</span>
-<span id="cb28-149"><a href="#cb28-149" aria-hidden="true" tabindex="-1"></a>df_infl_m.index <span class="op">=</span> df_infl_m.index <span class="op">+</span> pd.offsets.MonthEnd(<span class="dv">0</span>) <span class="co"># move to month end</span></span>
-<span id="cb28-150"><a href="#cb28-150" aria-hidden="true" tabindex="-1"></a>df_infl_m.plot(ax<span class="op">=</span>ax)</span>
-<span id="cb28-151"><a href="#cb28-151" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb28-152"><a href="#cb28-152" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-153"><a href="#cb28-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-154"><a href="#cb28-154" aria-hidden="true" tabindex="-1"></a><span class="fu">### Oil prices</span></span>
-<span id="cb28-155"><a href="#cb28-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-156"><a href="#cb28-156" aria-hidden="true" tabindex="-1"></a>Since the focus is on US inflation, below we get WTI oil prices. This data is downloaded from the <span class="co">[</span><span class="ot">St Louis Fed's FRED webpage</span><span class="co">](https://fred.stlouisfed.org/series/DCOILWTICO)</span>.</span>
-<span id="cb28-157"><a href="#cb28-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-160"><a href="#cb28-160" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-161"><a href="#cb28-161" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-oil</span></span>
-<span id="cb28-162"><a href="#cb28-162" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: WTI oil prices</span></span>
-<span id="cb28-163"><a href="#cb28-163" aria-hidden="true" tabindex="-1"></a>df_oil <span class="op">=</span> pd.read_csv(<span class="st">"docs/DCOILWTICO.csv"</span>)</span>
-<span id="cb28-164"><a href="#cb28-164" aria-hidden="true" tabindex="-1"></a>df_oil[<span class="st">'DCOILWTICO'</span>] <span class="op">=</span> pd.to_numeric(df_oil[<span class="st">'DCOILWTICO'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)</span>
-<span id="cb28-165"><a href="#cb28-165" aria-hidden="true" tabindex="-1"></a>df_oil[<span class="st">'DATE'</span>] <span class="op">=</span> pd.to_datetime(df_oil[<span class="st">'DATE'</span>])</span>
-<span id="cb28-166"><a href="#cb28-166" aria-hidden="true" tabindex="-1"></a>df_oil.set_index(<span class="st">'DATE'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb28-167"><a href="#cb28-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-168"><a href="#cb28-168" aria-hidden="true" tabindex="-1"></a>df_oil.plot()</span>
-<span id="cb28-169"><a href="#cb28-169" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-170"><a href="#cb28-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-171"><a href="#cb28-171" aria-hidden="true" tabindex="-1"></a>For the nowcasting, we are interested in the daily variation:</span>
-<span id="cb28-172"><a href="#cb28-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-175"><a href="#cb28-175" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-176"><a href="#cb28-176" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-oilD</span></span>
-<span id="cb28-177"><a href="#cb28-177" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Daily change in WTI oil prices</span></span>
+<span id="cb28-57"><a href="#cb28-57" aria-hidden="true" tabindex="-1"></a>where the hat notation ($\hat{ }$) means that a particular value was estimated.</span>
+<span id="cb28-58"><a href="#cb28-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-59"><a href="#cb28-59" aria-hidden="true" tabindex="-1"></a>For inflation, we take a dataflow from the <span class="co">[</span><span class="ot">BIS</span><span class="co">](https://data.bis.org/topics/CPI)</span>, since we are looking for US data. Let's explore it first and then choose the correct data specifications to download the time series.<span class="ot">[^sdmx]</span></span>
+<span id="cb28-60"><a href="#cb28-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-61"><a href="#cb28-61" aria-hidden="true" tabindex="-1"></a><span class="ot">[^sdmx]: </span>See <span class="co">[</span><span class="ot">here</span><span class="co">](https://sdmx1.readthedocs.io/en/latest/walkthrough.html)</span> for a practical walkthrough showing how to explore data with SDMX.</span>
+<span id="cb28-62"><a href="#cb28-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-65"><a href="#cb28-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-66"><a href="#cb28-66" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "inflation dataflow"</span></span>
+<span id="cb28-67"><a href="#cb28-67" aria-hidden="true" tabindex="-1"></a>BIS <span class="op">=</span> sdmx.Client(<span class="st">"BIS"</span>)</span>
+<span id="cb28-68"><a href="#cb28-68" aria-hidden="true" tabindex="-1"></a>cpi_msg <span class="op">=</span> BIS.dataflow(<span class="st">'WS_LONG_CPI'</span>)</span>
+<span id="cb28-69"><a href="#cb28-69" aria-hidden="true" tabindex="-1"></a>cpi_dsd <span class="op">=</span> cpi_msg.structure</span>
+<span id="cb28-70"><a href="#cb28-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-71"><a href="#cb28-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-72"><a href="#cb28-72" aria-hidden="true" tabindex="-1"></a>These are all possible keys:</span>
+<span id="cb28-73"><a href="#cb28-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-76"><a href="#cb28-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-77"><a href="#cb28-77" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "CPI_dimensions"</span></span>
+<span id="cb28-78"><a href="#cb28-78" aria-hidden="true" tabindex="-1"></a>cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.components</span>
+<span id="cb28-79"><a href="#cb28-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-80"><a href="#cb28-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-81"><a href="#cb28-81" aria-hidden="true" tabindex="-1"></a>For example, "FREQ" (frequency) takes in these values:</span>
+<span id="cb28-82"><a href="#cb28-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-85"><a href="#cb28-85" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-86"><a href="#cb28-86" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "FREQ_codelist"</span></span>
+<span id="cb28-87"><a href="#cb28-87" aria-hidden="true" tabindex="-1"></a>cl__FREQ <span class="op">=</span> sdmx.to_pandas(cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.get(<span class="st">"FREQ"</span>).local_representation.enumerated)</span>
+<span id="cb28-88"><a href="#cb28-88" aria-hidden="true" tabindex="-1"></a>cl__FREQ</span>
+<span id="cb28-89"><a href="#cb28-89" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-90"><a href="#cb28-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-91"><a href="#cb28-91" aria-hidden="true" tabindex="-1"></a>And "REF_AREA" (reference area) can be set to:</span>
+<span id="cb28-92"><a href="#cb28-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-95"><a href="#cb28-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-96"><a href="#cb28-96" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "REF_AREA_codelist"</span></span>
+<span id="cb28-97"><a href="#cb28-97" aria-hidden="true" tabindex="-1"></a>cl__REF_AREA <span class="op">=</span> sdmx.to_pandas(cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.get(<span class="st">"REF_AREA"</span>).local_representation.enumerated)</span>
+<span id="cb28-98"><a href="#cb28-98" aria-hidden="true" tabindex="-1"></a>cl__REF_AREA</span>
+<span id="cb28-99"><a href="#cb28-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-100"><a href="#cb28-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-101"><a href="#cb28-101" aria-hidden="true" tabindex="-1"></a>We can check that the US is amongst the reference areas:</span>
+<span id="cb28-102"><a href="#cb28-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-105"><a href="#cb28-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-106"><a href="#cb28-106" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "check US in REF_AREA codelist"</span></span>
+<span id="cb28-107"><a href="#cb28-107" aria-hidden="true" tabindex="-1"></a>cl__REF_AREA[<span class="st">'US'</span>]</span>
+<span id="cb28-108"><a href="#cb28-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-109"><a href="#cb28-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-110"><a href="#cb28-110" aria-hidden="true" tabindex="-1"></a>Finally, the "UNIT_MEASURE" values can be:</span>
+<span id="cb28-111"><a href="#cb28-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-114"><a href="#cb28-114" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-115"><a href="#cb28-115" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "codelist for UNIT_MEASURE in dataflow BIS__WS_LONG_CPI"</span></span>
+<span id="cb28-116"><a href="#cb28-116" aria-hidden="true" tabindex="-1"></a>cl__UNIT_MEASURE <span class="op">=</span> sdmx.to_pandas(cpi_dsd[<span class="st">'BIS_LONG_CPI'</span>].dimensions.get(<span class="st">"UNIT_MEASURE"</span>).local_representation.enumerated)</span>
+<span id="cb28-117"><a href="#cb28-117" aria-hidden="true" tabindex="-1"></a>cl__UNIT_MEASURE</span>
+<span id="cb28-118"><a href="#cb28-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-119"><a href="#cb28-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-120"><a href="#cb28-120" aria-hidden="true" tabindex="-1"></a>In the <span class="co">[</span><span class="ot">BIS website for this data</span><span class="co">](https://data.bis.org/topics/CPI#faq)</span>, we can see that the unit in levels is <span class="in">`Index, 2010 = 100`</span> (the other one is <span class="in">`Year-on-year changes, in per cent`</span>, which as discussed above we don't want for this case.)</span>
+<span id="cb28-121"><a href="#cb28-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-124"><a href="#cb28-124" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-125"><a href="#cb28-125" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "finding code for index"</span></span>
+<span id="cb28-126"><a href="#cb28-126" aria-hidden="true" tabindex="-1"></a>cl__UNIT_MEASURE[cl__UNIT_MEASURE.<span class="bu">str</span>.contains(<span class="st">"Index, 2010 = 100"</span>)]</span>
+<span id="cb28-127"><a href="#cb28-127" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-128"><a href="#cb28-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-129"><a href="#cb28-129" aria-hidden="true" tabindex="-1"></a>Armed with this knowledge, we can now download monthly consumer price index data for the US. Let's start after 1985 so that we have a sufficiently long history but without too much influence of the tectonic shift of the US dollar devaluation in the early 1970s and ensuing high inflation:</span>
+<span id="cb28-130"><a href="#cb28-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-133"><a href="#cb28-133" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-134"><a href="#cb28-134" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-CPI</span></span>
+<span id="cb28-135"><a href="#cb28-135" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "US consumer price index, 2010 = 100"</span></span>
+<span id="cb28-136"><a href="#cb28-136" aria-hidden="true" tabindex="-1"></a>df_infl <span class="op">=</span> load_SDMX_data(</span>
+<span id="cb28-137"><a href="#cb28-137" aria-hidden="true" tabindex="-1"></a>    sources<span class="op">=</span>{<span class="st">"BIS"</span>: <span class="st">"'WS_LONG_CPI'"</span>},</span>
+<span id="cb28-138"><a href="#cb28-138" aria-hidden="true" tabindex="-1"></a>    keys<span class="op">=</span>{<span class="st">"FREQ"</span>: <span class="st">"M"</span>, <span class="st">"REF_AREA"</span>: <span class="st">"US"</span>, <span class="st">"UNIT_MEASURE"</span>: <span class="st">"628"</span>},</span>
+<span id="cb28-139"><a href="#cb28-139" aria-hidden="true" tabindex="-1"></a>    params<span class="op">=</span>{<span class="st">"startPeriod"</span>: <span class="dv">1985</span>}</span>
+<span id="cb28-140"><a href="#cb28-140" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-141"><a href="#cb28-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-142"><a href="#cb28-142" aria-hidden="true" tabindex="-1"></a>df_infl.plot()</span>
+<span id="cb28-143"><a href="#cb28-143" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-144"><a href="#cb28-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-145"><a href="#cb28-145" aria-hidden="true" tabindex="-1"></a>As you can see in @fig-CPI, we downloaded the series $<span class="sc">\{</span>\text{CPI}_t<span class="sc">\}</span>$. Transforming that into $<span class="sc">\{</span>\pi_t<span class="sc">\}</span>$, defined above, we have:</span>
+<span id="cb28-146"><a href="#cb28-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-149"><a href="#cb28-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-150"><a href="#cb28-150" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-pi</span></span>
+<span id="cb28-151"><a href="#cb28-151" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: US monthly inflation rate</span></span>
+<span id="cb28-152"><a href="#cb28-152" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb28-153"><a href="#cb28-153" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, color<span class="op">=</span><span class="st">"black"</span>)</span>
+<span id="cb28-154"><a href="#cb28-154" aria-hidden="true" tabindex="-1"></a>df_infl_m <span class="op">=</span> df_infl.pct_change()</span>
+<span id="cb28-155"><a href="#cb28-155" aria-hidden="true" tabindex="-1"></a>df_infl_m.index <span class="op">=</span> df_infl_m.index <span class="op">+</span> pd.offsets.MonthEnd(<span class="dv">0</span>) <span class="co"># move to month end</span></span>
+<span id="cb28-156"><a href="#cb28-156" aria-hidden="true" tabindex="-1"></a>df_infl_m.plot(ax<span class="op">=</span>ax)</span>
+<span id="cb28-157"><a href="#cb28-157" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb28-158"><a href="#cb28-158" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-159"><a href="#cb28-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-160"><a href="#cb28-160" aria-hidden="true" tabindex="-1"></a><span class="fu">### Oil prices</span></span>
+<span id="cb28-161"><a href="#cb28-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-162"><a href="#cb28-162" aria-hidden="true" tabindex="-1"></a>Since the focus is on US inflation, below we get WTI oil prices. This data is downloaded from the <span class="co">[</span><span class="ot">St Louis Fed's FRED webpage</span><span class="co">](https://fred.stlouisfed.org/series/DCOILWTICO)</span>.</span>
+<span id="cb28-163"><a href="#cb28-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-166"><a href="#cb28-166" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-167"><a href="#cb28-167" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-oil</span></span>
+<span id="cb28-168"><a href="#cb28-168" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: WTI oil prices</span></span>
+<span id="cb28-169"><a href="#cb28-169" aria-hidden="true" tabindex="-1"></a>df_oil <span class="op">=</span> pd.read_csv(<span class="st">"docs/DCOILWTICO.csv"</span>)</span>
+<span id="cb28-170"><a href="#cb28-170" aria-hidden="true" tabindex="-1"></a>df_oil[<span class="st">'DCOILWTICO'</span>] <span class="op">=</span> pd.to_numeric(df_oil[<span class="st">'DCOILWTICO'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)</span>
+<span id="cb28-171"><a href="#cb28-171" aria-hidden="true" tabindex="-1"></a>df_oil[<span class="st">'DATE'</span>] <span class="op">=</span> pd.to_datetime(df_oil[<span class="st">'DATE'</span>])</span>
+<span id="cb28-172"><a href="#cb28-172" aria-hidden="true" tabindex="-1"></a>df_oil.set_index(<span class="st">'DATE'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb28-173"><a href="#cb28-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-174"><a href="#cb28-174" aria-hidden="true" tabindex="-1"></a>df_oil.plot()</span>
+<span id="cb28-175"><a href="#cb28-175" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-176"><a href="#cb28-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-177"><a href="#cb28-177" aria-hidden="true" tabindex="-1"></a>For the nowcasting, we are interested in the daily variation:</span>
 <span id="cb28-178"><a href="#cb28-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-179"><a href="#cb28-179" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb28-180"><a href="#cb28-180" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, color<span class="op">=</span><span class="st">"black"</span>)</span>
-<span id="cb28-181"><a href="#cb28-181" aria-hidden="true" tabindex="-1"></a>df_oil_d <span class="op">=</span> df_oil.pct_change().dropna()</span>
-<span id="cb28-182"><a href="#cb28-182" aria-hidden="true" tabindex="-1"></a>df_oil_d.plot(ax<span class="op">=</span>ax)</span>
-<span id="cb28-183"><a href="#cb28-183" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb28-184"><a href="#cb28-184" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-185"><a href="#cb28-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-186"><a href="#cb28-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-187"><a href="#cb28-187" aria-hidden="true" tabindex="-1"></a><span class="fu">### Temporal features</span></span>
-<span id="cb28-188"><a href="#cb28-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-189"><a href="#cb28-189" aria-hidden="true" tabindex="-1"></a>There is a lot of information encoded in the temporal features of a time series: which day in the month it is, which month of the year, etc. For example, consider how consumers behave differently in response to oil prices over warmer months (when many decide or not to travel, and how far) compared to colder months (when energy prices factor in heating and is thus perhaps less elastic).</span>
-<span id="cb28-190"><a href="#cb28-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-191"><a href="#cb28-191" aria-hidden="true" tabindex="-1"></a>In this pedagogical exercise, we will not incorporate these temporal features to keep things simple. But in a more complete version later in this notebook we will incorporate them.</span>
-<span id="cb28-192"><a href="#cb28-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-193"><a href="#cb28-193" aria-hidden="true" tabindex="-1"></a>In any case, to simplify notation about time, instead of the usual subscript $t$ as above to denote a time period, for precision we will follow this convention:</span>
-<span id="cb28-194"><a href="#cb28-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-195"><a href="#cb28-195" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>subscript $m$ denotes a given month</span>
-<span id="cb28-196"><a href="#cb28-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-197"><a href="#cb28-197" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>subscript $d$ denotes a given day</span>
-<span id="cb28-198"><a href="#cb28-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-199"><a href="#cb28-199" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>subscript $d(m)$ denotes a given day in a given month; example: $d(m-1)$ is a day in the previous month.</span>
-<span id="cb28-200"><a href="#cb28-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-201"><a href="#cb28-201" aria-hidden="true" tabindex="-1"></a><span class="fu">### Splitting the dataset</span></span>
-<span id="cb28-202"><a href="#cb28-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-203"><a href="#cb28-203" aria-hidden="true" tabindex="-1"></a>We will now split the dataset into training data up until end-2020 and validation data afterwards. And the training data will be further split into 5 temporally sequential folds (see <span class="co">[</span><span class="ot">here</span><span class="co">](https://scikit-learn.org/stable/modules/cross_validation.html#time-series-split)</span> for more information).</span>
-<span id="cb28-204"><a href="#cb28-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-205"><a href="#cb28-205" aria-hidden="true" tabindex="-1"></a>To simplify, we will consider valid nowcasting *input* data for a given output in period $m$ as:</span>
-<span id="cb28-206"><a href="#cb28-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-207"><a href="#cb28-207" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>all monthly data up to, and including, $m-1$; and</span>
-<span id="cb28-208"><a href="#cb28-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-209"><a href="#cb28-209" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>all daily data up to, and including, $d(m)$.</span>
-<span id="cb28-210"><a href="#cb28-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-213"><a href="#cb28-213" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-214"><a href="#cb28-214" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "time series splits"</span></span>
+<span id="cb28-181"><a href="#cb28-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-182"><a href="#cb28-182" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-oilD</span></span>
+<span id="cb28-183"><a href="#cb28-183" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Daily change in WTI oil prices</span></span>
+<span id="cb28-184"><a href="#cb28-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-185"><a href="#cb28-185" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb28-186"><a href="#cb28-186" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, color<span class="op">=</span><span class="st">"black"</span>)</span>
+<span id="cb28-187"><a href="#cb28-187" aria-hidden="true" tabindex="-1"></a>df_oil_d <span class="op">=</span> df_oil.pct_change().dropna()</span>
+<span id="cb28-188"><a href="#cb28-188" aria-hidden="true" tabindex="-1"></a>df_oil_d.plot(ax<span class="op">=</span>ax)</span>
+<span id="cb28-189"><a href="#cb28-189" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb28-190"><a href="#cb28-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-191"><a href="#cb28-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-192"><a href="#cb28-192" aria-hidden="true" tabindex="-1"></a><span class="fu">### Temporal features</span></span>
+<span id="cb28-193"><a href="#cb28-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-194"><a href="#cb28-194" aria-hidden="true" tabindex="-1"></a>There is a lot of information encoded in the temporal features of a time series: which day in the month it is, which month of the year, etc. For example, consider how consumers behave differently in response to oil prices over warmer months (when many decide or not to travel, and how far) compared to colder months (when energy prices factor in heating and is thus perhaps less elastic).</span>
+<span id="cb28-195"><a href="#cb28-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-196"><a href="#cb28-196" aria-hidden="true" tabindex="-1"></a>In this pedagogical exercise, we will not incorporate these temporal features to keep things simple. But the more complete version later in this notebook will incorporate them.</span>
+<span id="cb28-197"><a href="#cb28-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-198"><a href="#cb28-198" aria-hidden="true" tabindex="-1"></a>In any case, to simplify notation about time, instead of the usual subscript $t$ as above to denote a time period, for precision about the frequency, we will follow this convention:</span>
+<span id="cb28-199"><a href="#cb28-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-200"><a href="#cb28-200" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>subscript $m$ denotes a given month;</span>
+<span id="cb28-201"><a href="#cb28-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-202"><a href="#cb28-202" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>subscript $d$ denotes a given day;</span>
+<span id="cb28-203"><a href="#cb28-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-204"><a href="#cb28-204" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>subscript $d(m)$ denotes a given day in a given month; example: $d(m-1)$ is a day in the previous month.</span>
+<span id="cb28-205"><a href="#cb28-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-206"><a href="#cb28-206" aria-hidden="true" tabindex="-1"></a><span class="fu">### Splitting the dataset</span></span>
+<span id="cb28-207"><a href="#cb28-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-208"><a href="#cb28-208" aria-hidden="true" tabindex="-1"></a>We will now split the dataset into training data up until end-2020 and validation data afterwards. The training data will be further split into 5 temporally sequential folds.<span class="ot">[^tssplit]</span></span>
+<span id="cb28-209"><a href="#cb28-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-210"><a href="#cb28-210" aria-hidden="true" tabindex="-1"></a><span class="ot">[^tssplit]: </span>See <span class="co">[</span><span class="ot">here</span><span class="co">](https://scikit-learn.org/stable/modules/cross_validation.html#time-series-split)</span> for more information on time series splitting.</span>
+<span id="cb28-211"><a href="#cb28-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-212"><a href="#cb28-212" aria-hidden="true" tabindex="-1"></a>To simplify, we will consider valid nowcasting *input* data for a given output in period $m$ as:</span>
+<span id="cb28-213"><a href="#cb28-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-214"><a href="#cb28-214" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>all monthly data up to, and including, $m-1$; and</span>
 <span id="cb28-215"><a href="#cb28-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-216"><a href="#cb28-216" aria-hidden="true" tabindex="-1"></a><span class="co"># Lagging the nowcasted variable</span></span>
-<span id="cb28-217"><a href="#cb28-217" aria-hidden="true" tabindex="-1"></a>df_infl_m_L <span class="op">=</span> df_infl_m.shift(<span class="dv">1</span>).dropna()</span>
-<span id="cb28-218"><a href="#cb28-218" aria-hidden="true" tabindex="-1"></a>df_infl_m <span class="op">=</span> df_infl_m.loc[df_infl_m_L.index]</span>
-<span id="cb28-219"><a href="#cb28-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-220"><a href="#cb28-220" aria-hidden="true" tabindex="-1"></a><span class="co"># Training date cutoff</span></span>
-<span id="cb28-221"><a href="#cb28-221" aria-hidden="true" tabindex="-1"></a>cutoff <span class="op">=</span> <span class="st">"2020-12-31"</span></span>
+<span id="cb28-216"><a href="#cb28-216" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>all daily data up to, and including, $d(m)$.</span>
+<span id="cb28-217"><a href="#cb28-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-220"><a href="#cb28-220" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-221"><a href="#cb28-221" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "time series splits"</span></span>
 <span id="cb28-222"><a href="#cb28-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-223"><a href="#cb28-223" aria-hidden="true" tabindex="-1"></a>y_train, y_test <span class="op">=</span> df_infl_m[:cutoff], df_infl_m[cutoff:]</span>
-<span id="cb28-224"><a href="#cb28-224" aria-hidden="true" tabindex="-1"></a>Xm_train, Xm_test <span class="op">=</span> df_infl_m_L[:cutoff], df_infl_m_L[cutoff:]</span>
-<span id="cb28-225"><a href="#cb28-225" aria-hidden="true" tabindex="-1"></a>Xd_train, Xd_test <span class="op">=</span> df_oil_d[:cutoff], df_oil_d[cutoff:][<span class="dv">1</span>:]</span>
+<span id="cb28-223"><a href="#cb28-223" aria-hidden="true" tabindex="-1"></a><span class="co"># Lagging the nowcasted variable</span></span>
+<span id="cb28-224"><a href="#cb28-224" aria-hidden="true" tabindex="-1"></a>df_infl_m_L <span class="op">=</span> df_infl_m.shift(<span class="dv">1</span>).dropna()</span>
+<span id="cb28-225"><a href="#cb28-225" aria-hidden="true" tabindex="-1"></a>df_infl_m <span class="op">=</span> df_infl_m.loc[df_infl_m_L.index]</span>
 <span id="cb28-226"><a href="#cb28-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-227"><a href="#cb28-227" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up the temporal folds, using the dependent variable's date</span></span>
-<span id="cb28-228"><a href="#cb28-228" aria-hidden="true" tabindex="-1"></a>tscv <span class="op">=</span> TimeSeriesSplit(n_splits<span class="op">=</span><span class="dv">5</span>)</span>
-<span id="cb28-229"><a href="#cb28-229" aria-hidden="true" tabindex="-1"></a>monthly_cv <span class="op">=</span> tscv.split(y_train)</span>
-<span id="cb28-230"><a href="#cb28-230" aria-hidden="true" tabindex="-1"></a>monthly_cv_dates <span class="op">=</span> [</span>
-<span id="cb28-231"><a href="#cb28-231" aria-hidden="true" tabindex="-1"></a>    (y_train.index[m], y_train.index[n]) </span>
-<span id="cb28-232"><a href="#cb28-232" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> m, n <span class="kw">in</span> monthly_cv</span>
-<span id="cb28-233"><a href="#cb28-233" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb28-234"><a href="#cb28-234" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-235"><a href="#cb28-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-236"><a href="#cb28-236" aria-hidden="true" tabindex="-1"></a>Now for every month $m$ in the dependent variable, we can find all $m_{t-l}, l\geq 1$ and all $d(m_{t-s}), s\geq 0$.</span>
-<span id="cb28-237"><a href="#cb28-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-240"><a href="#cb28-240" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-241"><a href="#cb28-241" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "Auxiliary functions"</span></span>
-<span id="cb28-242"><a href="#cb28-242" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dates_Xy(X, y, date_list):</span>
-<span id="cb28-243"><a href="#cb28-243" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_filtered_data(frame, d):</span>
-<span id="cb28-244"><a href="#cb28-244" aria-hidden="true" tabindex="-1"></a>        filtered_data <span class="op">=</span> frame.loc[frame.index <span class="op">&lt;=</span> d]</span>
-<span id="cb28-245"><a href="#cb28-245" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> filtered_data <span class="cf">if</span> <span class="kw">not</span> filtered_data.empty <span class="cf">else</span> <span class="va">None</span></span>
-<span id="cb28-246"><a href="#cb28-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-247"><a href="#cb28-247" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> {</span>
-<span id="cb28-248"><a href="#cb28-248" aria-hidden="true" tabindex="-1"></a>        i: (</span>
-<span id="cb28-249"><a href="#cb28-249" aria-hidden="true" tabindex="-1"></a>            {</span>
-<span id="cb28-250"><a href="#cb28-250" aria-hidden="true" tabindex="-1"></a>                freq: get_filtered_data(Xdata, d)</span>
-<span id="cb28-251"><a href="#cb28-251" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> freq, Xdata <span class="kw">in</span> X.items()</span>
-<span id="cb28-252"><a href="#cb28-252" aria-hidden="true" tabindex="-1"></a>            }, </span>
-<span id="cb28-253"><a href="#cb28-253" aria-hidden="true" tabindex="-1"></a>            y.loc[d]</span>
-<span id="cb28-254"><a href="#cb28-254" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb28-255"><a href="#cb28-255" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, d <span class="kw">in</span> <span class="bu">enumerate</span>(date_list)</span>
-<span id="cb28-256"><a href="#cb28-256" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb28-257"><a href="#cb28-257" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span>
-<span id="cb28-258"><a href="#cb28-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-259"><a href="#cb28-259" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_Xy(X, y, splits):</span>
-<span id="cb28-260"><a href="#cb28-260" aria-hidden="true" tabindex="-1"></a>    folds <span class="op">=</span> {}</span>
-<span id="cb28-261"><a href="#cb28-261" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k, split <span class="kw">in</span> <span class="bu">enumerate</span>(splits):</span>
-<span id="cb28-262"><a href="#cb28-262" aria-hidden="true" tabindex="-1"></a>        folds[k] <span class="op">=</span> {}</span>
-<span id="cb28-263"><a href="#cb28-263" aria-hidden="true" tabindex="-1"></a>        split_train, split_valid <span class="op">=</span> split</span>
-<span id="cb28-264"><a href="#cb28-264" aria-hidden="true" tabindex="-1"></a>        folds[k][<span class="st">'Xy_train'</span>] <span class="op">=</span> dates_Xy(X, y, split_train)</span>
-<span id="cb28-265"><a href="#cb28-265" aria-hidden="true" tabindex="-1"></a>        folds[k][<span class="st">'Xy_valid'</span>] <span class="op">=</span> dates_Xy(X, y, split_valid)</span>
-<span id="cb28-266"><a href="#cb28-266" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> folds</span>
-<span id="cb28-267"><a href="#cb28-267" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-268"><a href="#cb28-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-269"><a href="#cb28-269" aria-hidden="true" tabindex="-1"></a>Let's see how this time series fold will be structured:</span>
-<span id="cb28-270"><a href="#cb28-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-273"><a href="#cb28-273" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-274"><a href="#cb28-274" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "Create batches of data"</span></span>
+<span id="cb28-227"><a href="#cb28-227" aria-hidden="true" tabindex="-1"></a><span class="co"># Training date cutoff</span></span>
+<span id="cb28-228"><a href="#cb28-228" aria-hidden="true" tabindex="-1"></a>cutoff <span class="op">=</span> <span class="st">"2020-12-31"</span></span>
+<span id="cb28-229"><a href="#cb28-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-230"><a href="#cb28-230" aria-hidden="true" tabindex="-1"></a>y_train, y_test <span class="op">=</span> df_infl_m[:cutoff], df_infl_m[cutoff:]</span>
+<span id="cb28-231"><a href="#cb28-231" aria-hidden="true" tabindex="-1"></a>Xm_train, Xm_test <span class="op">=</span> df_infl_m_L[:cutoff], df_infl_m_L[cutoff:]</span>
+<span id="cb28-232"><a href="#cb28-232" aria-hidden="true" tabindex="-1"></a>Xd_train, Xd_test <span class="op">=</span> df_oil_d[:cutoff], df_oil_d[cutoff:][<span class="dv">1</span>:]</span>
+<span id="cb28-233"><a href="#cb28-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-234"><a href="#cb28-234" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up the temporal folds, using the dependent variable's date</span></span>
+<span id="cb28-235"><a href="#cb28-235" aria-hidden="true" tabindex="-1"></a>tscv <span class="op">=</span> TimeSeriesSplit(n_splits<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb28-236"><a href="#cb28-236" aria-hidden="true" tabindex="-1"></a>monthly_cv <span class="op">=</span> tscv.split(y_train)</span>
+<span id="cb28-237"><a href="#cb28-237" aria-hidden="true" tabindex="-1"></a>monthly_cv_dates <span class="op">=</span> [</span>
+<span id="cb28-238"><a href="#cb28-238" aria-hidden="true" tabindex="-1"></a>    (y_train.index[m], y_train.index[n]) </span>
+<span id="cb28-239"><a href="#cb28-239" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> m, n <span class="kw">in</span> monthly_cv</span>
+<span id="cb28-240"><a href="#cb28-240" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb28-241"><a href="#cb28-241" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-242"><a href="#cb28-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-243"><a href="#cb28-243" aria-hidden="true" tabindex="-1"></a>Now for every month $m$ in the dependent variable, we can find all $m_{t-l}, l\geq 1$ and all $d(m_{t-s}), s\geq 0$.</span>
+<span id="cb28-244"><a href="#cb28-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-247"><a href="#cb28-247" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-248"><a href="#cb28-248" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "Auxiliary functions"</span></span>
+<span id="cb28-249"><a href="#cb28-249" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dates_Xy(X, y, date_list):</span>
+<span id="cb28-250"><a href="#cb28-250" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_filtered_data(frame, d):</span>
+<span id="cb28-251"><a href="#cb28-251" aria-hidden="true" tabindex="-1"></a>        filtered_data <span class="op">=</span> frame.loc[frame.index <span class="op">&lt;=</span> d]</span>
+<span id="cb28-252"><a href="#cb28-252" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> filtered_data <span class="cf">if</span> <span class="kw">not</span> filtered_data.empty <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb28-253"><a href="#cb28-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-254"><a href="#cb28-254" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> {</span>
+<span id="cb28-255"><a href="#cb28-255" aria-hidden="true" tabindex="-1"></a>        i: (</span>
+<span id="cb28-256"><a href="#cb28-256" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb28-257"><a href="#cb28-257" aria-hidden="true" tabindex="-1"></a>                freq: get_filtered_data(Xdata, d)</span>
+<span id="cb28-258"><a href="#cb28-258" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> freq, Xdata <span class="kw">in</span> X.items()</span>
+<span id="cb28-259"><a href="#cb28-259" aria-hidden="true" tabindex="-1"></a>            }, </span>
+<span id="cb28-260"><a href="#cb28-260" aria-hidden="true" tabindex="-1"></a>            y.loc[d]</span>
+<span id="cb28-261"><a href="#cb28-261" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb28-262"><a href="#cb28-262" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, d <span class="kw">in</span> <span class="bu">enumerate</span>(date_list)</span>
+<span id="cb28-263"><a href="#cb28-263" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb28-264"><a href="#cb28-264" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span>
+<span id="cb28-265"><a href="#cb28-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-266"><a href="#cb28-266" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_Xy(X, y, splits):</span>
+<span id="cb28-267"><a href="#cb28-267" aria-hidden="true" tabindex="-1"></a>    folds <span class="op">=</span> {}</span>
+<span id="cb28-268"><a href="#cb28-268" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k, split <span class="kw">in</span> <span class="bu">enumerate</span>(splits):</span>
+<span id="cb28-269"><a href="#cb28-269" aria-hidden="true" tabindex="-1"></a>        folds[k] <span class="op">=</span> {}</span>
+<span id="cb28-270"><a href="#cb28-270" aria-hidden="true" tabindex="-1"></a>        split_train, split_valid <span class="op">=</span> split</span>
+<span id="cb28-271"><a href="#cb28-271" aria-hidden="true" tabindex="-1"></a>        folds[k][<span class="st">'Xy_train'</span>] <span class="op">=</span> dates_Xy(X, y, split_train)</span>
+<span id="cb28-272"><a href="#cb28-272" aria-hidden="true" tabindex="-1"></a>        folds[k][<span class="st">'Xy_valid'</span>] <span class="op">=</span> dates_Xy(X, y, split_valid)</span>
+<span id="cb28-273"><a href="#cb28-273" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> folds</span>
+<span id="cb28-274"><a href="#cb28-274" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb28-275"><a href="#cb28-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-276"><a href="#cb28-276" aria-hidden="true" tabindex="-1"></a>train_data <span class="op">=</span> create_Xy(</span>
-<span id="cb28-277"><a href="#cb28-277" aria-hidden="true" tabindex="-1"></a>    X<span class="op">=</span>{<span class="st">"m"</span>: Xm_train, <span class="st">"d"</span>: Xd_train}, </span>
-<span id="cb28-278"><a href="#cb28-278" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>y_train, </span>
-<span id="cb28-279"><a href="#cb28-279" aria-hidden="true" tabindex="-1"></a>    splits<span class="op">=</span>monthly_cv_dates</span>
-<span id="cb28-280"><a href="#cb28-280" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb28-281"><a href="#cb28-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-282"><a href="#cb28-282" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ts_fold <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(train_data)):</span>
-<span id="cb28-283"><a href="#cb28-283" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Fold No </span><span class="sc">{</span>ts_fold <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">:"</span>)</span>
-<span id="cb28-284"><a href="#cb28-284" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span><span class="bu">len</span>(train_data[ts_fold][<span class="st">'Xy_train'</span>])<span class="sc">}</span><span class="ss"> training X-y pairs"</span>)</span>
-<span id="cb28-285"><a href="#cb28-285" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span><span class="bu">len</span>(train_data[ts_fold][<span class="st">'Xy_valid'</span>])<span class="sc">}</span><span class="ss"> validation X-y pairs"</span>)</span>
-<span id="cb28-286"><a href="#cb28-286" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-287"><a href="#cb28-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-276"><a href="#cb28-276" aria-hidden="true" tabindex="-1"></a>Let's see how this time series fold will be structured:</span>
+<span id="cb28-277"><a href="#cb28-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-280"><a href="#cb28-280" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-281"><a href="#cb28-281" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: "Create batches of data"</span></span>
+<span id="cb28-282"><a href="#cb28-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-283"><a href="#cb28-283" aria-hidden="true" tabindex="-1"></a>train_data <span class="op">=</span> create_Xy(</span>
+<span id="cb28-284"><a href="#cb28-284" aria-hidden="true" tabindex="-1"></a>    X<span class="op">=</span>{<span class="st">"m"</span>: Xm_train, <span class="st">"d"</span>: Xd_train}, </span>
+<span id="cb28-285"><a href="#cb28-285" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>y_train, </span>
+<span id="cb28-286"><a href="#cb28-286" aria-hidden="true" tabindex="-1"></a>    splits<span class="op">=</span>monthly_cv_dates</span>
+<span id="cb28-287"><a href="#cb28-287" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb28-288"><a href="#cb28-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-289"><a href="#cb28-289" aria-hidden="true" tabindex="-1"></a><span class="fu">## First model: a single layer neural network</span></span>
-<span id="cb28-290"><a href="#cb28-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-291"><a href="#cb28-291" aria-hidden="true" tabindex="-1"></a>The goal of this model is to nowcast $\pi_t$ based on its past values $\pi_{t-1}$ and on current oil prices $o_{d(m-s)}, s \geq 0$. The first model we will train is a very simple neural network:</span>
-<span id="cb28-292"><a href="#cb28-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-293"><a href="#cb28-293" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb28-294"><a href="#cb28-294" aria-hidden="true" tabindex="-1"></a>\begin{align}</span>
-<span id="cb28-295"><a href="#cb28-295" aria-hidden="true" tabindex="-1"></a>\xi &amp;= \phi(\mathbf{W}_1 x_t + \mathbf{b}_1) <span class="sc">\\</span></span>
-<span id="cb28-296"><a href="#cb28-296" aria-hidden="true" tabindex="-1"></a>y_t &amp;= \mathbf{W}_0 \xi + \mathbf{b}_0,</span>
-<span id="cb28-297"><a href="#cb28-297" aria-hidden="true" tabindex="-1"></a>\end{align}</span>
-<span id="cb28-298"><a href="#cb28-298" aria-hidden="true" tabindex="-1"></a>$$ {#eq-model0nnlayer}</span>
-<span id="cb28-299"><a href="#cb28-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-300"><a href="#cb28-300" aria-hidden="true" tabindex="-1"></a>where $\mathbf{W}_0 \in \mathbb{R}^{1 \times d}$, $b_0 \in \mathbb{R}$, $\mathbf{W}_1 \in \mathbb{R}^{d \times |x_t|}$, $b_1 \in \mathbb{R}^{d}$, $\xi \in \mathbb{R}^d$ and $\phi$ is an activation function. For simplicity, we will use the ReLU activation function, which is simply: $\phi(z) = \text{max}(z, 0)$.</span>
-<span id="cb28-301"><a href="#cb28-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-302"><a href="#cb28-302" aria-hidden="true" tabindex="-1"></a>For this neural network, we need a fix dimensionality of the input data. In other words, the network *needs* to know how much data it will take in at any given time, and this should not change throughout training or inference time.</span>
-<span id="cb28-303"><a href="#cb28-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-304"><a href="#cb28-304" aria-hidden="true" tabindex="-1"></a>For simplicity, let's fix it at a single lagged inflation (the past month, $\pi_{m-1}$) and the most recent available oil price change, $o_d$.</span>
+<span id="cb28-289"><a href="#cb28-289" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ts_fold <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(train_data)):</span>
+<span id="cb28-290"><a href="#cb28-290" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Fold No </span><span class="sc">{</span>ts_fold <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">:"</span>)</span>
+<span id="cb28-291"><a href="#cb28-291" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span><span class="bu">len</span>(train_data[ts_fold][<span class="st">'Xy_train'</span>])<span class="sc">}</span><span class="ss"> training X-y pairs"</span>)</span>
+<span id="cb28-292"><a href="#cb28-292" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span><span class="bu">len</span>(train_data[ts_fold][<span class="st">'Xy_valid'</span>])<span class="sc">}</span><span class="ss"> validation X-y pairs"</span>)</span>
+<span id="cb28-293"><a href="#cb28-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-294"><a href="#cb28-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-295"><a href="#cb28-295" aria-hidden="true" tabindex="-1"></a><span class="fu">## First model: a single layer neural network {#sec-layer}</span></span>
+<span id="cb28-296"><a href="#cb28-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-297"><a href="#cb28-297" aria-hidden="true" tabindex="-1"></a>The goal of this model is to nowcast $\pi_t$ based on its past values $\pi_{t-1}$ and on current oil prices $o_{d(m-s)}, s \geq 0$. The first model we will train is a very simple neural network:</span>
+<span id="cb28-298"><a href="#cb28-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-299"><a href="#cb28-299" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb28-300"><a href="#cb28-300" aria-hidden="true" tabindex="-1"></a>\begin{align}</span>
+<span id="cb28-301"><a href="#cb28-301" aria-hidden="true" tabindex="-1"></a>\xi &amp;= \phi(\mathbf{W}_1 x_t + \mathbf{b}_1) <span class="sc">\\</span></span>
+<span id="cb28-302"><a href="#cb28-302" aria-hidden="true" tabindex="-1"></a>y_t &amp;= \mathbf{W}_0 \xi + \mathbf{b}_0,</span>
+<span id="cb28-303"><a href="#cb28-303" aria-hidden="true" tabindex="-1"></a>\end{align}</span>
+<span id="cb28-304"><a href="#cb28-304" aria-hidden="true" tabindex="-1"></a>$$ {#eq-model0nnlayer}</span>
 <span id="cb28-305"><a href="#cb28-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-308"><a href="#cb28-308" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-309"><a href="#cb28-309" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="dv">5</span> <span class="co"># sort of arbitrary</span></span>
-<span id="cb28-310"><a href="#cb28-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-311"><a href="#cb28-311" aria-hidden="true" tabindex="-1"></a>nn <span class="op">=</span> keras.Sequential([</span>
-<span id="cb28-312"><a href="#cb28-312" aria-hidden="true" tabindex="-1"></a>    keras.layers.Input(shape<span class="op">=</span>(<span class="dv">2</span>,)),</span>
-<span id="cb28-313"><a href="#cb28-313" aria-hidden="true" tabindex="-1"></a>    keras.layers.Dense(units <span class="op">=</span> d, activation<span class="op">=</span><span class="st">"relu"</span>),</span>
-<span id="cb28-314"><a href="#cb28-314" aria-hidden="true" tabindex="-1"></a>    keras.layers.Dense(units<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb28-315"><a href="#cb28-315" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb28-316"><a href="#cb28-316" aria-hidden="true" tabindex="-1"></a>nn.summary()</span>
-<span id="cb28-317"><a href="#cb28-317" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-306"><a href="#cb28-306" aria-hidden="true" tabindex="-1"></a>where $\mathbf{W}_0 \in \mathbb{R}^{1 \times d}$, $b_0 \in \mathbb{R}$, $\mathbf{W}_1 \in \mathbb{R}^{d \times |x_t|}$, $b_1 \in \mathbb{R}^{d}$, $\xi \in \mathbb{R}^d$ and $\phi$ is an activation function. For simplicity, we will use the ReLU activation function, which is simply: $\phi(z) = \text{max}(z, 0)$.</span>
+<span id="cb28-307"><a href="#cb28-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-308"><a href="#cb28-308" aria-hidden="true" tabindex="-1"></a>For this neural network, we need a fix dimensionality of the input data. In other words, the network *needs* to know how much data it will take in at any given time, and this should not change throughout training or inference time.</span>
+<span id="cb28-309"><a href="#cb28-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-310"><a href="#cb28-310" aria-hidden="true" tabindex="-1"></a>For simplicity, let's fix it at a single lagged inflation (the past month, $\pi_{m-1}$) and the most recent available oil price change, $o_d$.</span>
+<span id="cb28-311"><a href="#cb28-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-314"><a href="#cb28-314" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-315"><a href="#cb28-315" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: nn model, simple layer</span></span>
+<span id="cb28-316"><a href="#cb28-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-317"><a href="#cb28-317" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="dv">5</span> <span class="co"># sort of arbitrary</span></span>
 <span id="cb28-318"><a href="#cb28-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-319"><a href="#cb28-319" aria-hidden="true" tabindex="-1"></a>Checking that it works:</span>
-<span id="cb28-320"><a href="#cb28-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-323"><a href="#cb28-323" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-324"><a href="#cb28-324" aria-hidden="true" tabindex="-1"></a><span class="co"># taking the last day of the training set of the last training fold</span></span>
-<span id="cb28-325"><a href="#cb28-325" aria-hidden="true" tabindex="-1"></a>last_day_key <span class="op">=</span> <span class="bu">len</span>(train_data[ts_fold][<span class="st">'Xy_train'</span>]) <span class="op">-</span> <span class="dv">1</span></span>
-<span id="cb28-326"><a href="#cb28-326" aria-hidden="true" tabindex="-1"></a>tmp_X, tmp_y <span class="op">=</span> train_data[ts_fold][<span class="st">'Xy_train'</span>][last_day_key]</span>
-<span id="cb28-327"><a href="#cb28-327" aria-hidden="true" tabindex="-1"></a>tmp_X <span class="op">=</span> np.concatenate([v.iloc[<span class="op">-</span><span class="dv">1</span>].values <span class="cf">for</span> v <span class="kw">in</span> tmp_X.values()]).reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb28-319"><a href="#cb28-319" aria-hidden="true" tabindex="-1"></a>nn <span class="op">=</span> keras.Sequential([</span>
+<span id="cb28-320"><a href="#cb28-320" aria-hidden="true" tabindex="-1"></a>    keras.layers.Input(shape<span class="op">=</span>(<span class="dv">2</span>,)),</span>
+<span id="cb28-321"><a href="#cb28-321" aria-hidden="true" tabindex="-1"></a>    keras.layers.Dense(units <span class="op">=</span> d, activation<span class="op">=</span><span class="st">"relu"</span>),</span>
+<span id="cb28-322"><a href="#cb28-322" aria-hidden="true" tabindex="-1"></a>    keras.layers.Dense(units<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb28-323"><a href="#cb28-323" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb28-324"><a href="#cb28-324" aria-hidden="true" tabindex="-1"></a>nn.summary()</span>
+<span id="cb28-325"><a href="#cb28-325" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-326"><a href="#cb28-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-327"><a href="#cb28-327" aria-hidden="true" tabindex="-1"></a>Checking that it works:</span>
 <span id="cb28-328"><a href="#cb28-328" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-329"><a href="#cb28-329" aria-hidden="true" tabindex="-1"></a><span class="co"># checking that the model runs</span></span>
-<span id="cb28-330"><a href="#cb28-330" aria-hidden="true" tabindex="-1"></a>nn_pred <span class="op">=</span> nn(tmp_X)</span>
-<span id="cb28-331"><a href="#cb28-331" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Prediction: </span><span class="sc">{</span>nn_pred<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb28-332"><a href="#cb28-332" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Actual value: </span><span class="sc">{</span>tmp_y<span class="sc">.</span>values<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb28-333"><a href="#cb28-333" aria-hidden="true" tabindex="-1"></a>nn_loss <span class="op">=</span> keras.losses.MeanSquaredError()(y_true<span class="op">=</span>tmp_y.values, y_pred<span class="op">=</span>nn_pred)</span>
-<span id="cb28-334"><a href="#cb28-334" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Mean squared error: </span><span class="sc">{</span>nn_loss<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb28-335"><a href="#cb28-335" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-336"><a href="#cb28-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-337"><a href="#cb28-337" aria-hidden="true" tabindex="-1"></a>So now let's fit it (very naively).</span>
+<span id="cb28-331"><a href="#cb28-331" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-332"><a href="#cb28-332" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: check nn model works</span></span>
+<span id="cb28-333"><a href="#cb28-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-334"><a href="#cb28-334" aria-hidden="true" tabindex="-1"></a><span class="co"># taking the last day of the training set of the last training fold</span></span>
+<span id="cb28-335"><a href="#cb28-335" aria-hidden="true" tabindex="-1"></a>last_day_key <span class="op">=</span> <span class="bu">len</span>(train_data[ts_fold][<span class="st">'Xy_train'</span>]) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb28-336"><a href="#cb28-336" aria-hidden="true" tabindex="-1"></a>tmp_X, tmp_y <span class="op">=</span> train_data[ts_fold][<span class="st">'Xy_train'</span>][last_day_key]</span>
+<span id="cb28-337"><a href="#cb28-337" aria-hidden="true" tabindex="-1"></a>tmp_X <span class="op">=</span> np.concatenate([v.iloc[<span class="op">-</span><span class="dv">1</span>].values <span class="cf">for</span> v <span class="kw">in</span> tmp_X.values()]).reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)</span>
 <span id="cb28-338"><a href="#cb28-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-341"><a href="#cb28-341" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb28-342"><a href="#cb28-342" aria-hidden="true" tabindex="-1"></a>nn.<span class="bu">compile</span>(loss<span class="op">=</span>keras.losses.mean_squared_error)</span>
-<span id="cb28-343"><a href="#cb28-343" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb28-344"><a href="#cb28-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-345"><a href="#cb28-345" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
+<span id="cb28-339"><a href="#cb28-339" aria-hidden="true" tabindex="-1"></a><span class="co"># checking that the model runs</span></span>
+<span id="cb28-340"><a href="#cb28-340" aria-hidden="true" tabindex="-1"></a>nn_pred <span class="op">=</span> nn(tmp_X)</span>
+<span id="cb28-341"><a href="#cb28-341" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Prediction: </span><span class="sc">{</span>nn_pred<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb28-342"><a href="#cb28-342" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Actual value: </span><span class="sc">{</span>tmp_y<span class="sc">.</span>values<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb28-343"><a href="#cb28-343" aria-hidden="true" tabindex="-1"></a>nn_loss <span class="op">=</span> keras.losses.MeanSquaredError()(y_true<span class="op">=</span>tmp_y.values, y_pred<span class="op">=</span>nn_pred)</span>
+<span id="cb28-344"><a href="#cb28-344" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Mean squared error: </span><span class="sc">{</span>nn_loss<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb28-345"><a href="#cb28-345" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb28-346"><a href="#cb28-346" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-347"><a href="#cb28-347" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
-<span id="cb28-348"><a href="#cb28-348" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb28-347"><a href="#cb28-347" aria-hidden="true" tabindex="-1"></a>It does, great!</span>
+<span id="cb28-348"><a href="#cb28-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-349"><a href="#cb28-349" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Note that this network **always** needs to take in input of a certain shape (in this case, a 2-columns matrix) to work.</span></span>
+<span id="cb28-350"><a href="#cb28-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-351"><a href="#cb28-351" aria-hidden="true" tabindex="-1"></a>We don't need to bother training this very simple neural network; the goal here is to use it as a building block for a mathematical/econometric intuition of the broader nowcasting model.</span>
+<span id="cb28-352"><a href="#cb28-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-353"><a href="#cb28-353" aria-hidden="true" tabindex="-1"></a><span class="fu">## Second model: Long short-term memory {#sec-lstm}</span></span>
+<span id="cb28-354"><a href="#cb28-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-355"><a href="#cb28-355" aria-hidden="true" tabindex="-1"></a>A marked improvement in how we can model time series data is the use of recurrent neural networks (RNNs). In essence, these are networks that learn to keep a stateful memory, which is updated as the network "visits" each sequential step in time, in turn using both the memory and the new data at that period to predict the output.</span>
+<span id="cb28-356"><a href="#cb28-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-357"><a href="#cb28-357" aria-hidden="true" tabindex="-1"></a>One particular type of RNN that has proven to be very successful in practice is the long short-term memory (LSTM) model, due to @hochreiter1997long. It is actually a combination of four different layers, similar to @eq-model0nnlayer, but built in a specific way. Here's how:</span>
+<span id="cb28-358"><a href="#cb28-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-359"><a href="#cb28-359" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb28-360"><a href="#cb28-360" aria-hidden="true" tabindex="-1"></a>\begin{align}</span>
+<span id="cb28-361"><a href="#cb28-361" aria-hidden="true" tabindex="-1"></a>f_t &amp;= \sigma(W_f x_t + U_f h_{t-1} + b_f) <span class="sc">\\</span></span>
+<span id="cb28-362"><a href="#cb28-362" aria-hidden="true" tabindex="-1"></a>i_t &amp;= \sigma(W_i x_t + U_i h_{t-1} + b_i) <span class="sc">\\</span></span>
+<span id="cb28-363"><a href="#cb28-363" aria-hidden="true" tabindex="-1"></a>o_t &amp;= \sigma(W_o x_t + U_o h_{t-1} + b_o) <span class="sc">\\</span></span>
+<span id="cb28-364"><a href="#cb28-364" aria-hidden="true" tabindex="-1"></a>\tilde{c}_t &amp;= \omega(W_c x_t + U_c h_{t-1} + b_c) <span class="sc">\\</span></span>
+<span id="cb28-365"><a href="#cb28-365" aria-hidden="true" tabindex="-1"></a>c_t &amp;= \underbrace{f_t \odot c_{t-1}}_{\text{Gated past}} + \underbrace{i_t \odot \tilde{c}_t}_{\text{How much to learn}} <span class="sc">\\</span></span>
+<span id="cb28-366"><a href="#cb28-366" aria-hidden="true" tabindex="-1"></a>h_t &amp;= o_t \odot \omega(c_t),</span>
+<span id="cb28-367"><a href="#cb28-367" aria-hidden="true" tabindex="-1"></a>\end{align}</span>
+<span id="cb28-368"><a href="#cb28-368" aria-hidden="true" tabindex="-1"></a>$$ {#eq-model1lstm}</span>
+<span id="cb28-369"><a href="#cb28-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-370"><a href="#cb28-370" aria-hidden="true" tabindex="-1"></a>where $\sigma$ is the sigmoid function, and $\omega$ is the hyperbolic function. The hyperbolic is used here because...</span>
+<span id="cb28-371"><a href="#cb28-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-372"><a href="#cb28-372" aria-hidden="true" tabindex="-1"></a>The basic intuition of the LSTM layer is that some of the individual component layers essentially learn to look at the current data and the past memory and then decide how much new information to let through. Note that, because their activation is a sigmoid, the output of layers $f_t$, $i_t$ and $o_t$ is a number between 0 and 1. This idea is important to bear in mind because it will be used at a much bigger scale by the whole TFT model - and will be one key feature of its interpretability.</span>
+<span id="cb28-373"><a href="#cb28-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-376"><a href="#cb28-376" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb28-377"><a href="#cb28-377" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: nn model, lstm</span></span>
+<span id="cb28-378"><a href="#cb28-378" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-379"><a href="#cb28-379" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="dv">5</span> <span class="co"># sort of arbitrary</span></span>
+<span id="cb28-380"><a href="#cb28-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-381"><a href="#cb28-381" aria-hidden="true" tabindex="-1"></a><span class="co"># nn = keras.Sequential([</span></span>
+<span id="cb28-382"><a href="#cb28-382" aria-hidden="true" tabindex="-1"></a><span class="co">#     keras.layers.Input(shape=(2,,)),</span></span>
+<span id="cb28-383"><a href="#cb28-383" aria-hidden="true" tabindex="-1"></a><span class="co">#     keras.layers.LSTM(units = d),</span></span>
+<span id="cb28-384"><a href="#cb28-384" aria-hidden="true" tabindex="-1"></a><span class="co">#     keras.layers.Dense(units=1)</span></span>
+<span id="cb28-385"><a href="#cb28-385" aria-hidden="true" tabindex="-1"></a><span class="co"># ])</span></span>
+<span id="cb28-386"><a href="#cb28-386" aria-hidden="true" tabindex="-1"></a><span class="co"># nn.summary()</span></span>
+<span id="cb28-387"><a href="#cb28-387" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-388"><a href="#cb28-388" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introducing... the gatekeepers {#sec-gates}</span></span>
+<span id="cb28-389"><a href="#cb28-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-390"><a href="#cb28-390" aria-hidden="true" tabindex="-1"></a><span class="fu">## Now is a(nother) good time to pay attention {#sec-transf}</span></span>
+<span id="cb28-391"><a href="#cb28-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-392"><a href="#cb28-392" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complete architecture {#sec-tftmf}</span></span>
+<span id="cb28-393"><a href="#cb28-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-394"><a href="#cb28-394" aria-hidden="true" tabindex="-1"></a><span class="fu">## Nowcasting inflation with a simple model {#sec-nowcast}</span></span>
+<span id="cb28-395"><a href="#cb28-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-396"><a href="#cb28-396" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
+<span id="cb28-397"><a href="#cb28-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-398"><a href="#cb28-398" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
+<span id="cb28-399"><a href="#cb28-399" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

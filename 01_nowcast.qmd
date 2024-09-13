@@ -2,7 +2,9 @@
 title: Nowcasting inflation with neural networks
 description: A simple, mixed-frequency example
 output-file: nowcast.html
-author: Douglas K. G. Araujo, Johannes Damp
+authors: 
+  - Douglas K. G. Araujo
+  - Johannes Damp
 code-fold: show
 code-tools: true
 jupyter: python3
@@ -32,6 +34,8 @@ To abstract from currency issues, we will use US inflation and oil prices, which
 
 ```{python}
 #| label: load packages
+import os
+os.environ["KERAS_BACKEND"] = "torch"
 import keras
 import matplotlib.pyplot as plt
 import numpy as np
@@ -167,7 +171,7 @@ df_oil_d.plot(ax=ax)
 plt.show()
 ```
 
-### Temporal features
+### Temporal features (not implemented for the time being)
 
 There is a lot of information encoded in the temporal features of a time series: which day in the month it is, which month of the year, etc. For example, consider how consumers behave differently in response to oil prices over warmer months (when many decide or not to travel, and how far) compared to colder months (when energy prices factor in heating and is thus perhaps less elastic).
 
@@ -185,6 +189,7 @@ To simplify notation about time, instead of the usual subscript $t$ as above to 
 #| label: tempfeatures
 
 # NOTE: to add documentation and tests, and later incorporate as a new function in gingado.utils
+# TO-DO: return also vocab_sizes dictionary, required to set up embedding layer.
 
 def get_timefeat(df, add_to_df=True):
     def i2s(index, df=df):
@@ -228,7 +233,7 @@ df_infl_m = get_timefeat(df_infl_m)
 Below is an example of the temporal features:
 
 ```{python}
-#| example of temporal features
+#| label: example of temporal features
 
 df_oil.head()
 ```
@@ -292,14 +297,70 @@ def dates_Xy(X, y, date_list):
 def create_Xy(X, y, splits):
     folds = {}
     for k, split in enumerate(splits):
-        folds[k] = {}
+        key = f"fold_{k}"
+        folds[key] = {}
         split_train, split_valid = split
-        folds[k]['Xy_train'] = dates_Xy(X, y, split_train)
-        folds[k]['Xy_valid'] = dates_Xy(X, y, split_valid)
+        folds[key]['Xy_train'] = dates_Xy(X, y, split_train)
+        folds[key]['Xy_valid'] = dates_Xy(X, y, split_valid)
     return folds
 ```
 
 Let's see how this time series fold will be structured:
+
+```{mermaid}
+#| label: data structure
+graph TD;
+    A[Dict] --> B1[Fold_0];
+    A --> B2[Fold_1];
+    A --> B3[Fold_n];
+    
+    B1 --> C1[Xy_train];
+    B1 --> C2[Xy_valid];
+    
+    C1 --> D1[X_data];
+    C1 --> D2[Y_data];
+    
+    D1 --> E1[Monthly X_data];
+    D1 --> E2[Daily X_data];
+    
+    C2 --> F1[X_data];
+    C2 --> F2[Y_data];
+    
+    F1 --> G1[Monthly X_data];
+    F1 --> G2[Daily X_data];
+    
+    B2 --> H1[Xy_train];
+    B2 --> H2[Xy_valid];
+    
+    H1 --> I1[X_data];
+    H1 --> I2[Y_data];
+    
+    I1 --> J1[Monthly X_data];
+    I1 --> J2[Daily X_data];
+    
+    H2 --> K1[X_data];
+    H2 --> K2[Y_data];
+    
+    K1 --> L1[Monthly X_data];
+    K1 --> L2[Daily X_data];
+    
+    B3 --> M1[Xy_train];
+    B3 --> M2[Xy_valid];
+    
+    M1 --> N1[X_data];
+    M1 --> N2[Y_data];
+    
+    N1 --> O1[Monthly X_data];
+    N1 --> O2[Daily X_data];
+    
+    M2 --> P1[X_data];
+    M2 --> P2[Y_data];
+    
+    P1 --> Q1[Monthly X_data];
+    P1 --> Q2[Daily X_data];
+```
+
+But because each fold is a sequentially longer window, we get the following data points:
 
 ```{python}
 #| label: "Create batches of data"
@@ -310,39 +371,45 @@ train_data = create_Xy(
     splits=monthly_cv_dates
 )
 
-for ts_fold in range(len(train_data)):
-    print(f"Fold No {ts_fold + 1}:")
-    print(f"  {len(train_data[ts_fold]['Xy_train'])} training X-y pairs")
-    print(f"  {len(train_data[ts_fold]['Xy_valid'])} validation X-y pairs")
+for key in train_data.keys():
+    print(key)
+    print(f"  {len(train_data[key]['Xy_train'])} training X-y pairs")
+    print(f"  {len(train_data[key]['Xy_valid'])} validation X-y pairs")
 ```
 
-## First model: a single layer neural network {#sec-layer}
+## First model: a fully connected neural network {#sec-layer}
 
 The goal of this model is to nowcast $\pi_t$ based on its past values $\pi_{t-1}$ and on current oil prices $o_{d(m-s)}, s \geq 0$. The first model we will train is a very simple neural network:
 
 $$
 \begin{align}
-\xi &= \phi(\mathbf{W}_1 x_t + \mathbf{b}_1) \\
-y_t &= \mathbf{W}_0 \xi + \mathbf{b}_0,
+\xi^{(m)} &= \phi(\mathbf{W}_1^{(m)} x_m + \mathbf{b}_1^{(m)}) \\
+\xi^{(d)} &= \phi(\mathbf{W}_1^{(d)} x_d + \mathbf{b}_1^{(d)}) \\
+y_t &= \mathbf{W}_2 [\xi^{(m)}, \xi^{(d)}] + \mathbf{b}_2,
 \end{align}
 $$ {#eq-model0nnlayer}
 
-where $\mathbf{W}_0 \in \mathbb{R}^{1 \times d}$, $b_0 \in \mathbb{R}$, $\mathbf{W}_1 \in \mathbb{R}^{d \times |x_t|}$, $b_1 \in \mathbb{R}^{d}$, $\xi \in \mathbb{R}^d$ and $\phi$ is an activation function. For simplicity, we will use the ReLU activation function, which is simply: $\phi(z) = \text{max}(z, 0)$.
+where $x_t$ is the input data, indexed in a frequency-related way as discussed above, the superscript in parenthesis indexes the frequency of the data to which it relates, and the subscript of parameters relates to the "depth" of the layer they belong to. $\mathbf{W}_2 \in \mathbb{R}^{1 \times d}$, $b_2 \in \mathbb{R}$, $\mathbf{W}_1 \in \mathbb{R}^{d \times |x_t|}$, $b_1 \in \mathbb{R}^{d}$, $\xi \in \mathbb{R}^d$ and $\phi$ is an activation function. For simplicity, we will use the ReLU activation function, which is simply: $\phi(z) = \text{max}(z, 0)$.
 
 For this neural network, we need a fix dimensionality of the input data. In other words, the network *needs* to know how much data it will take in at any given time, and this should not change throughout training or inference time.
 
-For simplicity, let's fix it at a single lagged inflation (the past month, $\pi_{m-1}$) and the most recent available oil price change, $o_d$.
+For simplicity, let's fix it at the first lag for inflation (the past month, $\pi_{m-1}$) and the most recent available oil price change, $o_d$.
 
 ```{python}
 #| label: nn model, simple layer
 
-d = 5 # sort of arbitrary
+d = 5 # arbitrary dimension
 
-nn = keras.Sequential([
-    keras.layers.Input(shape=(2,)),
-    keras.layers.Dense(units = d, activation="relu"),
-    keras.layers.Dense(units=1)
-])
+input_monthly = keras.layers.Input(shape=(None,1), name="Inflation (m)")
+input_daily = keras.layers.Input(shape=(None,1), name="Oil (d)")
+all_inputs = keras.layers.Concatenate()([input_monthly, input_daily])
+out = keras.layers.Dense(units = d, activation="relu")(all_inputs)
+out = keras.layers.Dense(units=1)(out)
+
+nn = keras.Model(
+    inputs=[input_monthly, input_daily], 
+    outputs=out
+)
 nn.summary()
 ```
 
@@ -351,17 +418,12 @@ Checking that it works:
 ```{python}
 #| label: check nn model works
 
-# taking the last day of the training set of the last training fold
-last_day_key = len(train_data[ts_fold]['Xy_train']) - 1
-tmp_X, tmp_y = train_data[ts_fold]['Xy_train'][last_day_key]
-tmp_X = np.concatenate([v.iloc[-1].values for v in tmp_X.values()]).reshape(1, -1)
+# # taking the last day of the training set of the last training fold
+# last_day_key = len(train_data[ts_fold]['Xy_train']) - 1
+# tmp_X, tmp_y = train_data[ts_fold]['Xy_train'][last_day_key]
+# tmp_X = np.concatenate([v.iloc[-1].values for v in tmp_X.values()]).reshape(1, -1)
 
-# checking that the model runs
-nn_pred = nn(tmp_X)
-print(f"Prediction: {nn_pred}")
-print(f"Actual value: {tmp_y.values}")
-nn_loss = keras.losses.MeanSquaredError()(y_true=tmp_y.values, y_pred=nn_pred)
-print(f"Mean squared error: {nn_loss}")
+nn.summary()
 ```
 
 It does, great!

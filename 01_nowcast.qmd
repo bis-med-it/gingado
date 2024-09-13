@@ -35,7 +35,7 @@ To abstract from currency issues, we will use US inflation and oil prices, which
 ```{python}
 #| label: load packages
 import os
-os.environ["KERAS_BACKEND"] = "torch"
+os.environ["KERAS_BACKEND"] = "tensorflow"
 import keras
 import matplotlib.pyplot as plt
 import numpy as np
@@ -46,6 +46,7 @@ from sklearn.feature_selection import VarianceThreshold
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import PolynomialFeatures
 ```
+
 
 ### Inflation
 
@@ -68,7 +69,7 @@ For inflation, we take a dataflow from the [BIS](https://data.bis.org/topics/CPI
 #| label: "inflation dataflow"
 BIS = sdmx.Client("BIS")
 cpi_msg = BIS.dataflow('WS_LONG_CPI')
-cpi_dsd = cpi_msg.structure
+cpi_dsdim = cpi_msg.structure
 ```
 
 These are all possible keys:
@@ -137,7 +138,7 @@ As you can see in @fig-CPI, we downloaded the series $\{\text{CPI}_t\}$. Transfo
 #| fig-cap: US monthly inflation rate
 fig, ax = plt.subplots()
 plt.axhline(y=0, linewidth=1.5, color="black")
-df_infl_m = df_infl.pct_change()
+df_infl_m = df_infl.pct_change().dropna()
 df_infl_m.index = df_infl_m.index + pd.offsets.MonthEnd(0) # move to month end
 df_infl_m.plot(ax=ax)
 plt.show()
@@ -166,7 +167,7 @@ For the nowcasting, we are interested in the daily variation:
 
 fig, ax = plt.subplots()
 plt.axhline(y=0, linewidth=1.5, color="black")
-df_oil_d = df_oil.pct_change().dropna()
+df_oil_dim = df_oil.pct_change().dropna()
 df_oil_d.plot(ax=ax)
 plt.show()
 ```
@@ -191,52 +192,67 @@ To simplify notation about time, instead of the usual subscript $t$ as above to 
 # NOTE: to add documentation and tests, and later incorporate as a new function in gingado.utils
 # TO-DO: return also vocab_sizes dictionary, required to set up embedding layer.
 
-def get_timefeat(df, add_to_df=True):
+def get_timefeat(df, freq="d", features=None, add_to_df=False):
+    # For the future documentation: the add_to_df argument should be True if the data will be fed to an algorithm that takes in all data at once. If, like neural networks, the inputs are fed through different "pipelines", then use False and then take the result from this function an feed it separately to a neural network.
+    # the frequency is used to filter which features to add. For example, if monthly then no higher frequency features (day of ..., week of... ) are added because it doesn't make sense
+    # None or list. if futures is None, then add all temporal features that the frequency above allows. Otherwise adds only the names ones
+    all_freqs = ["q", "m", "w", "d"]
+    
+    if not pd.api.types.is_datetime64_any_dtype(df.index):
+        df.index = pd.to_datetime(df.index)
+
+
     def i2s(index, df=df):
-        # transforms an index into a pandas Series with the index
+        # mini-helper func that transforms an index into a pandas Series with the index
         return pd.Series(index, index=df.index)
     dict_timefeat = {}
-    dict_timefeat['day_of_week'] = i2s(df.index.dayofweek + 1)  # Monday=0, Sunday=6
-    dict_timefeat['day_of_month'] = i2s(df.index.day)
-    dict_timefeat['day_of_quarter'] = i2s(df.index.to_series().apply(lambda x: (x - pd.Timestamp(f'{x.year}-01-01')).days % 91 + 1))
-    dict_timefeat['day_of_year'] = i2s(df.index.dayofyear)
 
-    dict_timefeat['week_of_month'] = i2s(df.index.to_series().apply(lambda x: (x.day - 1) // 7 + 1))
-    dict_timefeat['week_of_quarter'] = i2s(df.index.to_series().apply(lambda x: ((x - pd.Timestamp(f'{x.year}-{(x.month - 1) // 3 * 3 + 1}-01')).days // 7) + 1))
-    dict_timefeat['week_of_year'] = i2s(df.index.isocalendar().week)
+    if freq in all_freqs:
+        dict_timefeat['year_end'] = i2s(df.index.to_series().apply(lambda x: 1 if x.is_year_end else 0))
+        dict_timefeat['quarter_of_year'] = i2s(df.index.quarter)
+        dict_timefeat['quarter_end'] = i2s(df.index.to_series().apply(lambda x: 1 if x.is_quarter_end else 0))
 
-    dict_timefeat['month_of_quarter'] = i2s(df.index.to_series().apply(lambda x: (x.month - 1) % 3 + 1))
-    dict_timefeat['month_of_year'] = i2s(df.index.month)
+    if freq in [f for f in all_freqs if f not in ["y", "q"]]:
+        dict_timefeat['month_of_quarter'] = i2s(df.index.to_series().apply(lambda x: (x.month - 1) % 3 + 1))
+        dict_timefeat['month_of_year'] = i2s(df.index.month)
 
-    dict_timefeat['quarter_of_year'] = i2s(df.index.quarter)
+    if freq in [f for f in all_freqs if f not in ["y", "q", "m"]]:
+        dict_timefeat['week_of_month'] = i2s(df.index.to_series().apply(lambda x: (x.day - 1) // 7 + 1))
+        dict_timefeat['week_of_quarter'] = i2s(df.index.to_series().apply(lambda x: ((x - pd.Timestamp(f'{x.year}-{(x.month - 1) // 3 * 3 + 1}-01')).days // 7) + 1))
+        dict_timefeat['week_of_year'] = i2s(df.index.isocalendar().week)
 
-    dict_timefeat['quarter_end'] = i2s(df.index.to_series().apply(lambda x: 1 if x.is_quarter_end else 0))
-    dict_timefeat['year_end'] = i2s(df.index.to_series().apply(lambda x: 1 if x.is_year_end else 0))
+    if freq == "d":
+        dict_timefeat['day_of_week'] = i2s(df.index.dayofweek)
+        dict_timefeat['day_of_month'] = i2s(df.index.day)
+        dict_timefeat['day_of_quarter'] = i2s(df.index.to_series().apply(lambda x: (x - pd.Timestamp(f'{x.year}-01-01')).days % 91 + 1))
+        dict_timefeat['day_of_year'] = i2s(df.index.dayofyear)
+
     # Convert the dictionary of columns to a DataFrame
     df_timefeat = pd.concat(dict_timefeat, axis=1)
     var_thresh = VarianceThreshold(threshold=0)
     df_timefeat = var_thresh.fit_transform(df_timefeat)
     df_timefeat = pd.DataFrame(df_timefeat, columns=var_thresh.get_feature_names_out(), index=df.index).astype(int)
+
+    if features:
+        df_timefeat[features]
+    vocab_sizes = {col: df_timefeat[col].nunique() + 1 for col in df_timefeat}
     if add_to_df:
         return pd.concat([df, df_timefeat], axis=1)
     else:
         return df_timefeat
 ```
 
-```{python}
-#| label: temporal features for the datasets
+Specifically, temporal features are an excellent (and rare) type of *known future* input. Those are the data that we know will be like that during forecasting time, ie, at the time the observation $y_t$ takes place. For example, it is trivial to know the day of the week, of the month etc, for any date we are forecasting in.
 
-df_oil = get_timefeat(df_oil)
-df_infl_m = get_timefeat(df_infl_m)
-```
-
-Below is an example of the temporal features:
+For this reason, we now calculate the temporal features of inflation.
 
 ```{python}
-#| label: example of temporal features
+#| label: temporal features for the inflation series
 
-df_oil.head()
+df_timefeat = get_timefeat(df_infl_m, freq="m")
 ```
+
+
 
 ### Splitting the dataset
 
@@ -277,7 +293,9 @@ Now for every month $m$ in the dependent variable, we can find all $m_{t-l}, l\g
 
 ```{python}
 #| label: "Auxiliary functions"
-def dates_Xy(X, y, date_list):
+
+# NOTE: Let's think/discuss if these functions are sufficiently generic to be included in gingado.utils
+def dates_Xy(X, y, date_list, freq_y="m"):
     def get_filtered_data(frame, d):
         filtered_data = frame.loc[frame.index <= d]
         return filtered_data if not filtered_data.empty else None
@@ -292,6 +310,9 @@ def dates_Xy(X, y, date_list):
         )
         for i, d in enumerate(date_list)
     }
+    ### The code below is throwing errors, need to solve in order to (a) calculate the temporal features of the y data, and then (b) add them to the first element of the tuple, along with the other X elements
+    # for i, d in enumerate(date_list):
+    #     result[i][0]["future"] = get_timefeat(y[d], freq=freq_y, add_to_df=False)
     return result
 
 def create_Xy(X, y, splits):
@@ -299,68 +320,13 @@ def create_Xy(X, y, splits):
     for k, split in enumerate(splits):
         key = f"fold_{k}"
         folds[key] = {}
-        split_train, split_valid = split
+        split_train, split_validim = split
         folds[key]['Xy_train'] = dates_Xy(X, y, split_train)
         folds[key]['Xy_valid'] = dates_Xy(X, y, split_valid)
     return folds
 ```
 
-Let's see how this time series fold will be structured:
-
-```{mermaid}
-#| label: data structure
-graph TD;
-    A[Dict] --> B1[Fold_0];
-    A --> B2[Fold_1];
-    A --> B3[Fold_n];
-    
-    B1 --> C1[Xy_train];
-    B1 --> C2[Xy_valid];
-    
-    C1 --> D1[X_data];
-    C1 --> D2[Y_data];
-    
-    D1 --> E1[Monthly X_data];
-    D1 --> E2[Daily X_data];
-    
-    C2 --> F1[X_data];
-    C2 --> F2[Y_data];
-    
-    F1 --> G1[Monthly X_data];
-    F1 --> G2[Daily X_data];
-    
-    B2 --> H1[Xy_train];
-    B2 --> H2[Xy_valid];
-    
-    H1 --> I1[X_data];
-    H1 --> I2[Y_data];
-    
-    I1 --> J1[Monthly X_data];
-    I1 --> J2[Daily X_data];
-    
-    H2 --> K1[X_data];
-    H2 --> K2[Y_data];
-    
-    K1 --> L1[Monthly X_data];
-    K1 --> L2[Daily X_data];
-    
-    B3 --> M1[Xy_train];
-    B3 --> M2[Xy_valid];
-    
-    M1 --> N1[X_data];
-    M1 --> N2[Y_data];
-    
-    N1 --> O1[Monthly X_data];
-    N1 --> O2[Daily X_data];
-    
-    M2 --> P1[X_data];
-    M2 --> P2[Y_data];
-    
-    P1 --> Q1[Monthly X_data];
-    P1 --> Q2[Daily X_data];
-```
-
-But because each fold is a sequentially longer window, we get the following data points:
+Let's see how this time series fold will be structured. Each fold is a sequentially longer window, so we get the following data points:
 
 ```{python}
 #| label: "Create batches of data"
@@ -398,37 +364,53 @@ For simplicity, let's fix it at the first lag for inflation (the past month, $\p
 ```{python}
 #| label: nn model, simple layer
 
-d = 5 # arbitrary dimension
+dim = 5 # arbitrary dimension
 
-input_monthly = keras.layers.Input(shape=(None,1), name="Inflation (m)")
-input_daily = keras.layers.Input(shape=(None,1), name="Oil (d)")
-all_inputs = keras.layers.Concatenate()([input_monthly, input_daily])
-out = keras.layers.Dense(units = d, activation="relu")(all_inputs)
+freqs = ["m", "d"] # using here the commonly-used frequency abbreviations
+inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
+all_inputs = keras.layers.Concatenate(name="continuous")([i for i in inputs.values()])
+out = keras.layers.Dense(units = dim, activation="relu")(all_inputs)
 out = keras.layers.Dense(units=1)(out)
 
 nn = keras.Model(
-    inputs=[input_monthly, input_daily], 
+    inputs=inputs, 
     outputs=out
 )
-nn.summary()
+nn_fc.compile(loss=keras.losses.MeanSquaredError())
+nn_fc.summary()
 ```
 
-Checking that it works:
+@fig-FCarch presents the architecture of this model.
+
+```{python}
+#| label: fig-FCarch
+#| fig-cap: Architecture of the model with fully connected layer
+
+keras.utils.plot_model(nn_fc)
+```
+
+Checking that it works. In the code below, we take the first fold as an example. We find the last day in the training data for that fold. Then we get the corresponding `X` and `y` data. Recall that the `X` is actually a dictionary of the monthly and the daily datasets. So we take the last value out of each one.
+
+This simple neural network will then take one monthly and one daily data point, and try to estimate one inflation data point.
 
 ```{python}
 #| label: check nn model works
 
-# # taking the last day of the training set of the last training fold
-# last_day_key = len(train_data[ts_fold]['Xy_train']) - 1
-# tmp_X, tmp_y = train_data[ts_fold]['Xy_train'][last_day_key]
-# tmp_X = np.concatenate([v.iloc[-1].values for v in tmp_X.values()]).reshape(1, -1)
+# taking the last day of the training set of the last training fold
+last_day_key = len(train_data["fold_0"]['Xy_train']) - 1
+X, y = train_data["fold_0"]['Xy_train'][last_day_key]
+last_X = {}
+for k, v in X.items():
+    idx = -2 if k == "monthly" else -1 # if monthly, take the first lag, if daily take the latest available
+    last_X[k] = v.iloc[idx]
 
-nn.summary()
+nn_fc.fit(last_X, y=y, epochs=4)
+nn_fc.predict(last_X)
 ```
 
 It does, great!
 
-> Note that this network **always** needs to take in input of a certain shape (in this case, a 2-columns matrix) to work.
+> Note that this network **always** needs to take in input structured as a dictionary to work. The keys are the frequency codes: `"d"` for daily, `"m"` for monthly, etc.
 
 We don't need to bother training this very simple neural network; the goal here is to use it as a building block for a mathematical/econometric intuition of the broader nowcasting model.
 
@@ -444,7 +426,7 @@ f_t &= \sigma(W_f x_t + U_f h_{t-1} + b_f) \\
 i_t &= \sigma(W_i x_t + U_i h_{t-1} + b_i) \\
 o_t &= \sigma(W_o x_t + U_o h_{t-1} + b_o) \\
 \tilde{c}_t &= \omega(W_c x_t + U_c h_{t-1} + b_c) \\
-c_t &= \underbrace{f_t \odot c_{t-1}}_{\text{Gated past}} + \underbrace{i_t \odot \tilde{c}_t}_{\text{How much to learn}} \\
+c_t &= \underbrace{f_t \odot c_{t-1}}_{\text{Gated past data}} + \underbrace{i_t \odot \tilde{c}_t}_{\text{How much to learn}} \\
 h_t &= o_t \odot \omega(c_t),
 \end{align}
 $$ {#eq-model1lstm}
@@ -456,15 +438,57 @@ The basic intuition of the LSTM layer is that some of the individual component l
 ```{python}
 #| label: nn model, lstm
 
-d = 5 # sort of arbitrary
+dim = 5 # arbitrary dimension
 
-# nn = keras.Sequential([
-#     keras.layers.Input(shape=(2,,)),
-#     keras.layers.LSTM(units = d),
-#     keras.layers.Dense(units=1)
-# ])
-# nn.summary()
+freqs = ["m", "d"] # using here the commonly-used frequency abbreviations
+inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
+LSTMs = []
+for k, v in inputs.items():
+    lstm = keras.layers.Masking(mask_value=0.0)(v)
+    lstm = keras.layers.LSTM(units=d, return_sequences=False, name=f"LSTM__freq_{k}")(lstm)
+    LSTMs.append(lstm)
+encoded_series = keras.layers.Average(name="encoded_series")(LSTMs)
+out = keras.layers.Dense(units = dim, activation="relu")(encoded_series)
+out = keras.layers.Dense(units=1)(out)
+
+nn_lstm = keras.Model(
+    inputs=inputs, 
+    outputs=out
+)
+nn_lstm.compile(loss=keras.losses.MeanSquaredError())
+nn_lstm.summary()
 ```
+
+@fig-LSTMarch presents the architecture of this model.
+
+```{python}
+#| label: fig-LSTMarch
+#| fig-cap: Architecture of the model with fully connected layer
+
+keras.utils.plot_model(nn_lstm)
+```
+
+Note that the input goes through a few steps before reaching the LSTM layer. This is due to a masking layer that effectively helps the model jumps time steps for which there is no data available.
+
+To check that the LSTM-based neural network works, we need to feed this neural network a slightly different type of data. LSTM, as other recurrent neural networks, takes in time series data. So, unlike before, we now prepare a time series (or panel data) for each 
+
+This neural network will then take in the inputed time series data, and encode each frequency's series separately through the different LSTM streams. The final result will no longer have a time dimension; it is then averaged, and this average embeddings of the different time series is used to forecast the variable of interest.
+
+Note the code includes an adjustment that creates a pandas Series with 0 in case data for a given frequency is not available in a given period.
+
+```{python}
+#| label: check nn model works
+
+lstm_x = [
+    {k: (v if v is not None else pd.Series(0.0)) for k, v in c[0].items()}  # Replace None values with pd.Series(0.0)
+    for c in train_data["fold_0"]['Xy_train'].values()  # Iterate over values
+]
+
+lstm_y = [c[1] for c in train_data["fold_0"]['Xy_train'].values()]
+nn_lstm.fit(lstm_x, y=lstm_y, epochs=4)
+nn_lstm.predict(lstm_X)
+```
+
 ## Introducing... the gatekeepers {#sec-gates}
 
 ## Now is a(nother) good time to pay attention {#sec-transf}

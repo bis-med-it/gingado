@@ -1,0 +1,724 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: Nowcasting inflation with neural networks\n",
+        "description: A simple, mixed-frequency example\n",
+        "output-file: nowcast.html\n",
+        "authors: \n",
+        "  - Douglas K. G. Araujo\n",
+        "  - Johannes Damp\n",
+        "code-fold: show\n",
+        "code-tools: true\n",
+        "jupyter: python3\n",
+        "warning: false\n",
+        "fig-cap-location: top\n",
+        "---\n",
+        "\n",
+        "\n",
+        "This notebook showcases how to set up neural networks to nowcast inflation using data measured in different frequencies. The goal here is to start with a very simple dataset containing only two variables, inflation (monthly) and oil prices (daily), to slowly build up a more complex neural network based nowcasting model, the TFT-MF available in `gingado` from its v0.3.0.\n",
+        "\n",
+        "Nowcasting is essentially the use of the most current information possible to estimate in real time an economic series of interest such as inflation or GDP before it is actually released[^review]. For example, if you could measure all prices every day, you could create on the last day of the month a very accurate nowcast for the headline inflation for that month - which would only be officialy published a few days later. In the case of GDP, this lag between the end of the reference period and actual publication tends to be significant, around 6-10 weeks. For policymakers, investors and other decisionmakers, a lot can happen in this period.\n",
+        "\n",
+        "[^review]: @giannone2008nowcasting pioneered nowcasting in macroeconomics. See @bok2018nowcasting for a review.\n",
+        "\n",
+        "A related use of nowcasting is to estimate what the current period's reading will be as this period rolls out. In other words, estimating today what the inflation reading for this month (or GDP for this quarter) will likely be as new information is unveiled in real time.\n",
+        "\n",
+        "The nowcasting model available in `gingado` from v0.3.0 onwards is an adjusted version of the Temporal Fusion Transformer (TFT) of @lim2021temporal. This architecture combines *flexibility* to take on multiple datasets while learning which information to focus on and *interpretability* to provide insights on the important variables in each case.\n",
+        "\n",
+        "## Roadmap\n",
+        "\n",
+        "The TFT model can be a bit complex to understand at first, so we will build it up, step by step. After loading the data in @sec-data, the most basic neural network - a neuron layer - is presented in @sec-layer. This is followed by an architecture that is more suitable for time series in @sec-lstm. Next, these elements are combined in @sec-gates to show how the model knows what to focus on. The next individual element is the self-attention layer in @sec-transf. Finally, if you want to see the full picture directly, go to @sec-tftmf to see how these elements are put together. @sec-nowcast then trains the model and presents the results for this simple, illustrative nowcasting.\n",
+        "\n",
+        "## Loading the data {#sec-data}\n",
+        "\n",
+        "Let's use our SDMX connectors to find and download data from official sources in a reproducible way.\n",
+        "\n",
+        "To abstract from currency issues, we will use US inflation and oil prices, which are denominated in US dollars.\n"
+      ],
+      "id": "193e39be"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: load packages\n",
+        "import os\n",
+        "os.environ[\"KERAS_BACKEND\"] = \"tensorflow\"\n",
+        "import keras\n",
+        "import matplotlib.pyplot as plt\n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import sdmx\n",
+        "from gingado.utils import load_SDMX_data\n",
+        "from sklearn.feature_selection import VarianceThreshold\n",
+        "from sklearn.model_selection import TimeSeriesSplit\n",
+        "from sklearn.preprocessing import PolynomialFeatures"
+      ],
+      "id": "load-packages",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Inflation\n",
+        "\n",
+        "Since this is a monthly nowcast of inflation, the best way to do this is to use a *monthly change in the consumer price index*, $\\pi_t^{(m)}=(\\text{CPI}_t - \\text{CPI}_{t-1})/\\text{CPI}_{t-1}$, not the year-on-year rate, $\\pi_t^{(y)}=(\\text{CPI}_t - \\text{CPI}_{t-12})/\\text{CPI}_{t-12}$, which is how people usually think of inflation. This is because we want to nowcast only the value at the margin; 11 twelths of $\\pi_t^{(y)}$ are already known, since $\\pi_t^{(y)} = -1 + \\prod_{l=0}^{11} (1+\\pi_{t-l})$. \n",
+        "\n",
+        "Then, only at the end we combine rolling windows of 12 consecutive monthly inflation rates, of which only the last one or two are estimated, to correctly create an annual inflation rate. \n",
+        "\n",
+        "Formally, if we know all values except the current and last month's, then: \n",
+        "$$\n",
+        "\\hat{\\pi}_t^{(y)}=(\\prod_{l=0}^1 (1+\\hat{\\pi}_{t-l}^{(m)}) \\prod_{l=2}^{11} (1+\\pi_{t-l}^{(m)}) )-1,\n",
+        "$$ {#eq-finalnowcast}\n",
+        "\n",
+        "where the hat notation ($\\hat{ }$) means that a particular value was estimated.\n",
+        "\n",
+        "For inflation, we take a dataflow from the [BIS](https://data.bis.org/topics/CPI), since we are looking for US data. Let's explore it first and then choose the correct data specifications to download the time series.[^sdmx]\n",
+        "\n",
+        "[^sdmx]: See [here](https://sdmx1.readthedocs.io/en/latest/walkthrough.html) for a practical walkthrough showing how to explore data with SDMX.\n"
+      ],
+      "id": "21890a79"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: inflation dataflow\n",
+        "BIS = sdmx.Client(\"BIS\")\n",
+        "cpi_msg = BIS.dataflow('WS_LONG_CPI')\n",
+        "cpi_dsd = cpi_msg.structure"
+      ],
+      "id": "inflation-dataflow",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "These are all possible keys:\n"
+      ],
+      "id": "642fe64e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: CPI_dimensions\n",
+        "cpi_dsd['BIS_LONG_CPI'].dimensions.components"
+      ],
+      "id": "CPI_dimensions",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "For example, \"FREQ\" (frequency) takes in these values:\n"
+      ],
+      "id": "4b9d96dc"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: FREQ_codelist\n",
+        "cl__FREQ = sdmx.to_pandas(cpi_dsd['BIS_LONG_CPI'].dimensions.get(\"FREQ\").local_representation.enumerated)\n",
+        "cl__FREQ"
+      ],
+      "id": "FREQ_codelist",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "And \"REF_AREA\" (reference area) can be set to:\n"
+      ],
+      "id": "050e94be"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: REF_AREA_codelist\n",
+        "cl__REF_AREA = sdmx.to_pandas(cpi_dsd['BIS_LONG_CPI'].dimensions.get(\"REF_AREA\").local_representation.enumerated)\n",
+        "cl__REF_AREA"
+      ],
+      "id": "REF_AREA_codelist",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We can check that the US is amongst the reference areas:\n"
+      ],
+      "id": "c3892126"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: check US in REF_AREA codelist\n",
+        "cl__REF_AREA['US']"
+      ],
+      "id": "check-US-in-REF_AREA-codelist",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Finally, the \"UNIT_MEASURE\" values can be:\n"
+      ],
+      "id": "166bf1de"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: codelist for UNIT_MEASURE in dataflow BIS__WS_LONG_CPI\n",
+        "cl__UNIT_MEASURE = sdmx.to_pandas(cpi_dsd['BIS_LONG_CPI'].dimensions.get(\"UNIT_MEASURE\").local_representation.enumerated)\n",
+        "cl__UNIT_MEASURE"
+      ],
+      "id": "codelist-for-UNIT_MEASURE-in-dataflow-BIS__WS_LONG_CPI",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "In the [BIS website for this data](https://data.bis.org/topics/CPI#faq), we can see that the unit in levels is `Index, 2010 = 100` (the other one is `Year-on-year changes, in per cent`, which as discussed above we don't want for this case.)\n"
+      ],
+      "id": "ec4281b5"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: finding code for index\n",
+        "cl__UNIT_MEASURE[cl__UNIT_MEASURE.str.contains(\"Index, 2010 = 100\")]"
+      ],
+      "id": "finding-code-for-index",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Armed with this knowledge, we can now download monthly consumer price index data for the US. Let's start after 1985 so that we have a sufficiently long history but without too much influence of the tectonic shift of the US dollar devaluation in the early 1970s and ensuing high inflation:\n"
+      ],
+      "id": "8f8115e9"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-CPI\n",
+        "#| fig-cap: 'US consumer price index, 2010 = 100'\n",
+        "df_infl = load_SDMX_data(\n",
+        "    sources={\"BIS\": \"'WS_LONG_CPI'\"},\n",
+        "    keys={\"FREQ\": \"M\", \"REF_AREA\": \"US\", \"UNIT_MEASURE\": \"628\"},\n",
+        "    params={\"startPeriod\": 1985}\n",
+        ")\n",
+        "\n",
+        "df_infl.plot()"
+      ],
+      "id": "fig-CPI",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "As you can see in @fig-CPI, we downloaded the series $\\{\\text{CPI}_t\\}$. Transforming that into $\\{\\pi_t\\}$, defined above, we have:\n"
+      ],
+      "id": "aea24a13"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-pi\n",
+        "#| fig-cap: US monthly inflation rate\n",
+        "fig, ax = plt.subplots()\n",
+        "plt.axhline(y=0, linewidth=1.5, color=\"black\")\n",
+        "df_infl_m = df_infl.pct_change()\n",
+        "df_infl_m.index = df_infl_m.index + pd.offsets.MonthEnd(0) # move to month end\n",
+        "df_infl_m.plot(ax=ax)\n",
+        "plt.show()"
+      ],
+      "id": "fig-pi",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Oil prices\n",
+        "\n",
+        "Since the focus is on US inflation, below we get WTI oil prices. This data is downloaded from the [St Louis Fed's FRED webpage](https://fred.stlouisfed.org/series/DCOILWTICO).\n"
+      ],
+      "id": "466ec621"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-oil\n",
+        "#| fig-cap: WTI oil prices\n",
+        "df_oil = pd.read_csv(\"docs/DCOILWTICO.csv\")\n",
+        "df_oil['DCOILWTICO'] = pd.to_numeric(df_oil['DCOILWTICO'], errors='coerce')\n",
+        "df_oil['DATE'] = pd.to_datetime(df_oil['DATE'])\n",
+        "df_oil.set_index('DATE', inplace=True)\n",
+        "\n",
+        "df_oil.plot()"
+      ],
+      "id": "fig-oil",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "For the nowcasting, we are interested in the daily variation:\n"
+      ],
+      "id": "184e3ac0"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-oilD\n",
+        "#| fig-cap: Daily change in WTI oil prices\n",
+        "\n",
+        "fig, ax = plt.subplots()\n",
+        "plt.axhline(y=0, linewidth=1.5, color=\"black\")\n",
+        "df_oil_d = df_oil.pct_change().dropna()\n",
+        "df_oil_d.plot(ax=ax)\n",
+        "plt.show()"
+      ],
+      "id": "fig-oilD",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Temporal features (not implemented for the time being)\n",
+        "\n",
+        "There is a lot of information encoded in the temporal features of a time series: which day in the month it is, which month of the year, etc. For example, consider how consumers behave differently in response to oil prices over warmer months (when many decide or not to travel, and how far) compared to colder months (when energy prices factor in heating and is thus perhaps less elastic).\n",
+        "\n",
+        "To simplify notation about time, instead of the usual subscript $t$ as above to denote a time period, for precision about the frequency, we will follow this convention:\n",
+        "\n",
+        "- subscript $m$ denotes a given month;\n",
+        "\n",
+        "- subscript $d$ denotes a given day;\n",
+        "\n",
+        "- subscript $d(m)$ denotes a given day in a given month; example: $d(m-1)$ is a day in the previous month.\n",
+        "\n",
+        "`gingado` offers a practical way to set up the temporal features that requires only the dates of the dataset.\n"
+      ],
+      "id": "f56e4e45"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: tempfeatures\n",
+        "\n",
+        "# NOTE: to add documentation and tests, and later incorporate as a new function in gingado.utils\n",
+        "# TO-DO: return also vocab_sizes dictionary, required to set up embedding layer.\n",
+        "\n",
+        "def get_timefeat(df, freq=\"d\", add_to_df=True):\n",
+        "    # For the future documentation: the add_to_df argument should be True if the data will be fed to an algorithm that takes in all data at once. If, like neural networks, the inputs are fed through different \"pipelines\", then use False and then take the result from this function an feed it separately to a neural network.\n",
+        "    def i2s(index, df=df):\n",
+        "        # transforms an index into a pandas Series with the index\n",
+        "        return pd.Series(index, index=df.index)\n",
+        "    dict_timefeat = {}\n",
+        "    dict_timefeat['day_of_week'] = i2s(df.index.dayofweek + 1)  # Monday=0, Sunday=6\n",
+        "    dict_timefeat['day_of_month'] = i2s(df.index.day)\n",
+        "    dict_timefeat['day_of_quarter'] = i2s(df.index.to_series().apply(lambda x: (x - pd.Timestamp(f'{x.year}-01-01')).days % 91 + 1))\n",
+        "    dict_timefeat['day_of_year'] = i2s(df.index.dayofyear)\n",
+        "\n",
+        "    dict_timefeat['week_of_month'] = i2s(df.index.to_series().apply(lambda x: (x.day - 1) // 7 + 1))\n",
+        "    dict_timefeat['week_of_quarter'] = i2s(df.index.to_series().apply(lambda x: ((x - pd.Timestamp(f'{x.year}-{(x.month - 1) // 3 * 3 + 1}-01')).days // 7) + 1))\n",
+        "    dict_timefeat['week_of_year'] = i2s(df.index.isocalendar().week)\n",
+        "\n",
+        "    dict_timefeat['month_of_quarter'] = i2s(df.index.to_series().apply(lambda x: (x.month - 1) % 3 + 1))\n",
+        "    dict_timefeat['month_of_year'] = i2s(df.index.month)\n",
+        "\n",
+        "    dict_timefeat['quarter_of_year'] = i2s(df.index.quarter)\n",
+        "\n",
+        "    dict_timefeat['quarter_end'] = i2s(df.index.to_series().apply(lambda x: 1 if x.is_quarter_end else 0))\n",
+        "    dict_timefeat['year_end'] = i2s(df.index.to_series().apply(lambda x: 1 if x.is_year_end else 0))\n",
+        "    # Convert the dictionary of columns to a DataFrame\n",
+        "    df_timefeat = pd.concat(dict_timefeat, axis=1)\n",
+        "    var_thresh = VarianceThreshold(threshold=0)\n",
+        "    df_timefeat = var_thresh.fit_transform(df_timefeat)\n",
+        "    df_timefeat = pd.DataFrame(df_timefeat, columns=var_thresh.get_feature_names_out(), index=df.index).astype(int)\n",
+        "\n",
+        "    vocab_sizes = {col: df_timefeat[col].nunique() + 1 for col in df_timefeat}\n",
+        "    if add_to_df:\n",
+        "        return pd.concat([df, df_timefeat], axis=1)\n",
+        "    else:\n",
+        "        return df_timefeat"
+      ],
+      "id": "tempfeatures",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: temporal features for the datasets\n",
+        "\n",
+        "# df_oil = get_timefeat(df_oil)\n",
+        "# df_infl_m = get_timefeat(df_infl_m)"
+      ],
+      "id": "temporal-features-for-the-datasets",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Below is an example of the temporal features:\n"
+      ],
+      "id": "a267a30c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: example of temporal features\n",
+        "\n",
+        "df_oil.head()"
+      ],
+      "id": "example-of-temporal-features",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Splitting the dataset\n",
+        "\n",
+        "We will now split the dataset into training data up until end-2020 and validation data afterwards. The training data will be further split into 5 temporally sequential folds.[^tssplit]\n",
+        "\n",
+        "[^tssplit]: See [here](https://scikit-learn.org/stable/modules/cross_validation.html#time-series-split) for more information on time series splitting.\n",
+        "\n",
+        "To simplify, we will consider valid nowcasting *input* data for a given output in period $m$ as:\n",
+        "\n",
+        "- all monthly data up to, and including, $m-1$; and\n",
+        "\n",
+        "- all daily data up to, and including, $d(m)$.\n"
+      ],
+      "id": "c07687bd"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: time series splits\n",
+        "\n",
+        "# Lagging the nowcasted variable\n",
+        "df_infl_m_L = df_infl_m.shift(1).dropna()\n",
+        "df_infl_m = df_infl_m.loc[df_infl_m_L.index]\n",
+        "\n",
+        "# Training date cutoff\n",
+        "cutoff = \"2020-12-31\"\n",
+        "\n",
+        "y_train, y_test = df_infl_m[:cutoff], df_infl_m[cutoff:]\n",
+        "Xm_train, Xm_test = df_infl_m_L[:cutoff], df_infl_m_L[cutoff:]\n",
+        "Xd_train, Xd_test = df_oil_d[:cutoff], df_oil_d[cutoff:][1:]\n",
+        "\n",
+        "# Setting up the temporal folds, using the dependent variable's date\n",
+        "tscv = TimeSeriesSplit(n_splits=5)\n",
+        "monthly_cv = tscv.split(y_train)\n",
+        "monthly_cv_dates = [\n",
+        "    (y_train.index[m], y_train.index[n]) \n",
+        "    for m, n in monthly_cv\n",
+        "]"
+      ],
+      "id": "time-series-splits",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Now for every month $m$ in the dependent variable, we can find all $m_{t-l}, l\\geq 1$ and all $d(m_{t-s}), s\\geq 0$.\n"
+      ],
+      "id": "6e4ed067"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: Auxiliary functions\n",
+        "def dates_Xy(X, y, date_list):\n",
+        "    def get_filtered_data(frame, d):\n",
+        "        filtered_data = frame.loc[frame.index <= d]\n",
+        "        return filtered_data if not filtered_data.empty else None\n",
+        "\n",
+        "    result = {\n",
+        "        i: (\n",
+        "            {\n",
+        "                freq: get_filtered_data(Xdata, d)\n",
+        "                for freq, Xdata in X.items()\n",
+        "            }, \n",
+        "            y.loc[d]\n",
+        "        )\n",
+        "        for i, d in enumerate(date_list)\n",
+        "    }\n",
+        "    return result\n",
+        "\n",
+        "def create_Xy(X, y, splits):\n",
+        "    folds = {}\n",
+        "    for k, split in enumerate(splits):\n",
+        "        key = f\"fold_{k}\"\n",
+        "        folds[key] = {}\n",
+        "        split_train, split_valid = split\n",
+        "        folds[key]['Xy_train'] = dates_Xy(X, y, split_train)\n",
+        "        folds[key]['Xy_valid'] = dates_Xy(X, y, split_valid)\n",
+        "    return folds"
+      ],
+      "id": "Auxiliary-functions",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Let's see how this time series fold will be structured. Each fold is a sequentially longer window, so we get the following data points:\n"
+      ],
+      "id": "9530ae08"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: Create batches of data\n",
+        "\n",
+        "train_data = create_Xy(\n",
+        "    X={\"m\": Xm_train, \"d\": Xd_train}, \n",
+        "    y=y_train, \n",
+        "    splits=monthly_cv_dates\n",
+        ")\n",
+        "\n",
+        "for key in train_data.keys():\n",
+        "    print(key)\n",
+        "    print(f\"  {len(train_data[key]['Xy_train'])} training X-y pairs\")\n",
+        "    print(f\"  {len(train_data[key]['Xy_valid'])} validation X-y pairs\")"
+      ],
+      "id": "Create-batches-of-data",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## First model: a fully connected neural network {#sec-layer}\n",
+        "\n",
+        "The goal of this model is to nowcast $\\pi_t$ based on its past values $\\pi_{t-1}$ and on current oil prices $o_{d(m-s)}, s \\geq 0$. The first model we will train is a very simple neural network:\n",
+        "\n",
+        "$$\n",
+        "\\begin{align}\n",
+        "\\xi^{(m)} &= \\phi(\\mathbf{W}_1^{(m)} x_m + \\mathbf{b}_1^{(m)}) \\\\\n",
+        "\\xi^{(d)} &= \\phi(\\mathbf{W}_1^{(d)} x_d + \\mathbf{b}_1^{(d)}) \\\\\n",
+        "y_t &= \\mathbf{W}_2 [\\xi^{(m)}, \\xi^{(d)}] + \\mathbf{b}_2,\n",
+        "\\end{align}\n",
+        "$$ {#eq-model0nnlayer}\n",
+        "\n",
+        "where $x_t$ is the input data, indexed in a frequency-related way as discussed above, the superscript in parenthesis indexes the frequency of the data to which it relates, and the subscript of parameters relates to the \"depth\" of the layer they belong to. $\\mathbf{W}_2 \\in \\mathbb{R}^{1 \\times d}$, $b_2 \\in \\mathbb{R}$, $\\mathbf{W}_1 \\in \\mathbb{R}^{d \\times |x_t|}$, $b_1 \\in \\mathbb{R}^{d}$, $\\xi \\in \\mathbb{R}^d$ and $\\phi$ is an activation function. For simplicity, we will use the ReLU activation function, which is simply: $\\phi(z) = \\text{max}(z, 0)$.\n",
+        "\n",
+        "For this neural network, we need a fix dimensionality of the input data. In other words, the network *needs* to know how much data it will take in at any given time, and this should not change throughout training or inference time.\n",
+        "\n",
+        "For simplicity, let's fix it at the first lag for inflation (the past month, $\\pi_{m-1}$) and the most recent available oil price change, $o_d$.\n"
+      ],
+      "id": "72cbc7f4"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: 'nn model, simple layer'\n",
+        "\n",
+        "d = 5 # arbitrary dimension\n",
+        "\n",
+        "freqs = [\"m\", \"d\"] # using here the commonly-used frequency abbreviations\n",
+        "inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}\n",
+        "all_inputs = keras.layers.Concatenate(name=\"continuous\")([i for i in inputs.values()])\n",
+        "out = keras.layers.Dense(units = d, activation=\"relu\")(all_inputs)\n",
+        "out = keras.layers.Dense(units=1)(out)\n",
+        "\n",
+        "nn = keras.Model(\n",
+        "    inputs=inputs, \n",
+        "    outputs=out\n",
+        ")\n",
+        "nn.compile(loss=keras.losses.MeanSquaredError())\n",
+        "nn.summary()"
+      ],
+      "id": "nn-model-simple-layer",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "@fig-FCarch presents the architecture of this model.\n"
+      ],
+      "id": "83ab2113"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-FCarch\n",
+        "#| fig-cap: Architecture of the model with fully connected layer\n",
+        "\n",
+        "keras.utils.plot_model(nn)"
+      ],
+      "id": "fig-FCarch",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Checking that it works. In the code below, we take the first fold as an example. We find the last day in the training data for that fold. Then we get the corresponding `X` and `y` data. Recall that the `X` is actually a dictionary of the monthly and the daily datasets. So we take the last value out of each one.\n",
+        "\n",
+        "This simple neural network will then take one monthly and one daily data point, and try to estimate one inflation data point.\n"
+      ],
+      "id": "7434cb12"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: check nn model works\n",
+        "\n",
+        "# taking the last day of the training set of the last training fold\n",
+        "last_day_key = len(train_data[\"fold_0\"]['Xy_train']) - 1\n",
+        "X, y = train_data[\"fold_0\"]['Xy_train'][last_day_key]\n",
+        "last_X = {}\n",
+        "for k, v in X.items():\n",
+        "    idx = -2 if k == \"monthly\" else -1 # if monthly, take the first lag, if daily take the latest available\n",
+        "    last_X[k] = v.iloc[idx]\n",
+        "\n",
+        "nn.fit(last_X, y=y, epochs=4)\n",
+        "nn.predict(last_X)"
+      ],
+      "id": "check-nn-model-works",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "It does, great!\n",
+        "\n",
+        "> Note that this network **always** needs to take in input structured as a dictionary to work. The keys are the frequency codes: `\"d\"` for daily, `\"m\"` for monthly, etc.\n",
+        "\n",
+        "We don't need to bother training this very simple neural network; the goal here is to use it as a building block for a mathematical/econometric intuition of the broader nowcasting model.\n",
+        "\n",
+        "## Second model: Long short-term memory {#sec-lstm}\n",
+        "\n",
+        "A marked improvement in how we can model time series data is the use of recurrent neural networks (RNNs). In essence, these are networks that learn to keep a stateful memory, which is updated as the network \"visits\" each sequential step in time, in turn using both the memory and the new data at that period to predict the output.\n",
+        "\n",
+        "One particular type of RNN that has proven to be very successful in practice is the long short-term memory (LSTM) model, due to @hochreiter1997long. It is actually a combination of four different layers, similar to @eq-model0nnlayer, but built in a specific way. Here's how:\n",
+        "\n",
+        "$$\n",
+        "\\begin{align}\n",
+        "f_t &= \\sigma(W_f x_t + U_f h_{t-1} + b_f) \\\\\n",
+        "i_t &= \\sigma(W_i x_t + U_i h_{t-1} + b_i) \\\\\n",
+        "o_t &= \\sigma(W_o x_t + U_o h_{t-1} + b_o) \\\\\n",
+        "\\tilde{c}_t &= \\omega(W_c x_t + U_c h_{t-1} + b_c) \\\\\n",
+        "c_t &= \\underbrace{f_t \\odot c_{t-1}}_{\\text{Gated past}} + \\underbrace{i_t \\odot \\tilde{c}_t}_{\\text{How much to learn}} \\\\\n",
+        "h_t &= o_t \\odot \\omega(c_t),\n",
+        "\\end{align}\n",
+        "$$ {#eq-model1lstm}\n",
+        "\n",
+        "where $\\sigma$ is the sigmoid function, and $\\omega$ is the hyperbolic function. The hyperbolic is used here because...\n",
+        "\n",
+        "The basic intuition of the LSTM layer is that some of the individual component layers essentially learn to look at the current data and the past memory and then decide how much new information to let through. Note that, because their activation is a sigmoid, the output of layers $f_t$, $i_t$ and $o_t$ is a number between 0 and 1. This idea is important to bear in mind because it will be used at a much bigger scale by the whole TFT model - and will be one key feature of its interpretability.\n"
+      ],
+      "id": "d1a12d90"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: 'nn model, lstm'\n",
+        "\n",
+        "d = 5 # sort of arbitrary\n",
+        "\n",
+        "# nn = keras.Sequential([\n",
+        "#     keras.layers.Input(shape=(2,,)),\n",
+        "#     keras.layers.LSTM(units = d),\n",
+        "#     keras.layers.Dense(units=1)\n",
+        "# ])\n",
+        "# nn.summary()"
+      ],
+      "id": "nn-model-lstm",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Introducing... the gatekeepers {#sec-gates}\n",
+        "\n",
+        "## Now is a(nother) good time to pay attention {#sec-transf}\n",
+        "\n",
+        "## Complete architecture {#sec-tftmf}\n",
+        "\n",
+        "## Nowcasting inflation with a simple model {#sec-nowcast}\n",
+        "\n",
+        "## References\n",
+        "\n",
+        "::: {#refs}\n",
+        ":::"
+      ],
+      "id": "a50e9543"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/Users/douglasaraujo/Coding/.venv_gingado/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

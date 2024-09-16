@@ -4,3 +4,4 @@ statsmodels
 nbformat
 nbclient
 pre-commit
+pytest

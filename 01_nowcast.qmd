@@ -69,7 +69,7 @@ For inflation, we take a dataflow from the [BIS](https://data.bis.org/topics/CPI
 #| label: "inflation dataflow"
 BIS = sdmx.Client("BIS")
 cpi_msg = BIS.dataflow('WS_LONG_CPI')
-cpi_dsdim = cpi_msg.structure
+cpi_dsd = cpi_msg.structure
 ```
 
 These are all possible keys:
@@ -167,7 +167,7 @@ For the nowcasting, we are interested in the daily variation:
 
 fig, ax = plt.subplots()
 plt.axhline(y=0, linewidth=1.5, color="black")
-df_oil_dim = df_oil.pct_change().dropna()
+df_oil_d = df_oil.pct_change().dropna()
 df_oil_d.plot(ax=ax)
 plt.show()
 ```
@@ -320,7 +320,7 @@ def create_Xy(X, y, splits):
     for k, split in enumerate(splits):
         key = f"fold_{k}"
         folds[key] = {}
-        split_train, split_validim = split
+        split_train, split_valid = split
         folds[key]['Xy_train'] = dates_Xy(X, y, split_train)
         folds[key]['Xy_valid'] = dates_Xy(X, y, split_valid)
     return folds
@@ -372,7 +372,7 @@ all_inputs = keras.layers.Concatenate(name="continuous")([i for i in inputs.valu
 out = keras.layers.Dense(units = dim, activation="relu")(all_inputs)
 out = keras.layers.Dense(units=1)(out)
 
-nn = keras.Model(
+nn_fc = keras.Model(
     inputs=inputs, 
     outputs=out
 )

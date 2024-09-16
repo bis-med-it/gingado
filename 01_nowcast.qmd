@@ -445,7 +445,7 @@ inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
 LSTMs = []
 for k, v in inputs.items():
     lstm = keras.layers.Masking(mask_value=0.0)(v)
-    lstm = keras.layers.LSTM(units=d, return_sequences=False, name=f"LSTM__freq_{k}")(lstm)
+    lstm = keras.layers.LSTM(units=dim, return_sequences=False, name=f"LSTM__freq_{k}")(lstm)
     LSTMs.append(lstm)
 encoded_series = keras.layers.Average(name="encoded_series")(LSTMs)
 out = keras.layers.Dense(units = dim, activation="relu")(encoded_series)
@@ -477,7 +477,7 @@ This neural network will then take in the inputed time series data, and encode e
 Note the code includes an adjustment that creates a pandas Series with 0 in case data for a given frequency is not available in a given period.
 
 ```{python}
-#| label: check nn model works
+#| label: check lstm model works
 
 lstm_x = [
     {k: (v if v is not None else pd.Series(0.0)) for k, v in c[0].items()}  # Replace None values with pd.Series(0.0)
@@ -485,8 +485,8 @@ lstm_x = [
 ]
 
 lstm_y = [c[1] for c in train_data["fold_0"]['Xy_train'].values()]
-nn_lstm.fit(lstm_x, y=lstm_y, epochs=4)
-nn_lstm.predict(lstm_X)
+nn_lstm.fit(lstm_x[0], y=lstm_y, epochs=4)
+nn_lstm.predict(lstm_x[0])
 ```
 
 ## Introducing... the gatekeepers {#sec-gates}

@@ -81,10 +81,10 @@ def get_timefeat(
     dt_index = df.index
     time_features = pd.concat(
         [
-            get_day_features(dt_index),
-            get_week_features(dt_index),
-            get_month_features(dt_index),
-            get_quarter_features(dt_index),
+            _get_day_features(dt_index),
+            _get_week_features(dt_index),
+            _get_month_features(dt_index),
+            _get_quarter_features(dt_index),
         ],
         axis=1,
     )
@@ -97,7 +97,7 @@ def get_timefeat(
     return time_features
 
 
-def get_day_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
+def _get_day_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
     """
     Calculate day-related temporal features from a DatetimeIndex.
 
@@ -118,7 +118,7 @@ def get_day_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
     )
 
 
-def get_week_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
+def _get_week_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
     """
     Calculate week-related temporal features from a DatetimeIndex.
 
@@ -140,7 +140,7 @@ def get_week_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
     )
 
 
-def get_month_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
+def _get_month_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
     """
     Calculate month-related temporal features from a DatetimeIndex.
 
@@ -159,7 +159,7 @@ def get_month_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
     )
 
 
-def get_quarter_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
+def _get_quarter_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
     """
     Calculate quarter-related temporal features from a DatetimeIndex.
 

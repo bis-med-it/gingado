@@ -1,12 +1,15 @@
+"""Contains utilities to work with multi-frequency time series data."""
+
+import datetime
 from enum import Enum
 
+import numpy as np
 import pandas as pd
 from sklearn.feature_selection import VarianceThreshold
 
 
 class Frequency(Enum):
-    """
-    Enum class representing valid frequency codes for time series data.
+    """Enum class representing valid frequency codes for time series data.
 
     These frequency codes align with pandas' frequency aliases and can be used
     for operations like resampling or date range generation.
@@ -24,16 +27,19 @@ class Frequency(Enum):
     QUARTERLY = "QS"
 
 
-def validate_and_get_freq(freq: str | Frequency) -> Frequency:
-    """
-    Validate and return a pandas-compatible frequency string.
+FrequencyLike = str | Frequency
+DateTimeLike = pd.Timestamp | datetime.datetime | np.datetime64 | str | datetime.date
+
+
+def validate_and_get_freq(freq: FrequencyLike) -> Frequency:
+    """Validate and return a pandas-compatible frequency string.
 
     This function checks if the provided frequency string is valid according to
     the Frequency enum and pandas' internal frequency validation. It converts
     the input to uppercase before validation.
 
     Args:
-        freq_str (str | Frequency): The input frequency to validate.
+        freq (FrequencyLike): The input frequency to validate.
 
     Returns:
         str: A valid pandas frequency string.
@@ -54,17 +60,19 @@ def validate_and_get_freq(freq: str | Frequency) -> Frequency:
 
 
 def get_timefeat(
-    df: pd.DataFrame, freq: Frequency, add_to_df: bool = True, drop_zero_variance: bool = True
+    df: pd.DataFrame | pd.Series,
+    freq: FrequencyLike,
+    add_to_df: bool = True,
+    drop_zero_variance: bool = True,
 ) -> pd.DataFrame:
-    """
-    Generate temporal features from a DataFrame with a DatetimeIndex.
+    """Generate temporal features from a DataFrame with a DatetimeIndex.
 
     This function creates various time-based features such as day of week,
     day of month, week of year, etc., based on the DatetimeIndex of the input DataFrame.
 
     Args:
-        df (pd.DataFrame): Input DataFrame with a DatetimeIndex.
-        freq (Frequency): Frequency of the input DataFrame
+        df (pd.DataFrame | pd.Series): Input DataFrame or Series with a DatetimeIndex.
+        freq (FrequencyLike): Frequency of the input DataFrame
         add_to_df (bool, optional): If True, append the generated features to the input DataFrame.
             If False, return only the generated features. Defaults to True.
         drop_zero_variance (bool, optional): If True, drop columns with zero variance. For example,
@@ -107,8 +115,7 @@ def get_timefeat(
 
 
 def _get_day_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
-    """
-    Calculate day-related temporal features from a DatetimeIndex.
+    """Calculate day-related temporal features from a DatetimeIndex.
 
     Args:
         dt_index (pd.DatetimeIndex): The DatetimeIndex to extract features from.
@@ -128,8 +135,7 @@ def _get_day_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
 
 
 def _get_week_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
-    """
-    Calculate week-related temporal features from a DatetimeIndex.
+    """Calculate week-related temporal features from a DatetimeIndex.
 
     Args:
         dt_index (pd.DatetimeIndex): The DatetimeIndex to extract features from.
@@ -150,8 +156,7 @@ def _get_week_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
 
 
 def _get_month_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
-    """
-    Calculate month-related temporal features from a DatetimeIndex.
+    """Calculate month-related temporal features from a DatetimeIndex.
 
     Args:
         dt_index (pd.DatetimeIndex): The DatetimeIndex to extract features from
@@ -169,8 +174,7 @@ def _get_month_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
 
 
 def _get_quarter_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
-    """
-    Calculate quarter-related temporal features from a DatetimeIndex.
+    """Calculate quarter-related temporal features from a DatetimeIndex.
 
     Args:
         dt_index (pd.DatetimeIndex): The DatetimeIndex to extract features from.
@@ -186,3 +190,51 @@ def _get_quarter_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
             "year_end": dt_index.is_year_end.astype(int),
         },
     )
+
+
+def _get_filtered_data(frame: pd.DataFrame, cutoff_date: DateTimeLike) -> pd.DataFrame | None:
+    """Filter data up to a given date.
+
+    Args:
+        frame (pd.DataFrame): The input DataFrame to filter.
+        cutoff_date (DateTimeLike): The cutoff date.
+
+    Returns:
+        Optional[pd.DataFrame]: Filtered DataFrame or None if empty.
+    """
+    filtered_data = frame.loc[frame.index <= cutoff_date]
+    return filtered_data if not filtered_data.empty else None
+
+
+def dates_Xy(
+    X: dict[str, pd.DataFrame],
+    y: pd.DataFrame | pd.Series,
+    dates: list[DateTimeLike],
+    freq_y: FrequencyLike = "MS",
+) -> list[tuple[dict[str, pd.DataFrame | None], float]]:
+    """Process time series data by creating snapshots for each date in the given list.
+
+    Args:
+        X (dict[str, pd.DataFrame]): Dictionary of DataFrames containing feature data at different
+            frequencies.
+        y (pd.DataFrame | pd.Series): DataFrame or Series containing target data.
+        dates (list[DateTimeLike]): List of dates to process.
+        freq_y (FrequencyLike): Frequency of the target data. Defaults to "M" (monthly).
+
+    Returns:
+        list[tuple[dict[str, pd.DataFrame | None], float]]: Processed data for each date.
+    """
+    result = []
+    for date in dates:
+        # data up to 'date' and y_value at 'date'
+        X_filtered = {freq: _get_filtered_data(Xdata, date) for freq, Xdata in X.items()}
+        y_value = y.loc[date]
+
+        # Calculate temporal features for y data
+        y_history = y.loc[:date]
+        future_features = get_timefeat(y_history, freq=freq_y, add_to_df=False)
+        X_filtered["future"] = future_features.iloc[-1:, :]  # Use only the last row
+
+        result.append((X_filtered, y_value))
+
+    return result

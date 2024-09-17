@@ -45,6 +45,7 @@ from gingado.utils import load_SDMX_data
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import PolynomialFeatures
+from tqdm import tqdm
 ```
 
 
@@ -159,7 +160,7 @@ df_oil.set_index('DATE', inplace=True)
 df_oil.plot()
 ```
 
-For the nowcasting, we are interested in the daily variation:
+For the nowcasting, we are interested in the daily variation, clipped because of the sharp movements during the onset of the Covid-19 pandemic:
 
 ```{python}
 #| label: fig-oilD
@@ -169,6 +170,7 @@ fig, ax = plt.subplots()
 plt.axhline(y=0, linewidth=1.5, color="black")
 df_oil_d = df_oil.pct_change().dropna()
 df_oil_d.plot(ax=ax)
+plt.ylim(-0.25, 0.25)
 plt.show()
 ```
 
@@ -269,78 +271,71 @@ To simplify, we will consider valid nowcasting *input* data for a given output i
 ```{python}
 #| label: "time series splits"
 
-# Lagging the nowcasted variable
-df_infl_m_L = df_infl_m.shift(1).dropna()
-df_infl_m = df_infl_m.loc[df_infl_m_L.index]
-
 # Training date cutoff
 cutoff = "2020-12-31"
 
-y_train, y_test = df_infl_m[:cutoff], df_infl_m[cutoff:]
-Xm_train, Xm_test = df_infl_m_L[:cutoff], df_infl_m_L[cutoff:]
-Xd_train, Xd_test = df_oil_d[:cutoff], df_oil_d[cutoff:][1:]
+y_train, y_test = df_infl_m[:cutoff][1:], df_infl_m[cutoff:][1:]
+Xm_train, Xm_test = df_infl_m[:cutoff][:-1], df_infl_m[cutoff:][:-1]
+Xd_train, Xd_test = df_oil_d[:cutoff], df_oil_d[cutoff:]
 
-# Setting up the temporal folds, using the dependent variable's date
-tscv = TimeSeriesSplit(n_splits=5)
-monthly_cv = tscv.split(y_train)
-monthly_cv_dates = [
-    (y_train.index[m], y_train.index[n]) 
-    for m, n in monthly_cv
-]
+X_train = {"m": Xm_train, "d": Xd_train}
+X_test = {"m": Xm_test, "d": Xd_test}
 ```
 
 Now for every month $m$ in the dependent variable, we can find all $m_{t-l}, l\geq 1$ and all $d(m_{t-s}), s\geq 0$.
 
+Note that in the example below, for each data point that we want to forecast (`y`), we take 12 lags of the monthly covariates and 250 lags of the daily covariates.
+
 ```{python}
-#| label: "Auxiliary functions"
+#| label: create data
+#| 
+maxlags = {"m": 12, "d": 250}
 
-# NOTE: Let's think/discuss if these functions are sufficiently generic to be included in gingado.utils
-def dates_Xy(X, y, date_list, freq_y="m"):
-    def get_filtered_data(frame, d):
-        filtered_data = frame.loc[frame.index <= d]
-        return filtered_data if not filtered_data.empty else None
+def create_data(X, y, maxlags=maxlags, tscv=TimeSeriesSplit(n_splits=5)):
+    X_split = {}
+    y_split = {}
+    if tscv:
+        split_cv = tscv.split(y)
+        cv_dates = [
+            (y.index[m], y.index[n]) # (train, valid) for each fold
+            for m, n in split_cv
+        ]
+        for fold, split in enumerate(cv_dates):
+            dates_split = {
+                "train": split[0],
+                "valid": split[1]
+            }
+            X_split[fold] = {}
+            y_split[fold] = {}
+            for chunk, dates in dates_split.items():
+                X_split[fold][chunk] = []
+                y_split[fold][chunk] = []
+                for ysample_date in tqdm(dates):
+                    padded_x = {}
+                    for f in X_train.keys():
+                        try:
+                            to_pad = X_train[f][:ysample_date][:-1]
+                        except KeyError:
+                            to_pad = np.zeros((1,1))
+                        padded_x[f] = keras.utils.pad_sequences([to_pad], maxlen=maxlags[f], dtype=np.float32)
+                    X_split[fold][chunk].append(padded_x)
+                    y_split[fold][chunk].append(y_train.loc[ysample_date])
+        return X_split, y_split
 
-    result = {
-        i: (
-            {
-                freq: get_filtered_data(Xdata, d)
-                for freq, Xdata in X.items()
-            }, 
-            y.loc[d]
-        )
-        for i, d in enumerate(date_list)
-    }
-    ### The code below is throwing errors, need to solve in order to (a) calculate the temporal features of the y data, and then (b) add them to the first element of the tuple, along with the other X elements
-    # for i, d in enumerate(date_list):
-    #     result[i][0]["future"] = get_timefeat(y[d], freq=freq_y, add_to_df=False)
-    return result
-
-def create_Xy(X, y, splits):
-    folds = {}
-    for k, split in enumerate(splits):
-        key = f"fold_{k}"
-        folds[key] = {}
-        split_train, split_valid = split
-        folds[key]['Xy_train'] = dates_Xy(X, y, split_train)
-        folds[key]['Xy_valid'] = dates_Xy(X, y, split_valid)
-    return folds
+X_train_split, y_train_split = create_data(X=X_train, y=y_train, maxlags=maxlags)
 ```
+
+
 
 Let's see how this time series fold will be structured. Each fold is a sequentially longer window, so we get the following data points:
 
 ```{python}
 #| label: "Create batches of data"
 
-train_data = create_Xy(
-    X={"m": Xm_train, "d": Xd_train}, 
-    y=y_train, 
-    splits=monthly_cv_dates
-)
-
-for key in train_data.keys():
-    print(key)
-    print(f"  {len(train_data[key]['Xy_train'])} training X-y pairs")
-    print(f"  {len(train_data[key]['Xy_valid'])} validation X-y pairs")
+for key in y_split.keys():
+    print(f"Fold No {key+1}:")
+    print(f"  {len(y_train_split[key]['train'])} training X-y pairs")
+    print(f"  {len(y_train_split[key]['valid'])} validation X-y pairs")
 ```
 
 ## First model: a fully connected neural network {#sec-layer}
@@ -367,8 +362,8 @@ For simplicity, let's fix it at the first lag for inflation (the past month, $\p
 dim = 5 # arbitrary dimension
 
 freqs = ["m", "d"] # using here the commonly-used frequency abbreviations
-inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
-all_inputs = keras.layers.Concatenate(name="continuous")([i for i in inputs.values()])
+inputs = [keras.layers.Input(shape=(None, 1), name=f) for f in freqs]
+all_inputs = keras.layers.Concatenate(name="continuous")(inputs)
 out = keras.layers.Dense(units = dim, activation="relu")(all_inputs)
 out = keras.layers.Dense(units=1)(out)
 
@@ -386,7 +381,7 @@ nn_fc.summary()
 #| label: fig-FCarch
 #| fig-cap: Architecture of the model with fully connected layer
 
-keras.utils.plot_model(nn_fc)
+keras.utils.plot_model(nn_fc, show_shapes=True)
 ```
 
 Checking that it works. In the code below, we take the first fold as an example. We find the last day in the training data for that fold. Then we get the corresponding `X` and `y` data. Recall that the `X` is actually a dictionary of the monthly and the daily datasets. So we take the last value out of each one.
@@ -397,14 +392,16 @@ This simple neural network will then take one monthly and one daily data point, 
 #| label: check nn model works
 
 # taking the last day of the training set of the last training fold
-last_day_key = len(train_data["fold_0"]['Xy_train']) - 1
-X, y = train_data["fold_0"]['Xy_train'][last_day_key]
-last_X = {}
-for k, v in X.items():
-    idx = -2 if k == "monthly" else -1 # if monthly, take the first lag, if daily take the latest available
-    last_X[k] = v.iloc[idx]
+# because this network will only take one data at a time
+X_train_split_fc = [
+    np.array([
+        np.squeeze(v)[-1]
+        for v in d.values()
+    ])
+    for d in X_train_split[0]["train"]
+]
 
-nn_fc.fit(last_X, y=y, epochs=4)
+nn_fc.fit(x=X_train_split_fc, y=y_split[0]["train"], epochs=4)
 nn_fc.predict(last_X)
 ```
 
@@ -441,6 +438,7 @@ The basic intuition of the LSTM layer is that some of the individual component l
 dim = 5 # arbitrary dimension
 
 freqs = ["m", "d"] # using here the commonly-used frequency abbreviations
+
 inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
 LSTMs = []
 for k, v in inputs.items():
@@ -479,15 +477,60 @@ Note the code includes an adjustment that creates a pandas Series with 0 in case
 ```{python}
 #| label: check lstm model works
 
-lstm_x = [
-    {k: (v if v is not None else pd.Series(0.0)) for k, v in c[0].items()}  # Replace None values with pd.Series(0.0)
-    for c in train_data["fold_0"]['Xy_train'].values()  # Iterate over values
-]
+maxlag = {"m": 12, "d": 250} 
+"""
+#lstm_x = [
+#    {   
+#        k: (v if v is not None else pd.Series(0.0)) 
+#        for k, v in c[0].items()
+#    }  # Replace None values with pd.Series(0.0)
+#    for c in train_data["fold_0"]['Xy_train'].values()  # Iterate over values
+#]
+
+lstm_x = {
+    k: keras.utils.pad_sequences([v], maxlen=maxlag[k])
+    for k, v in c[0].items()
+    for c in train_data["fold_0"]['Xy_train'].values()
+}
 
 lstm_y = [c[1] for c in train_data["fold_0"]['Xy_train'].values()]
-nn_lstm.fit(lstm_x[0], y=lstm_y, epochs=4)
-nn_lstm.predict(lstm_x[0])
+"""
+# Example usage
+maxlag = {'m': 12, 'd': 365}  # Define the maxlen for each frequency (monthly, daily)
+
+def pad_sequences_by_frequency(train_data, maxlag):
+    formatted_data = []
+    
+    x_by_freq = {k: [] for k in maxlag.keys()}
+    # Iterate over each sample in 'Xy_train'
+    for sample, data in train_data["fold_0"]['Xy_train'].items():
+        for freq in x_by_freq.keys():       
+            x_by_freq[freq].append(data[0][freq])
+    
+        y_value = data[1]  # The dependent variable y
+        # Append the padded X values and y to the formatted data
+        formatted_data.append((padded_X, y_value))
+    
+
+    # Pad each X based on the frequency
+    padded_X = {
+        k: keras.utils.pad_sequences([
+            v if v is not None else pd.Series(0.0)
+        ], maxlen=maxlag[k], padding='post')[0]  # Pad and keep same format
+        for k, v in X_dict.items()
+    }
+    
+    return formatted_data
+
+
+# Call the function to pad the sequences by frequency
+formatted_train_data = pad_sequences_by_frequency(train_data, maxlag)
+
+nn_lstm.fit(lstm_x, y=lstm_y, epochs=4)
+nn_lstm.predict(lstm_x)
 ```
+
+
 
 ## Introducing... the gatekeepers {#sec-gates}
 

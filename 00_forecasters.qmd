@@ -15,15 +15,43 @@ warning: false
 
 Forecasting time series is one of the most traditional activities in economic practice. Machine learning-based methods are promising techniques across many domains due to their flexibility to fit complex data generation processes and to take up alternative data as input.
 
-In the last years, the field of *nowcasting* has gained attention.
+In the last years, the field of *nowcasting* has gained attention. Its goal is to take up ongoing information to anticipate key economic data (such as GDP or inflation) about current or immediate future periods before they are officially calculated and published.[^nowcastrefs]
 
-# Temporal Fusion Transformer
+[^nowcastrefs]: Key references in nowcasting economic variables are @giannone2008nowcasting, ... and ... .
+
+The state of the art in the academic literature is the dynamic factor model (DFM), complemented by a Kalman Filter to smooth the ragged end of time series, as they have different dates where new information become available.
+
+An alternative technique, showcased in Americo et al (...), has proven to be a competitive method to nowcasting GDP and inflation across multiple countries. This technique, based on a neural network model called the Temporal Fusion Transformer (TFT, @lim2021temporal), is incorporated below, with adjustments described in @sec-tft compared to the original paper.
+
+# Temporal data loaders
+
+An important part of ensuring forecasting and nowcasting models work correctly is to import the data correctly. Careful consideration to the time period of each series, the panel dimension(s) if any, and its frequency and range can help guarantee that a part of the time series is indeed out-of-sample as desired; that mixed frequency data are "glued together" in a way that makes sense; and that all of this is done even if series do not have a certain periodicity (eg, they may reflect events that happen sporadically) or that comprise non-traditional data such as time series of texts or images.
+
+The role of the `TemporalDataLoaders` is to facilitate the use of data under these conditions.
+
+Consider first two datasets, one daily and one monthly.
+
+```{python}
+#| label: download datasets
+
+from gingado.utils import load_SDMX_data
+
+df_daily = load_SDMX_data(
+    sources={'BIS': 'WS_CBPOL_D'},
+    keys={'FREQ': 'D'},
+    params={'startPeriod': 2019}
+)
+df_daily
+```
+
+# Temporal Fusion Transformer {#sec-tft}
 
 The Temporal Fusion Transformer (TFT) due to @lim2021temporal is a neural network architecture that combines several desirable characteristics for nowcasting or forecasting:
 
-- ...
-- ...
-- ...
+- **multi-horizon forecasting**: the ability to output, at each point in time $t$, a sequence of forecasts for $t+h, h > 1$
+- **quantile prediction**: each forecast is accompanied by a quantile band that communicates the amount of uncertainty around a prediction
+- **flexible use of different types of inputs**: static inputs (akin to fixed effects), historical input and known future input (eg, important holidays, years that are known to have major sports events such as Olympic games, etc)
+- **interpretability**: the model learns to select variables from the space of all input variables to retain only those that are globally meaningful, to assign attention to different parts of the time series, and to identify events of significance
 
 The current implementation is an adaptation that takes in mixed-frequency data (ie, some input data are measured daily, others monthly, etc). This version, called TFT-MF described in more detail in @sec-TFTMF. The several building blocks of the TFT-MF model are also accessible to the user in the following sections, in case they decide to adapt or create their own forecasting architecture.
 
@@ -36,7 +64,7 @@ The GLU is a key part of the Gated Residual Network, described in @sec-GRN.
 ## Gated Residual Network (GRN) {#sec-GRN}
 
 ```{python}
-show_doc
+#| label: GRN
 ```
 
 ## Variable Selection Network (VSN) {#sec-VSN}

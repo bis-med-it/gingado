@@ -24,7 +24,7 @@ class Frequency(Enum):
     QUARTERLY = "QS"
 
 
-def validate_and_get_freq(freq_str: str) -> str:
+def validate_and_get_freq(freq: str | Frequency) -> Frequency:
     """
     Validate and return a pandas-compatible frequency string.
 
@@ -33,7 +33,7 @@ def validate_and_get_freq(freq_str: str) -> str:
     the input to uppercase before validation.
 
     Args:
-        freq_str (str): The frequency string to validate.
+        freq_str (str | Frequency): The input frequency to validate.
 
     Returns:
         str: A valid pandas frequency string.
@@ -42,18 +42,19 @@ def validate_and_get_freq(freq_str: str) -> str:
         ValueError: If the input frequency is not valid or not supported.
     """
     try:
-        freq = Frequency(freq_str.upper())
+        if isinstance(freq, str):
+            freq = Frequency(freq.upper())
         # Additional check with pandas
         pd.tseries.frequencies.to_offset(freq.value)
-        return freq.value
+        return freq
     except ValueError as exc:
         raise ValueError(
-            f"Invalid frequency: {freq_str}. " f"Allowed values are {[f.value for f in Frequency]}"
+            f"Invalid frequency: {freq}. " f"Allowed values are {[f.value for f in Frequency]}"
         ) from exc
 
 
 def get_timefeat(
-    df: pd.DataFrame, add_to_df: bool = True, drop_zero_variance: bool = True
+    df: pd.DataFrame, freq: Frequency, add_to_df: bool = True, drop_zero_variance: bool = True
 ) -> pd.DataFrame:
     """
     Generate temporal features from a DataFrame with a DatetimeIndex.
@@ -63,6 +64,7 @@ def get_timefeat(
 
     Args:
         df (pd.DataFrame): Input DataFrame with a DatetimeIndex.
+        freq (Frequency): Frequency of the input DataFrame
         add_to_df (bool, optional): If True, append the generated features to the input DataFrame.
             If False, return only the generated features. Defaults to True.
         drop_zero_variance (bool, optional): If True, drop columns with zero variance. For example,
@@ -77,17 +79,24 @@ def get_timefeat(
     """
     if not isinstance(df.index, pd.DatetimeIndex):
         raise ValueError("DataFrame index must be a DatetimeIndex")
+    freq = validate_and_get_freq(freq)
 
-    dt_index = df.index
-    time_features = pd.concat(
-        [
-            _get_day_features(dt_index),
-            _get_week_features(dt_index),
-            _get_month_features(dt_index),
-            _get_quarter_features(dt_index),
-        ],
-        axis=1,
-    )
+    features = []
+
+    if freq == Frequency.DAILY:
+        features.append(_get_day_features(df.index))
+
+    if freq in [Frequency.DAILY, Frequency.WEEKLY]:
+        features.append(_get_week_features(df.index))
+
+    if freq in [Frequency.DAILY, Frequency.WEEKLY, Frequency.MONTHLY]:
+        features.append(_get_month_features(df.index))
+
+    # We currently use these for all frequencies
+    features.append(_get_quarter_features(df.index))
+
+    time_features = pd.concat(features, axis=1) if features else pd.DataFrame(index=df.index)
+
     if drop_zero_variance:
         var_thresh = VarianceThreshold(threshold=0)
         var_thresh.set_output(transform="pandas")

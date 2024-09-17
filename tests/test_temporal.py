@@ -35,6 +35,35 @@ def quarterly_start_df_fixture() -> pd.DataFrame:
     return pd.DataFrame({"value": range(len(date_range))}, index=date_range)
 
 
+def test_frequency_enum_values():
+    """Test that Frequency enum has correct values."""
+    assert tp.Frequency.DAILY.value == "D"
+    assert tp.Frequency.WEEKLY.value == "W"
+    assert tp.Frequency.MONTHLY.value == "MS"
+    assert tp.Frequency.QUARTERLY.value == "QS"
+
+
+@pytest.mark.parametrize("input_freq, expected", [("D", "D"), ("w", "W"), ("M", "M"), ("qs", "QS")])
+def test_validate_and_get_freq_valid_inputs(input_freq, expected):
+    """Test validate_and_get_freq with valid inputs."""
+    assert tp.validate_and_get_freq(input_freq) == expected
+
+
+@pytest.mark.parametrize("invalid_freq", ["INVALID", "DAY", "5"])
+def test_validate_and_get_freq_invalid_inputs(invalid_freq):
+    """Test validate_and_get_freq with invalid inputs."""
+    with pytest.raises(ValueError):
+        tp.validate_and_get_freq(invalid_freq)
+
+
+def test_validate_and_get_freq_pandas_compatibility():
+    """Test that returned frequencies are compatible with pandas."""
+    for freq in tp.Frequency:
+        offset = pd.tseries.frequencies.to_offset(freq.value)
+        assert offset is not None
+        assert str(offset) == freq.value
+
+
 def test_get_timefeat_add_to_df(sample_df: pd.DataFrame) -> None:
     """Test get_timefeat function when add_to_df is True."""
     result = tp.get_timefeat(sample_df, add_to_df=True)

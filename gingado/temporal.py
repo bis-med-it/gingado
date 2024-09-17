@@ -1,5 +1,55 @@
+from enum import Enum
+
 import pandas as pd
 from sklearn.feature_selection import VarianceThreshold
+
+
+class Frequency(Enum):
+    """
+    Enum class representing valid frequency codes for time series data.
+
+    These frequency codes align with pandas' frequency aliases and can be used
+    for operations like resampling or date range generation.
+
+    Attributes:
+        DAILY (str): Daily frequency ('D')
+        WEEKLY (str): Weekly frequency ('W')
+        MONTHLY (str): Monthly start frequency ('MS')
+        QUARTERLY (str): Quarterly start frequency ('QS')
+    """
+
+    DAILY = "D"
+    WEEKLY = "W"
+    MONTHLY = "MS"
+    QUARTERLY = "QS"
+
+
+def validate_and_get_freq(freq_str: str) -> str:
+    """
+    Validate and return a pandas-compatible frequency string.
+
+    This function checks if the provided frequency string is valid according to
+    the Frequency enum and pandas' internal frequency validation. It converts
+    the input to uppercase before validation.
+
+    Args:
+        freq_str (str): The frequency string to validate.
+
+    Returns:
+        str: A valid pandas frequency string.
+
+    Raises:
+        ValueError: If the input frequency is not valid or not supported.
+    """
+    try:
+        freq = Frequency(freq_str.upper())
+        # Additional check with pandas
+        pd.tseries.frequencies.to_offset(freq.value)
+        return freq.value
+    except ValueError as exc:
+        raise ValueError(
+            f"Invalid frequency: {freq_str}. " f"Allowed values are {[f.value for f in Frequency]}"
+        ) from exc
 
 
 def get_timefeat(

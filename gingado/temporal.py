@@ -1,7 +1,10 @@
 import pandas as pd
+from sklearn.feature_selection import VarianceThreshold
 
 
-def get_timefeat(df: pd.DataFrame, add_to_df: bool = True) -> pd.DataFrame:
+def get_timefeat(
+    df: pd.DataFrame, add_to_df: bool = True, drop_zero_variance: bool = True
+) -> pd.DataFrame:
     """
     Generate temporal features from a DataFrame with a DatetimeIndex.
 
@@ -11,11 +14,13 @@ def get_timefeat(df: pd.DataFrame, add_to_df: bool = True) -> pd.DataFrame:
     Args:
         df (pd.DataFrame): Input DataFrame with a DatetimeIndex.
         add_to_df (bool, optional): If True, append the generated features to the input DataFrame.
-                                    If False, return only the generated features. Defaults to True.
+            If False, return only the generated features. Defaults to True.
+        drop_zero_variance (bool, optional): If True, drop columns with zero variance. For example,
+            the day of month feature is irrelevant for inputs with a monthly frequency.
 
     Returns:
         pd.DataFrame: A DataFrame containing the generated temporal features,
-                      either appended to the input DataFrame or as a separate DataFrame.
+            either appended to the input DataFrame or as a separate DataFrame.
 
     Raises:
         ValueError: If the input DataFrame's index is not a DatetimeIndex.
@@ -33,7 +38,10 @@ def get_timefeat(df: pd.DataFrame, add_to_df: bool = True) -> pd.DataFrame:
         ],
         axis=1,
     )
-
+    if drop_zero_variance:
+        var_thresh = VarianceThreshold(threshold=0)
+        var_thresh.set_output(transform="pandas")
+        time_features = var_thresh.fit_transform(time_features)
     if add_to_df:
         return pd.concat([df, time_features], axis=1)
     return time_features

@@ -24,7 +24,7 @@ The nowcasting model available in `gingado` from v0.3.0 onwards is an adjusted v
 
 ## Roadmap
 
-The TFT model can be a bit complex to understand at first, so we will build it up, step by step. After loading the data in @sec-data, the most basic neural network - a neuron layer - is presented in @sec-fc. This is followed by an architecture that is more suitable for time series in @sec-lstm. Next, these elements are combined in @sec-gates to show how the model knows what to focus on. The next individual element is the self-attention layer in @sec-transf. Finally, if you want to see the full picture directly, go to @sec-tftmf to see how these elements are put together. @sec-nowcast then trains the model and presents the results for this simple, illustrative nowcasting.
+The TFT model can be a bit complex to understand at first, so we will build it up, step by step. After loading the data in @sec-data, the most basic neural network - a neuron layer - is presented in @sec-fc. Then a simple extension is shown where a neural network learns which data to let through or not in @sec-glu. Armed with these elements, @sec-lstm discusses the next architecture, more suitable for time series. Next, these elements are combined in @sec-gates to show how the model knows what to focus on. The next individual element is the self-attention layer in @sec-transf. Finally, if you want to see the full picture directly, go to @sec-tftmf to see how these elements are put together. @sec-nowcast then trains the model and presents the results for this simple, illustrative nowcasting.
 
 ## Loading the data {#sec-data}
 
@@ -34,6 +34,8 @@ To abstract from currency issues, we will use US inflation and oil prices, which
 
 ```{python}
 #| label: load packages
+from __future__ import annotations
+
 import os
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import keras
@@ -239,9 +241,9 @@ def get_timefeat(df, freq="d", features=None, add_to_df=False):
         df_timefeat[features]
     vocab_sizes = {col: df_timefeat[col].nunique() + 1 for col in df_timefeat}
     if add_to_df:
-        return pd.concat([df, df_timefeat], axis=1)
+        return pd.concat([df, df_timefeat], axis=1), vocab_sizes
     else:
-        return df_timefeat
+        return df_timefeat, vocab_sizes
 ```
 
 Specifically, temporal features are an excellent (and rare) type of *known future* input. Those are the data that we know will be like that during forecasting time, ie, at the time the observation $y_t$ takes place. For example, it is trivial to know the day of the week, of the month etc, for any date we are forecasting in.
@@ -251,7 +253,7 @@ For this reason, we now calculate the temporal features of inflation.
 ```{python}
 #| label: temporal features for the inflation series
 
-df_timefeat = get_timefeat(df_infl_m, freq="m")
+df_timefeat, _ = get_timefeat(df_infl_m, freq="m")
 ```
 
 
@@ -344,7 +346,7 @@ for fold in y_train_split.keys():
     print(f"  {len(y_train_split[fold]['valid'])} validation X-y pairs")
 ```
 
-## First model: a fully connected neural network {#sec-fc}
+## A simple, fully connected neural network {#sec-fc}
 
 The goal of this model is to nowcast $\pi_t$ based on its past values $\pi_{t-1}$ and on current oil prices $o_{d(m-s)}, s \geq 0$. The first model we will train is a very simple neural network:
 
@@ -411,7 +413,7 @@ y_valid_fc = np.array(y_train_split_fc[fold]["valid"])
 Now we train the network.
 
 ```{python}
-#| label: check nn model works
+#| label: fit nn model
 
 history_fc = nn_fc.fit(x=X_train_fc, y=y_train_fc, validation_data=(X_valid_fc, y_valid_fc), epochs=20, batch_size=10, shuffle=True)
 ```
@@ -430,7 +432,7 @@ plt.show()
 
 We don't need to bother training too much this very simple neural network; the goal here is to use it as a building block for a mathematical/econometric intuition of the broader nowcasting model.
 
-## A useful tool: a gate {#sec-gate}
+## A useful tool: a gate {#sec-glu}
 
 The network trained in the previous section can learn how to map the input data to the output data. But there are ways to take advantage of the incredible flexibility in architecture (ie, how neural layers are stacked). One such way is to have the data inform which layers's outputs are actually used downstream or not. This section describes how.
 
@@ -446,7 +448,9 @@ y_t &= \mathbf{W}_2 (\xi \odot G) + \mathbf{b}_2,
 \end{align}
 $$ {#eq-gated}
 
-with $\sigma$ representing the sigmoid function and $\odot$ the Hadamard multiplication.
+with $\sigma$ representing the sigmoid function and $\odot$ the Hadamard multiplication. 
+
+This type of model where the gate is trained on the same data was introduced by @dauphin2017language. From now on, we refer to @eq-gated as a Gated Linear Unit (GLU).
 
 Note that the data that informs the gate does not necessarily need to be the same as the mainstream data.
 
@@ -497,7 +501,7 @@ ax.set_ylabel("Mean squared error")
 plt.show()
 ```
 
-## Second model: Long short-term memory {#sec-lstm}
+## Long short-term memory {#sec-lstm}
 
 A marked improvement in how we can model time series data is the use of recurrent neural networks (RNNs). In essence, these are networks that learn to keep a stateful memory, which is updated as the network "visits" each sequential step in time, in turn using both the memory and the new data at that period to predict the output.
 
@@ -603,7 +607,143 @@ ax.set_ylabel("Mean squared error")
 plt.show()
 ```
 
+
 ## Introducing... the gatekeepers {#sec-gates}
+
+Introducing gates in a model can bring important advantages. According to @lim2021temporal, GLUs:
+
+- "... reduce the vanishing gradient problem for deep architectures by providing a linear path for gradients while retaining non-linear capabilities", and
+- "... provide flexibility to suppress any parts of the architecture that are not required for a given dataset".
+
+This section formalises the GLU model of @sec-glu as if it were a single layer. This serves as a building block for the Gated Residual Network (GRN), a group of layers that learns to dynamically adjust the complexity of a larger neural network.
+
+First, the GLU as a layer is introduced below.
+
+```{python}
+#| label: glu
+# NOTE: to add to codebase and replace here with an import
+
+class GatedLinearUnit(keras.Layer):
+    def __init__(
+        self,
+        d_model:int=16, # Embedding size, $d_\text{model}$
+        dropout_rate:float|None=None, # Dropout rate
+        use_time_distributed:bool=True, # Apply the GLU across all time steps?
+        activation:str|callable=None, # Activation function
+        **kwargs
+    ):
+        "Gated Linear Unit dynamically gates input data"
+        super(GatedLinearUnit, self).__init__(**kwargs)
+        self.d_model = d_model
+        self.dropout_rate = dropout_rate
+        self.use_time_distributed = use_time_distributed
+        self.activation = activation
+
+    def build(self, input_shape):
+        super(GatedLinearUnit, self).build(input_shape)
+        self.dropout = keras.layers.Dropout(self.dropout_rate) if self.dropout_rate is not None else None
+        self.activation_layer = keras.layers.Dense(self.d_model, activation=self.activation)
+        self.gate_layer = keras.layers.Dense(self.d_model, activation='sigmoid')
+        self.multiply = keras.layers.Multiply()
+
+        if self.use_time_distributed:
+            self.activation_layer = keras.layers.TimeDistributed(self.activation_layer)
+            self.gate_layer = keras.layers.TimeDistributed(self.gate_layer)
+
+    def call(
+        self, 
+        inputs, 
+        training=None
+    ):
+        """List of outputs with shape: [
+            (batch size, ..., d_model),
+            (batch size, ..., d_model)
+        ]"""
+        if self.dropout is not None and training:
+            inputs = self.dropout(inputs)
+
+        activation_output = self.activation_layer(inputs)
+        gate_output = self.gate_layer(inputs)
+        return self.multiply([activation_output, gate_output]), gate_output
+
+    def get_config(self):
+        config = super(GatingLayer, self).get_config()
+        config.update({
+            'd_model': self.d_model,
+            'dropout_rate': self.dropout_rate,
+            'use_time_distributed': self.use_time_distributed,
+            'activation': self.activation
+        })
+        return config
+```
+
+The GLU is simply
+
+$$
+\text{GLU}(x) = \sigma(W_{G} x + b_G) \odot (W_1 x + b_1),
+$$ {#eq-glu}
+
+with $W_{\text{GLU}} = \{W_G, W_1\} \in \mathbb{R}^{|x| \times \lambda}$ and $b_{\text{GLU}} = \{b_G, b_1\} \in \mathbb{R}^{\lambda}$.
+
+```{python}
+#| label: tbl-glu_summary
+#| tbl-cap: Summary of model with GLU
+
+dim = 16
+
+keras.backend.clear_session()
+
+inputs = keras.layers.Input(shape=(sum([v for v in maxlags.values()]),),name="FlattenedLaggedInput")
+
+gated_features, gate = GatedLinearUnit(d_model=dim, activation="relu", use_time_distributed=False, name="Gate")(inputs)
+
+output = keras.layers.Dense(units=dim, activation="relu", name="SummariseInput")(gated_features)
+
+output = keras.layers.Dense(units=1, name="CalculateOutput")(output)
+
+nn_glu = keras.Model(inputs=inputs, outputs=output, name="GLUModel")
+nn_glu.compile(loss=keras.losses.MeanSquaredError())
+nn_glu.summary()
+```
+
+```{python}
+#| label: fig-glu
+#| fig-cap: GLU model
+
+keras.utils.plot_model(nn_glu, show_layer_activations=True, show_shapes=True, show_layer_names=True)
+```
+
+```{python}
+#| label: fit glu model
+
+history_glu = nn_glu.fit(x=X_train_fc, y=y_train_fc, validation_data=(X_valid_fc, y_valid_fc), epochs=20, batch_size=10, shuffle=True)
+```
+
+```{python}
+#| label: fig-history_glu
+#| fig-cap: Losses calculated in a GLU neural network
+
+ax = pd.DataFrame(history_glu.history).plot()
+ax.set_xlabel("Epochs")
+ax.set_ylabel("Mean squared error")
+plt.show()
+```
+
+As mentioned above, the GLU itself actually serves as an important component of a slightly larger group of layers, the GRNs. Now is the time to introduce them.
+
+GRNs are formally:
+
+$$
+\text{GRN}(x) = ...
+$$ {#eq-grn}
+
+## Time to talk about time {#sec-timeembed}
+
+
+
+- Embedding of temporal features
+
+- Use as "future known data"
 
 ## Now is a(nother) good time to pay attention {#sec-transf}
 

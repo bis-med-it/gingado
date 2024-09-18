@@ -24,7 +24,7 @@ The nowcasting model available in `gingado` from v0.3.0 onwards is an adjusted v
 
 ## Roadmap
 
-The TFT model can be a bit complex to understand at first, so we will build it up, step by step. After loading the data in @sec-data, the most basic neural network - a neuron layer - is presented in @sec-layer. This is followed by an architecture that is more suitable for time series in @sec-lstm. Next, these elements are combined in @sec-gates to show how the model knows what to focus on. The next individual element is the self-attention layer in @sec-transf. Finally, if you want to see the full picture directly, go to @sec-tftmf to see how these elements are put together. @sec-nowcast then trains the model and presents the results for this simple, illustrative nowcasting.
+The TFT model can be a bit complex to understand at first, so we will build it up, step by step. After loading the data in @sec-data, the most basic neural network - a neuron layer - is presented in @sec-fc. This is followed by an architecture that is more suitable for time series in @sec-lstm. Next, these elements are combined in @sec-gates to show how the model knows what to focus on. The next individual element is the self-attention layer in @sec-transf. Finally, if you want to see the full picture directly, go to @sec-tftmf to see how these elements are put together. @sec-nowcast then trains the model and presents the results for this simple, illustrative nowcasting.
 
 ## Loading the data {#sec-data}
 
@@ -121,7 +121,7 @@ cl__UNIT_MEASURE[cl__UNIT_MEASURE.str.contains("Index, 2010 = 100")]
 Armed with this knowledge, we can now download monthly consumer price index data for the US. Let's start after 1985 so that we have a sufficiently long history but without too much influence of the tectonic shift of the US dollar devaluation in the early 1970s and ensuing high inflation:
 
 ```{python}
-#| label: fig-CPI
+#| label: fig-cpi
 #| fig-cap: "US consumer price index, 2010 = 100"
 df_infl = load_SDMX_data(
     sources={"BIS": "'WS_LONG_CPI'"},
@@ -132,7 +132,7 @@ df_infl = load_SDMX_data(
 df_infl.plot()
 ```
 
-As you can see in @fig-CPI, we downloaded the series $\{\text{CPI}_t\}$. Transforming that into $\{\pi_t\}$, defined above, we have:
+As you can see in @fig-cpi, we downloaded the series $\{\text{CPI}_t\}$. Transforming that into $\{\pi_t\}$, defined above, we have:
 
 ```{python}
 #| label: fig-pi
@@ -291,33 +291,39 @@ Note that in the example below, for each data point that we want to forecast (`y
 
 maxlags = {"m": 12, "d": 250}
 
-def create_data(X, y, maxlags=maxlags, tscv=TimeSeriesSplit(n_splits=5)):
+def create_data(X, y, maxlags=maxlags, tscv=TimeSeriesSplit(n_splits=5), timedim=True):
+    # If timeedim is true, then the dimensions of the tensors are n_samples/time dimension/features. If not then it is n_samples/time dimension (lag) * features, ie each lag is flattened as if it were a feature. Use True when passing to recurrent nets, use False for fully connected layers.
     X_split = {}
     y_split = {}
+
+    n_feat = {k: v.shape[1] for k, v in X.items()}
     if tscv:
         split_cv = tscv.split(y)
         cv_dates = [
             (y.index[m], y.index[n]) # (train, valid) for each fold
             for m, n in split_cv
         ]
-        for fold, split in enumerate(cv_dates):
+        for n_fold, split in enumerate(cv_dates):
+            fold = f"fold_{n_fold}"
             dates_split = {
                 "train": split[0],
                 "valid": split[1]
             }
-            X_split[fold] = {}
-            y_split[fold] = {}
+            X_split[fold] = {"train": [], "valid": []}
+            y_split[fold] = {"train": [], "valid": []}
             for chunk, dates in dates_split.items():
-                X_split[fold][chunk] = []
-                y_split[fold][chunk] = []
                 for ysample_date in tqdm(dates):
                     padded_x = {}
                     for f in X.keys():
                         try:
-                            to_pad = X[f][:ysample_date][:-1]
+                            to_pad = X[f][:ysample_date][:-1].values
                         except KeyError:
                             to_pad = np.zeros((1,1))
                         padded_x[f] = keras.utils.pad_sequences([to_pad], maxlen=maxlags[f], dtype=np.float32)
+                        
+                        x_shape = (1, maxlags[f], n_feat[f]) if timedim else (1, maxlags[f] * n_feat[f])
+                        
+                        padded_x[f] = padded_x[f].reshape(x_shape)
                     X_split[fold][chunk].append(padded_x)
                     y_split[fold][chunk].append(y_train.loc[ysample_date])
         return X_split, y_split
@@ -332,88 +338,172 @@ Let's see how this time series fold will be structured. Each fold is a sequentia
 ```{python}
 #| label: "Create batches of data"
 
-for key in y_train_split.keys():
-    print(f"Fold No {key+1}:")
-    print(f"  {len(y_train_split[key]['train'])} training X-y pairs")
-    print(f"  {len(y_train_split[key]['valid'])} validation X-y pairs")
+for fold in y_train_split.keys():
+    print(f"{fold}:")
+    print(f"  {len(y_train_split[fold]['train'])} training X-y pairs")
+    print(f"  {len(y_train_split[fold]['valid'])} validation X-y pairs")
 ```
 
-## First model: a fully connected neural network {#sec-layer}
+## First model: a fully connected neural network {#sec-fc}
 
 The goal of this model is to nowcast $\pi_t$ based on its past values $\pi_{t-1}$ and on current oil prices $o_{d(m-s)}, s \geq 0$. The first model we will train is a very simple neural network:
 
 $$
 \begin{align}
-\xi^{(m)} &= \phi(\mathbf{W}_1^{(m)} x_m + \mathbf{b}_1^{(m)}) \\
-\xi^{(d)} &= \phi(\mathbf{W}_1^{(d)} x_d + \mathbf{b}_1^{(d)}) \\
-y_t &= \mathbf{W}_2 [\xi^{(m)}, \xi^{(d)}] + \mathbf{b}_2,
+\xi &= \phi(\mathbf{W}_1 x_t + \mathbf{b}_1) \\
+y_t &= \mathbf{W}_2 \xi + \mathbf{b}_2,
 \end{align}
 $$ {#eq-model0nnlayer}
 
-where $x_t$ is the input data, indexed in a frequency-related way as discussed above, the superscript in parenthesis indexes the frequency of the data to which it relates, and the subscript of parameters relates to the "depth" of the layer they belong to. $\mathbf{W}_2 \in \mathbb{R}^{1 \times d}$, $b_2 \in \mathbb{R}$, $\mathbf{W}_1 \in \mathbb{R}^{d \times |x_t|}$, $b_1 \in \mathbb{R}^{d}$, $\xi \in \mathbb{R}^d$ and $\phi$ is an activation function. For simplicity, we will use the ReLU activation function, which is simply: $\phi(z) = \text{max}(z, 0)$.
+where $x_t$ is the input data and the subscript of parameters relates to the "depth" of the layer they belong to. Using $\lambda$ as the dimensionality of the model, $\mathbf{W}_2 \in \mathbb{R}^{1 \times \lambda}$, $b_2 \in \mathbb{R}$, $\mathbf{W}_1 \in \mathbb{R}^{\lambda \times |x_t|}$, $b_1 \in \mathbb{R}^{d}$, $\xi \in \mathbb{R}^\lambda$ and $\phi$ is an activation function. For simplicity, we will use the ReLU activation function, which is simply: $\phi(z) = \text{max}(z, 0)$.
 
 For this neural network, we need a fix dimensionality of the input data. In other words, the network *needs* to know how much data it will take in at any given time, and this should not change throughout training or inference time.
 
-For simplicity, let's fix it at the first lag for inflation (the past month, $\pi_{m-1}$) and the most recent available oil price change, $o_d$.
+For each data in our dependent variable, we simply stack the latest available monthly and daily data and their respective lags. Using the numbers above, this would be 12 lags for monthly data  and 250 lags of daily oil data. Linking this to @eq-model0nnlayer above, $x_t = [\pi_{m-1}, \dots, \pi_{m-12}, o_d, \dots, o_{d-250}]$. 
+
+All of this data will be considered by the neural network at the same time. In a way, this is analogous to how a normal regression is run. However, the number of data points (12 + 250) used in this toy neural network is bigger than typical regressions.
 
 ```{python}
-#| label: nn model, simple layer
+#| label: tbl-nn_fc_summary
+#| tbl-cap: Summary of fully connected model
 
-dim = 5 # arbitrary dimension
+def createNN_fc(dim=16, activation="relu"):
+    nn_fc = keras.Sequential([
+        keras.layers.Input(shape=(sum([v for v in maxlags.values()]),)),
+        keras.layers.Dense(units=dim, activation=activation, name="SummariseInput"),
+        keras.layers.Dense(units=1, name="CalculateOutput")
+    ], "FullyConnected")
 
-freqs = ["m", "d"] # using here the commonly-used frequency abbreviations
-inputs = [keras.layers.Input(shape=(None, 1), name=f) for f in freqs]
-all_inputs = keras.layers.Concatenate(name="continuous")(inputs)
-out = keras.layers.Dense(units = dim, activation="relu")(all_inputs)
-out = keras.layers.Dense(units=1)(out)
+    nn_fc.compile(loss=keras.losses.MeanSquaredError())
+    return nn_fc
 
-nn_fc = keras.Model(
-    inputs=inputs, 
-    outputs=out
-)
-nn_fc.compile(loss=keras.losses.MeanSquaredError())
+nn_fc = createNN_fc()
 nn_fc.summary()
 ```
 
-@fig-FCarch presents the architecture of this model.
+@fig-fcarch presents the architecture of this model.
 
 ```{python}
-#| label: fig-FCarch
+#| label: fig-fcarch
 #| fig-cap: Architecture of the model with fully connected layer
 
-keras.utils.plot_model(nn_fc, show_shapes=True)
+keras.utils.plot_model(nn_fc, show_shapes=True, show_layer_names=True, show_layer_activations=True)
 ```
 
-Checking that it works. In the code below, we take the first fold as an example. We find the last day in the training data for that fold. Then we get the corresponding `X` and `y` data. Recall that the `X` is actually a dictionary of the monthly and the daily datasets. So we take the last value out of each one.
+Note in @fig-fcarch that a first dense layer (ie, as in @eq-model0nnlayer) takes in 262 data points, uses the activation function ReLU, and then outputs 16 data points for the next layer.[^NoneDim]
 
-This simple neural network will then take one monthly and one daily data point, and try to estimate one inflation data point.
+[^NoneDim]: Ignore the `None` in the shapes; this means it dependets on each case. Specifically, the first dimension of the shapes in keras are always the number of samples going in the model. Because this varies with every training, application, etc, it is not fixed as the other dimensions are. Another way of thinking about this is as follows: in a regression, you know exactly how many variables you need to have, but the number of data points can vary.
+
+Checking that it works. In the code below, we take the last fold as an example. 
+
+
+```{python}
+#| label: preparing fully connected NN data
+X_train_split_fc, y_train_split_fc = create_data(X=X_train, y=y_train, timedim=False)
+
+fold = "fold_4"
+X_train_fc = np.array([np.concatenate([np.squeeze(v) for v in sample.values()]) for sample in X_train_split_fc[fold]["train"]])
+y_train_fc = np.array(y_train_split_fc[fold]["train"])
+X_valid_fc = np.array([np.concatenate([np.squeeze(v) for v in sample.values()]) for sample in X_train_split_fc[fold]["valid"]])
+y_valid_fc = np.array(y_train_split_fc[fold]["valid"])
+```
+
+Now we train the network.
 
 ```{python}
 #| label: check nn model works
 
-# taking the last day of the training set of the last training fold
-# because this network will only take one data at a time
-X_train_split_fc = [
-    np.array([
-        np.squeeze(v)[-1]
-        for v in d.values()
-    ])
-    for d in X_train_split[0]["train"]
-]
-
-nn_fc.fit(x=X_train_split_fc, y=y_train_split[0]["train"], epochs=4)
-nn_fc.predict(last_X)
+history_fc = nn_fc.fit(x=X_train_fc, y=y_train_fc, validation_data=(X_valid_fc, y_valid_fc), epochs=20, batch_size=10, shuffle=True)
 ```
 
-It does, great!
+You can see in @fig-history_fc that the loss decreases with training, but the validation loss (ie, calculated on held-out data) is higher than the in-sample loss. This suggests the model is learning *too much* how to fit the data. In other words, it is also fitting some level of noise, which is not reproducible out-of-sample.
 
-> Note that this network **always** needs to take in input structured as a dictionary to work. The keys are the frequency codes: `"d"` for daily, `"m"` for monthly, etc.
+```{python}
+#| label: fig-history_fc
+#| fig-cap: Losses calculated in a simple, fully-connected neural network.
 
-We don't need to bother training this very simple neural network; the goal here is to use it as a building block for a mathematical/econometric intuition of the broader nowcasting model.
+ax = pd.DataFrame(history_fc.history).plot()
+ax.set_xlabel("Epochs")
+ax.set_ylabel("Mean squared error")
+plt.show()
+```
+
+We don't need to bother training too much this very simple neural network; the goal here is to use it as a building block for a mathematical/econometric intuition of the broader nowcasting model.
+
+## A useful tool: a gate {#sec-gate}
+
+The network trained in the previous section can learn how to map the input data to the output data. But there are ways to take advantage of the incredible flexibility in architecture (ie, how neural layers are stacked). One such way is to have the data inform which layers's outputs are actually used downstream or not. This section describes how.
+
+First, we replicate the same simple fully connected layer of @eq-model0nnlayer two times. One of the neural networks will behave as before: learning to map the input data to the output data. The second one will also look at the same data, but with a different goal: it will learn how much data to let through. Its output is a value between 0 and 1, which is then multiplied to the "original" network. When this part of the neural network yields values closer to 0, the mainstream values are effectively shut down. Conversely, when the values are close to 1, the data proceeds as normal.
+
+Adjusting @eq-model0nnlayer to include a gate could be as in @eq-gated:
+
+$$
+\begin{align}
+\xi &= \phi(\mathbf{W}_1 x_t + \mathbf{b}_1) \\
+G &= \sigma(\mathbf{W}_G x_t + \mathbf{b}_G) \\
+y_t &= \mathbf{W}_2 (\xi \odot G) + \mathbf{b}_2,
+\end{align}
+$$ {#eq-gated}
+
+with $\sigma$ representing the sigmoid function and $\odot$ the Hadamard multiplication.
+
+Note that the data that informs the gate does not necessarily need to be the same as the mainstream data.
+
+```{python}
+#| label: tbl-nn_fc_gated_summary
+#| tbl-cap: Summary of gated model
+
+mainstream = createNN_fc(activation="relu")
+gate = createNN_fc(activation="sigmoid")
+
+dim = 16
+input = keras.layers.Input(shape=(sum([v for v in maxlags.values()]),), name="FlattenedLaggedData")
+mainstream = keras.layers.Dense(units=dim, activation="relu", name="SummariseInput")(input)
+gate = keras.layers.Dense(units=dim, activation="sigmoid", name="Gate")(input)
+
+gated_data = keras.layers.Multiply(name="GatedData")([mainstream, gate])
+output = keras.layers.Dense(units=1, name="CalculateOutput")(gated_data)
+
+nn_fc_gated = keras.Model(inputs=input, outputs=output, name="GatedModel")
+nn_fc_gated.compile(loss=keras.losses.MeanSquaredError())
+nn_fc_gated.summary()
+```
+
+```{python}
+#| label: fig-gatedmodel
+#| fig-cap: Architecture of gated neural network
+
+keras.utils.plot_model(nn_fc_gated, show_layer_names=True, show_layer_activations=True, show_shapes=True)
+```
+
+After fitting the model, we can inspect the gate.
+
+```{python}
+#| label: fitting gated model
+
+history_fc_gated = nn_fc_gated.fit(x=X_train_fc, y=y_train_fc, validation_data=(X_valid_fc, y_valid_fc), epochs=20, batch_size=10, shuffle=True)
+```
+
+```{python}
+#| label: fig-history_fc_gated
+#| fig-cap: Losses calculated in a simple, fully-connected neural network with gate.
+
+gated_loss = pd.DataFrame(history_fc_gated.history)
+gated_loss["val_loss (no gate)"] = history_fc.history["val_loss"]
+ax = gated_loss.plot()
+ax.set_xlabel("Epochs")
+ax.set_ylabel("Mean squared error")
+plt.show()
+```
+
+Interestingly, the addition of the gate in this simple example leads to improved performance (lower loss) compared to the same model and data, but with no gate.
 
 ## Second model: Long short-term memory {#sec-lstm}
 
 A marked improvement in how we can model time series data is the use of recurrent neural networks (RNNs). In essence, these are networks that learn to keep a stateful memory, which is updated as the network "visits" each sequential step in time, in turn using both the memory and the new data at that period to predict the output.
+
+In contrast to the fully connected layer in @sec-fc, which need to look at different lags to pick up any history-dependent information, RNNs look at the observable variables at each period and learn a latent "state" (akin to Kalman filters, for example). The same network then slides up one step in time and uses that information and the previous state to update the state, and so on...
 
 One particular type of RNN that has proven to be very successful in practice is the long short-term memory (LSTM) model, due to @hochreiter1997long. It is actually a combination of four different layers, similar to @eq-model0nnlayer, but built in a specific way. Here's how:
 
@@ -430,111 +520,7 @@ $$ {#eq-model1lstm}
 
 where $\sigma$ is the sigmoid function, and $\omega$ is the hyperbolic function. The hyperbolic is used here because...
 
-The basic intuition of the LSTM layer is that some of the individual component layers essentially learn to look at the current data and the past memory and then decide how much new information to let through. Note that, because their activation is a sigmoid, the output of layers $f_t$, $i_t$ and $o_t$ is a number between 0 and 1. This idea is important to bear in mind because it will be used at a much bigger scale by the whole TFT model - and will be one key feature of its interpretability.
-
-```{python}
-#| label: nn model, lstm
-
-dim = 5 # arbitrary dimension
-
-freqs = ["m", "d"] # using here the commonly-used frequency abbreviations
-
-inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
-LSTMs = []
-for k, v in inputs.items():
-    lstm = keras.layers.Masking(mask_value=0.0)(v)
-    lstm = keras.layers.LSTM(units=dim, return_sequences=False, name=f"LSTM__freq_{k}")(lstm)
-    LSTMs.append(lstm)
-encoded_series = keras.layers.Average(name="encoded_series")(LSTMs)
-out = keras.layers.Dense(units = dim, activation="relu")(encoded_series)
-out = keras.layers.Dense(units=1)(out)
-
-nn_lstm = keras.Model(
-    inputs=inputs, 
-    outputs=out
-)
-nn_lstm.compile(loss=keras.losses.MeanSquaredError())
-nn_lstm.summary()
-```
-
-@fig-LSTMarch presents the architecture of this model.
-
-```{python}
-#| label: fig-LSTMarch
-#| fig-cap: Architecture of the model with fully connected layer
-
-keras.utils.plot_model(nn_lstm, show_shapes=True)
-```
-
-Note that the input goes through a few steps before reaching the LSTM layer. This is due to a masking layer that effectively helps the model jumps time steps for which there is no data available.
-
-To check that the LSTM-based neural network works, we need to feed this neural network a slightly different type of data. LSTM, as other recurrent neural networks, takes in time series data. So, unlike before, we now prepare a time series (or panel data) for each 
-
-This neural network will then take in the inputed time series data, and encode each frequency's series separately through the different LSTM streams. The final result will no longer have a time dimension; it is then averaged, and this average embeddings of the different time series is used to forecast the variable of interest.
-
-Note the code includes an adjustment that creates a pandas Series with 0 in case data for a given frequency is not available in a given period.
-
-```{python}
-#| label: check lstm model works
-
-maxlag = {"m": 12, "d": 250} 
-"""
-#lstm_x = [
-#    {   
-#        k: (v if v is not None else pd.Series(0.0)) 
-#        for k, v in c[0].items()
-#    }  # Replace None values with pd.Series(0.0)
-#    for c in train_data["fold_0"]['Xy_train'].values()  # Iterate over values
-#]
-
-lstm_x = {
-    k: keras.utils.pad_sequences([v], maxlen=maxlag[k])
-    for k, v in c[0].items()
-    for c in train_data["fold_0"]['Xy_train'].values()
-}
-
-lstm_y = [c[1] for c in train_data["fold_0"]['Xy_train'].values()]
-"""
-"""# Example usage
-maxlag = {'m': 12, 'd': 365}  # Define the maxlen for each frequency (monthly, daily)
-
-def pad_sequences_by_frequency(train_data, maxlag):
-    formatted_data = []
-    
-    x_by_freq = {k: [] for k in maxlag.keys()}
-    # Iterate over each sample in 'Xy_train'
-    for sample, data in train_data["fold_0"]['Xy_train'].items():
-        for freq in x_by_freq.keys():       
-            x_by_freq[freq].append(data[0][freq])
-    
-        y_value = data[1]  # The dependent variable y
-        # Append the padded X values and y to the formatted data
-        formatted_data.append((padded_X, y_value))
-    
-
-    # Pad each X based on the frequency
-    padded_X = {
-        k: keras.utils.pad_sequences([
-            v if v is not None else pd.Series(0.0)
-        ], maxlen=maxlag[k], padding='post')[0]  # Pad and keep same format
-        for k, v in X_dict.items()
-    }
-    
-    return formatted_data
-
-
-# Call the function to pad the sequences by frequency
-formatted_train_data = pad_sequences_by_frequency(train_data, maxlag)
-"""
-{
-    k: v
-    for xdata in X_train_split[0]["train"]
-    for k, v in xdata.items()
-
-}
-nn_lstm.fit(x=X_train_split[0]["train"], y=y_train_split[0]["train"], epochs=4)
-```
-
+The basic intuition of the LSTM is that some of the individual component layers essentially learn to look at the current data and the past memory and then decide how much new information to let through. Note that, because their activation is a sigmoid, the output of layers $f_t$, $i_t$ and $o_t$ is a number between 0 and 1. This idea is important to bear in mind because it will be used at a much bigger scale by the whole TFT model - and will be one key feature of its interpretability.
 
 
 ## Introducing... the gatekeepers {#sec-gates}

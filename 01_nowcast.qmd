@@ -912,33 +912,23 @@ vocab_sizes = {col: time_feats[col].nunique() for col in time_feats}
 
 dim = 16
 
-# Step 1: Create input layers for each categorical variable
 inputs = {
     k: keras.layers.Input(shape=(1,), name=k, dtype='int32')  # Input layer for each feature with shape (1,)
     for k in vocab_sizes.keys()
 }
 
-# Step 2: Create embedding layers for each input
 embedded_layers = {
     k: keras.layers.Embedding(input_dim=v, output_dim=dim, name=f"{k}_embedding")(inputs[k])
     for k, v in vocab_sizes.items()
 }
 
-# Step 3: Combine embeddings
-# Here, we use Concatenate to merge all embeddings into a single tensor
 combined = keras.layers.Average()(list(embedded_layers.values()))
 
-# Step 4: Optionally, you can flatten the combined embeddings if necessary
-# combined = tf.keras.layers.Flatten()(combined)
-
-# Step 5: Add additional dense layers for further processing
 x = keras.layers.Dense(dim, activation="relu")(combined)
 output = keras.layers.Dense(1)(x)
 
-# Step 6: Define the model
 nn_embed = keras.Model(inputs=list(inputs.values()), outputs=output)
 nn_embed.compile(loss=keras.losses.MeanSquaredError())
-# Print the model summary
 nn_embed.summary()
 ```
 
@@ -1037,9 +1027,71 @@ plt.show()
 ```
 
 
+One way these categorical variables can enrich models with continues variables that were used before is by using the embeddings for a particular instance as additional context, as the $c$ in @eq-grn.
+
+
+```{python}
+#| label: tbl-summary_grn_context
+#| tbl-cap: GRN with Embeddings Summary
+
+dim = 16
+
+keras.backend.clear_session()
+
+inputs_cont = keras.layers.Input(shape=(sum([v for v in maxlags.values()]),), name="FlattenedLaggedInput")
+
+inputs_time = {
+    k: keras.layers.Input(shape=(1,), name=k, dtype='int32')  # Input layer for each feature with shape (1,)
+    for k in vocab_sizes.keys()
+}
+
+# Step 2: Create embedding layers for each input
+embedded_layers = {
+    k: keras.layers.Embedding(input_dim=v, output_dim=262, name=f"{k}_embedding")(inputs_time[k])
+    for k, v in vocab_sizes.items()
+}
+
+context = keras.layers.Average()(list(embedded_layers.values()))
+
+gated_features, gate = GatedResidualNetwork(d_model=262, use_time_distributed=False, name="GRN")(inputs_cont, additional_context=context)
+
+output = keras.layers.Dense(units=16, activation="relu", name="SummariseInput")(gated_features)
+
+output = keras.layers.Dense(units=1, name="CalculateOutput")(output)
+
+nn_grn_context = keras.Model(inputs=[inputs_cont, inputs_time], outputs=output, name="GRNwithContextModel")
+nn_grn_context.compile(loss=keras.losses.MeanSquaredError())
+nn_grn_context.summary()
+```
+
+```{python}
+#| label: fig-arch_grn_context
+#| fig-cap: Architecture of the GRN model with context
+
+keras.utils.plot_model(nn_grn_context, show_shapes=True, show_layer_activations=True, show_layer_names=True)
+```
+
+```{python}
+#| label: fitting GRN model with context
+
+history_grn_context = nn_grn_context.fit(x=[X_train_fc, y_timefeat_train], y=y_train_fc, validation_data=([X_valid_fc, y_timefeat_valid], y_valid_fc), epochs=20, batch_size=10, shuffle=True)
+```
+
+```{python}
+#| label: fig-history_grn_context
+#| fig-cap: Losses calculated in a GRN neural network with context
+
+ax = pd.DataFrame(history_grn_context.history).plot()
+ax.set_xlabel("Epochs")
+ax.set_ylabel("Mean squared error")
+plt.show()
+```
+
 ## Variable selection networks {#sec-varsel}
 
-Now is a good time to put these elements together in a useful way. In particular, we can consider how it can help select the most informative variables amongst a set of input series (eg, lagged inflation and oil prices in the current toy example.)
+Now is a good time to put these elements together in a more directly useful way. In particular, we can consider how it can help select the most informative variables amongst a set of input series (eg, lagged inflation and oil prices in the current toy example.)
+
+
 
 ```{python}
 #| label: class vsn

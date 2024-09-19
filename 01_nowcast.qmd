@@ -195,9 +195,8 @@ To simplify notation about time, instead of the usual subscript $t$ as above to 
 #| label: tempfeatures
 
 # NOTE: to add documentation and tests, and later incorporate as a new function in gingado.utils
-# TO-DO: return also vocab_sizes dictionary, required to set up embedding layer.
 
-def get_timefeat(df, freq="d", features=None, add_to_df=False):
+def get_timefeat(df, freq="d", features=None, add_to_df=False, remove_const=False):
     # For the future documentation: the add_to_df argument should be True if the data will be fed to an algorithm that takes in all data at once. If, like neural networks, the inputs are fed through different "pipelines", then use False and then take the result from this function an feed it separately to a neural network.
     # the frequency is used to filter which features to add. For example, if monthly then no higher frequency features (day of ..., week of... ) are added because it doesn't make sense
     # None or list. if futures is None, then add all temporal features that the frequency above allows. Otherwise adds only the names ones
@@ -214,37 +213,38 @@ def get_timefeat(df, freq="d", features=None, add_to_df=False):
 
     if freq in all_freqs:
         dict_timefeat['year_end'] = i2s(df.index.to_series().apply(lambda x: 1 if x.is_year_end else 0))
-        dict_timefeat['quarter_of_year'] = i2s(df.index.quarter)
+        dict_timefeat['quarter_of_year'] = i2s(df.index.quarter - 1)
         dict_timefeat['quarter_end'] = i2s(df.index.to_series().apply(lambda x: 1 if x.is_quarter_end else 0))
 
     if freq in [f for f in all_freqs if f not in ["y", "q"]]:
-        dict_timefeat['month_of_quarter'] = i2s(df.index.to_series().apply(lambda x: (x.month - 1) % 3 + 1))
-        dict_timefeat['month_of_year'] = i2s(df.index.month)
+        dict_timefeat['month_of_quarter'] = i2s(df.index.to_series().apply(lambda x: (x.month - 1) % 3))
+        dict_timefeat['month_of_year'] = i2s(df.index.month - 1)
 
     if freq in [f for f in all_freqs if f not in ["y", "q", "m"]]:
-        dict_timefeat['week_of_month'] = i2s(df.index.to_series().apply(lambda x: (x.day - 1) // 7 + 1))
-        dict_timefeat['week_of_quarter'] = i2s(df.index.to_series().apply(lambda x: ((x - pd.Timestamp(f'{x.year}-{(x.month - 1) // 3 * 3 + 1}-01')).days // 7) + 1))
+        dict_timefeat['week_of_month'] = i2s(df.index.to_series().apply(lambda x: (x.day - 1) // 7))
+        dict_timefeat['week_of_quarter'] = i2s(df.index.to_series().apply(lambda x: ((x - pd.Timestamp(f'{x.year}-{(x.month - 1) // 3 * 3 + 1}-01')).days // 7)))
         dict_timefeat['week_of_year'] = i2s(df.index.isocalendar().week)
 
     if freq == "d":
         dict_timefeat['day_of_week'] = i2s(df.index.dayofweek)
         dict_timefeat['day_of_month'] = i2s(df.index.day)
-        dict_timefeat['day_of_quarter'] = i2s(df.index.to_series().apply(lambda x: (x - pd.Timestamp(f'{x.year}-01-01')).days % 91 + 1))
+        dict_timefeat['day_of_quarter'] = i2s(df.index.to_series().apply(lambda x: (x - pd.Timestamp(f'{x.year}-01-01')).days % 91))
         dict_timefeat['day_of_year'] = i2s(df.index.dayofyear)
 
     # Convert the dictionary of columns to a DataFrame
     df_timefeat = pd.concat(dict_timefeat, axis=1)
-    var_thresh = VarianceThreshold(threshold=0)
-    df_timefeat = var_thresh.fit_transform(df_timefeat)
-    df_timefeat = pd.DataFrame(df_timefeat, columns=var_thresh.get_feature_names_out(), index=df.index).astype(int)
-
     if features:
-        df_timefeat[features]
-    vocab_sizes = {col: df_timefeat[col].nunique() + 1 for col in df_timefeat}
+        df_timefeat = df_timefeat[features]
+
+    if remove_const:
+        var_thresh = VarianceThreshold(threshold=0)
+        df_timefeat = var_thresh.fit_transform(df_timefeat)
+        df_timefeat = pd.DataFrame(df_timefeat, columns=var_thresh.get_feature_names_out(), index=df.index).astype(int)
+
     if add_to_df:
-        return pd.concat([df, df_timefeat], axis=1), vocab_sizes
+        return pd.concat([df, df_timefeat], axis=1)
     else:
-        return df_timefeat, vocab_sizes
+        return df_timefeat
 ```
 
 Specifically, temporal features are an excellent (and rare) type of *known future* input. Those are the data that we know will be like that during forecasting time, ie, at the time the observation $y_t$ takes place. For example, it is trivial to know the day of the week, of the month etc, for any date we are forecasting in.
@@ -254,7 +254,7 @@ For this reason, we now calculate the temporal features of inflation.
 ```{python}
 #| label: temporal features for the inflation series
 
-df_timefeat, _ = get_timefeat(df_infl_m, freq="m")
+df_timefeat = get_timefeat(df_infl_m, freq="m")
 ```
 
 
@@ -871,11 +871,182 @@ plt.show()
 
 ## Time to talk about time {#sec-timeembed}
 
+Nowcasting, or forecasting for that matter, involves trying to estimate the values of a variable of interest for a certain date. This trivial fact actually offers an important opportunity to improve estimates: it corresponds to something that is *known* about the future, ie about the variable we want to estimate.
 
-- Embedding of temporal features
+But temporal features are not continuous variables as inflation and oil price changes. Because they are categorical, they need to be embedded in a vector space with real data to incorporate continuous variables. This is the goal of this section.
 
-- Use as "future known data"
+```{python}
+#| label: getting temporal features data
 
+timefeat = ["month_of_quarter", "month_of_year"]
+
+y_timefeat_train = {timef:
+    np.array([
+        get_timefeat(pd.DataFrame(i.values, index=[i.name], columns=i.index), features=timef)
+        for i in y_train_split_fc[fold]["train"]
+    ])
+    for timef in timefeat
+}
+y_timefeat_valid = {timef:
+    np.array([
+        get_timefeat(pd.DataFrame(i.values, index=[i.name], columns=i.index), features=timef)
+        for i in y_train_split_fc[fold]["valid"]
+    ])
+    for timef in timefeat
+}
+
+date_range = pd.date_range(start="2024-01-01", end="2024-12-31", freq="D")
+time_feats = get_timefeat(pd.DataFrame(index=date_range), features=timefeat)
+```
+
+When working with categorical data, it is necessary to be explicit about the number of possible different values (eg, there are 7 different days of the week).
+
+```{python}
+#| label: set vocab sizes
+
+vocab_sizes = {col: time_feats[col].nunique() for col in time_feats}
+```
+
+```{python}
+#| label: embedding the temporal features
+
+dim = 16
+
+# Step 1: Create input layers for each categorical variable
+inputs = {
+    k: keras.layers.Input(shape=(1,), name=k, dtype='int32')  # Input layer for each feature with shape (1,)
+    for k in vocab_sizes.keys()
+}
+
+# Step 2: Create embedding layers for each input
+embedded_layers = {
+    k: keras.layers.Embedding(input_dim=v, output_dim=dim, name=f"{k}_embedding")(inputs[k])
+    for k, v in vocab_sizes.items()
+}
+
+# Step 3: Combine embeddings
+# Here, we use Concatenate to merge all embeddings into a single tensor
+combined = keras.layers.Average()(list(embedded_layers.values()))
+
+# Step 4: Optionally, you can flatten the combined embeddings if necessary
+# combined = tf.keras.layers.Flatten()(combined)
+
+# Step 5: Add additional dense layers for further processing
+x = keras.layers.Dense(dim, activation="relu")(combined)
+output = keras.layers.Dense(1)(x)
+
+# Step 6: Define the model
+nn_embed = keras.Model(inputs=list(inputs.values()), outputs=output)
+nn_embed.compile(loss=keras.losses.MeanSquaredError())
+# Print the model summary
+nn_embed.summary()
+```
+
+```{python}
+keras.utils.plot_model(nn_embed, show_shapes=True, show_layer_names=True, show_layer_activations=True)
+```
+
+```{python}
+history_embed = nn_embed.fit(x=y_timefeat_train, y=y_train_fc, validation_data=(y_timefeat_valid, y_valid_fc), epochs=20, batch_size=10, shuffle=True)
+```
+
+As before, the losses are plotted below.
+
+```{python}
+#| label: fig-history_embed
+#| fig-cap: Losses calculated in a simple, fully-connected neural network.
+
+ax = pd.DataFrame(history_embed.history).plot()
+ax.set_xlabel("Epochs")
+ax.set_ylabel("Mean squared error")
+plt.show()
+```
+
+The embeddings themselves can be inspected, as in @fig-embed.
+
+```{python}
+#| label: fig-embed
+#| fig-cap: Embedding values
+#| fig-subcap:
+#|   - Month of the year
+#|   - Quarter of theyear
+
+plt.figure(figsize=(8, 6))
+plt.imshow(nn_embed.layers[2].get_weights()[0], cmap='viridis', aspect='auto')
+plt.colorbar(label='Values')  # Optional: Add colorbar to show scale
+plt.xlabel('Embedding vector elements')
+plt.ylabel('Month of the quarter')
+plt.show()
+
+plt.figure(figsize=(8, 6))
+plt.imshow(nn_embed.layers[3].get_weights()[0], cmap='viridis', aspect='auto')
+plt.colorbar(label='Values')  # Optional: Add colorbar to show scale
+plt.xlabel('Embedding vector elements')
+plt.ylabel('Month of the year')
+plt.show()
+```
+
+To get an intuition how this type of data feeds into a nowcasting model, consider that each nowcasted date has a different combination of month of year and month of quarter. Then the inputs to the model change correspondingly. The time series is plotted below.
+
+```{python}
+#| label: ts_embed calculations
+#| fig-cap: Time series of embeddings
+
+y_time_feats = get_timefeat(pd.DataFrame(index=y_train.index), features=timefeat)
+embed_layers = [nn_embed.get_layer(f"{k}_embedding") for k in vocab_sizes.keys()]
+embed_values = keras.Model(inputs=[e.input for e in embed_layers], outputs=[e.output for e in embed_layers])
+
+embed_ts = embed_values.predict(dict(y_time_feats))
+embed_ts = [
+    np.squeeze(i, axis=1)
+    for i in embed_ts
+]
+```
+
+```{python}
+#| label: fig-embedts
+#| fig-cap: Embedding values (last 24 months)
+#| fig-subcap:
+#|   - Month of quarter
+#|   - Month of year
+#|   - Average of month of quarter and year embeddings
+
+window_months = 24
+
+plt.figure(figsize=(10, 6))
+for feature_index in range(embed_ts[0].shape[1]):
+    plt.plot(embed_ts[0][-window_months:, feature_index], label=f'Feature {feature_index + 1}')
+
+# Add labels and legend
+plt.title('Time Series of Features')
+plt.xlabel('Time Steps')
+plt.ylabel('Feature Values')
+plt.grid(True)
+plt.show()
+
+plt.figure(figsize=(10, 6))
+for feature_index in range(embed_ts[0].shape[1]):
+    plt.plot(embed_ts[1][-window_months:, feature_index], label=f'Feature {feature_index + 1}')
+
+# Add labels and legend
+plt.title('Time Series of Features')
+plt.xlabel('Time Steps')
+plt.ylabel('Feature Values')
+plt.grid(True)
+plt.show()
+
+# TO-DO: include average of embeddings
+plt.figure(figsize=(10, 6))
+for feature_index in range(embed_ts[0].shape[1]):
+    plt.plot(embed_ts[1][-window_months:, feature_index], label=f'Feature {feature_index + 1}')
+
+# Add labels and legend
+plt.title('Time Series of Features')
+plt.xlabel('Time Steps')
+plt.ylabel('Feature Values')
+plt.grid(True)
+plt.show()
+```
 
 ## Variable selection networks {#sec-varsel}
 
@@ -883,7 +1054,6 @@ Now is a good time to put these elements together in a useful way. In particular
 
 ```{python}
 #| label: class vsn
-
 
 ```
 

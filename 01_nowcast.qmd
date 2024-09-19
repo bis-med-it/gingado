@@ -7,6 +7,7 @@ authors:
   - Johannes Damp
 code-fold: show
 code-tools: true
+number-sections: true
 jupyter: python3
 warning: false
 fig-cap-location: top
@@ -20,11 +21,11 @@ Nowcasting is essentially the use of the most current information possible to es
 
 A related use of nowcasting is to estimate what the current period's reading will be as this period rolls out. In other words, estimating today what the inflation reading for this month (or GDP for this quarter) will likely be as new information is unveiled in real time.
 
-The nowcasting model available in `gingado` from v0.3.0 onwards is an adjusted version of the Temporal Fusion Transformer (TFT) of @lim2021temporal. This architecture combines *flexibility* to take on multiple datasets while learning which information to focus on and *interpretability* to provide insights on the important variables in each case.
+The nowcasting model available in `gingado` from v0.3.0 onwards is an adjusted version of the Temporal Fusion Transformer (TFT) of @lim2021temporal. This architecture combines *flexibility* to take on multiple datasets while learning which information to focus on and *interpretability* to provide insights on the important variables in each case. Empirical results with the TFT in finance and economics settings include stock prices (@hu2021stock, @diaz2024causality) and GDP (@laborda2023multi).
 
 ## Roadmap
 
-The TFT model can be a bit complex to understand at first, so we will build it up, step by step. After loading the data in @sec-data, the most basic neural network - a neuron layer - is presented in @sec-fc. Then a simple extension is shown where a neural network learns which data to let through or not in @sec-glu. Armed with these elements, @sec-lstm discusses the next architecture, more suitable for time series. Next, these elements are combined in @sec-gates to show how the model knows what to focus on. The next individual element is the self-attention layer in @sec-transf. Finally, if you want to see the full picture directly, go to @sec-tftmf to see how these elements are put together. @sec-nowcast then trains the model and presents the results for this simple, illustrative nowcasting.
+The TFT model can be a bit complex to understand at first, so we will build it up, step by step. After loading the data in @sec-data, the most basic neural network - a neuron layer - is presented in @sec-fc. Then a simple extension is shown where a neural network learns which data to let through or not in @sec-glu. Armed with these elements, @sec-lstm discusses the next architecture, more suitable for time series. Next, these elements are combined in @sec-gates to show how the model knows what to focus on. @sec-timeembed introduces the concept of embeddings of categorical variables. All this content is then put together in a way that dynamically selects useful inputs for each instance in @sec-varsel. The next component is the self-attention layer in @sec-transf. Finally, if you want to see the full picture directly, go to @sec-tftmf to see how these elements are put together. @sec-nowcast then trains the model and presents the results for this simple, illustrative nowcasting.
 
 ## Loading the data {#sec-data}
 
@@ -383,16 +384,16 @@ nn_fc = createNN_fc()
 nn_fc.summary()
 ```
 
-@fig-archfc presents the architecture of this model.
+@fig-arch_fc presents the architecture of this model.
 
 ```{python}
-#| label: fig-archfc
+#| label: fig-arch_fc
 #| fig-cap: Architecture of the model with fully connected layer
 
 keras.utils.plot_model(nn_fc, show_shapes=True, show_layer_names=True, show_layer_activations=True)
 ```
 
-Note in @fig-archfc that a first dense layer (ie, as in @eq-model0nnlayer) takes in 262 data points, uses the activation function ReLU, and then outputs 16 data points for the next layer.[^NoneDim]
+Note in @fig-arch_fc that a first dense layer (ie, as in @eq-model0nnlayer) takes in 262 data points, uses the activation function ReLU, and then outputs 16 data points for the next layer.[^NoneDim]
 
 [^NoneDim]: Ignore the `None` in the shapes; this means it dependets on each case. Specifically, the first dimension of the shapes in keras are always the number of samples going in the model. Because this varies with every training, application, etc, it is not fixed as the other dimensions are. Another way of thinking about this is as follows: in a regression, you know exactly how many variables you need to have, but the number of data points can vary.
 
@@ -554,13 +555,13 @@ nn_lstm.summary()
 ```
 
 ```{python}
-#| label: fig-archlstm
+#| label: fig-arch_lstm
 #| fig-cap: Architecture of the network with LSTM layer
 
 keras.utils.plot_model(nn_lstm, show_layer_activations=True, show_shapes=True, show_layer_names=True)
 ```
 
-The reason why the dimensions in the input layer are now `(None, None, 1)`, with one addition `None` compared to before(for example, @fig-archfc) is due to the *time dimension*. Whereas before the model didn't know how many samples it would be fed, now also the length of the time window can change because each time step will pass through exactly the same parameters. 
+The reason why the dimensions in the input layer are now `(None, None, 1)`, with one addition `None` compared to before(for example, @fig-arch_fc) is due to the *time dimension*. Whereas before the model didn't know how many samples it would be fed, now also the length of the time window can change because each time step will pass through exactly the same parameters. 
 
 Note that the input goes through a few steps before reaching the LSTM layer. This is due to a masking layer that effectively helps the model jumps time steps for which there is no data available.
 
@@ -620,7 +621,7 @@ This section formalises the GLU model of @sec-glu as if it were a single layer. 
 First, the GLU as a layer is introduced below.
 
 ```{python}
-#| label: glu
+#| label: class glu
 # NOTE: to add to codebase and replace here with an import
 
 class GatedLinearUnit(keras.Layer):
@@ -677,7 +678,7 @@ class GatedLinearUnit(keras.Layer):
         return config
 ```
 
-The GLU is simply
+The GLU is simply:
 
 $$
 \text{GLU}(x) = \sigma(W_{G} x + b_G) \odot (W_1 x + b_1),
@@ -686,7 +687,7 @@ $$ {#eq-glu}
 with $W_{\text{GLU}} = \{W_G, W_1\} \in \mathbb{R}^{|x| \times \lambda}$ and $b_{\text{GLU}} = \{b_G, b_1\} \in \mathbb{R}^{\lambda}$.
 
 ```{python}
-#| label: tbl-glu_summary
+#| label: tbl-summary_glu
 #| tbl-cap: Summary of model with GLU
 
 dim = 16
@@ -707,7 +708,7 @@ nn_glu.summary()
 ```
 
 ```{python}
-#| label: fig-glu
+#| label: fig-arch_glu
 #| fig-cap: GLU model
 
 keras.utils.plot_model(nn_glu, show_layer_activations=True, show_shapes=True, show_layer_names=True)
@@ -734,16 +735,157 @@ As mentioned above, the GLU itself actually serves as an important component of 
 GRNs are formally:
 
 $$
-\text{GRN}(x) = ...
+\text{GRN}(x) = \text{LayerNorm}(x + \text{GLU}(W_2 (\text{ELU}(W_1 x + b1 + W_c c )) + b_2)),
 $$ {#eq-grn}
 
-## Time to talk about time {#sec-timeembed}
+where $\text{LayerNorm}$ (@ba2016layer) normalises its inputs, ie subtracts its mean and divides by its standard deviation,[^layernorm] \text{ELU}$ is the exponential linear unit function (@clevert2015fast). Unlike ReLUs, ELUs allow for negative values, which pushes unit activations closer to zero at a lower computation complexity, and producing more accurate results. 
 
+The final component in @eq-grn is $c \in \mathbb{R}^{\lambda}$, or a context vector - more on that below in @sec-timeembed. For the moment, we can use $c=\mathbf{0}$ the zero vector.
+
+[^layernorm]: Normalising a layer helps to avoid the numbers from becoming too large, which is detrimental to gradient transmission and therefore to learning. This is helpful for example when summing up the outputs from intermediary layers.
+
+Put simply, the GRN takes in a certain data $x$ and combines it with a non-linear transformation. This non-linear component goes through an GLU, which learns when to gate and when to let through the non-linear transformation of the data.
+
+The GRN helps keep information only from relevant input variables and keeps the model as simple as possible by only applying non-linearities when relevant.
+
+```{python}
+#| label: class grn
+
+class GatedResidualNetwork(keras.layers.Layer):
+    def __init__(
+        self, 
+        d_model:int=16, # Embedding size, $d_\text{model}$
+        output_size=None, 
+        dropout_rate=None, 
+        use_time_distributed=True, 
+        **kwargs
+    ):
+        "Gated residual network"
+        super(GatedResidualNetwork, self).__init__(**kwargs)
+        self.d_model = d_model
+        self.output_size = output_size if output_size is not None else d_model
+        self.dropout_rate = dropout_rate
+        self.use_time_distributed = use_time_distributed
+
+    def build(self, input_shape):
+        super(GatedResidualNetwork, self).build(input_shape)
+        self.dense = keras.layers.Dense(self.output_size)
+        self.hidden_dense = keras.layers.Dense(self.d_model)
+        self.hidden_activation = keras.layers.Activation('elu')
+        self.context_dense = keras.layers.Dense(self.d_model, use_bias=False)
+        self.gating_layer = GatedLinearUnit(
+            d_model=self.output_size, 
+            dropout_rate=self.dropout_rate, 
+            use_time_distributed=self.use_time_distributed, 
+            activation=None)
+        self.add = keras.layers.Add()
+        self.l_norm = keras.layers.LayerNormalization()
+
+        if self.use_time_distributed:
+            self.dense = keras.layers.TimeDistributed(self.dense)
+            self.hidden_dense = keras.layers.TimeDistributed(self.hidden_dense)
+            self.context_dense = keras.layers.TimeDistributed(self.context_dense)
+
+    def call(self, inputs, additional_context=None, training=None):
+        # Setup skip connection
+        skip = self.dense(inputs) if self.output_size != self.d_model else inputs
+        
+        # 1st step: eta2
+        hidden = self.hidden_dense(inputs)
+
+        # Context handling
+        if additional_context is not None:
+            hidden += self.context_dense(additional_context)
+
+        hidden = self.hidden_activation(hidden)
+
+        # 2nd step: eta1 and 3rd step
+        gating_layer, gate = self.gating_layer(hidden)
+        
+        # Final step
+        GRN = self.add([skip, gating_layer])
+        GRN = self.l_norm(GRN)
+
+        return GRN, gate
+
+    def get_config(self):
+        config = super(GatedResidualNetwork, self).get_config()
+        config.update({
+            'd_model': self.d_model,
+            'output_size': self.output_size,
+            'dropout_rate': self.dropout_rate,
+            'use_time_distributed': self.use_time_distributed
+        })
+        return config
+```
+
+```{python}
+#| label: tbl-summary_grn
+#| tbl-cap: GRN Summary
+
+dim = 16
+
+keras.backend.clear_session()
+
+inputs = keras.layers.Input(shape=(sum([v for v in maxlags.values()]),),name="FlattenedLaggedInput")
+
+# inputs = keras.layers.Dense(units=dim, activation="relu", name="SummariseInput")(inputs)
+
+gated_features, gate = GatedResidualNetwork(d_model=262, use_time_distributed=False, name="GRN")(inputs)
+
+output = keras.layers.Dense(units=16, activation="relu", name="SummariseInput")(gated_features)
+
+output = keras.layers.Dense(units=1, name="CalculateOutput")(output)
+
+nn_grn = keras.Model(inputs=inputs, outputs=output, name="GRNModel")
+nn_grn.compile(loss=keras.losses.MeanSquaredError())
+nn_grn.summary()
+```
+
+```{python}
+#| label: fig-arch_grn
+#| fig-cap: GRN model architecture
+
+keras.utils.plot_model(nn_grn, show_shapes=True, show_layer_names=True, show_layer_activations=True)
+```
+
+
+```{python}
+#| label: fitting GRN model
+
+history_grn = nn_grn.fit(x=X_train_fc, y=y_train_fc, validation_data=(X_valid_fc, y_valid_fc), epochs=20, batch_size=10, shuffle=True)
+```
+
+
+```{python}
+#| label: fig-history_grn
+#| fig-cap: Losses calculated in a GRN neural network
+
+ax = pd.DataFrame(history_grn.history).plot()
+ax.set_xlabel("Epochs")
+ax.set_ylabel("Mean squared error")
+plt.show()
+```
+
+
+
+## Time to talk about time {#sec-timeembed}
 
 
 - Embedding of temporal features
 
 - Use as "future known data"
+
+
+## Variable selection networks {#sec-varsel}
+
+Now is a good time to put these elements together in a useful way. In particular, we can consider how it can help select the most informative variables amongst a set of input series (eg, lagged inflation and oil prices in the current toy example.)
+
+```{python}
+#| label: class vsn
+
+
+```
 
 ## Now is a(nother) good time to pay attention {#sec-transf}
 

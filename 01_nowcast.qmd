@@ -1011,42 +1011,31 @@ embed_ts = [
 #|   - Month of year
 #|   - Average of month of quarter and year embeddings
 
-window_months = 24
+window_months = 36
 
 plt.figure(figsize=(10, 6))
-for feature_index in range(embed_ts[0].shape[1]):
-    plt.plot(embed_ts[0][-window_months:, feature_index], label=f'Feature {feature_index + 1}')
-
-# Add labels and legend
-plt.title('Time Series of Features')
-plt.xlabel('Time Steps')
-plt.ylabel('Feature Values')
-plt.grid(True)
+plt.imshow(embed_ts[0][-window_months:].T, cmap='viridis', aspect='auto')
+plt.colorbar(label='Values') 
+plt.xlabel("Months")
+plt.ylabel("Embedding elements")
 plt.show()
 
 plt.figure(figsize=(10, 6))
-for feature_index in range(embed_ts[0].shape[1]):
-    plt.plot(embed_ts[1][-window_months:, feature_index], label=f'Feature {feature_index + 1}')
-
-# Add labels and legend
-plt.title('Time Series of Features')
-plt.xlabel('Time Steps')
-plt.ylabel('Feature Values')
-plt.grid(True)
+plt.imshow(embed_ts[1][-window_months:].T, cmap='viridis', aspect='auto')
+plt.colorbar(label='Values') 
+plt.xlabel("Months")
+plt.ylabel("Embedding elements")
 plt.show()
 
-# TO-DO: include average of embeddings
+avg_embed = np.mean(np.stack(embed_ts, axis=0), axis=0)
 plt.figure(figsize=(10, 6))
-for feature_index in range(embed_ts[0].shape[1]):
-    plt.plot(embed_ts[1][-window_months:, feature_index], label=f'Feature {feature_index + 1}')
-
-# Add labels and legend
-plt.title('Time Series of Features')
-plt.xlabel('Time Steps')
-plt.ylabel('Feature Values')
-plt.grid(True)
+plt.imshow(avg_embed[-window_months:].T, cmap='viridis', aspect='auto')
+plt.colorbar(label='Values') 
+plt.xlabel("Months")
+plt.ylabel("Embedding elements")
 plt.show()
 ```
+
 
 ## Variable selection networks {#sec-varsel}
 

@@ -3,7 +3,13 @@ import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin  # type: ignore
 
 from gingado.temporal.temporal import get_timefeat, validate_and_get_freq
-from gingado.temporal.types import FrequencyLike
+from gingado.temporal.types import (
+    DayFeatures,
+    FrequencyLike,
+    MonthFeatures,
+    QuarterFeatures,
+    WeekFeatures,
+)
 
 
 class TemporalFeatureTransformer(BaseEstimator, TransformerMixin):
@@ -14,15 +20,23 @@ class TemporalFeatureTransformer(BaseEstimator, TransformerMixin):
     based on the DatetimeIndex of the input DataFrame.
     """
 
-    def __init__(self, freq: FrequencyLike, drop_zero_variance: bool = True):
+    def __init__(
+        self,
+        freq: FrequencyLike,
+        features: list[str] | None = None,
+        drop_zero_variance: bool = True,
+    ):
         """Configure and set up a temporal feature transformer.
 
         Args:
             freq (FrequencyLike): Frequency of the input DataFrame.
+            features (list[str] | None): List of temporal features to include. If None, all temporal
+                features are selected. Defaults to None.
             drop_zero_variance (bool): If True, drop columns with zero variance. Defaults to True.
         """
-        self.freq = freq
+        self.freq = validate_and_get_freq(freq)
         self.drop_zero_variance = drop_zero_variance
+        self.features = features
 
     def fit(self, X: pd.DataFrame, y: pd.Series | None = None):
         """Fit the transformer to the input DataFrame.
@@ -54,6 +68,8 @@ class TemporalFeatureTransformer(BaseEstimator, TransformerMixin):
         X_transformed = get_timefeat(
             df=X, freq=self.freq, add_to_df=True, drop_zero_variance=self.drop_zero_variance
         )
+        # if self.features:
+
         return X_transformed
 
     def get_feature_names_out(self, input_features: list[str] | None = None) -> np.ndarray:
@@ -73,3 +89,13 @@ class TemporalFeatureTransformer(BaseEstimator, TransformerMixin):
 
         all_features = input_features + temporal_features.columns.tolist()
         return np.array(all_features)
+
+    @staticmethod
+    def get_valid_features() -> dict[str, list[str]]:
+        """Get a dictionary of all valid features grouped by feature type."""
+        return {
+            "day_features": [f.value for f in DayFeatures],
+            "week_features": [f.value for f in WeekFeatures],
+            "month_features": [f.value for f in MonthFeatures],
+            "quarter_features": [f.value for f in QuarterFeatures],
+        }

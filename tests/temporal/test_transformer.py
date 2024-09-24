@@ -5,6 +5,7 @@ from pandas.testing import assert_frame_equal, assert_index_equal
 from numpy.testing import assert_array_equal
 
 from gingado.temporal.transformer import TemporalFeatureTransformer
+from gingado.temporal.types import DayFeatures, MonthFeatures, QuarterFeatures, WeekFeatures
 
 
 @pytest.fixture
@@ -42,8 +43,7 @@ def test_transformer_transform(sample_df):
     assert isinstance(transformed_df, pd.DataFrame)
     assert_index_equal(transformed_df.index, sample_df.index)
     assert "value" in transformed_df.columns
-    assert "day_of_week" in transformed_df.columns
-    assert "month_of_year" in transformed_df.columns
+    assert all([f.value in transformed_df.columns for f in DayFeatures])
 
 
 def test_transformer_invalid_input():
@@ -101,3 +101,23 @@ def test_different_frequencies():
 
     assert "day_of_week" not in transformed_monthly.columns
     assert "day_of_month" not in transformed_weekly.columns
+
+
+def test_get_valid_features():
+    """Test the get_valid_features static method of TemporalFeatureTransformer."""
+    valid_features = TemporalFeatureTransformer.get_valid_features()
+
+    # Check that the result is a dictionary
+    assert isinstance(valid_features, dict), "get_valid_features should return a dictionary"
+
+    # Check that the dictionary has the correct keys
+    expected_keys = ["day_features", "week_features", "month_features", "quarter_features"]
+    assert set(valid_features.keys()) == set(expected_keys)
+
+    # Check that the lists contain the correct feature names
+    assert set(valid_features["day_features"]) == set(feature.value for feature in DayFeatures)
+    assert set(valid_features["week_features"]) == set(feature.value for feature in WeekFeatures)
+    assert set(valid_features["month_features"]) == set(feature.value for feature in MonthFeatures)
+    assert set(valid_features["quarter_features"]) == set(
+        feature.value for feature in QuarterFeatures
+    )

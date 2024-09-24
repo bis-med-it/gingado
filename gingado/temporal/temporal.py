@@ -3,7 +3,15 @@
 import pandas as pd
 from sklearn.feature_selection import VarianceThreshold
 
-from gingado.temporal.types import DateTimeLike, Frequency, FrequencyLike
+from gingado.temporal.types import (
+    DateTimeLike,
+    DayFeatures,
+    Frequency,
+    FrequencyLike,
+    MonthFeatures,
+    QuarterFeatures,
+    WeekFeatures,
+)
 
 
 def validate_and_get_freq(freq: FrequencyLike) -> Frequency:
@@ -101,10 +109,12 @@ def _get_day_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
     return pd.DataFrame(
         index=dt_index,
         data={
-            "day_of_week": dt_index.dayofweek,
-            "day_of_month": dt_index.day,
-            "day_of_quarter": dt_index.dayofyear - dt_index.to_period("Q").start_time.dayofyear + 1,
-            "day_of_year": dt_index.dayofyear,
+            DayFeatures.DAY_OF_WEEK.value: dt_index.dayofweek,
+            DayFeatures.DAY_OF_MONTH.value: dt_index.day,
+            DayFeatures.DAY_OF_QUARTER.value: dt_index.dayofyear
+            - dt_index.to_period("Q").start_time.dayofyear
+            + 1,
+            DayFeatures.DAY_OF_YEAR.value: dt_index.dayofyear,
         },
     )
 
@@ -121,11 +131,13 @@ def _get_week_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
     return pd.DataFrame(
         index=dt_index,
         data={
-            "week_of_month": dt_index.day.map(lambda x: (x - 1) // 7 + 1),
-            "week_of_quarter": (dt_index.dayofyear - dt_index.to_period("Q").start_time.dayofyear)
+            WeekFeatures.WEEK_OF_MONTH.value: dt_index.day.map(lambda x: (x - 1) // 7 + 1),
+            WeekFeatures.WEEK_OF_QUARTER.value: (
+                dt_index.dayofyear - dt_index.to_period("Q").start_time.dayofyear
+            )
             // 7
             + 1,
-            "week_of_year": dt_index.isocalendar().week,
+            WeekFeatures.WEEK_OF_YEAR.value: dt_index.isocalendar().week,
         },
     )
 
@@ -142,8 +154,8 @@ def _get_month_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
     return pd.DataFrame(
         index=dt_index,
         data={
-            "month_of_quarter": dt_index.month.map(lambda x: (x - 1) % 3 + 1),
-            "month_of_year": dt_index.month,
+            MonthFeatures.MONTH_OF_QUARTER.value: dt_index.month.map(lambda x: (x - 1) % 3 + 1),
+            MonthFeatures.MONTH_OF_YEAR.value: dt_index.month,
         },
     )
 
@@ -160,9 +172,9 @@ def _get_quarter_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
     return pd.DataFrame(
         index=dt_index,
         data={
-            "quarter_of_year": dt_index.quarter,
-            "quarter_end": dt_index.is_quarter_end.astype(int),
-            "year_end": dt_index.is_year_end.astype(int),
+            QuarterFeatures.QUARTER_OF_YEAR.value: dt_index.quarter,
+            QuarterFeatures.QUARTER_END.value: dt_index.is_quarter_end.astype(int),
+            QuarterFeatures.YEAR_END.value: dt_index.is_year_end.astype(int),
         },
     )
 

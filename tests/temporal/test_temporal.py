@@ -6,7 +6,13 @@ import pytest
 from pandas.testing import assert_frame_equal
 
 import gingado.temporal.temporal as tp
-from gingado.temporal.types import Frequency
+from gingado.temporal.types import (
+    DayFeatures,
+    Frequency,
+    MonthFeatures,
+    QuarterFeatures,
+    WeekFeatures,
+)
 
 
 @pytest.fixture(name="sample_df")
@@ -198,9 +204,9 @@ def test_drop_zero_variance_quarterly(
     assert len(result_with_drop.columns) < len(result_without_drop.columns)
 
     # Check specific columns that should be dropped
-    assert "day_of_month" not in result_with_drop.columns
-    assert "week_of_month" not in result_with_drop.columns
-    assert "month_of_quarter" not in result_with_drop.columns
+    assert DayFeatures.DAY_OF_MONTH.value not in result_with_drop.columns
+    assert WeekFeatures.WEEK_OF_MONTH.value not in result_with_drop.columns
+    assert MonthFeatures.MONTH_OF_QUARTER.value not in result_with_drop.columns
 
     # Check columns that should be retained
     assert "quarter_of_year" in result_with_drop.columns
@@ -208,17 +214,14 @@ def test_drop_zero_variance_quarterly(
 
 def test_day_features(sample_df: pd.DataFrame) -> None:
     """Test the get_day_features function."""
-    result = tp._get_day_features(sample_df.index)
+    result = tp._get_day_features(pd.DatetimeIndex(sample_df.index))
     assert result.index.equals(sample_df.index)
-    assert "day_of_week" in result.columns
-    assert "day_of_month" in result.columns
-    assert "day_of_quarter" in result.columns
-    assert "day_of_year" in result.columns
+    assert all([f.value in result.columns for f in DayFeatures])
 
 
 def test_day_features_specific_values(sample_df: pd.DataFrame) -> None:
     """Test specific values for day features."""
-    result = tp._get_day_features(sample_df.index)
+    result = tp._get_day_features(pd.DatetimeIndex(sample_df.index))
 
     # Test for the first day of the year
     assert result.loc["2023-01-01", "day_of_week"] == 6  # Sunday
@@ -244,17 +247,15 @@ def test_day_features_specific_values(sample_df: pd.DataFrame) -> None:
 
 def test_week_features(sample_df: pd.DataFrame) -> None:
     """Test the get_week_features function."""
-    result = tp._get_week_features(sample_df.index)
+    result = tp._get_week_features(pd.DatetimeIndex(sample_df.index))
     assert result.index.equals(sample_df.index)
 
-    assert "week_of_month" in result.columns
-    assert "week_of_quarter" in result.columns
-    assert "week_of_year" in result.columns
+    assert all([f.value in result.columns for f in WeekFeatures])
 
 
 def test_week_features_specific_values(sample_df: pd.DataFrame) -> None:
     """Test specific values for week features."""
-    result = tp._get_week_features(sample_df.index)
+    result = tp._get_week_features(pd.DatetimeIndex(sample_df.index))
 
     # Test for the first week of the year
     assert result.loc["2023-01-01", "week_of_month"] == 1
@@ -279,15 +280,14 @@ def test_week_features_specific_values(sample_df: pd.DataFrame) -> None:
 
 def test_month_features(sample_df: pd.DataFrame) -> None:
     """Test the get_month_features function."""
-    result = tp._get_month_features(sample_df.index)
+    result = tp._get_month_features(pd.DatetimeIndex(sample_df.index))
     assert result.index.equals(sample_df.index)
-    assert "month_of_quarter" in result.columns
-    assert "month_of_year" in result.columns
+    assert all([f.value in result.columns for f in MonthFeatures])
 
 
 def test_month_features_specific_values(sample_df: pd.DataFrame) -> None:
     """Test specific values for month features."""
-    result = tp._get_month_features(sample_df.index)
+    result = tp._get_month_features(pd.DatetimeIndex(sample_df.index))
 
     # Test for January (first month of year and quarter)
     assert result.loc["2023-01-15", "month_of_quarter"] == 1
@@ -308,16 +308,14 @@ def test_month_features_specific_values(sample_df: pd.DataFrame) -> None:
 
 def test_quarter_features(sample_df: pd.DataFrame) -> None:
     """Test the get_quarter_features function."""
-    result = tp._get_quarter_features(sample_df.index)
+    result = tp._get_quarter_features(pd.DatetimeIndex(sample_df.index))
     assert result.index.equals(sample_df.index)
-    assert "quarter_of_year" in result.columns
-    assert "quarter_end" in result.columns
-    assert "year_end" in result.columns
+    assert all([f.value in result.columns for f in QuarterFeatures])
 
 
 def test_quarter_features_specific_values(sample_df: pd.DataFrame) -> None:
     """Test specific values for quarter features."""
-    result = tp._get_quarter_features(sample_df.index)
+    result = tp._get_quarter_features(pd.DatetimeIndex(sample_df.index))
     # Test for first day of Q1
     assert result.loc["2023-01-01", "quarter_of_year"] == 1
     assert result.loc["2023-01-01", "quarter_end"] == 0

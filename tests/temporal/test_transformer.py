@@ -1,11 +1,18 @@
 import numpy as np
 import pandas as pd
 import pytest
-from pandas.testing import assert_frame_equal, assert_index_equal
-from numpy.testing import assert_array_equal
+from pandas.testing import assert_index_equal
+from sklearn.dummy import DummyRegressor  # type: ignore
+from sklearn.pipeline import Pipeline  # type: ignore
 
 from gingado.temporal.transformer import TemporalFeatureTransformer
-from gingado.temporal.types import DayFeatures, MonthFeatures, QuarterFeatures, WeekFeatures
+from gingado.temporal.types import (
+    DayFeatures,
+    Frequency,
+    MonthFeatures,
+    QuarterFeatures,
+    WeekFeatures,
+)
 
 
 @pytest.fixture
@@ -24,8 +31,7 @@ def sample_df():
 def test_transformer_init():
     """Test the initialization of TemporalFeatureTransformer."""
     transformer = TemporalFeatureTransformer(freq="D")
-    assert transformer.freq == "D"
-    assert transformer.drop_zero_variance
+    assert transformer.freq == Frequency.DAILY
 
 
 def test_transformer_fit(sample_df):
@@ -53,33 +59,6 @@ def test_transformer_invalid_input():
 
     with pytest.raises(ValueError, match="DataFrame index must be a DatetimeIndex"):
         transformer.transform(df)
-
-
-def test_get_feature_names_out(sample_df):
-    """Test the get_feature_names_out method."""
-    transformer = TemporalFeatureTransformer(freq="D")
-    transformer.fit(sample_df)
-    feature_names = transformer.get_feature_names_out()
-
-    assert isinstance(feature_names, np.ndarray)
-    assert "value" in feature_names
-    assert "day_of_week" in feature_names
-    assert "month_of_year" in feature_names
-
-
-def test_drop_zero_variance(sample_df):
-    """Test the drop_zero_variance parameter."""
-    # Add a constant column
-    sample_df["constant"] = 1
-
-    transformer_with_drop = TemporalFeatureTransformer(freq="D", drop_zero_variance=True)
-    transformer_without_drop = TemporalFeatureTransformer(freq="D", drop_zero_variance=False)
-
-    transformed_with_drop = transformer_with_drop.transform(sample_df)
-    transformed_without_drop = transformer_without_drop.transform(sample_df)
-
-    assert "constant" in transformed_without_drop.columns
-    assert "constant" not in transformed_with_drop.columns
 
 
 def test_different_frequencies():
@@ -121,3 +100,37 @@ def test_get_valid_features():
     assert set(valid_features["quarter_features"]) == set(
         feature.value for feature in QuarterFeatures
     )
+
+
+def test_pipeline():
+    """Test that the transformer can be used in an sklearn pipeline"""
+    # Create sample data
+    dates = pd.date_range(start="2021-01-01", end="2021-12-31", freq="D")
+    rng = np.random.default_rng(seed=42)
+    df = pd.DataFrame(
+        index=dates,
+        data={
+            "value": rng.uniform(size=len(dates)),
+            "target": np.sin(np.arange(len(dates)) / 10) + rng.normal(0, 0.1, len(dates)),
+        },
+    )
+
+    # Split the data
+    X = df[["value"]]
+    y = df["target"]
+
+    # Create the pipeline
+    pipeline = Pipeline(
+        [
+            ("temporal_features", TemporalFeatureTransformer(freq="D")),
+            ("regressor", DummyRegressor(strategy="mean")),
+        ]
+    )
+
+    # Fit the pipeline
+    pipeline.fit(X, y)
+
+    # Make predictions
+    _ = pipeline.predict(X)
+
+    # TODO: test feature names once correctly implemented

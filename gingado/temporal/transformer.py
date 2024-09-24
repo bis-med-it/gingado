@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin  # type: ignore
+from sklearn.utils.validation import _check_feature_names_in
 
 from gingado.temporal.temporal import get_timefeat, validate_and_get_freq
 from gingado.temporal.types import (
@@ -24,7 +25,6 @@ class TemporalFeatureTransformer(BaseEstimator, TransformerMixin):
         self,
         freq: FrequencyLike,
         features: list[str] | None = None,
-        drop_zero_variance: bool = True,
     ):
         """Configure and set up a temporal feature transformer.
 
@@ -32,10 +32,8 @@ class TemporalFeatureTransformer(BaseEstimator, TransformerMixin):
             freq (FrequencyLike): Frequency of the input DataFrame.
             features (list[str] | None): List of temporal features to include. If None, all temporal
                 features are selected. Defaults to None.
-            drop_zero_variance (bool): If True, drop columns with zero variance. Defaults to True.
         """
         self.freq = validate_and_get_freq(freq)
-        self.drop_zero_variance = drop_zero_variance
         self.features = features
 
     def fit(self, X: pd.DataFrame, y: pd.Series | None = None):
@@ -65,30 +63,8 @@ class TemporalFeatureTransformer(BaseEstimator, TransformerMixin):
         Raises:
             ValueError: If the input DataFrame's index is not a DatetimeIndex.
         """
-        X_transformed = get_timefeat(
-            df=X, freq=self.freq, add_to_df=True, drop_zero_variance=self.drop_zero_variance
-        )
-        # if self.features:
-
+        X_transformed = get_timefeat(df=X, freq=self.freq, add_to_df=True)
         return X_transformed
-
-    def get_feature_names_out(self, input_features: list[str] | None = None) -> np.ndarray:
-        if input_features is None and not hasattr(self, "X_"):
-            raise AttributeError(
-                "Transformer has not been fitted yet. Call 'fit' with appropriate arguments before"
-                " using this method."
-            )
-        if input_features is None:
-            input_features = self.X_.columns.tolist()
-        # Generate a sample DataFrame to get the temporal feature names
-        freq_str = validate_and_get_freq(self.freq).value
-        sample_df = pd.DataFrame(index=pd.date_range(start="2021-01-01", periods=10, freq=freq_str))
-        temporal_features = get_timefeat(
-            sample_df, freq=self.freq, add_to_df=False, drop_zero_variance=self.drop_zero_variance
-        )
-
-        all_features = input_features + temporal_features.columns.tolist()
-        return np.array(all_features)
 
     @staticmethod
     def get_valid_features() -> dict[str, list[str]]:

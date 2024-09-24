@@ -1,34 +1,9 @@
 """Contains utilities to work with multi-frequency time series data."""
 
-import datetime
-from enum import Enum
-
-import numpy as np
 import pandas as pd
 from sklearn.feature_selection import VarianceThreshold
 
-
-class Frequency(Enum):
-    """Enum class representing valid frequency codes for time series data.
-
-    These frequency codes align with pandas' frequency aliases and can be used
-    for operations like resampling or date range generation.
-
-    Attributes:
-        DAILY (str): Daily frequency ('D')
-        WEEKLY (str): Weekly frequency ('W')
-        MONTHLY (str): Monthly start frequency ('MS')
-        QUARTERLY (str): Quarterly start frequency ('QS')
-    """
-
-    DAILY = "D"
-    WEEKLY = "W"
-    MONTHLY = "MS"
-    QUARTERLY = "QS"
-
-
-FrequencyLike = str | Frequency
-DateTimeLike = pd.Timestamp | datetime.datetime | np.datetime64 | str | datetime.date
+from gingado.temporal.types import DateTimeLike, Frequency, FrequencyLike
 
 
 def validate_and_get_freq(freq: FrequencyLike) -> Frequency:

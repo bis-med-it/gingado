@@ -43,10 +43,7 @@ def validate_and_get_freq(freq: FrequencyLike) -> Frequency:
 
 
 def get_timefeat(
-    df: pd.DataFrame | pd.Series,
-    freq: FrequencyLike,
-    add_to_df: bool = True,
-    drop_zero_variance: bool = True,
+    df: pd.DataFrame | pd.Series, freq: FrequencyLike, add_to_df: bool = True
 ) -> pd.DataFrame:
     """Generate temporal features from a DataFrame with a DatetimeIndex.
 
@@ -58,8 +55,6 @@ def get_timefeat(
         freq (FrequencyLike): Frequency of the input DataFrame
         add_to_df (bool, optional): If True, append the generated features to the input DataFrame.
             If False, return only the generated features. Defaults to True.
-        drop_zero_variance (bool, optional): If True, drop columns with zero variance. For example,
-            the day of month feature is irrelevant for inputs with a monthly frequency.
 
     Returns:
         pd.DataFrame: A DataFrame containing the generated temporal features,
@@ -88,10 +83,6 @@ def get_timefeat(
 
     time_features = pd.concat(features, axis=1) if features else pd.DataFrame(index=df.index)
 
-    if drop_zero_variance:
-        var_thresh = VarianceThreshold(threshold=0)
-        var_thresh.set_output(transform="pandas")
-        time_features = var_thresh.fit_transform(time_features)
     if add_to_df:
         return pd.concat([df, time_features], axis=1)
     return time_features

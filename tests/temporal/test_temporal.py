@@ -149,69 +149,6 @@ def test_feature_values(sample_df: pd.DataFrame) -> None:
     assert result.loc["2023-12-31", "year_end"] == 1
 
 
-@pytest.mark.parametrize("frequency", ["D", Frequency.DAILY])
-def test_drop_zero_variance_daily(daily_df: pd.DataFrame, frequency: str | Frequency) -> None:
-    """Test drop_zero_variance parameter with daily frequency data."""
-    result_with_drop = tp.get_timefeat(
-        daily_df, freq=frequency, add_to_df=False, drop_zero_variance=True
-    )
-    result_without_drop = tp.get_timefeat(
-        daily_df, freq=frequency, add_to_df=False, drop_zero_variance=False
-    )
-
-    # All features should be relevant for daily data
-    assert len(result_with_drop.columns) == len(result_without_drop.columns)
-    assert set(result_with_drop.columns) == set(result_without_drop.columns)
-
-
-@pytest.mark.parametrize("frequency", ["MS", Frequency.MONTHLY])
-def test_drop_zero_variance_monthly(
-    monthly_start_df: pd.DataFrame, frequency: str | Frequency
-) -> None:
-    """Test drop_zero_variance parameter with monthly frequency data."""
-    result_with_drop = tp.get_timefeat(
-        monthly_start_df, freq=frequency, add_to_df=False, drop_zero_variance=True
-    )
-    result_without_drop = tp.get_timefeat(
-        monthly_start_df, freq=frequency, add_to_df=False, drop_zero_variance=False
-    )
-
-    # Some features should be dropped for monthly data
-    assert len(result_with_drop.columns) < len(result_without_drop.columns)
-
-    # Check specific columns that should be dropped
-    assert "day_of_month" not in result_with_drop.columns
-    assert "week_of_month" not in result_with_drop.columns
-
-    # Check specific columns that should be retained
-    assert "month_of_year" in result_with_drop.columns
-    assert "quarter_of_year" in result_with_drop.columns
-
-
-@pytest.mark.parametrize("frequency", ["QS", Frequency.QUARTERLY])
-def test_drop_zero_variance_quarterly(
-    quarterly_start_df: pd.DataFrame, frequency: str | Frequency
-) -> None:
-    """Test drop_zero_variance parameter with quarterly frequency data."""
-    result_with_drop = tp.get_timefeat(
-        quarterly_start_df, freq=frequency, add_to_df=False, drop_zero_variance=True
-    )
-    result_without_drop = tp.get_timefeat(
-        quarterly_start_df, add_to_df=False, freq=frequency, drop_zero_variance=False
-    )
-
-    # Many features should be dropped for quarterly data
-    assert len(result_with_drop.columns) < len(result_without_drop.columns)
-
-    # Check specific columns that should be dropped
-    assert DayFeatures.DAY_OF_MONTH.value not in result_with_drop.columns
-    assert WeekFeatures.WEEK_OF_MONTH.value not in result_with_drop.columns
-    assert MonthFeatures.MONTH_OF_QUARTER.value not in result_with_drop.columns
-
-    # Check columns that should be retained
-    assert "quarter_of_year" in result_with_drop.columns
-
-
 def test_day_features(sample_df: pd.DataFrame) -> None:
     """Test the get_day_features function."""
     result = tp._get_day_features(pd.DatetimeIndex(sample_df.index))

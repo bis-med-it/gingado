@@ -63,7 +63,7 @@ class TemporalFeatureTransformer(BaseEstimator, TransformerMixin):
         Raises:
             ValueError: If the input DataFrame's index is not a DatetimeIndex.
         """
-        X_transformed = get_timefeat(df=X, freq=self.freq, add_to_df=True)
+        X_transformed = get_timefeat(df=X, freq=self.freq, columns=self.features, add_to_df=True)
         return X_transformed
 
     @staticmethod

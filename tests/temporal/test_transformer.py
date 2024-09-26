@@ -82,6 +82,20 @@ def test_different_frequencies():
     assert "day_of_month" not in transformed_weekly.columns
 
 
+def test_transformer_user_provided_args(sample_df):
+    """Tests that the transformer uses only"""
+    transformer = TemporalFeatureTransformer(
+        freq="D", features=["day_of_month", "week_of_year", "month_of_quarter"]
+    )
+    df_transformed = transformer.transform(sample_df)
+    assert sorted(df_transformed.columns) == [
+        "day_of_month",
+        "month_of_quarter",
+        "value",
+        "week_of_year",
+    ]
+
+
 def test_get_valid_features():
     """Test the get_valid_features static method of TemporalFeatureTransformer."""
     valid_features = TemporalFeatureTransformer.get_valid_features()

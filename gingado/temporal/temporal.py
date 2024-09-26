@@ -1,5 +1,7 @@
 """Contains utilities to work with multi-frequency time series data."""
 
+import warnings
+
 import pandas as pd
 from sklearn.feature_selection import VarianceThreshold
 
@@ -8,6 +10,7 @@ from gingado.temporal.types import (
     DayFeatures,
     Frequency,
     FrequencyLike,
+    InvalidTemporalFeature,
     MonthFeatures,
     QuarterFeatures,
     WeekFeatures,
@@ -43,7 +46,10 @@ def validate_and_get_freq(freq: FrequencyLike) -> Frequency:
 
 
 def get_timefeat(
-    df: pd.DataFrame | pd.Series, freq: FrequencyLike, add_to_df: bool = True
+    df: pd.DataFrame | pd.Series,
+    freq: FrequencyLike,
+    columns: list[str] | None = None,
+    add_to_df: bool = True,
 ) -> pd.DataFrame:
     """Generate temporal features from a DataFrame with a DatetimeIndex.
 
@@ -53,6 +59,8 @@ def get_timefeat(
     Args:
         df (pd.DataFrame | pd.Series): Input DataFrame or Series with a DatetimeIndex.
         freq (FrequencyLike): Frequency of the input DataFrame
+        columns (list[str], optional): List of colums with temporal feature names that should be
+            kept. If None, all default temporal features are returned. Defaults to None.
         add_to_df (bool, optional): If True, append the generated features to the input DataFrame.
             If False, return only the generated features. Defaults to True.
 
@@ -83,9 +91,56 @@ def get_timefeat(
 
     time_features = pd.concat(features, axis=1) if features else pd.DataFrame(index=df.index)
 
+    # Filter for user-provided features
+    if columns is not None:
+        valid_columns = _check_valid_features(columns, freq)
+        time_features = time_features.loc[:, valid_columns]
+
     if add_to_df:
         return pd.concat([df, time_features], axis=1)
     return time_features
+
+
+def _get_temporal_feature_names(freq: Frequency | None = None) -> list[str]:
+    """Returns all supported temporal feature names, optionally only those valid for a given
+    frequency.
+
+    Args:
+        freq (Frequency | None): Optional input frequency
+
+    Returns:
+        list[str]: List of feature names supported by the arguments
+    """
+    if not freq or freq == Frequency.DAILY:
+        all_features = [DayFeatures, WeekFeatures, MonthFeatures, QuarterFeatures]
+    elif freq == Frequency.WEEKLY:
+        all_features = [WeekFeatures, MonthFeatures, QuarterFeatures]
+    elif freq == Frequency.MONTHLY:
+        all_features = [MonthFeatures, QuarterFeatures]
+    else:
+        all_features = [QuarterFeatures]
+
+    return [f.value for features in all_features for f in features]
+
+
+def _check_valid_features(features: list[str], freq: Frequency) -> list[str]:
+    """Warns if a feature is requested that does not match the provided input frequency"""
+    valid_features = []
+    freq_features = _get_temporal_feature_names(freq)
+    all_features = _get_temporal_feature_names()
+    for feature in features:
+        if feature in freq_features:
+            valid_features.append(feature)
+        elif feature in all_features:
+            warnings.warn(
+                f"Requested temporal feature {feature} "
+                f"not available for data with frequency {freq.value}!",
+                category=UserWarning,
+                stacklevel=2,  # Warning traceback points to caller of this function
+            )
+        else:
+            raise InvalidTemporalFeature(feature)
+    return valid_features
 
 
 def _get_day_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:

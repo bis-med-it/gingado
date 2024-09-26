@@ -97,3 +97,12 @@ class QuarterFeatures(Enum):
     QUARTER_OF_YEAR = "quarter_of_year"
     QUARTER_END = "quarter_end"
     YEAR_END = "year_end"
+
+
+class InvalidTemporalFeature(Exception):
+    """Exception raised when an invalid temporal feature is passed to a method."""
+
+    def __init__(self, feature_name: str, message: str = "Invalid temporal feature passed"):
+        self.feature_name = feature_name
+        self.message = f"{message}: '{feature_name}'"
+        super().__init__(self.message)

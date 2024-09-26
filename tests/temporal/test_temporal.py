@@ -9,6 +9,7 @@ import gingado.temporal.temporal as tp
 from gingado.temporal.types import (
     DayFeatures,
     Frequency,
+    InvalidTemporalFeature,
     MonthFeatures,
     QuarterFeatures,
     WeekFeatures,
@@ -147,6 +148,41 @@ def test_feature_values(sample_df: pd.DataFrame) -> None:
     assert result.loc["2023-01-01", "month_of_year"] == 1
     assert result.loc["2023-03-31", "quarter_end"] == 1
     assert result.loc["2023-12-31", "year_end"] == 1
+
+
+def test_user_provided_features(sample_df: pd.DataFrame) -> None:
+    """Tests that only user provided temporal feature are used"""
+    result = tp.get_timefeat(
+        sample_df, freq=Frequency.DAILY, columns=["day_of_week", "month_of_year"], add_to_df=False
+    )
+
+    assert len(result.columns) == 2
+    assert "day_of_week" in result.columns
+    assert "month_of_year" in result.columns
+
+
+def test_user_provided_wrong_frequency_features(monthly_start_df: pd.DataFrame) -> None:
+    """Tests that a warning is issued for supported features for the wrong frequency"""
+    with pytest.warns(
+        UserWarning,
+        match="Requested temporal feature day_of_week not available for data with frequency MS!",
+    ):
+        result = tp.get_timefeat(
+            monthly_start_df,
+            freq=Frequency.MONTHLY,
+            columns=["day_of_week", "month_of_year"],
+            add_to_df=False,
+        )
+
+    assert result.columns == ["month_of_year"]
+
+
+def test_user_provided_invalid_frequency(sample_df: pd.DataFrame) -> None:
+    """Tests that an appropriate exception is thrown for invalid columns"""
+    with pytest.raises(
+        InvalidTemporalFeature, match="Invalid temporal feature passed: 'ace_of_spades'"
+    ):
+        tp.get_timefeat(sample_df, freq=Frequency.DAILY, columns=["day_of_year", "ace_of_spades"])
 
 
 def test_day_features(sample_df: pd.DataFrame) -> None:

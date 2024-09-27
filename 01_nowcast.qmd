@@ -506,7 +506,8 @@ A marked improvement in how we can model time series data is the use of recurren
 
 In contrast to the fully connected layer in @sec-fc, which need to look at different lags to pick up any history-dependent information, RNNs look at the observable variables at each period and learn a latent "state" (akin to Kalman filters, for example). The same network then slides up one step in time and uses that information and the previous state to update the state, and so on...
 
-One particular type of RNN that has proven to be very successful in practice is the long short-term memory (LSTM) model, due to @hochreiter1997long. It is actually a combination of four different layers, of which three are actually gates. These layers are built in a specific way. Here's how:
+One particular type of RNN that has proven to be very successful in practice is the long short-term memory (LSTM) model, due to @hochreiter1997long. It is actually a combination of four different layers, of which three are actually gates. These layers are built in a specific way.
+ Here's how the input vector $x_t$ and the learned LSTM state $h_{t-1}$ are used for the LSTM-forward pass at time step $t$:
 
 $$
 \begin{align}
@@ -523,7 +524,7 @@ where $\omega$ is the hyperbolic function.
 
 The basic intuition of the LSTM is that some of the individual component layers essentially learn to look at the current data and the past memory and then decide how much new information to let through. Note that, because their activation is a sigmoid, the output of layers $f_t$, $i_t$ and $o_t$ is a number between 0 and 1. This idea is important to bear in mind because it will be used at a much bigger scale by the whole TFT model - and will be one key feature of its interpretability.
 
-With LSTM networks, it is easier to incorporate mixed-frequency data in a meaningful way. This is done below by passing data of each frequency through their own LSTM layers, and combining their output.
+With LSTM networks, it is easier to incorporate mixed-frequency data in a meaningful way. This is done below by passing data of each frequency through their own LSTM layers, and combining their last outputs.
 
 ```{python}
 #| label: tbl-lstm_summary
@@ -682,7 +683,7 @@ $$
 \text{GLU}(x) = \sigma(W_{G} x + b_G) \odot (W_1 x + b_1),
 $$ {#eq-glu}
 
-with $W_{\text{GLU}} = \{W_G, W_1\} \in \mathbb{R}^{|x| \times \lambda}$ and $b_{\text{GLU}} = \{b_G, b_1\} \in \mathbb{R}^{\lambda}$.
+with $W_G, W_1 \in \mathbb{R}^{|x| \times \lambda}$ and $b_G, b_1 \in \mathbb{R}^{\lambda}$.
 
 ```{python}
 #| label: tbl-summary_glu

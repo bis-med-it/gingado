@@ -15,7 +15,7 @@ fig-cap-location: top
 
 This notebook showcases how to set up neural networks to nowcast inflation using data measured in different frequencies. The goal here is to start with a very simple dataset containing only two variables, inflation (monthly) and oil prices (daily), to slowly build up a more complex neural network based nowcasting model, the TFT-MF available in `gingado` from its v0.3.0.
 
-Nowcasting is essentially the use of the most current information possible to estimate in real time an economic series of interest such as inflation or GDP before it is actually released[^review]. For example, if you could measure all prices every day, you could create on the last day of the month a very accurate nowcast for the headline inflation for that month - which would only be officialy published a few days later. In the case of GDP, this lag between the end of the reference period and actual publication tends to be significant, around 6-10 weeks. For policymakers, investors and other decisionmakers, a lot can happen in this period.
+Nowcasting is essentially the use of the most current information possible to estimate in real time an economic series of interest such as inflation or GDP before it is actually released[^review]. For example, if you could measure all prices every day, you could create on the last day of the month a very accurate nowcast for the headline inflation for that month - which would only be officially published a few days later. In the case of GDP, this lag between the end of the reference period and actual publication tends to be significant, around 6-10 weeks. For policymakers, investors and other decision-makers, a lot can happen in this period.
 
 [^review]: @giannone2008nowcasting pioneered nowcasting in macroeconomics. See @bok2018nowcasting for a review.
 
@@ -54,7 +54,7 @@ from tqdm import tqdm
 
 ### Inflation
 
-Since this is a monthly nowcast of inflation, the best way to do this is to use a *monthly change in the consumer price index*, $\pi_t^{(m)}=(\text{CPI}_t - \text{CPI}_{t-1})/\text{CPI}_{t-1}$, not the year-on-year rate, $\pi_t^{(y)}=(\text{CPI}_t - \text{CPI}_{t-12})/\text{CPI}_{t-12}$, which is how people usually think of inflation. This is because we want to nowcast only the value at the margin; 11 twelths of $\pi_t^{(y)}$ are already known, since $\pi_t^{(y)} = -1 + \prod_{l=0}^{11} (1+\pi_{t-l})$. 
+Since this is a monthly nowcast of inflation, the best way to do this is to use a *monthly change in the consumer price index*, $\pi_t^{(m)}=(\text{CPI}_t - \text{CPI}_{t-1})/\text{CPI}_{t-1}$, not the year-on-year rate, $\pi_t^{(y)}=(\text{CPI}_t - \text{CPI}_{t-12})/\text{CPI}_{t-12}$, which is how people usually think of inflation. This is because we want to nowcast only the value at the margin; 11 twelfths of $\pi_t^{(y)}$ are already known, since $\pi_t^{(y)} = -1 + \prod_{l=0}^{11} (1+\pi_{t-l})$.
 
 Then, only at the end we combine rolling windows of 12 consecutive monthly inflation rates, of which only the last one or two are estimated, to correctly create an annual inflation rate. 
 
@@ -567,7 +567,7 @@ Note that the input goes through a few steps before reaching the LSTM layer. Thi
 
 To check that the LSTM-based neural network works, we need to feed this neural network a slightly different type of data. LSTM, as other recurrent neural networks, takes in time series data. So, unlike before, we now prepare a time series (or panel data) for each 
 
-This neural network will then take in the inputed time series data, and encode each frequency's series separately through the different LSTM streams. The final result will no longer have a time dimension; it is then averaged, and this average embeddings of the different time series is used to forecast the variable of interest.
+This neural network will then take in the inputted time series data, and encode each frequency's series separately through the different LSTM streams. The final result will no longer have a time dimension; it is then averaged, and this average embeddings of the different time series is used to forecast the variable of interest.
 
 ```{python}
 #| label: train the lstm
@@ -966,7 +966,7 @@ The embeddings themselves can be inspected, as in @fig-embed.
 #| fig-cap: Embedding values
 #| fig-subcap:
 #|   - Month of the year
-#|   - Quarter of theyear
+#|   - Quarter of the year
 
 plt.figure(figsize=(8, 6))
 plt.imshow(nn_embed.layers[2].get_weights()[0], cmap='viridis', aspect='auto')
@@ -1321,7 +1321,7 @@ keras.utils.plot_model(nn_vsn, show_shapes=True, show_layer_activations=True, sh
 
 The transformer architecture (@vaswani2023attentionneed) is based on an altogether different way to look at time series compared to recurrent neural networks as the LSTMs above. Its basic idea is to look at the whole sequence at the same time instead of sequentially. This allows the network to learn relevant connections between data that might be far off in time.
 
-Starting with just one frequency for clarity, consider we input time windows of size $N = k + \tau_{\text{max}}$, for $k$ the maximum number of lags and $\tau_{\text{max}}$ the number of forecasted steps. Each of these time steps is associated with a value vetor, $v \in \mathbb{R}^{\lambda_{\text{value}}}$; the time series of these values is $\mathbf{V} \in \mathbb{R}^{N \times \lambda_{\text{value}}}$. The self-attention mechanism will scale the $\mathbf{V}$ to reflect the similarity between two other vectors also associated with each time steps. 
+Starting with just one frequency for clarity, consider we input time windows of size $N = k + \tau_{\text{max}}$, for $k$ the maximum number of lags and $\tau_{\text{max}}$ the number of forecasted steps. Each of these time steps is associated with a value vector, $v \in \mathbb{R}^{\lambda_{\text{value}}}$; the time series of these values is $\mathbf{V} \in \mathbb{R}^{N \times \lambda_{\text{value}}}$. The self-attention mechanism will scale the $\mathbf{V}$ to reflect the similarity between two other vectors also associated with each time steps.
 
 These vectors are their keys and queries, respectively $\mathbf{K}, \mathbf{Q} \in \mathbb{R}^{\lambda_{\text{attention}}}$. "Attention" refers to how their similarity is calculated. Essentially, key vectors that are more similar to query vectors will generate larger numbers of "attention"; similarly, if they are orthogonal, this will result in a low or null attention between a pair of time steps. We follow common practice and calculate the attention weights using the dot-product between the key and query vectors, normalised by softmax to sum to one and span only the positive space:
 
@@ -1569,7 +1569,7 @@ keras.utils.plot_model(nn_imha, show_shapes=True, show_layer_names=True, show_la
 
 
 ```{python}
-#| label: train the lstm with multihead attention
+#| label: train the lstm with multi-head attention
 X_train_split, y_train_split = create_data(X=X_train, y=y_train, maxlags=maxlags)
 
 def adjust_data_lstm(fold="fold_0", chunk="train"):
@@ -1589,7 +1589,7 @@ history_imha = nn_imha.fit(x=lstm_X_train, y=np.array(y_train_split["fold_4"]["t
 
 ```{python}
 #| label: fig-history_imha
-#| fig-cap: Losses of the model with intepretable multi-head attention
+#| fig-cap: Losses of the model with interpretable multi-head attention
 
 imha_loss = history_imha.history
 imha_loss["val_loss_SDPA"] = history_sdpa.history["val_loss"]
@@ -1776,7 +1776,7 @@ class TFT(keras.Model):
             
         xi_hist, xi_fut, xi_stat = self.input_layer([cont_hist, cat_hist, cat_fut, cat_stat])
 
-        # selecing the static covariates
+        # selecting the static covariates
         static_selected_vars, static_selection_weights = self.svars(xi_stat, training=training)
 
         # create context vectors from static data

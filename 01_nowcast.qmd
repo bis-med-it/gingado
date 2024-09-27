@@ -15,7 +15,7 @@ fig-cap-location: top
 
 This notebook showcases how to set up neural networks to nowcast inflation using data measured in different frequencies. The goal here is to start with a very simple dataset containing only two variables, inflation (monthly) and oil prices (daily), to slowly build up a more complex neural network based nowcasting model, the TFT-MF available in `gingado` from its v0.3.0.
 
-Nowcasting is essentially the use of the most current information possible to estimate in real time an economic series of interest such as inflation or GDP before it is actually released[^review]. For example, if you could measure all prices every day, you could create on the last day of the month a very accurate nowcast for the headline inflation for that month - which would only be officialy published a few days later. In the case of GDP, this lag between the end of the reference period and actual publication tends to be significant, around 6-10 weeks. For policymakers, investors and other decisionmakers, a lot can happen in this period.
+Nowcasting is essentially the use of the most current information possible to estimate in real time an economic series of interest such as inflation or GDP before it is actually released[^review]. For example, if you could measure all prices every day, you could create on the last day of the month a very accurate nowcast for the headline inflation for that month - which would only be officially published a few days later. In the case of GDP, this lag between the end of the reference period and actual publication tends to be significant, around 6-10 weeks. For policymakers, investors and other decision-makers, a lot can happen in this period.
 
 [^review]: @giannone2008nowcasting pioneered nowcasting in macroeconomics. See @bok2018nowcasting for a review.
 
@@ -35,8 +35,6 @@ To abstract from currency issues, we will use US inflation and oil prices, which
 
 ```{python}
 #| label: load packages
-from __future__ import annotations
-
 import os
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import keras
@@ -47,14 +45,14 @@ import sdmx
 from gingado.utils import load_SDMX_data
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.model_selection import TimeSeriesSplit
-from sklearn.preprocessing import PolynomialFeatures
 from tqdm import tqdm
+from typing import Callable
 ```
 
 
 ### Inflation
 
-Since this is a monthly nowcast of inflation, the best way to do this is to use a *monthly change in the consumer price index*, $\pi_t^{(m)}=(\text{CPI}_t - \text{CPI}_{t-1})/\text{CPI}_{t-1}$, not the year-on-year rate, $\pi_t^{(y)}=(\text{CPI}_t - \text{CPI}_{t-12})/\text{CPI}_{t-12}$, which is how people usually think of inflation. This is because we want to nowcast only the value at the margin; 11 twelths of $\pi_t^{(y)}$ are already known, since $\pi_t^{(y)} = -1 + \prod_{l=0}^{11} (1+\pi_{t-l})$. 
+Since this is a monthly nowcast of inflation, the best way to do this is to use a *monthly change in the consumer price index*, $\pi_t^{(m)}=(\text{CPI}_t - \text{CPI}_{t-1})/\text{CPI}_{t-1}$, not the year-on-year rate, $\pi_t^{(y)}=(\text{CPI}_t - \text{CPI}_{t-12})/\text{CPI}_{t-12}$, which is how people usually think of inflation. This is because we want to nowcast only the value at the margin; 11 twelfths of $\pi_t^{(y)}$ are already known, since $\pi_t^{(y)} = -1 + \prod_{l=0}^{11} (1+\pi_{t-l})$.
 
 Then, only at the end we combine rolling windows of 12 consecutive monthly inflation rates, of which only the last one or two are estimated, to correctly create an annual inflation rate. 
 
@@ -63,7 +61,7 @@ $$
 \hat{\pi}_t^{(y)}=(\prod_{l=0}^1 (1+\hat{\pi}_{t-l}^{(m)}) \prod_{l=2}^{11} (1+\pi_{t-l}^{(m)}) )-1,
 $$ {#eq-finalnowcast}
 
-where the hat notation ($\hat{ }$) means that a particular value was estimated.
+where the hat notation ($\hat{\pi}$) means that a particular value was estimated.
 
 For inflation, we take a dataflow from the [BIS](https://data.bis.org/topics/CPI), since we are looking for US data. Let's explore it first and then choose the correct data specifications to download the time series.[^sdmx]
 
@@ -508,7 +506,8 @@ A marked improvement in how we can model time series data is the use of recurren
 
 In contrast to the fully connected layer in @sec-fc, which need to look at different lags to pick up any history-dependent information, RNNs look at the observable variables at each period and learn a latent "state" (akin to Kalman filters, for example). The same network then slides up one step in time and uses that information and the previous state to update the state, and so on...
 
-One particular type of RNN that has proven to be very successful in practice is the long short-term memory (LSTM) model, due to @hochreiter1997long. It is actually a combination of four different layers, of which three are actually gates. These layers are built in a specific way. Here's how:
+One particular type of RNN that has proven to be very successful in practice is the long short-term memory (LSTM) model, due to @hochreiter1997long. It is actually a combination of four different layers, of which three are actually gates. These layers are built in a specific way.
+ Here's how the input vector $x_t$ and the learned LSTM state $h_{t-1}$ are used for the LSTM-forward pass at time step $t$:
 
 $$
 \begin{align}
@@ -525,7 +524,7 @@ where $\omega$ is the hyperbolic function.
 
 The basic intuition of the LSTM is that some of the individual component layers essentially learn to look at the current data and the past memory and then decide how much new information to let through. Note that, because their activation is a sigmoid, the output of layers $f_t$, $i_t$ and $o_t$ is a number between 0 and 1. This idea is important to bear in mind because it will be used at a much bigger scale by the whole TFT model - and will be one key feature of its interpretability.
 
-With LSTM networks, it is easier to incorporate mixed-frequency data in a meaningful way. This is done below by passing data of each frequency through their own LSTM layers, and combining their output.
+With LSTM networks, it is easier to incorporate mixed-frequency data in a meaningful way. This is done below by passing data of each frequency through their own LSTM layers, and combining their last outputs.
 
 ```{python}
 #| label: tbl-lstm_summary
@@ -567,7 +566,7 @@ Note that the input goes through a few steps before reaching the LSTM layer. Thi
 
 To check that the LSTM-based neural network works, we need to feed this neural network a slightly different type of data. LSTM, as other recurrent neural networks, takes in time series data. So, unlike before, we now prepare a time series (or panel data) for each 
 
-This neural network will then take in the inputed time series data, and encode each frequency's series separately through the different LSTM streams. The final result will no longer have a time dimension; it is then averaged, and this average embeddings of the different time series is used to forecast the variable of interest.
+This neural network will then take in the inputted time series data, and encode each frequency's series separately through the different LSTM streams. The final result will no longer have a time dimension; it is then averaged, and this average embeddings of the different time series is used to forecast the variable of interest.
 
 ```{python}
 #| label: train the lstm
@@ -630,18 +629,18 @@ class GatedLinearUnit(keras.Layer):
         d_model:int=16, # Embedding size, $d_\text{model}$
         dropout_rate:float|None=None, # Dropout rate
         use_time_distributed:bool=True, # Apply the GLU across all time steps?
-        activation:str|callable=None, # Activation function
+        activation:str|Callable|None=None, # Activation function
         **kwargs
     ):
         "Gated Linear Unit dynamically gates input data"
-        super(GatedLinearUnit, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.d_model = d_model
         self.dropout_rate = dropout_rate
         self.use_time_distributed = use_time_distributed
         self.activation = activation
 
     def build(self, input_shape):
-        super(GatedLinearUnit, self).build(input_shape)
+        super().build(input_shape)
         self.dropout = keras.layers.Dropout(self.dropout_rate) if self.dropout_rate is not None else None
         self.activation_layer = keras.layers.Dense(self.d_model, activation=self.activation)
         self.gate_layer = keras.layers.Dense(self.d_model, activation='sigmoid')
@@ -668,7 +667,7 @@ class GatedLinearUnit(keras.Layer):
         return self.multiply([activation_output, gate_output]), gate_output
 
     def get_config(self):
-        config = super(GatingLayer, self).get_config()
+        config = super().get_config()
         config.update({
             'd_model': self.d_model,
             'dropout_rate': self.dropout_rate,
@@ -684,7 +683,7 @@ $$
 \text{GLU}(x) = \sigma(W_{G} x + b_G) \odot (W_1 x + b_1),
 $$ {#eq-glu}
 
-with $W_{\text{GLU}} = \{W_G, W_1\} \in \mathbb{R}^{|x| \times \lambda}$ and $b_{\text{GLU}} = \{b_G, b_1\} \in \mathbb{R}^{\lambda}$.
+with $W_G, W_1 \in \mathbb{R}^{|x| \times \lambda}$ and $b_G, b_1 \in \mathbb{R}^{\lambda}$.
 
 ```{python}
 #| label: tbl-summary_glu
@@ -738,7 +737,7 @@ $$
 \text{GRN}(x) = \text{LayerNorm}(x + \text{GLU}(W_2 (\text{ELU}(W_1 x + b1 + W_c c )) + b_2)),
 $$ {#eq-grn}
 
-where $\text{LayerNorm}$ (@ba2016layer) normalises its inputs, ie subtracts its mean and divides by its standard deviation,[^layernorm] \text{ELU}$ is the exponential linear unit function (@clevert2015fast). Unlike ReLUs, ELUs allow for negative values, which pushes unit activations closer to zero at a lower computation complexity, and producing more accurate results. 
+where $\text{LayerNorm}$ (@ba2016layer) normalises its inputs, ie subtracts its mean and divides by its standard deviation,[^layernorm] $\text{ELU}$ is the exponential linear unit function (@clevert2015fast). Unlike ReLUs, ELUs allow for negative values, which pushes unit activations closer to zero at a lower computation complexity, and producing more accurate results.
 
 The final component in @eq-grn is $c \in \mathbb{R}^{\lambda}$, or a context vector - more on that below in @sec-timeembed. For the moment, we can use $c=\mathbf{0}$ the zero vector.
 
@@ -966,7 +965,7 @@ The embeddings themselves can be inspected, as in @fig-embed.
 #| fig-cap: Embedding values
 #| fig-subcap:
 #|   - Month of the year
-#|   - Quarter of theyear
+#|   - Quarter of the year
 
 plt.figure(figsize=(8, 6))
 plt.imshow(nn_embed.layers[2].get_weights()[0], cmap='viridis', aspect='auto')
@@ -1321,7 +1320,7 @@ keras.utils.plot_model(nn_vsn, show_shapes=True, show_layer_activations=True, sh
 
 The transformer architecture (@vaswani2023attentionneed) is based on an altogether different way to look at time series compared to recurrent neural networks as the LSTMs above. Its basic idea is to look at the whole sequence at the same time instead of sequentially. This allows the network to learn relevant connections between data that might be far off in time.
 
-Starting with just one frequency for clarity, consider we input time windows of size $N = k + \tau_{\text{max}}$, for $k$ the maximum number of lags and $\tau_{\text{max}}$ the number of forecasted steps. Each of these time steps is associated with a value vetor, $v \in \mathbb{R}^{\lambda_{\text{value}}}$; the time series of these values is $\mathbf{V} \in \mathbb{R}^{N \times \lambda_{\text{value}}}$. The self-attention mechanism will scale the $\mathbf{V}$ to reflect the similarity between two other vectors also associated with each time steps. 
+Starting with just one frequency for clarity, consider we input time windows of size $N = k + \tau_{\text{max}}$, for $k$ the maximum number of lags and $\tau_{\text{max}}$ the number of forecasted steps. Each of these time steps is associated with a value vector, $v \in \mathbb{R}^{\lambda_{\text{value}}}$; the time series of these values is $\mathbf{V} \in \mathbb{R}^{N \times \lambda_{\text{value}}}$. The self-attention mechanism will scale the $\mathbf{V}$ to reflect the similarity between two other vectors also associated with each time steps.
 
 These vectors are their keys and queries, respectively $\mathbf{K}, \mathbf{Q} \in \mathbb{R}^{\lambda_{\text{attention}}}$. "Attention" refers to how their similarity is calculated. Essentially, key vectors that are more similar to query vectors will generate larger numbers of "attention"; similarly, if they are orthogonal, this will result in a low or null attention between a pair of time steps. We follow common practice and calculate the attention weights using the dot-product between the key and query vectors, normalised by softmax to sum to one and span only the positive space:
 
@@ -1569,7 +1568,7 @@ keras.utils.plot_model(nn_imha, show_shapes=True, show_layer_names=True, show_la
 
 
 ```{python}
-#| label: train the lstm with multihead attention
+#| label: train the lstm with multi-head attention
 X_train_split, y_train_split = create_data(X=X_train, y=y_train, maxlags=maxlags)
 
 def adjust_data_lstm(fold="fold_0", chunk="train"):
@@ -1589,7 +1588,7 @@ history_imha = nn_imha.fit(x=lstm_X_train, y=np.array(y_train_split["fold_4"]["t
 
 ```{python}
 #| label: fig-history_imha
-#| fig-cap: Losses of the model with intepretable multi-head attention
+#| fig-cap: Losses of the model with interpretable multi-head attention
 
 imha_loss = history_imha.history
 imha_loss["val_loss_SDPA"] = history_sdpa.history["val_loss"]
@@ -1776,7 +1775,7 @@ class TFT(keras.Model):
             
         xi_hist, xi_fut, xi_stat = self.input_layer([cont_hist, cat_hist, cat_fut, cat_stat])
 
-        # selecing the static covariates
+        # selecting the static covariates
         static_selected_vars, static_selection_weights = self.svars(xi_stat, training=training)
 
         # create context vectors from static data

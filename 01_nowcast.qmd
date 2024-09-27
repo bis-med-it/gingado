@@ -60,7 +60,7 @@ $$
 \hat{\pi}_t^{(y)}=(\prod_{l=0}^1 (1+\hat{\pi}_{t-l}^{(m)}) \prod_{l=2}^{11} (1+\pi_{t-l}^{(m)}) )-1,
 $$ {#eq-finalnowcast}
 
-where the hat notation ($\hat{ }$) means that a particular value was estimated.
+where the hat notation ($\hat{\pi}$) means that a particular value was estimated.
 
 For inflation, we take a dataflow from the [BIS](https://data.bis.org/topics/CPI), since we are looking for US data. Let's explore it first and then choose the correct data specifications to download the time series.[^sdmx]
 

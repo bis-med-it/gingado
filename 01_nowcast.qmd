@@ -395,7 +395,7 @@ keras.utils.plot_model(nn_fc, show_shapes=True, show_layer_names=True, show_laye
 
 Note in @fig-arch_fc that a first dense layer (ie, as in @eq-model0nnlayer) takes in 262 data points, uses the activation function ReLU, and then outputs 16 data points for the next layer.[^NoneDim]
 
-[^NoneDim]: Ignore the `None` in the shapes; this means it dependets on each case. Specifically, the first dimension of the shapes in keras are always the number of samples going in the model. Because this varies with every training, application, etc, it is not fixed as the other dimensions are. Another way of thinking about this is as follows: in a regression, you know exactly how many variables you need to have, but the number of data points can vary.
+[^NoneDim]: Ignore the `None` in the shapes; this means the dimensionality along that axis depends on each case. Specifically, the first dimension of the shapes in keras are always the number of samples going in the model. Because this varies with every training, application, etc, it is not fixed as the other dimensions are. Another way of thinking about this is as follows: in a regression, you know exactly how many variables you need to have, but the number of data points can vary.
 
 Checking that it works. In the code below, we take the last fold as an example. 
 
@@ -821,7 +821,7 @@ class GatedResidualNetwork(keras.layers.Layer):
 
 ```{python}
 #| label: tbl-summary_grn
-#| tbl-cap: GRN Summary
+#| tbl-cap: Summary of GRN
 
 dim = 16
 
@@ -905,10 +905,12 @@ When working with categorical data, it is necessary to be explicit about the num
 #| label: set vocab sizes
 
 vocab_sizes = {col: time_feats[col].nunique() for col in time_feats}
+print(vocab_sizes)
 ```
 
 ```{python}
-#| label: embedding the temporal features
+#| label: tbl-summary_embed
+#| tbl-cap: Summary of model with embedding
 
 dim = 16
 
@@ -933,10 +935,15 @@ nn_embed.summary()
 ```
 
 ```{python}
+#| label: fig-arch_embed
+#| fig-label: Architecture of model with embeddings
+
 keras.utils.plot_model(nn_embed, show_shapes=True, show_layer_names=True, show_layer_activations=True)
 ```
 
 ```{python}
+#| label: fig-embed_loss
+#| fig-cap: Losses of model with embeddings
 history_embed = nn_embed.fit(x=y_timefeat_train, y=y_train_fc, validation_data=(y_timefeat_valid, y_valid_fc), epochs=20, batch_size=10, shuffle=True)
 ```
 
@@ -1039,21 +1046,20 @@ dim = 16
 keras.backend.clear_session()
 
 inputs_cont = keras.layers.Input(shape=(sum([v for v in maxlags.values()]),), name="FlattenedLaggedInput")
+continuous = keras.layers.Dense(dim, activation="relu")(inputs_cont)
 
 inputs_time = {
     k: keras.layers.Input(shape=(1,), name=k, dtype='int32')  # Input layer for each feature with shape (1,)
     for k in vocab_sizes.keys()
 }
-
 # Step 2: Create embedding layers for each input
 embedded_layers = {
-    k: keras.layers.Embedding(input_dim=v, output_dim=262, name=f"{k}_embedding")(inputs_time[k])
+    k: keras.layers.Embedding(input_dim=v, output_dim=dim, name=f"{k}_embedding")(inputs_time[k])
     for k, v in vocab_sizes.items()
 }
-
 context = keras.layers.Average()(list(embedded_layers.values()))
 
-gated_features, gate = GatedResidualNetwork(d_model=262, use_time_distributed=False, name="GRN")(inputs_cont, additional_context=context)
+gated_features, gate = GatedResidualNetwork(d_model=dim, use_time_distributed=False, name="GRN")(continuous, additional_context=context)
 
 output = keras.layers.Dense(units=16, activation="relu", name="SummariseInput")(gated_features)
 
@@ -1087,22 +1093,763 @@ ax.set_ylabel("Mean squared error")
 plt.show()
 ```
 
+## Encoding continuous variables {#sec-encodcont}
+
+The intuition on embeddings built from @sec-timeembed can also serve now to think about embedding, or encoding, continuous variables.
+
+In contrast to categorical variables like temporal features, or entity identity (ie, which country, or bank, or stock, etc), the possible values are not defined a priori. So there is no way to create a lookup table that will map a given category, say, the month of "September" to a specific vector.
+
+However, continuous variables can still be mapped into a vector space defined in $\mathbb{R}$, in a way that encodes useful information. The simplest way to achieve this is by training parameters of a linear transformation of each data point of variable $j$ in time $t$ into $\xi_t^{(j)} \in \mathbb{R}^{\lambda}$. 
+
+```{python}
+#| label: tbl-encodcont
+#| tbl-cap: Summary of network embedding continuous variable_weights
+
+inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
+
+encoded_inputs = {
+    k: keras.layers.TimeDistributed(
+        keras.layers.Dense(dim),
+        name=f"encoding__{k}"
+    )(v)
+    for k, v in inputs.items()
+}
+
+LSTMs = []
+for k, v in encoded_inputs.items():
+    lstm = keras.layers.Masking(mask_value=0.0)(v)
+    lstm = keras.layers.LSTM(units=dim, return_sequences=False, name=f"LSTM__freq_{k}")(lstm)
+    LSTMs.append(lstm)
+encoded_series = keras.layers.Average(name="encoded_series")(LSTMs)
+out = keras.layers.Dense(units = dim, activation="relu")(encoded_series)
+out = keras.layers.Dense(units=1)(out)
+
+nn_encodcont = keras.Model(
+    inputs=inputs, 
+    outputs=out,
+    name="EncodedContinuousVarsNetwork"
+)
+
+nn_encodcont.compile(loss=keras.losses.MeanSquaredError())
+nn_encodcont.summary()
+```
+
+```{python}
+#| label: fig-arch_encodcont
+#| fig-cap: Architecture of the network with encoded continuous variables before the LSTM layers
+
+keras.utils.plot_model(nn_encodcont, show_layer_activations=True, show_shapes=True, show_layer_names=True)
+```
+
+Compare this figure with @fig-arch_lstm. Note that while before, each LSTM received as input the original variable, now in @fig-arch_encodcont the inputs to the LSTMs are actually $\lambda=16$ latent variables for each raw data variable we included.
+
+The aim of this operation is to allow the model to learn richer nuance from the data in addition to the data point itself.
+
+
+```{python}
+#| label: train network with encoded continuous variables
+
+X_train_split, y_train_split = create_data(X=X_train, y=y_train, maxlags=maxlags)
+
+def adjust_data_lstm(fold="fold_0", chunk="train"):
+    X_lstm = {}
+    for d in X_train_split[fold][chunk]:
+        for key, array in d.items():
+            if key not in X_lstm:
+                X_lstm[key] = []  # Initialize an empty list if key is not present
+            X_lstm[key].append(array)  # Append the array to the list for that key
+    lstm_X = {k: np.squeeze(np.array(v), axis=1) for k, v in X_lstm.items()}
+    return lstm_X
+lstm_X_train = adjust_data_lstm(fold="fold_4", chunk="train")
+lstm_X_valid = adjust_data_lstm(fold="fold_4", chunk="valid")
+
+history_encodcont = nn_encodcont.fit(x=lstm_X_train, y=np.array(y_train_split["fold_4"]["train"]), validation_data=(lstm_X_valid, np.array(y_train_split["fold_4"]["valid"])), epochs=20, batch_size=10, shuffle=True)
+```
+
+Now that the network is trained, we can inspect how these embeddings of continuous variables work. Compare @fig-encodcontts below with @fig-embedts-3.
+
+```{python}
+#| label: fig-encodcontts
+#| fig-cap: Time series of continuous embedding
+#| fig-subcap:
+#|   - Monthly data
+#|   - Daily data
+
+encodcont_ts_m = nn_encodcont.get_layer("encoding__m")(np.expand_dims(lstm_X_train["m"][:,-1,0], axis=(0, -1)))
+plt.plot(np.squeeze(encodcont_ts_m))
+plt.show()
+
+encodcont_ts_m = nn_encodcont.get_layer("encoding__d")(np.expand_dims(lstm_X_train["d"][:,-1,0], axis=(0, -1)))
+plt.plot(np.squeeze(encodcont_ts_m))
+plt.show()
+```
+
 ## Variable selection networks {#sec-varsel}
 
 Now is a good time to put these elements together in a more directly useful way. In particular, we can consider how it can help select the most informative variables amongst a set of input series (eg, lagged inflation and oil prices in the current toy example.)
 
+The Variable Selection Networks (VSN) are components of the TFT that are built with GRNs, taking in each covariate and outputting a weighted average of the covariates, where the weights are learned by the model.
+
+VSNs can be used to select amongst continuous, categorical or even static variables. The code below focuses on the continuous variables of the current toy model, $\pi_m$ and $o_d$.
+
 
 
 ```{python}
-#| label: class vsn
+#| label: class tvs
 
+class TemporalVariableSelection(keras.Layer):
+    def __init__(
+        self, 
+        d_model:int=16, # Embedding size, $d_\text{model}$
+        dropout_rate:float=0., 
+        **kwargs
+    ):
+        "Temporal variable selection"
+        super(TemporalVariableSelection, self).__init__(**kwargs)
+        self.d_model = d_model
+        self.dropout_rate = dropout_rate
+
+        self.mult = keras.layers.Multiply()
+
+    def build(self, input_shape):
+        super(TemporalVariableSelection, self).build(input_shape)
+        self.batch_size, self.time_steps, self.num_input_vars, self.d_model = input_shape
+
+        self.var_sel_weights = GatedResidualNetwork(
+            d_model=self.d_model,
+            output_size=self.num_input_vars,
+            dropout_rate=self.dropout_rate,
+            use_time_distributed=True,
+        )
+        self.softmax = keras.layers.Activation('softmax')
+    
+        # Create a GRN for each temporal variable
+        self.grns_transformed_embeddings = GatedResidualNetwork(
+                d_model=self.d_model,
+                dropout_rate=self.dropout_rate,
+                use_time_distributed=True
+        )
+
+    def call(
+        self, 
+        inputs, # List of temporal embeddings, static context
+        context=None, # Used for static_context in the TFT
+        training=None
+    ):
+        temporal_embeddings = inputs
+
+        flattened_embed = keras.ops.reshape(
+            temporal_embeddings,
+            (-1, self.time_steps, self.num_input_vars * self.d_model)
+        )
+        parallel_variables = keras.ops.reshape(
+            temporal_embeddings, 
+            (-1, self.time_steps, self.d_model)
+        ) # tensor is shaped this way so that a GRN can be applied to each variable of each batch
+        c_s = keras.ops.expand_dims(static_context, axis=1) if context else None
+
+        # variable weights
+        grn_outputs, _ = self.var_sel_weights(flattened_embed, c_s, training=training)
+        variable_weights = self.softmax(grn_outputs)
+        variable_weights = keras.ops.expand_dims(variable_weights, axis=2)
+
+        transformed_embeddings, _ = self.grns_transformed_embeddings(parallel_variables, training=training)
+        transformed_embeddings = keras.ops.reshape(
+            transformed_embeddings,
+            [-1, self.time_steps, self.num_input_vars, self.d_model]
+        )
+        temporal_vec = keras.ops.einsum('btij,btjk->btk', variable_weights, transformed_embeddings)
+        return temporal_vec, keras.ops.squeeze(variable_weights, axis=2)
+```
+
+```{python}
+#| label: tbl-summary_vsn
+#| tbl-cap: Summary of VSN (work in progress)
+
+dim = 16 # arbitrary dimension
+
+freqs = ["m", "d"] # using here the commonly-used frequency abbreviations
+
+inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
+
+# encode each variable into R^dim before passing to the VSN
+encoded_series = {f: keras.layers.TimeDistributed(keras.layers.Dense(dim, activation="relu", name=f"encoding_{f}"))(inputs[f]) for f in inputs.keys()}
+encoded_series = {k: keras.ops.expand_dims(v, axis=2) for k, v in encoded_series.items()} # add a `variable` dimension in axis=2. axis=3 reserved for the embedding dimension
+encoded_series = keras.ops.concatenate([v for v in encoded_series.values()], axis=2)
+# VSN
+####
+# TemporalVariableSelection(d_model=dim)(encoded_series)
+####
+flattened = keras.layers.Reshape((-1, len(inputs)*dim))(encoded_series)
+grn_flattened, _ = GatedResidualNetwork(
+            d_model=dim,
+            output_size=len(inputs),
+            dropout_rate=0.,
+            use_time_distributed=True,
+        )(flattened)
+weights = keras.layers.Activation("softmax")(grn_flattened)
+
+######
+
+LSTMs = []
+for k, v in inputs.items():
+    lstm = keras.layers.Masking(mask_value=0.0)(v)
+    lstm = keras.layers.LSTM(units=dim, return_sequences=False, name=f"LSTM__freq_{k}")(lstm)
+    LSTMs.append(lstm)
+
+encoded_series = keras.layers.Average(name="encoded_series")(LSTMs)
+out = keras.layers.Dense(units = dim, activation="relu", name="FinalFeatureTransformation")(encoded_series)
+out = keras.layers.Dense(units=1)(out)
+
+nn_vsn = keras.Model(
+    inputs=inputs, 
+    outputs=weights,
+    name="VSN"
+)
+nn_vsn.compile(loss=keras.losses.MeanSquaredError())
+nn_vsn.summary()
+```
+
+
+```{python}
+#| label: fig-arch_vsn
+#| fig-cap: Architecture of model with variable selection network
+keras.utils.plot_model(nn_vsn, show_shapes=True, show_layer_activations=True, show_layer_names=True)
 ```
 
 ## Now is a(nother) good time to pay attention {#sec-transf}
 
+The transformer architecture (@vaswani2023attentionneed) is based on an altogether different way to look at time series compared to recurrent neural networks as the LSTMs above. Its basic idea is to look at the whole sequence at the same time instead of sequentially. This allows the network to learn relevant connections between data that might be far off in time.
+
+Starting with just one frequency for clarity, consider we input time windows of size $N = k + \tau_{\text{max}}$, for $k$ the maximum number of lags and $\tau_{\text{max}}$ the number of forecasted steps. Each of these time steps is associated with a value vetor, $v \in \mathbb{R}^{\lambda_{\text{value}}}$; the time series of these values is $\mathbf{V} \in \mathbb{R}^{N \times \lambda_{\text{value}}}$. The self-attention mechanism will scale the $\mathbf{V}$ to reflect the similarity between two other vectors also associated with each time steps. 
+
+These vectors are their keys and queries, respectively $\mathbf{K}, \mathbf{Q} \in \mathbb{R}^{\lambda_{\text{attention}}}$. "Attention" refers to how their similarity is calculated. Essentially, key vectors that are more similar to query vectors will generate larger numbers of "attention"; similarly, if they are orthogonal, this will result in a low or null attention between a pair of time steps. We follow common practice and calculate the attention weights using the dot-product between the key and query vectors, normalised by softmax to sum to one and span only the positive space:
+
+$A(\mathbf{Q}, \mathbf{K}) = \text{Softmax}(\mathbf{Q}\mathbf{K}'/\sqrt{\lambda_{\text{attention}}})$.
+
+```{python}
+#| label: class ScaledDotProductAttention
+
+class ScaledDotProductAttention(keras.Layer):
+    def __init__(
+        self,
+        dropout_rate:float=0.0, # Will be ignored if `training=False`
+        **kwargs
+    ):
+        super(ScaledDotProductAttention, self).__init__(**kwargs)
+        self.dropout_rate = dropout_rate
+
+    def build(self, input_shape):
+        super(ScaledDotProductAttention, self).build(input_shape)
+        self.dropout = keras.layers.Dropout(rate=self.dropout_rate)
+        self.activation = keras.layers.Activation('softmax')
+        self.dot_22 = keras.layers.Dot(axes=(2, 2)) # both inputs need to have the same size in their axis=2 dimensions, in this case, d_model for both
+        self.dot_21 = keras.layers.Dot(axes=(2, 1)) # the size of the first input's axis=2 dimension needs to match the size of the second input's axis=1 dimension
+        self.lambda_layer = keras.layers.Lambda(lambda x: (-1e9) * (1. - keras.ops.cast(x, 'float32')))
+        self.add = keras.layers.Add()
+
+    def call(
+        self,
+        q, # Queries, tensor of shape (?, time, D_model)
+        k, # Keys, tensor of shape (?, time, D_model)
+        v, # Values, tensor of shape (?, time, D_model)
+        mask, # Masking if required (sets Softmax to very large value), tensor of shape (?, time, time)
+        training=None, # Whether the layer is being trained or used in inference
+    ):
+        # returns Tuple (layer outputs, attention weights)
+        scale = keras.ops.sqrt(keras.ops.cast(keras.ops.shape(k)[-1], dtype='float32'))
+        attention = self.dot_22([q, k]) / scale
+        #attention = keras.ops.einsum("bij,bjk->bik", q, keras.ops.transpose(k, axes=(0, 2, 1))) / scale
+        if mask is not None:
+            mmask = self.lambda_layer(mask)
+            attention = self.add([attention, mmask])
+        attention = self.activation(attention)
+        if training:
+            attention = self.dropout(attention)
+        output = self.dot_21([attention, v])
+        #output = keras.ops.einsum("btt,btd->bt", attention, v)
+        return output, attention
+```
+
+```{python}
+#| label: tbl-summary_sdpa
+#| tbl-cap: Summary of network with attention
+
+dim = 16 # arbitrary dimension
+
+freqs = ["m", "d"]
+
+inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
+
+encoded_inputs = {
+    k: keras.layers.TimeDistributed(
+        keras.layers.Dense(dim),
+        name=f"encoding__{k}"
+    )(v)
+    for k, v in inputs.items()
+}
+
+Attns = []
+LSTMs = []
+for k, v in encoded_inputs.items():
+    attn, attn_weights = ScaledDotProductAttention(name=f"Attention__freq_{k}")(q=v, k=v, v=v, mask=None)
+    Attns.append(attn)
+    lstm = keras.layers.LSTM(units=dim, return_sequences=False, name=f"LSTM__freq_{k}")(attn)
+    LSTMs.append(lstm)
+
+encoded_series = keras.layers.Concatenate(name="encoded_series")(LSTMs)
+out = keras.layers.Dense(units = dim, activation="relu")(encoded_series)
+out = keras.layers.Dense(units=1)(out)
+
+nn_sdpa = keras.Model(
+    inputs=inputs, 
+    outputs=out,
+    name="Attention"
+)
+nn_sdpa.compile(loss=keras.losses.MeanSquaredError())
+nn_sdpa.summary()
+```
+
+```{python}
+#| label: fig-arch_sdpa
+#| fig-cap: Architecture of the multi-frequency attention Model
+
+keras.utils.plot_model(nn_sdpa, show_shapes=True, show_layer_names=True, show_layer_activations=True)
+```
+
+Note that in this simple model, the way the different frequencies are combined in @fig-arch_sdpa is by passing the result of the respective self-attention layers (each with their own size along the time dimension due to different frequencies) through their own LSTM layer returning one value. This value is then weighted by a dense network, producing the output.
+
+```{python}
+#| label: train the lstm with attention
+X_train_split, y_train_split = create_data(X=X_train, y=y_train, maxlags=maxlags)
+
+def adjust_data_lstm(fold="fold_0", chunk="train"):
+    X_lstm = {}
+    for d in X_train_split[fold][chunk]:
+        for key, array in d.items():
+            if key not in X_lstm:
+                X_lstm[key] = []  # Initialize an empty list if key is not present
+            X_lstm[key].append(array)  # Append the array to the list for that key
+    lstm_X = {k: np.squeeze(np.array(v), axis=1) for k, v in X_lstm.items()}
+    return lstm_X
+lstm_X_train = adjust_data_lstm(fold="fold_4", chunk="train")
+lstm_X_valid = adjust_data_lstm(fold="fold_4", chunk="valid")
+
+history_sdpa = nn_sdpa.fit(x=lstm_X_train, y=np.array(y_train_split["fold_4"]["train"]), validation_data=(lstm_X_valid, np.array(y_train_split["fold_4"]["valid"])), epochs=20, batch_size=10, shuffle=True)
+```
+
+```{python}
+#| label: fig-history_sdpa
+#| fig-cap: Losses of the model with attention
+
+ax = pd.DataFrame(history_sdpa.history).plot()
+ax.set_xlabel("Epochs")
+ax.set_ylabel("Mean squared error")
+plt.show()
+```
+
+Taking this concept of an attention layer further is the interpretable multi-head attention layer. This is just a combination of different scaled dot-product attention layers with the following actions:
+
+- linear transformation of the query, keys and values before being passed to each attention layer,
+
+- concatenation and a linear combination of the results of the layer.
+
+In effect, this allows the attention layers to attend to different aspects of the time series. For example, one attention head might focus on seasonality issues, while another on non-linearities and jumps in volatility.
+
+Note that there is no way to know in advance what aspects each head will be focusing on. However, this can be inspected (and subjectively interpreted) ex post.
+
+```{python}
+#| label: class interpretablemultiheadattention
+
+class InterpretableMultiHeadAttention(keras.Layer):
+    def __init__(
+        self,
+        n_head:int=4,
+        d_model:int=16, # Embedding size, $d_\text{model}$
+        dropout_rate:float=0.0, # Will be ignored if `training=False`
+        **kwargs
+    ):
+        super(InterpretableMultiHeadAttention, self).__init__(**kwargs)
+        self.n_head = n_head
+        self.d_model = d_model
+        self.d_qk = self.d_v = d_model // n_head # the original model divides by number of heads
+        self.dropout_rate = dropout_rate
+
+    def build(self, input_shape):
+        super(InterpretableMultiHeadAttention, self).build(input_shape)
+        
+        # using the same value layer facilitates interpretability
+        vs_layer = keras.layers.Dense(self.d_v, use_bias=False, name="shared_attn_value")
+
+        # creates list of queries, keys and values across heads
+        self.qs_layers = [keras.layers.Dense(self.d_qk) for _ in range(self.n_head)]
+        self.ks_layers = [keras.layers.Dense(self.d_qk) for _ in range(self.n_head)]
+        self.vs_layers = [vs_layer for _ in range(self.n_head)]
+
+        self.attention = ScaledDotProductAttention(dropout_rate=self.dropout_rate)
+        self.w_o = keras.layers.Dense(self.d_model, use_bias=False, name="W_v") # W_v in Eqs. (14)-(16), output weight matrix to project internal state to the original TFT
+        self.dropout = keras.layers.Dropout(self.dropout_rate)
+
+    def call(
+        self,
+        q, # Queries, tensor of shape (?, time, d_model)
+        k, # Keys, tensor of shape (?, time, d_model)
+        v, # Values, tensor of shape (?, time, d_model)
+        mask=None, # Masking if required (sets Softmax to very large value), tensor of shape (?, time, time)
+        training=None
+    ):
+        heads = []
+        attns = []
+        for i in range(self.n_head):
+            qs = self.qs_layers[i](q)
+            ks = self.ks_layers[i](q)
+            vs = self.vs_layers[i](v)
+           
+            head, attn = self.attention(qs, ks, vs, mask, training=training)
+            if training:
+                head = self.dropout(head)
+            heads.append(head)
+            attns.append(attn)
+        head = keras.ops.stack(heads) if self.n_head > 1 else heads[0]
+        attn = keras.ops.stack(attns)
+
+        outputs = keras.ops.mean(head, axis=0) if self.n_head > 1 else head # H_tilde
+        outputs = self.w_o(outputs)
+        if training:
+            outputs = self.dropout(outputs)
+
+        return outputs, attn
+```
+
+```{python}
+#| label: tbl-imha
+#| tbl-cap: Summary of network with interpretable multi-head attention
+
+dim = 16 # arbitrary dimension
+
+freqs = ["m", "d"]
+
+inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
+
+encoded_inputs = {
+    k: keras.layers.TimeDistributed(
+        keras.layers.Dense(dim),
+        name=f"encoding__{k}"
+    )(v)
+    for k, v in inputs.items()
+}
+
+Attns = []
+LSTMs = []
+for k, v in encoded_inputs.items():
+    attn, attn_weights = InterpretableMultiHeadAttention(name=f"IMHA__freq_{k}")(q=v, k=v, v=v, mask=None)
+    Attns.append(attn)
+    lstm = keras.layers.LSTM(units=dim, return_sequences=False, name=f"LSTM__freq_{k}")(attn)
+    LSTMs.append(lstm)
+
+encoded_series = keras.layers.Concatenate(name="encoded_series")(LSTMs)
+out = keras.layers.Dense(units = dim, activation="relu")(encoded_series)
+out = keras.layers.Dense(units=1)(out)
+
+nn_imha = keras.Model(
+    inputs=inputs, 
+    outputs=out,
+    name="Attention"
+)
+nn_imha.compile(loss=keras.losses.MeanSquaredError())
+nn_imha.summary()
+```
+
+```{python}
+#| label: fig-arch_imha
+#| fig-cap: Architecture of the model with multi-frequency interpretable multi-head attention
+
+keras.utils.plot_model(nn_imha, show_shapes=True, show_layer_names=True, show_layer_activations=True)
+```
+
+
+```{python}
+#| label: train the lstm with multihead attention
+X_train_split, y_train_split = create_data(X=X_train, y=y_train, maxlags=maxlags)
+
+def adjust_data_lstm(fold="fold_0", chunk="train"):
+    X_lstm = {}
+    for d in X_train_split[fold][chunk]:
+        for key, array in d.items():
+            if key not in X_lstm:
+                X_lstm[key] = []  # Initialize an empty list if key is not present
+            X_lstm[key].append(array)  # Append the array to the list for that key
+    lstm_X = {k: np.squeeze(np.array(v), axis=1) for k, v in X_lstm.items()}
+    return lstm_X
+lstm_X_train = adjust_data_lstm(fold="fold_4", chunk="train")
+lstm_X_valid = adjust_data_lstm(fold="fold_4", chunk="valid")
+
+history_imha = nn_imha.fit(x=lstm_X_train, y=np.array(y_train_split["fold_4"]["train"]), validation_data=(lstm_X_valid, np.array(y_train_split["fold_4"]["valid"])), epochs=20, batch_size=10, shuffle=True)
+```
+
+```{python}
+#| label: fig-history_imha
+#| fig-cap: Losses of the model with intepretable multi-head attention
+
+imha_loss = history_imha.history
+imha_loss["val_loss_SDPA"] = history_sdpa.history["val_loss"]
+
+ax = pd.DataFrame(imha_loss).plot()
+ax.set_xlabel("Epochs")
+ax.set_ylabel("Mean squared error")
+plt.show()
+```
+
 ## Complete architecture {#sec-tftmf}
 
+This section uses the following notation, using as much as possible the original TFT paper notation.
+
+- Panel data
+  - individuals (countries, banks, households, etc) are indexed by $i \in (1, \dots, I)$.
+  - time steps are indexed by $t \in (t0, t1, \dots, T)$
+- Input variables
+  - static variables: $s_i \in \mathbb{R}^{m_s}$, for $m_s$ the number of static variables for each individual $i$
+  - time-dependent variables: $\chi_{i,t} \in \mathbb{R}^{m_{\chi}}$, for $m_{\chi}$ the number of time-dependent variable
+- Model dimensionality
+  - $k(f)$ is the number of lags for each frequency
+  - $\tau_{\text{max}}$ is the number of steps ahead that is forecasted for the dependent variable $y$
+  - $N$ is the number of time steps that feed into the attention layer
+
+```{python}
+#| label: class tft
+
+class TFT(keras.Model):
+    def __init__(
+        self,
+        quantiles=[0.05, 0.25, 0.5, 0.75, 0.95],
+        d_model:int=16, # Embedding size, $d_\text{model}$
+        output_size:int=1, # How many periods to nowcast/forecast?
+        n_head:int=4,
+        dropout_rate:float=0.1,
+        skip_attention:bool=False, # Build a partial TFT without attention
+        **kwargs
+    ):
+        super(TFT, self).__init__(**kwargs)
+        self.quantiles = quantiles
+        self.d_model = d_model
+        self.output_size = output_size
+        self.n_head = n_head
+        self.dropout_rate = dropout_rate
+        self.skip_attention = skip_attention
+
+    def build(self, input_shape):
+        super(TFT, self).build(input_shape)
+        
+        self.input_layer = InputTFT(
+            d_model=self.d_model,
+            name="input"
+        )
+        self.svars = StaticVariableSelection(
+            d_model=self.d_model,
+            dropout_rate=self.dropout_rate,
+            name="static_variable_selection"
+        )
+        self.tvars_hist = TemporalVariableSelection(
+            d_model=self.d_model,
+            dropout_rate=self.dropout_rate,
+            name="historical_variable_selection"
+        )
+        self.tvars_fut = TemporalVariableSelection(
+            d_model=self.d_model,
+            dropout_rate=self.dropout_rate,
+            name="future_variable_selection"
+        )
+        self.static_context_s_grn = GatedResidualNetwork(
+            d_model=self.d_model,
+            dropout_rate=self.dropout_rate,
+            use_time_distributed=False,
+            name="static_context_for_variable_selection"
+        )
+        self.static_context_h_grn = GatedResidualNetwork(
+            d_model=self.d_model,
+            dropout_rate=self.dropout_rate,
+            use_time_distributed=False,
+            name="static_context_for_LSTM_state_h"
+        )
+        self.static_context_c_grn = GatedResidualNetwork(
+            d_model=self.d_model,
+            dropout_rate=self.dropout_rate,
+            use_time_distributed=False,
+            name="static_context_for_LSTM_state_c"
+        )
+        self.static_context_e_grn = GatedResidualNetwork(
+            d_model=self.d_model,
+            dropout_rate=self.dropout_rate,
+            use_time_distributed=False,
+            name="static_context_for_enrichment_of"
+        )
+        self.temporal_features = TemporalFeatures(
+            d_model=self.d_model,
+            dropout_rate=self.dropout_rate,
+            name="LSTM_encoder"
+        )
+        self.static_context_enrichment = GatedResidualNetwork(
+            d_model=self.d_model,
+            dropout_rate=self.dropout_rate,
+            use_time_distributed=True,
+            name="static_context_enrichment"
+        )
+        if not self.skip_attention:
+            self.attention = InterpretableMultiHeadAttention(
+                n_head=self.n_head,
+                d_model=self.d_model,
+                dropout_rate=self.dropout_rate,
+                name="attention_heads"
+            )
+            self.attention_gating = GatedLinearUnit(
+                d_model=self.d_model,
+                dropout_rate=self.dropout_rate,
+                use_time_distributed=True,
+                activation=None,
+                name="attention_gating"
+            )
+            self.attn_grn = GatedResidualNetwork(
+                d_model=self.d_model,
+                dropout_rate=self.dropout_rate,
+                use_time_distributed=True,
+                name="output_nonlinear_processing"
+            )
+            self.final_skip = GatedLinearUnit(
+                d_model=self.d_model,
+                dropout_rate=self.dropout_rate,
+                use_time_distributed=True,
+                activation=None,
+                name="final_skip_connection"
+            )
+            self.add = layers.Add()
+        self.l_norm = layers.LayerNormalization()
+        
+        self.flat = layers.Flatten(name="flatten")
+
+
+        # Output layers:
+        # In order to enforce monotonicity of the quantiles, forecast only the lowest quantile
+        # from a base forecast layer, and use output_len - 1 additional layers with ReLU activation
+        # to produce the difference between the current quantile and the previous one
+        output_len = len(self.quantiles)
+
+        self.base_output_layer = layers.TimeDistributed(
+            layers.Dense(1),
+            name="output"
+        )
+        def elu_plus(x):
+            return keras.activations.elu(x) + 1
+
+        self.quantile_diff_layers = [
+            layers.TimeDistributed(
+                layers.Dense(1, activation=elu_plus),
+                name=f"quantile_diff_{i}"
+            ) 
+            for i in range(output_len - 1)
+        ]
+
+    def get_config(self):
+        config = super().get_config()
+        config.update(
+            {
+                "quantiles": self.quantiles,
+                "d_model": self.d_model,
+                "output_size": self.output_size,
+                "n_head": self.n_head,
+                "dropout_rate" :self.dropout_rate,
+                "skip_attention":  self.skip_attention,
+            }
+        )
+        return config
+    
+    def call(
+        self,
+        inputs,
+        training=None
+    ):
+        "Creates the model architecture"
+        
+        # embedding the inputs
+        cont_hist, cat_hist, cat_fut, cat_stat = inputs
+        if len(cat_stat.shape) == 2:
+            cat_stat = keras.ops.expand_dims(cat_stat, axis=-1)
+            
+        xi_hist, xi_fut, xi_stat = self.input_layer([cont_hist, cat_hist, cat_fut, cat_stat])
+
+        # selecing the static covariates
+        static_selected_vars, static_selection_weights = self.svars(xi_stat, training=training)
+
+        # create context vectors from static data
+        c_s, _ = self.static_context_s_grn(static_selected_vars, training=training) # for variable selection
+        c_h, _ = self.static_context_h_grn(static_selected_vars, training=training) # for LSTM state h
+        c_c, _ = self.static_context_c_grn(static_selected_vars, training=training) # for LSTM state c
+        c_e, _ = self.static_context_e_grn(static_selected_vars, training=training) # for context enrichment of post-LSTM features
+
+        # temporal variable selection
+        hist_selected_vars, hist_selection_weights = self.tvars_hist(
+            [xi_hist, c_s],
+            training=training
+        )
+        fut_selected_vars, fut_selection_weights = self.tvars_fut(
+            [xi_fut, c_s],
+            training=training
+        )
+        input_embeddings = keras.ops.concatenate(
+            [hist_selected_vars, fut_selected_vars],
+            axis=1
+        )
+
+        features = self.temporal_features(
+            [hist_selected_vars, fut_selected_vars, c_h, c_c],
+            training=training
+        )
+        
+        # static context enrichment
+        enriched, _ = self.static_context_enrichment(
+            features, 
+            additional_context=keras.ops.expand_dims(c_e, axis=1),
+            training=training
+        )
+        if not self.skip_attention:
+            mask = get_decoder_mask(enriched)
+            attn_output, self_attn = self.attention(
+                q=enriched,
+                k=enriched,
+                v=enriched,
+                mask=mask,
+                training=training
+            )
+            attn_output, _ = self.attention_gating(attn_output)
+            output = self.add([enriched, attn_output])
+            output = self.l_norm(output)
+            output, _ = self.attn_grn(output)
+            output, _ = self.final_skip(output)
+            output = self.add([features, output])
+        else:
+            output = enriched
+        output = self.l_norm(output)
+        
+        # Base quantile output
+        base_output = output[Ellipsis,hist_selected_vars.shape[1]:,:]
+        base_quantile = self.base_output_layer(base_output)
+                
+        # Additional layers for remaining quantiles
+        quantile_outputs = [base_quantile]
+        for i in range(len(self.quantiles) - 1):
+            quantile_diff = self.quantile_diff_layers[i](base_output)
+            quantile_output = quantile_outputs[-1] + quantile_diff
+            quantile_outputs.append(quantile_output)
+
+        final_output = keras.ops.concatenate(quantile_outputs, axis=-1)
+        
+        return final_output
+```
+
 ## Nowcasting inflation with a simple model {#sec-nowcast}
+
+It all boils down to this: using past data, coupled with higher frequency current data, to nowcast current values. Continuing with the simplistic example in this page, now it is time to nowcast monthly inflation from its lags and from daily changes in oil prices.
+
+
 
 ## References
 

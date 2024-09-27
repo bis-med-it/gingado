@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-import gingado.temporal.temporal as tp
+import gingado.temporal.features as tp
 from gingado.temporal.types import (
     DayFeatures,
     Frequency,

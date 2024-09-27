@@ -5,7 +5,6 @@ from pandas.testing import assert_index_equal
 from sklearn.dummy import DummyRegressor  # type: ignore
 from sklearn.pipeline import Pipeline  # type: ignore
 
-from gingado.temporal.transformer import TemporalFeatureTransformer
 from gingado.temporal.types import (
     DayFeatures,
     Frequency,
@@ -13,6 +12,7 @@ from gingado.temporal.types import (
     QuarterFeatures,
     WeekFeatures,
 )
+from gingado.utils import TemporalFeatureTransformer
 
 
 @pytest.fixture

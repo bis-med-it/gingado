@@ -46,6 +46,7 @@ from gingado.utils import load_SDMX_data
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.model_selection import TimeSeriesSplit
 from tqdm import tqdm
+from typing import Callable
 ```
 
 
@@ -627,18 +628,18 @@ class GatedLinearUnit(keras.Layer):
         d_model:int=16, # Embedding size, $d_\text{model}$
         dropout_rate:float|None=None, # Dropout rate
         use_time_distributed:bool=True, # Apply the GLU across all time steps?
-        activation:str|callable=None, # Activation function
+        activation:str|Callable|None=None, # Activation function
         **kwargs
     ):
         "Gated Linear Unit dynamically gates input data"
-        super(GatedLinearUnit, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.d_model = d_model
         self.dropout_rate = dropout_rate
         self.use_time_distributed = use_time_distributed
         self.activation = activation
 
     def build(self, input_shape):
-        super(GatedLinearUnit, self).build(input_shape)
+        super().build(input_shape)
         self.dropout = keras.layers.Dropout(self.dropout_rate) if self.dropout_rate is not None else None
         self.activation_layer = keras.layers.Dense(self.d_model, activation=self.activation)
         self.gate_layer = keras.layers.Dense(self.d_model, activation='sigmoid')
@@ -665,7 +666,7 @@ class GatedLinearUnit(keras.Layer):
         return self.multiply([activation_output, gate_output]), gate_output
 
     def get_config(self):
-        config = super(GatingLayer, self).get_config()
+        config = super().get_config()
         config.update({
             'd_model': self.d_model,
             'dropout_rate': self.dropout_rate,

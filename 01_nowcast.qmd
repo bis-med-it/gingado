@@ -35,8 +35,6 @@ To abstract from currency issues, we will use US inflation and oil prices, which
 
 ```{python}
 #| label: load packages
-from __future__ import annotations
-
 import os
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import keras
@@ -47,7 +45,6 @@ import sdmx
 from gingado.utils import load_SDMX_data
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.model_selection import TimeSeriesSplit
-from sklearn.preprocessing import PolynomialFeatures
 from tqdm import tqdm
 ```
 

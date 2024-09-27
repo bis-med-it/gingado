@@ -25,9 +25,11 @@ The nowcasting model available in `gingado` from v0.3.0 onwards is an adjusted v
 
 ## Roadmap
 
-The TFT model can be a bit complex to understand at first, so we will build it up, step by step. After loading the data in @sec-data, the most basic neural network - a neuron layer - is presented in @sec-fc. Then a simple extension is shown where a neural network learns which data to let through or not in @sec-glu. Armed with these elements, @sec-lstm discusses the next architecture, more suitable for time series. Next, these elements are combined in @sec-gates to show how the model knows what to focus on. @sec-timeembed introduces the concept of embeddings of categorical variables. All this content is then put together in a way that dynamically selects useful inputs for each instance in @sec-varsel. The next component is the self-attention layer in @sec-transf. Finally, if you want to see the full picture directly, go to @sec-tftmf to see how these elements are put together. @sec-nowcast then trains the model and presents the results for this simple, illustrative nowcasting.
+The TFT model can be a bit complex to understand at first, so we will build it up, step by step. After loading the data in @sec-data, the most basic neural network - a neuron layer - is presented in @sec-fc. Then a simple extension is shown where a neural network learns which data to let through or not in @sec-glu. Armed with these elements, @sec-lstm discusses the next architecture, more suitable for time series. Next, these elements are combined in @sec-gates to show how the model knows what to focus on. @sec-timeembed introduces the concept of embeddings of categorical variables, while @sec-encodcont explores this in the context of continuous variables. All this content is then put together in a way that dynamically selects useful inputs for each instance in @sec-varsel. The next component is the self-attention layer in @sec-transf. Finally, if you want to see the full picture directly, go to @sec-tftmf to see how these elements are put together. @sec-nowcast then trains the model and presents the results for this simple, illustrative nowcasting.
 
-## Loading the data {#sec-data}
+## Loading the packages[^mac] and data {#sec-data}
+
+[^mac]: Mac users might need to include the following line after importing the package `os` and before importing `keras`: `os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"`.
 
 Let's use our SDMX connectors to find and download data from official sources in a reproducible way.
 
@@ -36,7 +38,7 @@ To abstract from currency issues, we will use US inflation and oil prices, which
 ```{python}
 #| label: load packages
 import os
-os.environ["KERAS_BACKEND"] = "tensorflow"
+os.environ["KERAS_BACKEND"] = "tensorflow" # or "torch", "jax" according to user preference
 import keras
 import matplotlib.pyplot as plt
 import numpy as np
@@ -285,7 +287,7 @@ X_test = {"m": Xm_test, "d": Xd_test}
 
 Now for every month $m$ in the dependent variable, we can find all $m_{t-l}, l\geq 1$ and all $d(m_{t-s}), s\geq 0$.
 
-Note that in the example below, for each data point that we want to forecast (`y`), we take 12 lags of the monthly covariates and 250 lags of the daily covariates.
+Note that in the example below, for each data point that we want to forecast (`y`), we take 12 lags of the monthly covariates and 250 lags of the daily covariates (broadly corresponding to one year).
 
 ```{python}
 #| label: create data
@@ -334,7 +336,9 @@ X_train_split, y_train_split = create_data(X=X_train, y=y_train, maxlags=maxlags
 
 
 
-Let's see how this time series fold will be structured. Each fold is a sequentially longer window, so we get the following data points:
+Let's see how this time series fold will be structured. Each fold is a sequentially longer window, so we get the following data points:[^difflengths]
+
+[^difflengths]: The division of the data between folds might produce slightly unequal-sized folds, as can be seen in the current example. 
 
 ```{python}
 #| label: "Create batches of data"
@@ -345,6 +349,13 @@ for fold in y_train_split.keys():
     print(f"  {len(y_train_split[fold]['valid'])} validation X-y pairs")
 ```
 
+Another way to visualise this is in @fig-tssplit, which shows a similar division of dataset along the time dimension, albeit for four folds.
+
+::: {#fig-tssplit}
+
+![Time series split illustration](https://scikit-learn.org/stable/_images/sphx_glr_plot_cv_indices_013.png){fig-scap='Source: scikit-learn.org'}
+
+:::
 ## A simple, fully connected neural network {#sec-fc}
 
 The goal of this model is to nowcast $\pi_t$ based on its past values $\pi_{t-1}$ and on current oil prices $o_{d(m-s)}, s \geq 0$. The first model we will train is a very simple neural network:
@@ -457,8 +468,8 @@ Note that the data that informs the gate does not necessarily need to be the sam
 #| label: tbl-nn_fc_gated_summary
 #| tbl-cap: Summary of gated model
 
-mainstream = createNN_fc(activation="relu")
-gate = createNN_fc(activation="sigmoid")
+#mainstream = createNN_fc(activation="relu")
+#gate = createNN_fc(activation="sigmoid")
 
 dim = 16
 input = keras.layers.Input(shape=(sum([v for v in maxlags.values()]),), name="FlattenedLaggedData")
@@ -1720,10 +1731,10 @@ class TFT(keras.Model):
                 activation=None,
                 name="final_skip_connection"
             )
-            self.add = layers.Add()
-        self.l_norm = layers.LayerNormalization()
+            self.add = keras.layers.Add()
+        self.l_norm = keras.layers.LayerNormalization()
         
-        self.flat = layers.Flatten(name="flatten")
+        self.flat = keras.layers.Flatten(name="flatten")
 
 
         # Output layers:
@@ -1732,16 +1743,16 @@ class TFT(keras.Model):
         # to produce the difference between the current quantile and the previous one
         output_len = len(self.quantiles)
 
-        self.base_output_layer = layers.TimeDistributed(
-            layers.Dense(1),
+        self.base_output_layer = keras.layers.TimeDistributed(
+            keras.layers.Dense(1),
             name="output"
         )
         def elu_plus(x):
             return keras.activations.elu(x) + 1
 
         self.quantile_diff_layers = [
-            layers.TimeDistributed(
-                layers.Dense(1, activation=elu_plus),
+            keras.layers.TimeDistributed(
+                keras.layers.Dense(1, activation=elu_plus),
                 name=f"quantile_diff_{i}"
             ) 
             for i in range(output_len - 1)
@@ -1842,6 +1853,13 @@ class TFT(keras.Model):
         final_output = keras.ops.concatenate(quantile_outputs, axis=-1)
         
         return final_output
+```
+
+```{python}
+#| label: tbl-tft
+#| tbl-cap: Summary of TFT Model
+
+tft = TFT()
 ```
 
 ## Nowcasting inflation with a simple model {#sec-nowcast}

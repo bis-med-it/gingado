@@ -1,5 +1,6 @@
 # Welcome to gingado!
 
+
 `gingado` seeks to facilitate the use of machine learning in economic
 and finance use cases, while promoting good practices. This package aims
 to be suitable for beginners and advanced users alike. Use cases may
@@ -29,9 +30,6 @@ functionalities:
   [**estimators**](https://bis-med-it.github.io/gingado/estimators.html),
   to help answer questions of academic or practical importance;
 
-- (*New in v.0.3!*) [**forecasters**](https://bis-med-it.github.io/gingado/forecasters.html), 
-  to nowcast and forecast time series;
-
 - **support for** [**model
   documentation**](https://bis-med-it.github.io/gingado/documentation.html),
   to embed documentation and ethical considerations in the model
@@ -45,27 +43,19 @@ Each of these functionalities builds on top of the previous one. They
 can be used on a stand-alone basis, together, or even as part of a
 larger pipeline from data input to model training to documentation!
 
-<div>
-
-> **Tip**
+> [!TIP]
 >
 > New functionalities are planned over time, so consider checking
 > frequently on `gingado` for the latest toolsets.
 
-</div>
-
 ## Install
 
-<div>
-
-> **Note**
+> [!NOTE]
 >
 > Please make sure you have read and understood the license disclaimer
 > in the NOTES.md file in our [GitHub
 > repository](https://github.com/bis-med-it/gingado) before using
 > gingado.
-
-</div>
 
 To install `gingado`, simply run the following code on the terminal:
 
@@ -128,7 +118,8 @@ In addition, `gingado` is developed and maintained using
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
 
 <div id="ref-gingado" class="csl-entry">
 

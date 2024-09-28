@@ -45,6 +45,7 @@ import numpy as np
 import pandas as pd
 import sdmx
 from gingado.utils import load_SDMX_data
+from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.model_selection import TimeSeriesSplit
 from tqdm import tqdm
@@ -294,11 +295,12 @@ Note that in the example below, for each data point that we want to forecast (`y
 
 maxlags = {"m": 12, "d": 250}
 
-def create_data(X, y, maxlags=maxlags, tscv=TimeSeriesSplit(n_splits=5), timedim=True):
+def create_data(X, y, maxlags=maxlags, tscv=TimeSeriesSplit(n_splits=5), timedim=True, return_dates=False):
     # If timeedim is true, then the dimensions of the tensors are n_samples/time dimension/features. If not then it is n_samples/time dimension (lag) * features, ie each lag is flattened as if it were a feature. Use True when passing to recurrent nets, use False for fully connected layers.
     X_split = {}
     y_split = {}
-
+    if return_dates:
+        X_dates = {}
     n_feat = {k: v.shape[1] for k, v in X.items()}
     if tscv:
         split_cv = tscv.split(y)
@@ -314,11 +316,16 @@ def create_data(X, y, maxlags=maxlags, tscv=TimeSeriesSplit(n_splits=5), timedim
             }
             X_split[fold] = {"train": [], "valid": []}
             y_split[fold] = {"train": [], "valid": []}
+            if return_dates:
+                X_dates[fold] = {"train": [], "valid": []}
             for chunk, dates in dates_split.items():
                 for ysample_date in tqdm(dates):
                     padded_x = {}
+                    dates_X = {}
                     for f in X.keys():
                         try:
+                            if return_dates:
+                                dates_X[f] = X[f][:ysample_date][:-1].index
                             to_pad = X[f][:ysample_date][:-1].values
                         except KeyError:
                             to_pad = np.zeros((1,1))
@@ -329,12 +336,14 @@ def create_data(X, y, maxlags=maxlags, tscv=TimeSeriesSplit(n_splits=5), timedim
                         padded_x[f] = padded_x[f].reshape(x_shape)
                     X_split[fold][chunk].append(padded_x)
                     y_split[fold][chunk].append(y_train.loc[ysample_date])
+                    if return_dates:
+                        X_dates[fold][chunk].append(dates_X)
+        if return_dates:
+            return X_split, y_split, X_dates
         return X_split, y_split
 
-X_train_split, y_train_split = create_data(X=X_train, y=y_train, maxlags=maxlags)
+X_train_split, y_train_split, dates = create_data(X=X_train, y=y_train, maxlags=maxlags, return_dates=True)
 ```
-
-
 
 Let's see how this time series fold will be structured. Each fold is a sequentially longer window, so we get the following data points:[^difflengths]
 
@@ -781,6 +790,7 @@ class GatedResidualNetwork(keras.layers.Layer):
         super(GatedResidualNetwork, self).build(input_shape)
         self.dense = keras.layers.Dense(self.output_size)
         self.hidden_dense = keras.layers.Dense(self.d_model)
+        self.hidden_dense_post = keras.layers.Dense(self.d_model)
         self.hidden_activation = keras.layers.Activation('elu')
         self.context_dense = keras.layers.Dense(self.d_model, use_bias=False)
         self.gating_layer = GatedLinearUnit(
@@ -795,10 +805,11 @@ class GatedResidualNetwork(keras.layers.Layer):
             self.dense = keras.layers.TimeDistributed(self.dense)
             self.hidden_dense = keras.layers.TimeDistributed(self.hidden_dense)
             self.context_dense = keras.layers.TimeDistributed(self.context_dense)
+            self.hidden_dense_post = keras.layers.TimeDistributed(self.hidden_dense_post)
 
     def call(self, inputs, additional_context=None, training=None):
         # Setup skip connection
-        skip = self.dense(inputs) if self.output_size != self.d_model else inputs
+        skip = self.dense(inputs) if self.output_size else inputs
         
         # 1st step: eta2
         hidden = self.hidden_dense(inputs)
@@ -808,6 +819,7 @@ class GatedResidualNetwork(keras.layers.Layer):
             hidden += self.context_dense(additional_context)
 
         hidden = self.hidden_activation(hidden)
+        hidden = self.hidden_dense_post(hidden)
 
         # 2nd step: eta1 and 3rd step
         gating_layer, gate = self.gating_layer(hidden)
@@ -923,6 +935,8 @@ print(vocab_sizes)
 #| tbl-cap: Summary of model with embedding
 
 dim = 16
+
+keras.backend.clear_session()
 
 inputs = {
     k: keras.layers.Input(shape=(1,), name=k, dtype='int32')  # Input layer for each feature with shape (1,)
@@ -1112,7 +1126,7 @@ In contrast to categorical variables like temporal features, or entity identity 
 However, continuous variables can still be mapped into a vector space defined in $\mathbb{R}$, in a way that encodes useful information. The simplest way to achieve this is by training parameters of a linear transformation of each data point of variable $j$ in time $t$ into $\xi_t^{(j)} \in \mathbb{R}^{\lambda}$. 
 
 ```{python}
-#| label: tbl-encodcont
+#| label: tbl-summary_encodcont
 #| tbl-cap: Summary of network embedding continuous variable_weights
 
 inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
@@ -1202,7 +1216,92 @@ The Variable Selection Networks (VSN) are components of the TFT that are built w
 
 VSNs can be used to select amongst continuous, categorical or even static variables. The code below focuses on the continuous variables of the current toy model, $\pi_m$ and $o_d$.
 
+```{python}
+#| label: class svs
 
+class StaticVariableSelection(keras.Layer):
+    def __init__(
+        self, 
+        d_model:int=16, # Embedding size, $d_\text{model}$
+        dropout_rate:float=0., 
+        **kwargs
+    ):
+        "Static variable selection network"
+        super(StaticVariableSelection, self).__init__(**kwargs)
+        self.d_model = d_model
+        self.dropout_rate = dropout_rate
+
+        # Define GRNs for the transformed embeddings
+        self.grns_transformed_embeddings = []  # This will be a list of GRN layers
+
+        self.flat = keras.layers.Flatten()
+        self.softmax = keras.layers.Activation('softmax')
+        self.mult = keras.layers.Multiply()
+
+    def build(self, input_shape):
+        super(StaticVariableSelection, self).build(input_shape)
+        
+        num_static = input_shape[2]
+
+        # Define the GRN for the sparse weights
+        self.grn_sparse_weights = GatedResidualNetwork(
+            d_model=self.d_model,
+            output_size=num_static,
+            use_time_distributed=False
+        )
+
+        for i in range(num_static):
+            # Create a GRN for each static variable
+            self.grns_transformed_embeddings.append(
+                GatedResidualNetwork(
+                    self.d_model, 
+                    use_time_distributed=False
+                    )
+            )
+
+    def call(self, inputs, training=None):
+        _, _, num_static, _ = inputs.shape # batch size / one time step (since it's static) / num static variables / d_model
+
+        flattened = self.flat(inputs)
+
+        # Compute sparse weights
+        grn_outputs, _ = self.grn_sparse_weights(flattened, training=training)
+        sparse_weights = self.softmax(grn_outputs)
+        sparse_weights = keras.ops.expand_dims(sparse_weights, axis=-1)
+
+        # Compute transformed embeddings
+        transformed_embeddings = []
+        for i in range(num_static):
+            embed, _ = self.grns_transformed_embeddings[i](inputs[:, 0, i:i+1, :], training=training)
+            transformed_embeddings.append(embed)
+        transformed_embedding = keras.ops.concatenate(transformed_embeddings, axis=1)
+
+        # Combine with sparse weights
+        combined = self.mult([sparse_weights, transformed_embedding])
+        static_vec = keras.ops.sum(combined, axis=1)
+
+        return static_vec, sparse_weights
+
+    def get_config(self):
+        config = super(StaticVariableSelectionLayer, self).get_config()
+        config.update({
+            'd_model': self.d_model,
+            'dropout_rate': self.dropout_rate
+        })
+        return config
+```
+
+Temporal variable selection networks work by considering all variables (of a given frequency) at the same time, together with an (optional) static context embedding, to calculate weights that are multiplied by a processed version of each variable. Breaking this up in steps: 
+
+- consider $\xi_t^{(j)} \in \mathbb{R}^{\lambda}$ to be the encoding (as in @tbl-summary_embed or @tbl-summary_encodcont) of the $j$th variable in time $t$, and collect the values at time $t$ for *all* $J$ input variables for that frequency in the flattened vector $\Xi_t$
+
+- collect the static variable encoders for use as context, $c_s \in \mathbb{R}^{\lambda}$,
+
+- then, the selection weights for that frequency are the result of $\nu_t = \text{Softmax}(\text{GRN}(\Xi_t, c_s))  \in \mathbb{R}^{|J|}$$,
+
+- these weights, which sum to one due to the softmax operation, are used on a version of the encoded variables that has itself been further encoded by a variable-specific GRN: $\tilde{\xi}_t = \sum_{j=1}^{J}\nu_t^{(j)} \text{GRN}_j (\xi_t^{(j)}) \in \mathbb{R}^{\lambda}$.
+
+In short, the temporal variable selection network takes in data with the shape (batch size / number of time steps / number of variables / embedding dimension $\lambda$) and output a tensor with the shape (batch size / number of time steps / embedding dimension $\lambda$).
 
 ```{python}
 #| label: class tvs
@@ -1223,7 +1322,7 @@ class TemporalVariableSelection(keras.Layer):
 
     def build(self, input_shape):
         super(TemporalVariableSelection, self).build(input_shape)
-        self.batch_size, self.time_steps, self.num_input_vars, self.d_model = input_shape
+        self.time_steps, self.num_input_vars, self.d_model = input_shape[1:]
 
         self.var_sel_weights = GatedResidualNetwork(
             d_model=self.d_model,
@@ -1234,11 +1333,14 @@ class TemporalVariableSelection(keras.Layer):
         self.softmax = keras.layers.Activation('softmax')
     
         # Create a GRN for each temporal variable
-        self.grns_transformed_embeddings = GatedResidualNetwork(
+        self.grns_transformed_embeddings = [
+            GatedResidualNetwork(
                 d_model=self.d_model,
                 dropout_rate=self.dropout_rate,
                 use_time_distributed=True
-        )
+            )
+            for _ in range(self.num_input_vars)
+        ]
 
     def call(
         self, 
@@ -1246,30 +1348,37 @@ class TemporalVariableSelection(keras.Layer):
         context=None, # Used for static_context in the TFT
         training=None
     ):
-        temporal_embeddings = inputs
+        # shape of inputs (temporal_embeddings): (batch size / num time steps / num variables / embedding dimension, ie dim_model)
 
-        flattened_embed = keras.ops.reshape(
-            temporal_embeddings,
+        flattened_embed = keras.ops.reshape( # \Xi_t
+            inputs,
             (-1, self.time_steps, self.num_input_vars * self.d_model)
         )
-        parallel_variables = keras.ops.reshape(
-            temporal_embeddings, 
-            (-1, self.time_steps, self.d_model)
+        parallel_variables = keras.ops.split(
+            inputs, 
+            indices_or_sections=self.num_input_vars,
+            axis=2
         ) # tensor is shaped this way so that a GRN can be applied to each variable of each batch
-        c_s = keras.ops.expand_dims(static_context, axis=1) if context else None
+        c_s = keras.ops.expand_dims(context, axis=1) if context else None
 
         # variable weights
         grn_outputs, _ = self.var_sel_weights(flattened_embed, c_s, training=training)
         variable_weights = self.softmax(grn_outputs)
         variable_weights = keras.ops.expand_dims(variable_weights, axis=2)
 
-        transformed_embeddings, _ = self.grns_transformed_embeddings(parallel_variables, training=training)
-        transformed_embeddings = keras.ops.reshape(
-            transformed_embeddings,
-            [-1, self.time_steps, self.num_input_vars, self.d_model]
-        )
-        temporal_vec = keras.ops.einsum('btij,btjk->btk', variable_weights, transformed_embeddings)
-        return temporal_vec, keras.ops.squeeze(variable_weights, axis=2)
+        transformed_embeddings, _ = [
+            self.grns_transformed_embeddings[i](parallel_variables[i], training=training)
+            for i in range(self.num_input_vars)
+        ]
+        transformed_embeddings = keras.ops.stack(transformed_embeddings, axis=2)
+        combined = keras.layers.Multiply()([variable_weights, transformed_embeddings])
+        temporal_vec = keras.sum(combined, axis=2)
+        
+        self.variable_weights = variable_weights
+        return temporal_vec
+
+    def get_selection_weights(self):
+        return self.variable_weights
 ```
 
 ```{python}
@@ -1278,31 +1387,90 @@ class TemporalVariableSelection(keras.Layer):
 
 dim = 16 # arbitrary dimension
 
-freqs = ["m", "d"] # using here the commonly-used frequency abbreviations
+keras.backend.clear_session()
 
-inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
+# <continuous variables>
+freqs = ["m", "d"]
+cont_inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
+encoded_cont_inputs = {
+    k: keras.layers.TimeDistributed(
+        keras.layers.Dense(dim),
+        name=f"encoding__freq_{k}"
+    )(v)
+    for k, v in cont_inputs.items()
+}
+# expand dims to add a dimension for the number of variables (in this case, one)
+encoded_cont_inputs = {k: keras.ops.expand_dims(v, axis=2) for k, v in encoded_cont_inputs.items()}
+# </continuous variables>
 
-# encode each variable into R^dim before passing to the VSN
-encoded_series = {f: keras.layers.TimeDistributed(keras.layers.Dense(dim, activation="relu", name=f"encoding_{f}"))(inputs[f]) for f in inputs.keys()}
-encoded_series = {k: keras.ops.expand_dims(v, axis=2) for k, v in encoded_series.items()} # add a `variable` dimension in axis=2. axis=3 reserved for the embedding dimension
-encoded_series = keras.ops.concatenate([v for v in encoded_series.values()], axis=2)
-# VSN
-####
-# TemporalVariableSelection(d_model=dim)(encoded_series)
-####
-flattened = keras.layers.Reshape((-1, len(inputs)*dim))(encoded_series)
-grn_flattened, _ = GatedResidualNetwork(
+# <categorical variables>
+cat_inputs = {
+    k: keras.layers.Input(shape=(None,1), name=k, dtype='int32')  # Input layer for each feature with shape (None, 1) to include a time dimension
+    for k in vocab_sizes.keys()
+}
+
+encoded_cat_inputs = {
+    k: keras.layers.Embedding(input_dim=v, output_dim=dim, name=f"{k}_embedding")(cat_inputs[k])
+    for k, v in vocab_sizes.items()
+}
+# </categorical variables>
+
+# next, join up the continuous and categorical historical variables
+#encoded_inputs = encoded_cont_inputs | encoded_cat_inputs
+encoded_inputs = {k: None for k in encoded_cont_inputs.keys()}
+for k in encoded_cont_inputs.keys():
+    if k == y_freq:
+        encoded_inputs[k] = keras.ops.concatenate([encoded_cont_inputs[k]] + list(encoded_cat_inputs.values()), axis=2)
+    else:
+        encoded_inputs[k] = encoded_cont_inputs[k]
+
+### <VSN>
+flattened = {
+    k: keras.layers.Reshape(target_shape=(-1, v.shape[-1] * v.shape[-2]), name=f"reshape__freq_{k}")(v) # \Xi_t
+    for k, v in encoded_inputs.items()
+}
+parallel_variables = {
+    k: keras.ops.split(
+            v, 
+            indices_or_sections=v.shape[2],
+            axis=2
+        )
+    for k, v in encoded_inputs.items()
+} # each value is a list, with each item of the list corresponding to one variable
+var_weights = {
+    k: keras.layers.Activation('softmax')(
+        GatedResidualNetwork(
             d_model=dim,
-            output_size=len(inputs),
-            dropout_rate=0.,
+            output_size=3, # number of input variables in each frequency
             use_time_distributed=True,
-        )(flattened)
-weights = keras.layers.Activation("softmax")(grn_flattened)
+            name=f"variable_selection__freq_{k}"
+        )(v)[0]
+    )
+    for k, v in flattened.items()
+}
+varspecific_grn = {
+    k: keras.ops.concatenate([
+        GatedResidualNetwork(
+            d_model=dim,
+            use_time_distributed=True,
+            name=f"variable_specific__freq_{k}__var_{i}"
+        )(v[i])[0]
+        for i in range(len(v)) # number of input variables in each frequency
+    ], axis=2) # along the num_input_vars dimension, resulting in batch size / num time steps / num input vars / embedding dim (lambda)
+    for k, v in parallel_variables.items()
+}
+combined_features = {}
+for f in freqs:
+    broadcasted_weights = keras.ops.tile(keras.ops.expand_dims(var_weights[f], axis=-1), (1, 1, 1, dim))
+    combined_features[f] = keras.ops.sum(
+        keras.layers.Multiply(name=f"weighting__freq_{f}")([broadcasted_weights, varspecific_grn[f]]),
+        axis=2
+    )
 
-######
+# </VSN>
 
 LSTMs = []
-for k, v in inputs.items():
+for k, v in combined_features.items():
     lstm = keras.layers.Masking(mask_value=0.0)(v)
     lstm = keras.layers.LSTM(units=dim, return_sequences=False, name=f"LSTM__freq_{k}")(lstm)
     LSTMs.append(lstm)
@@ -1312,19 +1480,60 @@ out = keras.layers.Dense(units = dim, activation="relu", name="FinalFeatureTrans
 out = keras.layers.Dense(units=1)(out)
 
 nn_vsn = keras.Model(
-    inputs=inputs, 
-    outputs=weights,
+    inputs=cont_inputs | cat_inputs, 
+    outputs=out,
     name="VSN"
 )
 nn_vsn.compile(loss=keras.losses.MeanSquaredError())
 nn_vsn.summary()
 ```
 
-
 ```{python}
 #| label: fig-arch_vsn
 #| fig-cap: Architecture of model with variable selection network
 keras.utils.plot_model(nn_vsn, show_shapes=True, show_layer_activations=True, show_layer_names=True)
+```
+
+```{python}
+#| label: train the model with temporal variable selection
+
+X_train_split, y_train_split, X_dates = create_data(X=X_train, y=y_train, maxlags=maxlags, return_dates=True)
+
+y_freq = "m" # only do the date features for the same frequency as the dependent variable
+
+date_feats = {fold: {chunk: [] for chunk in X_dates[fold].keys()} for fold in X_dates.keys()}
+for fold in X_dates.keys():
+    for chunk in X_dates[fold].keys():
+        dates_fold = [i[y_freq] for i in X_dates[fold][chunk]]
+        for i in dates_fold:
+            to_pad = get_timefeat(pd.DataFrame(index=i), freq=y_freq, features=timefeat).to_dict(orient="list")
+            padded = {k: keras.utils.pad_sequences([v], maxlen=maxlags[y_freq], dtype=np.int32) for k, v in to_pad.items()}
+            date_feats[fold][chunk].append(padded)
+
+def adjust_data_vsn(fold="fold_0", chunk="train"):
+    X_vsn = {}
+    merged_data = [{**d1, **d2} for d1, d2 in zip(X_train_split[fold][chunk], date_feats[fold][chunk])]
+    for d in merged_data:
+        for key, array in d.items():
+            if key not in X_vsn:
+                X_vsn[key] = []  # Initialize an empty list if key is not present
+            X_vsn[key].append(array)  # Append the array to the list for that key
+    vsn_X = {k: np.squeeze(np.array(v), axis=1) for k, v in X_vsn.items()}
+    return vsn_X
+vsn_X_train = adjust_data_vsn(fold="fold_4", chunk="train")
+vsn_X_valid = adjust_data_vsn(fold="fold_4", chunk="valid")
+
+history_vsn = nn_vsn.fit(x=vsn_X_train, y=np.array(y_train_split["fold_4"]["train"]), validation_data=(vsn_X_valid, np.array(y_train_split["fold_4"]["valid"])), epochs=20, batch_size=10, shuffle=True)
+```
+
+```{python}
+#| label: fig-history_vsn
+#| fig-cap: Losses of the model with variable selection
+
+ax = pd.DataFrame(history_vsn.history).plot()
+ax.set_xlabel("Epochs")
+ax.set_ylabel("Mean squared error")
+plt.show()
 ```
 
 ## Now is a(nother) good time to pay attention {#sec-transf}
@@ -1625,6 +1834,40 @@ This section uses the following notation, using as much as possible the original
   - $\tau_{\text{max}}$ is the number of steps ahead that is forecasted for the dependent variable $y$
   - $N$ is the number of time steps that feed into the attention layer
 
+
+```{python}
+#| label: tft model graph
+
+# class TFT(BaseEstimator, RegressorMixin):
+#     def __init__(
+#         self,
+#         quantiles:list=[0.1, 0.5, 0.9],
+#         d_model:int=8,
+#         n_head:int=1,
+#         dropout_rate:float=0.1,
+#         time_feat:list|None=None
+#         ):
+#         self.quantiles = quantiles
+#         self.d_model = d_model
+#         self.n_head = n_head
+#         self.dropout_rate = dropout_rate
+#         self.time_feat = time_feat
+
+#     def fit(self, X, y):
+#         pass
+
+#     def predict(self, X):
+#         pass
+
+```
+
+```{python}
+#| label: test tft
+
+from sklearn.utils.estimator_checks import check_estimator
+check_estimator(TFT)
+```
+
 ```{python}
 #| label: class tft
 
@@ -1856,8 +2099,42 @@ class TFT(keras.Model):
 ```
 
 ```{python}
-#| label: tbl-tft
+#| label: tbl-summary_tft
 #| tbl-cap: Summary of TFT Model
+
+dim = 16 # arbitrary dimension
+
+freqs = ["m", "d"]
+
+inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in freqs}
+
+encoded_inputs = {
+    k: keras.layers.TimeDistributed(
+        keras.layers.Dense(dim),
+        name=f"encoding__{k}"
+    )(v)
+    for k, v in inputs.items()
+}
+
+Attns = []
+LSTMs = []
+for k, v in encoded_inputs.items():
+    attn, attn_weights = ScaledDotProductAttention(name=f"Attention__freq_{k}")(q=v, k=v, v=v, mask=None)
+    Attns.append(attn)
+    lstm = keras.layers.LSTM(units=dim, return_sequences=False, name=f"LSTM__freq_{k}")(attn)
+    LSTMs.append(lstm)
+
+encoded_series = keras.layers.Concatenate(name="encoded_series")(LSTMs)
+out = keras.layers.Dense(units = dim, activation="relu")(encoded_series)
+out = keras.layers.Dense(units=1)(out)
+
+nn_sdpa = keras.Model(
+    inputs=inputs, 
+    outputs=out,
+    name="Attention"
+)
+nn_sdpa.compile(loss=keras.losses.MeanSquaredError())
+nn_sdpa.summary()
 
 tft = TFT()
 ```

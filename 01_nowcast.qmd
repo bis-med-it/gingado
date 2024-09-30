@@ -1387,7 +1387,7 @@ class TemporalVariableSelection(keras.Layer):
 #| tbl-cap: Summary of VSN (work in progress)
 
 dim = 16 # arbitrary dimension
-
+y_freq = "m"
 keras.backend.clear_session()
 
 # <continuous variables>
@@ -1595,7 +1595,7 @@ class ScaledDotProductAttention(keras.Layer):
 #| label: tbl-summary_sdpa
 #| tbl-cap: Summary of network with attention
 
-dim = 16 # arbitrary dimension
+dim = 8 # arbitrary dimension
 
 freqs = ["m", "d"]
 
@@ -1745,7 +1745,7 @@ class InterpretableMultiHeadAttention(keras.Layer):
 #| label: tbl-imha
 #| tbl-cap: Summary of network with interpretable multi-head attention
 
-dim = 16 # arbitrary dimension
+dim = 8 # arbitrary dimension
 
 freqs = ["m", "d"]
 
@@ -1983,9 +1983,10 @@ class TFT(BaseEstimator, RegressorMixin):
             lstm = keras.layers.LSTM(units=dim, return_sequences=True, return_state=False, name=f"LSTM__freq_{k}")(lstm)
             LSTMs[k] = lstm
 
-        #encoded_series = keras.layers.Average(name="encoded_series")(LSTMs)
+        mixfreq_attn = keras.layers.Attention()(query=LSTMs["m"], value=LSTMs["d"])
 
-        encoded_series = LSTMs["m"]
+        encoded_series = keras.layers.Average(name="encoded_series")(LSTMs)
+
         # </LSTM>
 
         #out = keras.layers.Dense(units = dim, activation="relu", name="FinalFeatureTransformation")(encoded_series)

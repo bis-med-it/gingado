@@ -1964,8 +1964,15 @@ class TFT(BaseEstimator, RegressorMixin):
 
     def _build_model(self):
         # all_inputs = 
+        all_inputs = {f: keras.layers.Input(shape=(None,None), name=f) for f in freqs} # should I change this shape to (None, None)???
+        encoded_cont_inputs = {
+            k: keras.layers.TimeDistributed(
+                keras.layers.Dense(self.d_model),
+                name=f"encoding__freq_{k}"
+            )(v)
+            for k, v in cont_inputs.items()
+        }
         # transformer_layer # (sample, time (t-self.lags[highest_freq_X]; t+self.nowcasting_steps), embe dim)
-        self._calculate_nowcasting_dates()
         num_quantiles = len(self.quantiles)
         
         
@@ -1996,6 +2003,7 @@ class TFT(BaseEstimator, RegressorMixin):
     def fit(self, X:dict, y:dict):
         # DOC: both X and y need to be dicts where the keys are frequencies, and the elements are pandas dataframes with dates as indices
         
+        if self.verbose: print("Processing `X` and `y` data...")
         # first we find all data with higher frequencies then `y`
         highest_freq_X_ = self._highest_freq(X.keys(), y.keys())
          
@@ -2063,7 +2071,8 @@ class TFT(BaseEstimator, RegressorMixin):
                             to_pad = np.zeros((1, 1))
                         fit_data[fold][chunk]["X"][Xk].append(to_pad)
                     fit_data[fold][chunk]["X"][Xk] = keras.utils.pad_sequences(fit_data[fold][chunk]["X"][Xk], maxlen=self.lags[Xk], dtype=np.float32)
-        
+        if self.verbose: print("Processing `X` and `y` data: concluded")
+
         # TODO: find all unique frequencies and calculate their time features
         # TODO: build model ---- self.model = self._build_model()
         # TODO: construct tscv

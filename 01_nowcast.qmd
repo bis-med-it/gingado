@@ -1862,230 +1862,221 @@ def quantile_loss(y_true, y_pred):
     return final_loss
 ```
 
+**Actual TFT implementation**
+
+The model nowcasts the dependent variable at the highest possible frequency. For example, if the variable of interst is monthly inflation and the input data includes daily data, then the output is daily inflation metrics.
+
+The model below implements some changes to facilitate use in datasets of the same size as ecoomic data. In particular,
+
+- the static covariate enrichment is only added when there is more than one entity to nowcast about
+
+- 
+
 ```{python}
 #| label: tft model graph
 
+learning_rate = [1e-4, 1e-3, 1e-2][0]
+max_gradient_norm = [0.01, 1.0, 100.0][0]
+
 class TFT(BaseEstimator, RegressorMixin):
+    freq_rank = {
+        "YE": 0,   # Yearly
+        "QE": 1,   # Quarterly
+        "ME": 2,   # Monthly
+        "W": 3,   # Weekly
+        "D": 4   # Daily
+    }
+
+    freq_len = { # measured in units of the highest frequency, which are days
+        "YE": 365,
+        "QE": 91,
+        "ME": 30,
+        "W": 7,
+        "D": 1
+    }
+
+    @classmethod
+    def _higher_freq(cls, X_keys, y_key):
+        y_freq_rank = cls.freq_rank[list(y_key)[0]]
+        return [k for k in list(X_keys) if cls.freq_rank[k] > y_freq_rank]
+
+    @classmethod
+    def _leq_freq(cls, X_keys, y_key):
+        # returns the frequencies in `X` that are lower or equal to `y`
+        y_freq_rank = cls.freq_rank[list(y_key)[0]]
+        return [k for k in list(X_keys) + list(y_key) if cls.freq_rank[k] <= y_freq_rank]    
+
+    @classmethod
+    def _highest_freq(cls, X_keys, y_key):
+        # Convert dict or dict_keys type y_key to string if necessary
+        y_freq_rank = cls.freq_rank[list(y_key)[0]]
+
+        # Filter keys that are strictly higher than y_key in frequency
+        higher_freqs = [k for k in list(X_keys) if cls.freq_rank[k] > y_freq_rank]
+        
+        # Return the highest frequency (i.e., max by rank) if any are found
+        if higher_freqs:
+            return max(higher_freqs, key=lambda k: cls.freq_rank[k])
+        else:
+            return y_freq
+
+    @classmethod
+    def _count_nowcasting_days(cls, highest_freq, y_freq):
+        return int(cls.freq_len[y_freq]/cls.freq_len[highest_freq])
+
     def __init__(
         self,
-        name="TFT",
-        quantiles:list=[0.1, 0.5, 0.9],
+        name="TFT-MF",
         d_model:int=8,
         n_head:int=1,
-        vocab_sizes:dict|None=None,
-        dropout_rate:float=0.1,
-        time_feat:str|list|None="all",
-        compile_args={"loss": quantile_loss},
-        fit_args={"epochs": 20, "batch_size": 10, "shuffle": True},
-        random_state:int=42,
-        **kwargs
+        quantiles:list=[0.1, 0.5, 0.9],
+        lags:dict={
+            "YE": 1,   # Yearly
+            "QE": 4,   # Quarterly
+            "ME": 12,   # Monthly
+            "W": 52,   # Weekly
+            "D": 365   # Daily
+        }, # need to contain at least the keys in X
+        tscv=TimeSeriesSplit(n_splits=5),
+        compile_args={
+            "loss": quantile_loss,
+            "optimizer": keras.optimizers.Adam(learning_rate=learning_rate, clipnorm=max_gradient_norm),
+            "callbacks": [
+                keras.callbacks.EarlyStopping(
+                    monitor='val_loss',
+                    patience=5,
+                    min_delta=1e-4
+                )
+            ]    
+        },
+        fit_args = {"epochs": 20, "batch_size":10, "shuffle": True},
+        verbose=True
     ):
         self.name = name
-        self.quantiles = quantiles
         self.d_model = d_model
         self.n_head = n_head
-        self.vocab_sizes = vocab_sizes
-        self.dropout_rate = dropout_rate
-        self.time_feat = time_feat
+        self.quantiles = quantiles
+        self.lags = lags
+        self.tscv = tscv
         self.compile_args = compile_args
         self.fit_args = fit_args
-        self.random_state = random_state
-        self.kwargs = kwargs
-        # for (k, v) in kwargs.items():
-        #     setattr(self, k, v)
+        self.verbose = verbose
 
-    def _build_tft_model(self):
-        # <continuous variables>
-        cont_inputs = {k: keras.layers.Input(shape=(None,1), name=k) for k in self.X_freqs_}
-        encoded_cont_inputs = {
-            k: keras.layers.TimeDistributed(
-                keras.layers.Dense(dim),
-                name=f"encoding__freq_{k}"
-            )(v)
-            for k, v in cont_inputs.items()
-        }
-        # TEMP: expand dims to add a dimension for the number of variables (in this case, one)
-        encoded_cont_inputs = {k: keras.ops.expand_dims(v, axis=2) for k, v in encoded_cont_inputs.items()}
-        # </continuous variables>
-
-        # <categorical variables>
-        if self.time_feat:
-            cat_inputs = {
-                k: keras.layers.Input(shape=(None,1), name=k, dtype='int32')  # Input layer for each feature with shape (None, 1) to include a time dimension
-                for k in vocab_sizes.keys()
-            }
-
-            encoded_cat_inputs = {
-                k: keras.layers.Embedding(input_dim=v, output_dim=dim, name=f"embedding__{k}")(cat_inputs[k])
-                for k, v in self.vocab_sizes.items()
-            }
-
-            # next, join up the continuous and categorical historical variables
-            #encoded_inputs = encoded_cont_inputs | encoded_cat_inputs
-            encoded_inputs = {k: None for k in encoded_cont_inputs.keys()}
-            for k in encoded_cont_inputs.keys():
-                if k == y_freq:
-                    encoded_inputs[k] = keras.ops.concatenate([encoded_cont_inputs[k]] + list(encoded_cat_inputs.values()), axis=2)
-                else:
-                    encoded_inputs[k] = encoded_cont_inputs[k]
-        else:
-            encoded_inputs = encoded_cont_inputs
-        # </categorical variables>
+    def _build_model(self):
+        # all_inputs = 
+        # transformer_layer # (sample, time (t-self.lags[highest_freq_X]; t+self.nowcasting_steps), embe dim)
+        self._calculate_nowcasting_dates()
+        num_quantiles = len(self.quantiles)
         
-        #<VSN>
-        flattened = {
-            k: keras.layers.Reshape(target_shape=(-1, v.shape[-1] * v.shape[-2]), name=f"flat__freq_{k}")(v) # \Xi_t
-            for k, v in encoded_inputs.items()
-        }
-        parallel_variables = {
-            k: keras.ops.split(
-                    v, 
-                    indices_or_sections=v.shape[2],
-                    axis=2
-                )
-            for k, v in encoded_inputs.items()
-        } # each value is a list, with each item of the list corresponding to one variable
-        var_weights = {
-            k: keras.layers.Activation('softmax')(
-                GatedResidualNetwork(
-                    d_model=dim,
-                    output_size=3, # number of input variables in each frequency
-                    use_time_distributed=True,
-                    name=f"variable_selection__freq_{k}"
-                )(v)[0]
-            )
-            for k, v in flattened.items()
-        }
-        varspecific_grn = {
-            k: keras.ops.concatenate([
-                GatedResidualNetwork(
-                    d_model=dim,
-                    use_time_distributed=True,
-                    name=f"variable_specific__freq_{k}__var_{i}"
-                )(v[i])[0]
-                for i in range(len(v)) # number of input variables in each frequency
-            ], axis=2) # along the num_input_vars dimension, resulting in batch size / num time steps / num input vars / embedding dim (lambda)
-            for k, v in parallel_variables.items()
-        }
-        combined_features = {}
-        for f in self.X_freqs_:
-            broadcasted_weights = keras.ops.tile(keras.ops.expand_dims(var_weights[f], axis=-1), (1, 1, 1, dim))
-            combined_features[f] = keras.ops.sum(
-                keras.layers.Multiply(name=f"weighting__freq_{f}")([broadcasted_weights, varspecific_grn[f]]),
-                axis=2
-            )
-        # </VSN>
+        
+        if self.use_static_context: pass
 
-        # <LSTM>
-        LSTMs = {}
-        for k, v in combined_features.items():
-            lstm = keras.layers.Masking(mask_value=0.0)(v)
-            lstm = keras.layers.LSTM(units=dim, return_sequences=True, return_state=False, name=f"LSTM__freq_{k}")(lstm)
-            LSTMs[k] = lstm
-
-        mixfreq_attn = keras.layers.Attention()(query=LSTMs["m"], value=LSTMs["d"])
-
-        encoded_series = keras.layers.Average(name="encoded_series")(LSTMs)
-
-        # </LSTM>
-
-        #out = keras.layers.Dense(units = dim, activation="relu", name="FinalFeatureTransformation")(encoded_series)
-
-        # <Quantile output - WIP>
-        self.output_len = len(self.quantiles)
         # Output layers:
-        # In order to enforce monotoncity of the quantiles forecast only the lowest quantile
-        # from a base forecast layer, and use output_len - 1 additional layers with ReLU activation
-        # to produce the difference between the current quantile and the previous one
-        # The ReLU activation will yield a non-negative number, thus remaining monotonical where the
-        # lowest quantile is the output of `base_output_layer` and the increasingly higher quantiles
-        # are the output of `base_output_layer` summed with the output of the elements of `quantile_diff_layers`
+        # In order to enforce monotoncity of the quantiles forecast only the lowest quantile from a base forecast layer, and use output_len - 1 additional layers with ReLU activation to produce the difference between the current quantile and the previous one
 
-        base_output_layer = keras.layers.TimeDistributed(
-            keras.layers.Dense(self.num_steps_forecast),
-            name="output_lowest_quantile"
-        )
-        quantile_diff_layers = [
+        output_lowest_quant = keras.layers.TimeDistributed(
+            keras.layers.Dense(self.nowcasting_steps),
+            name=f"output_q{str(self.quantiles[0])}"
+        )(transformer_layer[Ellipsis, self.num_encoder_steps:, :])
+
+        output_quant_deltas = [
             keras.layers.TimeDistributed(
-                keras.layers.Dense(self.num_steps_forecast, activation="relu"),
-                name=f"output_quantile_diff_{i}"
-            ) 
-            for i in range(self.output_len - 1)
+                keras.layers.Dense(self.nowcasting_steps, activation="relu", use_bias=False),
+                name=f"output_delta_to_q{str(self.quantiles[i+1])}"
+            )(transformer_layer[Ellipsis, self.num_encoder_steps:, :])
+            for i in range(num_quantiles - 1)
         ]
+        # TODO: sum them up
+        outputs = None #keras.ops.concatenate(, axis=-1)
+
+        model = keras.Model(inputs=all_inputs, outputs=outputs)
+        model.compile(**self.compile_args)
+        return model
+
+    def fit(self, X:dict, y:dict):
+        # DOC: both X and y need to be dicts where the keys are frequencies, and the elements are pandas dataframes with dates as indices
         
-        base_quantile = base_output_layer(encoded_series)
-
-        quantile_outputs = [base_quantile]
-        for i in range(self.output_len - 1):
-            quantile_diff = quantile_diff_layers[i](encoded_series)
-            quantile_output = quantile_outputs[-1] + quantile_diff
-            quantile_outputs.append(quantile_output)
-
-        final_output = keras.ops.concatenate(quantile_outputs, axis=-1)
-        # </Quantile output - WIP>
-        #out = keras.layers.Dense(units=self.num_steps_forecast)(out)
-
-        inputs = cont_inputs | cat_inputs if self.time_feat else cont_inputs
-        TFTmodel = keras.Model(
-            inputs=inputs,
-            outputs=final_output,
-            name=self.name
-        )
+        # first we find all data with higher frequencies then `y`
+        highest_freq_X_ = self._highest_freq(X.keys(), y.keys())
+         
+        # now we resample `y` such that we are repeating it at the highest possible frequency; each such repetition will become the basis of the nowcast
+        # in other words, the final transformer layer should 
+        y_df = y[list(y.keys())[0]]
+        resampled_y_df = y_df.resample(highest_freq_X).bfill()
+        self.resampled_y_dates = resampled_y_df.index
+        self.nowcasting_steps_ = self._count_nowcasting_days(highest_freq_X, list(y.keys())[0])
         
-        TFTmodel.compile(**self.compile_args)
-        return TFTmodel
-    
-    def fit(self, X, y, valid_data): # needs to take in a dictionary of pandas DataFrame with date in the indices if `time_feat=True`
+        # to simplify the model, only include the static context if there is variation
+        entities = resampled_y_df.columns
+        self.use_static_context = True if len(entities) > 1 else False
+
+        # this step finds, for each nowcasting time period (remember: measured at the highest possible frequency), the last available date for the lower frequencies
+        #leq_freq_X = self._leq_freq(X.keys(), y.keys()) # for ME in all_freqs...
+        all_freqs  = list(X.keys()) + list(y.keys())
+        last_avail_dates = pd.DataFrame(index=resampled_y_df.index)
+        def add_lastdate(df, offset_func, newcol=None):
+            new_df = pd.concat([
+                df,
+                pd.DataFrame(
+                    df.index - offset_func, 
+                    index=df.index, 
+                )], axis=1
+            )
+            new_df.columns = [c for c in new_df.columns[:-1]] + [f"LastAvail{newcol}"]
+            return new_df
+        if "D" in all_freqs:
+            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.DateOffset(days=1), newcol="D")
+        if "W" in all_freqs:
+            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.DateOffset(weeks=1), newcol="W")
+        if "ME" in all_freqs:
+            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.MonthEnd(1), newcol="ME")
+        if "QE" in all_freqs:
+            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.QuarterEnd(1), newcol="QE")
+        if "YE" in all_freqs:
+            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.YearEnd(1), newcol="YE")
+        self.last_avail_dates_ = last_avail_dates
+
+        # now the `resampled_y_df` dates are split into different validation folds
+        self.split_dates_ = {f"fold_{i}": {"train": train, "valid": test} for i, (train, test) in enumerate(self.tscv.split(resampled_y_df.index))}
+
+        # the lagged `y` data is also used as explanatory variable, so it needs to be concatenated to that, according to the corresponding frequency
+        for yk, yv in y.items():
+            if yk in X:
+                X[yk] = pd.concat([X[yk], yv], axis=1)
+            else:
+                X[yk] = yv
+
+        # now use these last available dates to loop over the resampled_y data and for each resampled_y date, keep only those Xs that belong to the last available date and up to a lag for each frequency, padding when necessary
         
-        # <preliminaries>
-        # TODO: set up `n_features_in_` for each key in X
-        # self.n_features_in_ = 
-
-        self.X_keys_ = X.keys()
-        self.X_freqs_ = [f for f in X.keys() if f in ["b", "d", "w", "m", "q", "y"]]# ["B", "D", "W", "M", "Q", "Y"]] # see https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#period-aliases
-        self.y_freqs_ = y.keys()
-        self.num_steps_forecast = list(y.values())[0].shape[-1]
-        # </preliminaries>
+        fit_data = {}
+        for fold in tqdm(self.split_dates_.keys(), disable=~self.verbose):
+            fit_data[fold] = {}
+            for chunk in ["train", "valid"]:
+                fit_data[fold][chunk] = {"X": {}, "y": resampled_y_df.iloc[tft.split_dates_[fold][chunk]]}
+                for Xk, Xv in X.items():
+                    fit_data[fold][chunk]["X"][Xk] = []
+                    for y_date in resampled_y_df.index[self.split_dates_[fold][chunk]]:
+                        date_lim = self.last_avail_dates_[f"LastAvail{Xk}"][y_date]
+                        try:
+                            to_pad = Xv[:date_lim].values
+                        except KeyError:
+                            to_pad = np.zeros((1, 1))
+                        fit_data[fold][chunk]["X"][Xk].append(to_pad)
+                    fit_data[fold][chunk]["X"][Xk] = keras.utils.pad_sequences(fit_data[fold][chunk]["X"][Xk], maxlen=self.lags[Xk], dtype=np.float32)
         
-        # <build and fit>
-        if not hasattr(self, "model"):
-            self.model = self._build_tft_model()
+        # TODO: find all unique frequencies and calculate their time features
+        # TODO: build model ---- self.model = self._build_model()
+        # TODO: construct tscv
+        # TODO: actually fit model
 
-        self.history_ = self.model.fit(x=X, y=y, validation_data=valid_data, **self.fit_args)
-        # </build and fit>
-
-    def predict(self, X):
-        pred = self.model.predict(X)
-        return pred
-
-    def fit_predict(self, X, y):
-        pass
-
-    def document(self):
-        # TODO: implement automatic documentation using gingado's forecastmodel card
-        pass
-    
-    def summary(self):
-        if not hasattr(self, "model"):
-            self.model = self._build_tft_model()
-        self.model.summary()
-
-    def plot(self, show_shapes=True, show_layer_names=True, show_layer_activations=True):
-        return keras.utils.plot_model(self.model, show_shapes=show_shapes, show_layer_names=show_layer_names, show_layer_activations=show_layer_activations)
+tft = TFT()
+tmp_out = tft.fit(X={"D": df_oil_d, "W": df_oil_d.resample("W").bfill(), "QE": df_oil_d.resample("QE").bfill()}, y={"ME": df_infl_m})
+tmp_out
 ```
 
+
+
 ```{python}
-compile_args = {
-    "loss": keras.losses.MeanSquaredError(),
-    "callbacks": [
-        keras.callbacks.EarlyStopping(
-            monitor='val_loss',
-            patience=5,
-            min_delta=1e-4
-        )
-    ]
-}
-fit_args = {"epochs": 20, "batch_size":10, "shuffle": True}
 tft = TFT(fit_args=fit_args, time_feat=None)
 
 y_fit = pd.DataFrame(y_train_split["fold_4"]["train"], index=[i.name for i in y_train_split["fold_4"]["train"]])

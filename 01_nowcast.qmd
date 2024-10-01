@@ -1972,6 +1972,40 @@ class TFT(BaseEstimator, RegressorMixin):
             )(v)
             for k, v in cont_inputs.items()
         }
+
+        #<temp LSTM>
+        hist_LSTMs = {}
+        hist_states_h = {}
+        hist_states_c = {}
+        for k, v in encoded_inputs.items():
+            lstm = keras.layers.Masking(mask_value=0.0)(v)
+            lstm, state_h, state_c = keras.layers.LSTM(units=self.d_model, return_sequences=True, return_state=True, name=f"LSTMencoder__freq_{k}")(lstm)
+            hist_LSTMs[k] = lstm
+            hist_states_h[k] = state_h
+            hist_states_c[k] = state_c
+        
+        # combine nonlinearly the states from the different frequencies
+        state_h = keras.layers.Dense(units=d_model, activation="sigmoid")([v for v in hist_states_h.values()])
+        state_c = keras.layers.Dense(units=d_model, activation="sigmoid")([v for v in hist_states_c.values()])
+
+        # combine the frequency time series by encoding the lower frequency LSTM memories into a higher frequency-consistent time series
+
+        # using a RepeatVector layer
+        num_timesteps_transformer = self.lags[self.highest_freq_X_] + self.nowcasting_steps_ # in other words, historical time steps + future time steps, both at the highest frequency
+        latent = {
+            k: keras.layers.RepeatVector(num_timesteps_transformer)(v)
+            for k, v in hist_states_h
+            if k != self.highest_freq_X_
+        }
+        # now an LSTM decoder for each frequency and then a time distributed dense layer, finaly combining the outpout with the originally high frequency before passing to the transformers
+        
+        # for the future data, we use only the highest frequency time series, which is the same as the data being outputted
+        future_lstm = keras.layers.LSTM(units=self.d_model, return_sequences=True, return_state=False)(future_features, initial_state=[state_h, state_c])
+                # out = keras.layers.Dense(units = dim, activation="relu")(encoded_series)
+                # out = keras.layers.Dense(units=1)(out)
+
+        #</temp LSTM>
+
         # transformer_layer # (sample, time (t-self.lags[highest_freq_X]; t+self.nowcasting_steps), embe dim)
         num_quantiles = len(self.quantiles)
         
@@ -1982,19 +2016,25 @@ class TFT(BaseEstimator, RegressorMixin):
         # In order to enforce monotoncity of the quantiles forecast only the lowest quantile from a base forecast layer, and use output_len - 1 additional layers with ReLU activation to produce the difference between the current quantile and the previous one
 
         output_lowest_quant = keras.layers.TimeDistributed(
-            keras.layers.Dense(self.nowcasting_steps),
+            keras.layers.Dense(self.nowcasting_steps_),
             name=f"output_q{str(self.quantiles[0])}"
         )(transformer_layer[Ellipsis, self.num_encoder_steps:, :])
 
         output_quant_deltas = [
             keras.layers.TimeDistributed(
-                keras.layers.Dense(self.nowcasting_steps, activation="relu", use_bias=False),
+                keras.layers.Dense(self.nowcasting_steps_, activation="relu", use_bias=False),
                 name=f"output_delta_to_q{str(self.quantiles[i+1])}"
             )(transformer_layer[Ellipsis, self.num_encoder_steps:, :])
             for i in range(num_quantiles - 1)
         ]
-        # TODO: sum them up
-        outputs = None #keras.ops.concatenate(, axis=-1)
+        # now it is time to sum up the lowest quantile with the quantile deltas
+        output_lowest_quant_expanded = np.expand_dims(output_lowest_quant, axis=-1)
+        quantile_outputs = [output_lowest_quant_expanded]
+        for delta in output_quant_deltas:
+            # Expand delta along the quantile axis and sum with the expanded lowest quantile
+            delta_expanded = np.expand_dims(delta, axis=-1)  # Shape: (samples, time, nowcasting_steps, 1)
+            quantile_outputs.append(output_lowest_quant_expanded + delta_expanded)
+        outputs = np.concatenate(quantile_outputs, axis=-1)
 
         model = keras.Model(inputs=all_inputs, outputs=outputs)
         model.compile(**self.compile_args)
@@ -2003,21 +2043,25 @@ class TFT(BaseEstimator, RegressorMixin):
     def fit(self, X:dict, y:dict):
         # DOC: both X and y need to be dicts where the keys are frequencies, and the elements are pandas dataframes with dates as indices
         
-        if self.verbose: print("Processing `X` and `y` data...")
+        if self.verbose: print("Processing `X` and `y` data.")
+
+        if self.verbose: print("  working out the frequencies...")
         # first we find all data with higher frequencies then `y`
-        highest_freq_X_ = self._highest_freq(X.keys(), y.keys())
+        self.highest_freq_X_ = self._highest_freq(X.keys(), y.keys())
          
         # now we resample `y` such that we are repeating it at the highest possible frequency; each such repetition will become the basis of the nowcast
         # in other words, the final transformer layer should 
         y_df = y[list(y.keys())[0]]
-        resampled_y_df = y_df.resample(highest_freq_X).bfill()
+        resampled_y_df = y_df if list(y.keys())[0] == self.highest_freq_X_ else y_df.resample(highest_freq_X).bfill()
         self.resampled_y_dates = resampled_y_df.index
-        self.nowcasting_steps_ = self._count_nowcasting_days(highest_freq_X, list(y.keys())[0])
+        self.num_encoder_steps = self.lags[self.highest_freq_X_]
+        self.nowcasting_steps_ = self._count_nowcasting_days(self.highest_freq_X_, list(y.keys())[0])
         
         # to simplify the model, only include the static context if there is variation
         entities = resampled_y_df.columns
         self.use_static_context = True if len(entities) > 1 else False
 
+        if self.verbose: print("  calculating ...")
         # this step finds, for each nowcasting time period (remember: measured at the highest possible frequency), the last available date for the lower frequencies
         #leq_freq_X = self._leq_freq(X.keys(), y.keys()) # for ME in all_freqs...
         all_freqs  = list(X.keys()) + list(y.keys())
@@ -2045,7 +2089,7 @@ class TFT(BaseEstimator, RegressorMixin):
         self.last_avail_dates_ = last_avail_dates
 
         # now the `resampled_y_df` dates are split into different validation folds
-        self.split_dates_ = {f"fold_{i}": {"train": train, "valid": test} for i, (train, test) in enumerate(self.tscv.split(resampled_y_df.index))}
+        self.split_idx_ = {f"fold_{i}": {"train": train, "valid": test} for i, (train, test) in enumerate(self.tscv.split(resampled_y_df.index))}
 
         # the lagged `y` data is also used as explanatory variable, so it needs to be concatenated to that, according to the corresponding frequency
         for yk, yv in y.items():
@@ -2057,13 +2101,13 @@ class TFT(BaseEstimator, RegressorMixin):
         # now use these last available dates to loop over the resampled_y data and for each resampled_y date, keep only those Xs that belong to the last available date and up to a lag for each frequency, padding when necessary
         
         fit_data = {}
-        for fold in tqdm(self.split_dates_.keys(), disable=~self.verbose):
+        for fold in tqdm(self.split_idx_.keys(), disable=~self.verbose):
             fit_data[fold] = {}
             for chunk in ["train", "valid"]:
-                fit_data[fold][chunk] = {"X": {}, "y": resampled_y_df.iloc[tft.split_dates_[fold][chunk]]}
+                fit_data[fold][chunk] = {"X": {}, "y": resampled_y_df.iloc[tft.split_idx_[fold][chunk]]}
                 for Xk, Xv in X.items():
                     fit_data[fold][chunk]["X"][Xk] = []
-                    for y_date in resampled_y_df.index[self.split_dates_[fold][chunk]]:
+                    for y_date in resampled_y_df.index[self.split_idx_[fold][chunk]]:
                         date_lim = self.last_avail_dates_[f"LastAvail{Xk}"][y_date]
                         try:
                             to_pad = Xv[:date_lim].values
@@ -2071,15 +2115,17 @@ class TFT(BaseEstimator, RegressorMixin):
                             to_pad = np.zeros((1, 1))
                         fit_data[fold][chunk]["X"][Xk].append(to_pad)
                     fit_data[fold][chunk]["X"][Xk] = keras.utils.pad_sequences(fit_data[fold][chunk]["X"][Xk], maxlen=self.lags[Xk], dtype=np.float32)
+    
         if self.verbose: print("Processing `X` and `y` data: concluded")
 
         # TODO: find all unique frequencies and calculate their time features
-        # TODO: build model ---- self.model = self._build_model()
+        self.model = self._build_model()
         # TODO: construct tscv
         # TODO: actually fit model
 
 tft = TFT()
-tmp_out = tft.fit(X={"D": df_oil_d, "W": df_oil_d.resample("W").bfill(), "QE": df_oil_d.resample("QE").bfill()}, y={"ME": df_infl_m})
+X_complicated = {"D": df_oil_d, "W": df_oil_d.resample("W").bfill(), "QE": df_oil_d.resample("QE").bfill()}
+tmp_out = tft.fit(X={"D": df_oil_d}, y={"ME": df_infl_m})
 tmp_out
 ```
 

@@ -44,6 +44,7 @@ import inspect
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pickle
 import sdmx
 from gingado.utils import load_SDMX_data
 from sklearn.base import BaseEstimator, RegressorMixin
@@ -1950,6 +1951,7 @@ class TFT(BaseEstimator, RegressorMixin):
             ]    
         },
         fit_args = {"epochs": 20, "batch_size":10, "shuffle": True},
+        cache_data=True,
         verbose=True
     ):
         self.name = name
@@ -1960,6 +1962,7 @@ class TFT(BaseEstimator, RegressorMixin):
         self.tscv = tscv
         self.compile_args = compile_args
         self.fit_args = fit_args
+        self.cache_data=True
         self.verbose = verbose
 
     def _build_model(self):
@@ -1983,22 +1986,36 @@ class TFT(BaseEstimator, RegressorMixin):
             hist_LSTMs[k] = lstm
             hist_states_h[k] = state_h
             hist_states_c[k] = state_c
+
+        # combine nonlinearly the states (at the end of historical series) from the different frequencies
+        state_h = keras.ops.concatenate([v for v in hist_states_h.values()], axis=-1) if len(hist_states_h.keys()) > 1 else list(hist_states_h.values())[0]
+        state_h = keras.layers.Dense(units=d_model, activation="sigmoid")(state_h)
         
-        # combine nonlinearly the states from the different frequencies
-        state_h = keras.layers.Dense(units=d_model, activation="sigmoid")([v for v in hist_states_h.values()])
-        state_c = keras.layers.Dense(units=d_model, activation="sigmoid")([v for v in hist_states_c.values()])
+        state_c = keras.ops.concatenate([v for v in hist_states_c.values()], axis=-1) if len(hist_states_c.keys()) > 1 else list(hist_states_c.values())[0]
+        state_c = keras.layers.Dense(units=d_model, activation="sigmoid")(state_c)
 
         # combine the frequency time series by encoding the lower frequency LSTM memories into a higher frequency-consistent time series
 
-        # using a RepeatVector layer
         num_timesteps_transformer = self.lags[self.highest_freq_X_] + self.nowcasting_steps_ # in other words, historical time steps + future time steps, both at the highest frequency
-        latent = {
-            k: keras.layers.RepeatVector(num_timesteps_transformer)(v)
-            for k, v in hist_states_h
-            if k != self.highest_freq_X_
-        }
-        # now an LSTM decoder for each frequency and then a time distributed dense layer, finaly combining the outpout with the originally high frequency before passing to the transformers
         
+        # the process to translate information from one frequency to another is only necessary if there is more than one frequency in the data
+        if len(hist_states_h.keys()) > 1:
+            latent = {
+                k: keras.Sequential([
+                    keras.layers.RepeatVector(num_timesteps_transformer),
+                    keras.layers.LSTM(units=d_model, return_sequences=True),
+                    keras.layers.TimeDistributed(keras.layers.Dense(units=d_model))
+                ], name=f"translate__freq_{k}_to_{self.highest_freq_X_}")(v)
+                for k, v in hist_states_h
+                if k != self.highest_freq_X_
+            }
+            # now an LSTM decoder for each frequency and then a time distributed dense layer, finaly combining the outpout with the originally high frequency before passing to the transformers
+            all_latent = [v for v in latent.values()] + [hist_LSTMs[self.highest_freq_X_]]
+            hist_LSTM = keras.ops.concatenate(all_latent, axis=-1)
+            hist_LSTM = keras.layers.TimeDistributed(keras.layers.Dense(units=d_model, use_bias=False))(hist_LSTM)
+        else:
+            hist_LSTM = hist_LSTMs[self.highest_freq_X_]
+
         # for the future data, we use only the highest frequency time series, which is the same as the data being outputted
         future_lstm = keras.layers.LSTM(units=self.d_model, return_sequences=True, return_state=False)(future_features, initial_state=[state_h, state_c])
                 # out = keras.layers.Dense(units = dim, activation="relu")(encoded_series)
@@ -2006,7 +2023,12 @@ class TFT(BaseEstimator, RegressorMixin):
 
         #</temp LSTM>
 
+        # concatenate along the time dimension
+        transformer_layer = keras.ops.concatenate([hist_LSTM, future_LSTM], axis=1) 
+        
         # transformer_layer # (sample, time (t-self.lags[highest_freq_X]; t+self.nowcasting_steps), embe dim)
+        
+        
         num_quantiles = len(self.quantiles)
         
         
@@ -2039,6 +2061,24 @@ class TFT(BaseEstimator, RegressorMixin):
         model = keras.Model(inputs=all_inputs, outputs=outputs)
         model.compile(**self.compile_args)
         return model
+
+    def _organise_data(self, X, y):
+        fit_data = {}
+        for fold in tqdm(self.split_idx_.keys(), disable=~self.verbose):
+            fit_data[fold] = {}
+            for chunk in ["train", "valid"]:
+                fit_data[fold][chunk] = {"X": {}, "y": resampled_y_df.iloc[tft.split_idx_[fold][chunk]]}
+                for Xk, Xv in X.items():
+                    fit_data[fold][chunk]["X"][Xk] = []
+                    for y_date in resampled_y_df.index[self.split_idx_[fold][chunk]]:
+                        date_lim = self.last_avail_dates_[f"LastAvail{Xk}"][y_date]
+                        try:
+                            to_pad = Xv[:date_lim].values
+                        except KeyError:
+                            to_pad = np.zeros((1, 1))
+                        fit_data[fold][chunk]["X"][Xk].append(to_pad)
+                    fit_data[fold][chunk]["X"][Xk] = keras.utils.pad_sequences(fit_data[fold][chunk]["X"][Xk], maxlen=self.lags[Xk], dtype=np.float32)
+        return fit_data
 
     def fit(self, X:dict, y:dict):
         # DOC: both X and y need to be dicts where the keys are frequencies, and the elements are pandas dataframes with dates as indices
@@ -2100,21 +2140,16 @@ class TFT(BaseEstimator, RegressorMixin):
 
         # now use these last available dates to loop over the resampled_y data and for each resampled_y date, keep only those Xs that belong to the last available date and up to a lag for each frequency, padding when necessary
         
-        fit_data = {}
-        for fold in tqdm(self.split_idx_.keys(), disable=~self.verbose):
-            fit_data[fold] = {}
-            for chunk in ["train", "valid"]:
-                fit_data[fold][chunk] = {"X": {}, "y": resampled_y_df.iloc[tft.split_idx_[fold][chunk]]}
-                for Xk, Xv in X.items():
-                    fit_data[fold][chunk]["X"][Xk] = []
-                    for y_date in resampled_y_df.index[self.split_idx_[fold][chunk]]:
-                        date_lim = self.last_avail_dates_[f"LastAvail{Xk}"][y_date]
-                        try:
-                            to_pad = Xv[:date_lim].values
-                        except KeyError:
-                            to_pad = np.zeros((1, 1))
-                        fit_data[fold][chunk]["X"][Xk].append(to_pad)
-                    fit_data[fold][chunk]["X"][Xk] = keras.utils.pad_sequences(fit_data[fold][chunk]["X"][Xk], maxlen=self.lags[Xk], dtype=np.float32)
+        if self.cache_data:
+            filename = "tft.pkl"
+            if os.path.isfile(filename):
+                fit_data = pickle.load(filename)
+            else:
+                fit_data = self._organise_data(X=X, y=resampled_y_df)
+                with open(filename, "wb") as f:
+                    pickle.dump(fit_data, file=f)
+
+        
     
         if self.verbose: print("Processing `X` and `y` data: concluded")
 

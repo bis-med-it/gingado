@@ -1967,20 +1967,20 @@ class TFT(BaseEstimator, RegressorMixin):
 
     def _build_model(self):
         # all_inputs = 
-        all_inputs = {f: keras.layers.Input(shape=(None,None), name=f) for f in freqs} # should I change this shape to (None, None)???
+        all_inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in self.freq_rank.keys()} # should I change this shape to (None, None)???
         encoded_cont_inputs = {
             k: keras.layers.TimeDistributed(
                 keras.layers.Dense(self.d_model),
                 name=f"encoding__freq_{k}"
             )(v)
-            for k, v in cont_inputs.items()
+            for k, v in all_inputs.items()
         }
 
         #<temp LSTM>
         hist_LSTMs = {}
         hist_states_h = {}
         hist_states_c = {}
-        for k, v in encoded_inputs.items():
+        for k, v in encoded_cont_inputs.items():
             lstm = keras.layers.Masking(mask_value=0.0)(v)
             lstm, state_h, state_c = keras.layers.LSTM(units=self.d_model, return_sequences=True, return_state=True, name=f"LSTMencoder__freq_{k}")(lstm)
             hist_LSTMs[k] = lstm
@@ -2006,10 +2006,11 @@ class TFT(BaseEstimator, RegressorMixin):
                     keras.layers.LSTM(units=d_model, return_sequences=True),
                     keras.layers.TimeDistributed(keras.layers.Dense(units=d_model))
                 ], name=f"translate__freq_{k}_to_{self.highest_freq_X_}")(v)
-                for k, v in hist_states_h
+                for k, v in hist_states_h.items()
                 if k != self.highest_freq_X_
             }
             # now an LSTM decoder for each frequency and then a time distributed dense layer, finaly combining the outpout with the originally high frequency before passing to the transformers
+            print(f"highest_freq_X_: {self.highest_freq_X_}, hist_LSTMs.keys(): {hist_LSTMs.keys()}")
             all_latent = [v for v in latent.values()] + [hist_LSTMs[self.highest_freq_X_]]
             hist_LSTM = keras.ops.concatenate(all_latent, axis=-1)
             hist_LSTM = keras.layers.TimeDistributed(keras.layers.Dense(units=d_model, use_bias=False))(hist_LSTM)
@@ -2017,6 +2018,8 @@ class TFT(BaseEstimator, RegressorMixin):
             hist_LSTM = hist_LSTMs[self.highest_freq_X_]
 
         # for the future data, we use only the highest frequency time series, which is the same as the data being outputted
+
+
         future_lstm = keras.layers.LSTM(units=self.d_model, return_sequences=True, return_state=False)(future_features, initial_state=[state_h, state_c])
                 # out = keras.layers.Dense(units = dim, activation="relu")(encoded_series)
                 # out = keras.layers.Dense(units=1)(out)
@@ -2062,22 +2065,57 @@ class TFT(BaseEstimator, RegressorMixin):
         model.compile(**self.compile_args)
         return model
 
+    def _add_last_avail_date(self):
+        last_avail_dates = pd.DataFrame(index=resampled_y_df.index)
+        def add_lastdate(df, offset_func, newcol=None):
+            new_df = pd.concat([
+                df,
+                pd.DataFrame(
+                    df.index - offset_func, 
+                    index=df.index, 
+                )], axis=1
+            )
+            new_df.columns = [c for c in new_df.columns[:-1]] + [f"LastAvail{newcol}"]
+            return new_df
+        if "D" in self.data_freqs_:
+            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.DateOffset(days=1), newcol="D")
+        if "W" in self.data_freqs_:
+            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.DateOffset(weeks=1), newcol="W")
+        if "ME" in self.data_freqs_:
+            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.MonthEnd(1), newcol="ME")
+        if "QE" in self.data_freqs_:
+            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.QuarterEnd(1), newcol="QE")
+        if "YE" in self.data_freqs_:
+            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.YearEnd(1), newcol="YE")
+        self.last_avail_dates_ = last_avail_dates
+
     def _organise_data(self, X, y):
         fit_data = {}
         for fold in tqdm(self.split_idx_.keys(), disable=~self.verbose):
             fit_data[fold] = {}
             for chunk in ["train", "valid"]:
-                fit_data[fold][chunk] = {"X": {}, "y": resampled_y_df.iloc[tft.split_idx_[fold][chunk]]}
+                fit_data[fold][chunk] = {"X_hist": {}, "X_fut": {}, "y": resampled_y_df.iloc[tft.split_idx_[fold][chunk]]}
                 for Xk, Xv in X.items():
-                    fit_data[fold][chunk]["X"][Xk] = []
+                    fit_data[fold][chunk]["X_hist"][Xk] = []
+                    fit_data[fold][chunk]["X_fut"][Xk] = []
                     for y_date in resampled_y_df.index[self.split_idx_[fold][chunk]]:
                         date_lim = self.last_avail_dates_[f"LastAvail{Xk}"][y_date]
                         try:
                             to_pad = Xv[:date_lim].values
                         except KeyError:
                             to_pad = np.zeros((1, 1))
-                        fit_data[fold][chunk]["X"][Xk].append(to_pad)
-                    fit_data[fold][chunk]["X"][Xk] = keras.utils.pad_sequences(fit_data[fold][chunk]["X"][Xk], maxlen=self.lags[Xk], dtype=np.float32)
+                        fit_data[fold][chunk]["X_hist"][Xk].append(to_pad)
+                        
+                        try:
+                            to_pad = Xv[date_lim:].values
+                        except KeyError:
+                            to_pad = np.zeros((1, 1))
+                        fit_data[fold][chunk]["X_fut"][Xk].append(to_pad)
+
+                    fit_data[fold][chunk]["X_hist"][Xk] = keras.utils.pad_sequences(fit_data[fold][chunk]["X_hist"][Xk], maxlen=self.lags[Xk], dtype=np.float32)
+                    
+                    fit_data[fold][chunk]["X_fut"][Xk] = keras.utils.pad_sequences(fit_data[fold][chunk]["X_fut"][Xk], padding="post", maxlen=self.nowcasting_steps_, dtype=np.float32)
+
         return fit_data
 
     def fit(self, X:dict, y:dict):
@@ -2087,11 +2125,12 @@ class TFT(BaseEstimator, RegressorMixin):
 
         if self.verbose: print("  working out the frequencies...")
         # first we find all data with higher frequencies then `y`
+        self.y_freq_ = list(y.keys())[0]
         self.highest_freq_X_ = self._highest_freq(X.keys(), y.keys())
          
         # now we resample `y` such that we are repeating it at the highest possible frequency; each such repetition will become the basis of the nowcast
         # in other words, the final transformer layer should 
-        y_df = y[list(y.keys())[0]]
+        y_df = y[self.y_freq_]
         resampled_y_df = y_df if list(y.keys())[0] == self.highest_freq_X_ else y_df.resample(highest_freq_X).bfill()
         self.resampled_y_dates = resampled_y_df.index
         self.num_encoder_steps = self.lags[self.highest_freq_X_]
@@ -2104,29 +2143,8 @@ class TFT(BaseEstimator, RegressorMixin):
         if self.verbose: print("  calculating ...")
         # this step finds, for each nowcasting time period (remember: measured at the highest possible frequency), the last available date for the lower frequencies
         #leq_freq_X = self._leq_freq(X.keys(), y.keys()) # for ME in all_freqs...
-        all_freqs  = list(X.keys()) + list(y.keys())
-        last_avail_dates = pd.DataFrame(index=resampled_y_df.index)
-        def add_lastdate(df, offset_func, newcol=None):
-            new_df = pd.concat([
-                df,
-                pd.DataFrame(
-                    df.index - offset_func, 
-                    index=df.index, 
-                )], axis=1
-            )
-            new_df.columns = [c for c in new_df.columns[:-1]] + [f"LastAvail{newcol}"]
-            return new_df
-        if "D" in all_freqs:
-            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.DateOffset(days=1), newcol="D")
-        if "W" in all_freqs:
-            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.DateOffset(weeks=1), newcol="W")
-        if "ME" in all_freqs:
-            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.MonthEnd(1), newcol="ME")
-        if "QE" in all_freqs:
-            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.QuarterEnd(1), newcol="QE")
-        if "YE" in all_freqs:
-            last_avail_dates = add_lastdate(last_avail_dates, pd.offsets.YearEnd(1), newcol="YE")
-        self.last_avail_dates_ = last_avail_dates
+        self.data_freqs_ = list(X.keys()) + list(y.keys())
+        self._add_last_avail_date()
 
         # now the `resampled_y_df` dates are split into different validation folds
         self.split_idx_ = {f"fold_{i}": {"train": train, "valid": test} for i, (train, test) in enumerate(self.tscv.split(resampled_y_df.index))}
@@ -2141,15 +2159,15 @@ class TFT(BaseEstimator, RegressorMixin):
         # now use these last available dates to loop over the resampled_y data and for each resampled_y date, keep only those Xs that belong to the last available date and up to a lag for each frequency, padding when necessary
         
         if self.cache_data:
-            filename = "tft.pkl"
+            filename = "TFT.pkl"
             if os.path.isfile(filename):
-                fit_data = pickle.load(filename)
+                with open(filename, "rb") as f:
+                    fit_data = pickle.load(f)
             else:
                 fit_data = self._organise_data(X=X, y=resampled_y_df)
                 with open(filename, "wb") as f:
                     pickle.dump(fit_data, file=f)
 
-        
     
         if self.verbose: print("Processing `X` and `y` data: concluded")
 

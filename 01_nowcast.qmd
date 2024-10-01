@@ -2094,23 +2094,25 @@ class TFT(BaseEstimator, RegressorMixin):
         for fold in tqdm(self.split_idx_.keys(), disable=~self.verbose):
             fit_data[fold] = {}
             for chunk in ["train", "valid"]:
-                fit_data[fold][chunk] = {"X_hist": {}, "X_fut": {}, "y": resampled_y_df.iloc[tft.split_idx_[fold][chunk]]}
+                fit_data[fold][chunk] = {"X_hist": {}, "X_fut": {}, "y": y.iloc[tft.split_idx_[fold][chunk]]}
                 for Xk, Xv in X.items():
                     fit_data[fold][chunk]["X_hist"][Xk] = []
                     fit_data[fold][chunk]["X_fut"][Xk] = []
-                    for y_date in resampled_y_df.index[self.split_idx_[fold][chunk]]:
+                    for y_date in y.index[self.split_idx_[fold][chunk]]:
                         date_lim = self.last_avail_dates_[f"LastAvail{Xk}"][y_date]
+                        date_lim_ydata = self.last_avail_dates_[f"LastAvail{self.y_freq_}"][y_date]
                         try:
                             to_pad = Xv[:date_lim].values
                         except KeyError:
                             to_pad = np.zeros((1, 1))
                         fit_data[fold][chunk]["X_hist"][Xk].append(to_pad)
                         
-                        try:
-                            to_pad = Xv[date_lim:].values
-                        except KeyError:
-                            to_pad = np.zeros((1, 1))
-                        fit_data[fold][chunk]["X_fut"][Xk].append(to_pad)
+                        if self.freq_rank[Xk] > self.freq_rank[self.y_freq_] and date_lim_ydata < y_date:
+                            try:
+                                to_pad = Xv[date_lim_ydata:y_date][1:].values
+                            except KeyError:
+                                to_pad = np.zeros((1, 1))
+                            fit_data[fold][chunk]["X_fut"][Xk].append(to_pad)
 
                     fit_data[fold][chunk]["X_hist"][Xk] = keras.utils.pad_sequences(fit_data[fold][chunk]["X_hist"][Xk], maxlen=self.lags[Xk], dtype=np.float32)
                     
@@ -2183,7 +2185,22 @@ tmp_out
 ```
 
 
+```{python}
+#| label: JUST FOR TESTING
 
+with open("tft.pkl", "rb") as f:
+    fit_data = pickle.load(f)
+
+fit_data["fold_0"]["train"]["y"]
+df_infl_m["1991-06-01":"1991-11-30"]
+df_oil_d["1991-08-25":"1991-10-05"]
+fit_data["fold_0"]["train"]["X_fut"]["D"][-5:,:,0].T
+fit_data["fold_3"]["train"]["X_hist"]["D"][-3,:,:]
+fit_data["fold_3"]["train"]["y"].index[-5:]
+
+
+
+```
 ```{python}
 tft = TFT(fit_args=fit_args, time_feat=None)
 

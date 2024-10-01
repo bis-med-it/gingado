@@ -1941,16 +1941,19 @@ class TFT(BaseEstimator, RegressorMixin):
         tscv=TimeSeriesSplit(n_splits=5),
         compile_args={
             "loss": quantile_loss,
-            "optimizer": keras.optimizers.Adam(learning_rate=learning_rate, clipnorm=max_gradient_norm),
+            "optimizer": keras.optimizers.Adam(learning_rate=learning_rate, clipnorm=max_gradient_norm)    
+        },
+        fit_args = {
+            "epochs": 20, 
+            "batch_size":10, 
+            "shuffle": True,
             "callbacks": [
                 keras.callbacks.EarlyStopping(
                     monitor='val_loss',
                     patience=5,
                     min_delta=1e-4
                 )
-            ]    
-        },
-        fit_args = {"epochs": 20, "batch_size":10, "shuffle": True},
+            ]},
         cache_data=True,
         verbose=True
     ):
@@ -1966,15 +1969,17 @@ class TFT(BaseEstimator, RegressorMixin):
         self.verbose = verbose
 
     def _build_model(self):
-        # all_inputs = 
-        all_inputs = {f: keras.layers.Input(shape=(None,1), name=f) for f in self.freq_rank.keys()} # should I change this shape to (None, None)???
+        hist_inputs = {k: keras.layers.Input(shape=(None,1), name=f"HistInput__freq_{k}") for k in self.freq_rank.keys()} # should I change this shape to (None, None)???
         encoded_cont_inputs = {
             k: keras.layers.TimeDistributed(
                 keras.layers.Dense(self.d_model),
                 name=f"encoding__freq_{k}"
             )(v)
-            for k, v in all_inputs.items()
+            for k, v in hist_inputs.items()
         }
+
+        higher_freqs = [k for k in list(hist_inputs.keys()) if self.freq_rank[k] > self.freq_rank[self.y_freq_]]
+        fut_inputs = {f: keras.layers.Input(shape=(None, 1), name=f"FutInput__freq_{k}") for k in higher_freqs}
 
         #<temp LSTM>
         hist_LSTMs = {}
@@ -2003,32 +2008,33 @@ class TFT(BaseEstimator, RegressorMixin):
             latent = {
                 k: keras.Sequential([
                     keras.layers.RepeatVector(num_timesteps_transformer),
-                    keras.layers.LSTM(units=d_model, return_sequences=True),
-                    keras.layers.TimeDistributed(keras.layers.Dense(units=d_model))
+                    keras.layers.LSTM(units=self.d_model, return_sequences=True),
+                    keras.layers.TimeDistributed(keras.layers.Dense(units=self.d_model))
                 ], name=f"translate__freq_{k}_to_{self.highest_freq_X_}")(v)
                 for k, v in hist_states_h.items()
                 if k != self.highest_freq_X_
             }
             # now an LSTM decoder for each frequency and then a time distributed dense layer, finaly combining the outpout with the originally high frequency before passing to the transformers
-            print(f"highest_freq_X_: {self.highest_freq_X_}, hist_LSTMs.keys(): {hist_LSTMs.keys()}")
             all_latent = [v for v in latent.values()] + [hist_LSTMs[self.highest_freq_X_]]
             hist_LSTM = keras.ops.concatenate(all_latent, axis=-1)
-            hist_LSTM = keras.layers.TimeDistributed(keras.layers.Dense(units=d_model, use_bias=False))(hist_LSTM)
+            hist_LSTM = keras.layers.TimeDistributed(keras.layers.Dense(units=self.d_model, use_bias=False))(hist_LSTM)
         else:
             hist_LSTM = hist_LSTMs[self.highest_freq_X_]
 
         # for the future data, we use only the highest frequency time series, which is the same as the data being outputted
 
 
-        future_lstm = keras.layers.LSTM(units=self.d_model, return_sequences=True, return_state=False)(future_features, initial_state=[state_h, state_c])
-                # out = keras.layers.Dense(units = dim, activation="relu")(encoded_series)
-                # out = keras.layers.Dense(units=1)(out)
+        future_dec = {
+            k: keras.layers.LSTM(units=self.d_model, return_sequences=True, return_state=False, name=f"LSTMDecoder__freq_{k}")(v, initial_state=[state_h, state_c])
+            for k, v in fut_inputs.items()
+        }
+        future_dec = keras.ops.concatenate([v for v in future_dec.values()], axis=-1)
+        future_dec = keras.layers.TimeDistributed(keras.layers.Dense(units=self.d_model, use_bias="False"))(future_dec)
 
         #</temp LSTM>
 
         # concatenate along the time dimension
-        transformer_layer = keras.ops.concatenate([hist_LSTM, future_LSTM], axis=1) 
-        
+        transformer_layer = keras.ops.concatenate([hist_LSTM, future_dec], axis=1) 
         # transformer_layer # (sample, time (t-self.lags[highest_freq_X]; t+self.nowcasting_steps), embe dim)
         
         
@@ -2053,15 +2059,15 @@ class TFT(BaseEstimator, RegressorMixin):
             for i in range(num_quantiles - 1)
         ]
         # now it is time to sum up the lowest quantile with the quantile deltas
-        output_lowest_quant_expanded = np.expand_dims(output_lowest_quant, axis=-1)
+        output_lowest_quant_expanded = keras.ops.expand_dims(output_lowest_quant, axis=-1)
         quantile_outputs = [output_lowest_quant_expanded]
         for delta in output_quant_deltas:
             # Expand delta along the quantile axis and sum with the expanded lowest quantile
-            delta_expanded = np.expand_dims(delta, axis=-1)  # Shape: (samples, time, nowcasting_steps, 1)
+            delta_expanded = keras.ops.expand_dims(delta, axis=-1)  # Shape: (samples, time, nowcasting_steps, 1)
             quantile_outputs.append(output_lowest_quant_expanded + delta_expanded)
-        outputs = np.concatenate(quantile_outputs, axis=-1)
+        outputs = keras.ops.concatenate(quantile_outputs, axis=-1)
 
-        model = keras.Model(inputs=all_inputs, outputs=outputs)
+        model = keras.Model(inputs=[hist_inputs, fut_inputs], outputs=outputs)
         model.compile(**self.compile_args)
         return model
 
@@ -2175,6 +2181,14 @@ class TFT(BaseEstimator, RegressorMixin):
 
         # TODO: find all unique frequencies and calculate their time features
         self.model = self._build_model()
+        
+        fold = "fold_0"
+        self.history = self.model.fit(
+            x=[fit_data[fold]["train"]["X_hist"], fit_data[fold]["train"]["X_fut"]],
+            y=fit_data[fold]["train"]["y"],
+            validation_data=([fit_data[fold]["valid"]["X_hist"], fit_data[fold]["valid"]["X_fut"]], fit_data[fold]["valid"]["y"]),
+            **self.fit_args
+        )
         # TODO: construct tscv
         # TODO: actually fit model
 
@@ -2188,15 +2202,15 @@ tmp_out
 ```{python}
 #| label: JUST FOR TESTING
 
-with open("tft.pkl", "rb") as f:
-    fit_data = pickle.load(f)
+# with open("tft.pkl", "rb") as f:
+#     fit_data = pickle.load(f)
 
-fit_data["fold_0"]["train"]["y"]
-df_infl_m["1991-06-01":"1991-11-30"]
-df_oil_d["1991-08-25":"1991-10-05"]
-fit_data["fold_0"]["train"]["X_fut"]["D"][-5:,:,0].T
-fit_data["fold_3"]["train"]["X_hist"]["D"][-3,:,:]
-fit_data["fold_3"]["train"]["y"].index[-5:]
+# fit_data["fold_0"]["train"]["y"]
+# df_infl_m["1991-06-01":"1991-11-30"]
+# df_oil_d["1991-08-25":"1991-10-05"]
+# fit_data["fold_0"]["train"]["X_fut"]["D"][-5:,:,0].T
+# fit_data["fold_3"]["train"]["X_hist"]["D"][-3,:,:]
+# fit_data["fold_3"]["train"]["y"].index[-5:]
 
 
 

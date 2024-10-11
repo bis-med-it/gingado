@@ -131,7 +131,7 @@ def load_lr_tanzania_data(wide_format: bool = False) -> dict[str, pd.DataFrame]:
 
     Parameters:
     wide_format (bool): If True, returns data in wide format with pivoted columns. Column names will
-        be in the format <BANK_CODE>__<VAR_NAME>.
+        be in the format BANK_CODE__VAR_NAME.
 
     Returns:
     dict[str, pd.DataFrame]: A dictionary with keys 'w' for weekly data and 'm' for monthly data.

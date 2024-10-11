@@ -137,6 +137,12 @@ This function loads liquidity risk data from CSV files for 38 Tanzanian commerci
 from 2010 to 2021. The dataset is sourced from the study "Using machine learning for detecting liquidity risk in banks"
 and includes both monthly and weekly data provided by the Bank of Tanzania (BOT). 
 
+```{python}
+# Load liquidity risk data for 2020
+lr_data = load_lr_tanzania_data()
+lr_data["m"].head()
+```
+
 If you use this data in your work, please cite the dataset, as follows:
 ```
 @article{BARONGO2024100511
@@ -148,16 +154,6 @@ If you use this data in your work, please cite the dataset, as follows:
     doi = {https://doi.org/10.1016/j.mlwa.2023.100511},
     url = {https://www.sciencedirect.com/science/article/pii/S2666827023000646},
 }
-
-```{python}
-# Load liquidity risk data for 2020
-lr_data = load_lr_tanzania_data()
-# Print the first few rows of the monthly data
-print(lr_data["m"].head())
-```
-
-https://github.com/jdamp-bis/gingado
-
 
 ## Simulated datasets
 

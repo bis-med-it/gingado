@@ -70,7 +70,7 @@ The code below simplifies the column names by removing the identification of the
 print("Original column names:")
 print(df.columns)
 
-df.columns = ['USD' + col.split('_')[9] for col in df.columns]
+df.columns = ['USD' + col.split('_')[8] for col in df.columns]
 
 print("New column names:")
 print(df.columns)
@@ -87,7 +87,7 @@ We are interested in the percentage change from the previous day.
 
 ```{python}
 
-FX_rate_changes = df.pct_change()
+FX_rate_changes = df.pct_change(fill_method=None)
 FX_rate_changes.dropna(inplace=True)
 ```
 

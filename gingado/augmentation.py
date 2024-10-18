@@ -75,7 +75,7 @@ class AugmentSDMX(BaseEstimator, TransformerMixin):
         if 'TIME_PERIOD' in X.columns:
             X.drop(columns='TIME_PERIOD', inplace=True)
         if self.propagate_last_known_value:
-            X.fillna(method="ffill", inplace=True)
+            X.ffill(inplace=True)
         if self.fillna is not None:
             X.fillna(self.fillna)
         if training:

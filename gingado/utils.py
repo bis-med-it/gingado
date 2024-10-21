@@ -188,3 +188,148 @@ def load_SDMX_data(
     df = pd.concat(data_sdmx, axis=1)
     df.columns = ['_'.join(col) for col in df.columns.to_flat_index()]
     return df
+
+
+def get_timefeat(
+    df: pd.DataFrame | pd.Series,
+    freq: FrequencyLike,
+    columns: list[str] | None = None,
+    add_to_df: bool = True,
+) -> pd.DataFrame:
+    """Generate temporal features from a DataFrame with a DatetimeIndex.
+
+    This function creates various time-based features such as day of week,
+    day of month, week of year, etc., based on the DatetimeIndex of the input DataFrame.
+
+    Args:
+        df (pd.DataFrame | pd.Series): Input DataFrame or Series with a DatetimeIndex.
+        freq (FrequencyLike): Frequency of the input DataFrame. Can either be a string which is
+            a supported pandas frequency alias or an gingado-interal Frequency object.
+        columns (list[str], optional): List of colums with temporal feature names that should be
+            kept. If None, all default temporal features are returned. Defaults to None.
+        add_to_df (bool, optional): If True, append the generated features to the input DataFrame.
+            If False, return only the generated features. Defaults to True.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing the generated temporal features,
+            either appended to the input DataFrame or as a separate DataFrame.
+
+    Raises:
+        ValueError: If the input DataFrame's index is not a DatetimeIndex.
+    """
+    if not isinstance(df.index, pd.DatetimeIndex):
+        raise ValueError("DataFrame index must be a DatetimeIndex")
+    freq = validate_and_get_freq(freq)
+
+    features = []
+
+    if freq == Frequency.DAILY:
+        features.append(_get_day_features(df.index))
+
+    if freq in [Frequency.DAILY, Frequency.WEEKLY]:
+        features.append(_get_week_features(df.index))
+
+    if freq in [Frequency.DAILY, Frequency.WEEKLY, Frequency.MONTHLY]:
+        features.append(_get_month_features(df.index))
+
+    # We currently use these for all frequencies
+    features.append(_get_quarter_features(df.index))
+
+    time_features = pd.concat(features, axis=1) if features else pd.DataFrame(index=df.index)
+
+    # Filter for user-provided features
+    if columns is not None:
+        valid_columns = _check_valid_features(columns, freq)
+        time_features = time_features.loc[:, valid_columns]
+
+    if add_to_df:
+        return pd.concat([df, time_features], axis=1)
+    return time_features
+
+
+def dates_Xy(
+    X: dict[str, pd.DataFrame],
+    y: pd.DataFrame | pd.Series,
+    dates: list[DateTimeLike],
+    freq_y: FrequencyLike = "MS",
+) -> list[tuple[dict[str, pd.DataFrame | None], float]]:
+    """Process time series data by creating snapshots for each date in the given list.
+    Args:
+        X (dict[str, pd.DataFrame]): Dictionary of DataFrames containing feature data at different
+            frequencies.
+        y (pd.DataFrame | pd.Series): DataFrame or Series containing target data.
+        dates (list[DateTimeLike]): List of dates to process.
+        freq_y (FrequencyLike): Frequency of the target data. Defaults to "M" (monthly).
+    Returns:
+        list[tuple[dict[str, pd.DataFrame | None], float]]: Processed data for each date.
+    """
+    result = []
+    for date in dates:
+        # data up to 'date' and y_value at 'date'
+        X_filtered = {freq: _get_filtered_data(Xdata, date) for freq, Xdata in X.items()}
+        y_value = y.loc[date]
+
+        # Calculate temporal features for y data
+        y_history = y.loc[:date]
+        future_features = get_timefeat(y_history, freq=freq_y, add_to_df=False)
+        X_filtered["future"] = future_features.iloc[-1:, :]  # Use only the last row
+
+        result.append((X_filtered, y_value))
+
+    return result
+
+
+class TemporalFeatureTransformer(BaseEstimator, TransformerMixin):
+    """
+    A scikit-learn transformer that adds temporal features to a pandas DataFrame.
+    This transformer uses the get_timefeat function to generate temporal features
+    based on the DatetimeIndex of the input DataFrame.
+    """
+
+    def __init__(
+        self,
+        freq: FrequencyLike,
+        features: list[str] | None = None,
+    ):
+        """Configure and set up a temporal feature transformer.
+        Args:
+            freq (FrequencyLike): Frequency of the input DataFrame.
+            features (list[str] | None): List of temporal features to include. If None, all temporal
+                features are selected. Defaults to None.
+        """
+        self.freq = validate_and_get_freq(freq)
+        self.features = features
+
+    def fit(self, X: pd.DataFrame, y: pd.Series | None = None):
+        """Fit the transformer to the input DataFrame.
+        This method doesn't actually do anything as the transformer doesn't need fitting.
+        It's included to conform to the scikit-learn transformer interface.
+        Args:
+            X (pd.DataFrame): Input features.
+            y (pd.Series | None): Target variable. Not used in this transformer.
+        Returns:
+            TemporalFeatureTransformer: The transformer instance.
+        """
+        return self
+
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Transform the input DataFrame by adding temporal features.
+        Args:
+            X (pd.DataFrame): Input features.
+        Returns:
+            pd.DataFrame | np.ndarray: Transformed DataFrame with added temporal features.
+        Raises:
+            ValueError: If the input DataFrame's index is not a DatetimeIndex.
+        """
+        X_transformed = get_timefeat(df=X, freq=self.freq, columns=self.features, add_to_df=True)
+        return X_transformed
+
+    @staticmethod
+    def get_valid_features() -> dict[str, list[str]]:
+        """Get a dictionary of all valid features grouped by feature type."""
+        return {
+            "day_features": [f.value for f in DayFeatures],
+            "week_features": [f.value for f in WeekFeatures],
+            "month_features": [f.value for f in MonthFeatures],
+            "quarter_features": [f.value for f in QuarterFeatures],
+        }

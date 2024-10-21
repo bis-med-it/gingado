@@ -5,7 +5,7 @@ from pandas.testing import assert_index_equal
 from sklearn.dummy import DummyRegressor  # type: ignore
 from sklearn.pipeline import Pipeline  # type: ignore
 
-from gingado.temporal.types import (
+from gingado.internals import (
     DayFeatures,
     Frequency,
     MonthFeatures,

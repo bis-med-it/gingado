@@ -1,13 +1,18 @@
 """Functions intended for library internal use."""
+
 from __future__ import annotations  # Allows forward annotations in Python < 3.10
 
+import datetime
+from enum import Enum
 import io
 import os
 from pathlib import Path
 import re
 import time
+import warnings
 from zipfile import ZipFile
 
+import numpy as np
 import pandas as pd
 import requests
 
@@ -168,4 +173,271 @@ def verify_cached_csv(file_path: str) -> None:
             'Manually remove the file or replace with correct dataset.'
         )
     except Exception as ex:
-        raise RuntimeError('Verification error. See previous exception.') from ex
+        raise RuntimeError("Verification error. See previous exception.") from ex
+
+
+class Frequency(Enum):
+    """Enum class representing valid frequency codes for time series data.
+
+    These frequency codes align with pandas' frequency aliases and can be used
+    for operations like resampling or date range generation.
+
+    Attributes:
+        DAILY (str): Daily frequency ('D')
+        WEEKLY (str): Weekly frequency ('W')
+        MONTHLY (str): Monthly start frequency ('MS')
+        QUARTERLY (str): Quarterly start frequency ('QS')
+    """
+
+    DAILY = "D"
+    WEEKLY = "W"
+    MONTHLY = "MS"
+    QUARTERLY = "QS"
+
+
+FrequencyLike = str | Frequency
+DateTimeLike = pd.Timestamp | datetime.datetime | np.datetime64 | str | datetime.date
+
+
+class DayFeatures(Enum):
+    """Enum class representing day-based temporal features.
+
+    These features provide various ways to represent a day within different
+    time periods (week, month, quarter, year).
+
+    Attributes:
+        DAY_OF_WEEK (str): Day of the week (0-6, where 0 is Monday)
+        DAY_OF_MONTH (str): Day of the month (1-31)
+        DAY_OF_QUARTER (str): Day of the quarter (1-92)
+        DAY_OF_YEAR (str): Day of the year (1-366)
+    """
+
+    DAY_OF_WEEK = "day_of_week"
+    DAY_OF_MONTH = "day_of_month"
+    DAY_OF_QUARTER = "day_of_quarter"
+    DAY_OF_YEAR = "day_of_year"
+
+
+class WeekFeatures(Enum):
+    """Enum class representing week-based temporal features.
+
+    These features provide various ways to represent a week within different
+    time periods (month, quarter, year).
+
+    Attributes:
+        WEEK_OF_MONTH (str): Week of the month (1-5)
+        WEEK_OF_QUARTER (str): Week of the quarter (1-13)
+        WEEK_OF_YEAR (str): Week of the year (1-53)
+    """
+
+    WEEK_OF_MONTH = "week_of_month"
+    WEEK_OF_QUARTER = "week_of_quarter"
+    WEEK_OF_YEAR = "week_of_year"
+
+
+class MonthFeatures(Enum):
+    """Enum class representing month-based temporal features.
+
+    These features provide ways to represent a month within a quarter and a year.
+
+    Attributes:
+        MONTH_OF_QUARTER (str): Month of the quarter (1-3)
+        MONTH_OF_YEAR (str): Month of the year (1-12)
+    """
+
+    MONTH_OF_QUARTER = "month_of_quarter"
+    MONTH_OF_YEAR = "month_of_year"
+
+
+class QuarterFeatures(Enum):
+    """Enum class representing quarter-based and year-end temporal features.
+
+    These features provide ways to represent quarters within a year and
+    indicate if a date is at the end of a quarter or year.
+
+    Attributes:
+        QUARTER_OF_YEAR (str): Quarter of the year (1-4)
+        QUARTER_END (str): Boolean indicator for end of quarter (0 or 1)
+        YEAR_END (str): Boolean indicator for end of year (0 or 1)
+            Note: This is not strictly a quarterly feature but is included
+            here for convenience in temporal feature generation.
+    """
+
+    QUARTER_OF_YEAR = "quarter_of_year"
+    QUARTER_END = "quarter_end"
+    YEAR_END = "year_end"
+
+
+class InvalidTemporalFeature(Exception):
+    """Exception raised when an invalid temporal feature is passed to a method."""
+
+    def __init__(self, feature_name: str, message: str = "Invalid temporal feature passed"):
+        self.feature_name = feature_name
+        self.message = f"{message}: '{feature_name}'"
+        super().__init__(self.message)
+
+
+def validate_and_get_freq(freq: FrequencyLike) -> Frequency:
+    """Validate and return a pandas-compatible frequency string.
+
+    This function checks if the provided frequency string is valid according to
+    the Frequency enum and pandas' internal frequency validation. It converts
+    the input to uppercase before validation.
+
+    Args:
+        freq (FrequencyLike): The input frequency to validate.
+
+    Returns:
+        str: A valid pandas frequency string.
+
+    Raises:
+        ValueError: If the input frequency is not valid or not supported.
+    """
+    try:
+        if isinstance(freq, str):
+            freq = Frequency(freq.upper())
+        # Additional check with pandas
+        pd.tseries.frequencies.to_offset(freq.value)
+        return freq
+    except ValueError as exc:
+        raise ValueError(
+            f"Invalid frequency: {freq}. Allowed values are {[f.value for f in Frequency]}"
+        ) from exc
+
+
+def _get_temporal_feature_names(freq: Frequency | None = None) -> list[str]:
+    """Returns all supported temporal feature names, optionally only those valid for a given
+    frequency.
+
+    Args:
+        freq (Frequency | None): Optional input frequency
+
+    Returns:
+        list[str]: List of feature names supported by the arguments
+    """
+    if not freq or freq == Frequency.DAILY:
+        all_features = [DayFeatures, WeekFeatures, MonthFeatures, QuarterFeatures]
+    elif freq == Frequency.WEEKLY:
+        all_features = [WeekFeatures, MonthFeatures, QuarterFeatures]
+    elif freq == Frequency.MONTHLY:
+        all_features = [MonthFeatures, QuarterFeatures]
+    else:
+        all_features = [QuarterFeatures]
+
+    return [f.value for features in all_features for f in features]
+
+
+def _check_valid_features(features: list[str], freq: Frequency) -> list[str]:
+    """Warns if a feature is requested that does not match the provided input frequency"""
+    valid_features = []
+    freq_features = _get_temporal_feature_names(freq)
+    all_features = _get_temporal_feature_names()
+    for feature in features:
+        if feature in freq_features:
+            valid_features.append(feature)
+        elif feature in all_features:
+            warnings.warn(
+                f"Requested temporal feature {feature} "
+                f"not available for data with frequency {freq.value}!",
+                category=UserWarning,
+                stacklevel=2,  # Warning traceback points to caller of this function
+            )
+        else:
+            raise InvalidTemporalFeature(feature)
+    return valid_features
+
+
+def _get_day_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
+    """Calculate day-related temporal features from a DatetimeIndex.
+
+    Args:
+        dt_index (pd.DatetimeIndex): The DatetimeIndex to extract features from.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing day-related features
+    """
+    return pd.DataFrame(
+        index=dt_index,
+        data={
+            DayFeatures.DAY_OF_WEEK.value: dt_index.dayofweek,
+            DayFeatures.DAY_OF_MONTH.value: dt_index.day,
+            DayFeatures.DAY_OF_QUARTER.value: dt_index.dayofyear
+            - dt_index.to_period("Q").start_time.dayofyear
+            + 1,
+            DayFeatures.DAY_OF_YEAR.value: dt_index.dayofyear,
+        },
+    )
+
+
+def _get_week_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
+    """Calculate week-related temporal features from a DatetimeIndex.
+
+    Args:
+        dt_index (pd.DatetimeIndex): The DatetimeIndex to extract features from.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing week-related features
+    """
+    return pd.DataFrame(
+        index=dt_index,
+        data={
+            WeekFeatures.WEEK_OF_MONTH.value: dt_index.day.map(lambda x: (x - 1) // 7 + 1),
+            WeekFeatures.WEEK_OF_QUARTER.value: (
+                dt_index.dayofyear - dt_index.to_period("Q").start_time.dayofyear
+            )
+            // 7
+            + 1,
+            WeekFeatures.WEEK_OF_YEAR.value: dt_index.isocalendar().week,
+        },
+    )
+
+
+def _get_month_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
+    """Calculate month-related temporal features from a DatetimeIndex.
+
+    Args:
+        dt_index (pd.DatetimeIndex): The DatetimeIndex to extract features from
+
+    Returns:
+        pd.DataFrame: A DataFrame containing month-related features
+    """
+    return pd.DataFrame(
+        index=dt_index,
+        data={
+            MonthFeatures.MONTH_OF_QUARTER.value: dt_index.month.map(lambda x: (x - 1) % 3 + 1),
+            MonthFeatures.MONTH_OF_YEAR.value: dt_index.month,
+        },
+    )
+
+
+def _get_quarter_features(dt_index: pd.DatetimeIndex) -> pd.DataFrame:
+    """Calculate quarter-related temporal features from a DatetimeIndex.
+
+    Args:
+        dt_index (pd.DatetimeIndex): The DatetimeIndex to extract features from.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing quarter-related features
+    """
+    return pd.DataFrame(
+        index=dt_index,
+        data={
+            QuarterFeatures.QUARTER_OF_YEAR.value: dt_index.quarter,
+            QuarterFeatures.QUARTER_END.value: dt_index.is_quarter_end.astype(int),
+            QuarterFeatures.YEAR_END.value: dt_index.is_year_end.astype(int),
+        },
+    )
+
+
+def _get_filtered_data(frame: pd.DataFrame, cutoff_date: DateTimeLike) -> pd.DataFrame | None:
+    """Filter data up to a given date.
+
+    Args:
+        frame (pd.DataFrame): The input DataFrame to filter.
+        cutoff_date (DateTimeLike): The cutoff date.
+
+    Returns:
+        Optional[pd.DataFrame]: Filtered DataFrame or None if empty.
+    """
+    filtered_data = frame.loc[frame.index <= cutoff_date]
+    return filtered_data if not filtered_data.empty else None

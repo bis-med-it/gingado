@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="description" content="Functions to support the use of gingado">
 
-<title>gingado - Utils</title>
+<title>Utils – gingado</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -58,7 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -103,10 +103,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="gingado - Utils">
+<meta property="og:title" content="Utils – gingado">
 <meta property="og:description" content="Functions to support the use of gingado">
 <meta property="og:site_name" content="gingado">
 </head>
@@ -123,13 +126,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Examples</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-examples">    
@@ -148,7 +151,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Reference</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-reference">    
@@ -192,7 +195,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -229,6 +232,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#list_sdmx_sources" id="toc-list_sdmx_sources" class="nav-link" data-scroll-target="#list_sdmx_sources"></a><a id="list_sdmx_sources" class="nav-link" data-scroll-target="undefined">list_SDMX_sources</a></li>
   <li><a href="#list_all_dataflows" id="toc-list_all_dataflows" class="nav-link" data-scroll-target="#list_all_dataflows"></a><a id="list_all_dataflows" class="nav-link" data-scroll-target="undefined">list_all_dataflows</a></li>
   <li><a href="#load_sdmx_data" id="toc-load_sdmx_data" class="nav-link" data-scroll-target="#load_sdmx_data"></a><a id="load_sdmx_data" class="nav-link" data-scroll-target="undefined">load_SDMX_data</a></li>
+  </ul></li>
+  <li><a href="#temporal-features" id="toc-temporal-features" class="nav-link" data-scroll-target="#temporal-features">Temporal features</a>
+  <ul>
+  <li><a href="#get_timefeat" id="toc-get_timefeat" class="nav-link" data-scroll-target="#get_timefeat"></a><a id="get_timefeat" class="nav-link" data-scroll-target="undefined">get_timefeat</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
@@ -268,7 +275,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>get_datetime <code>()</code></p>
 </blockquote>
 <pre>Returns the time now</pre>
-<div id="77f4189f" class="cell" data-execution_count="4">
+<div id="22a56f7e" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> get_datetime()</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(d, <span class="bu">str</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(d) <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -286,24 +293,22 @@ Args:
 <p>Function <code>read_attr</code> helps gingado Documenters to read the object behind the scenes.</p>
 <p>It collects the type of estimator, and any attributes resulting from fitting an object (in ie, those that end in “_” without being double underscores).</p>
 <p>For example, the attributes of an untrained and a trained random forest are, in sequence:</p>
-<div id="cd308383" class="cell" data-execution_count="6">
+<div id="2a519166" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="545de8b1" class="cell" data-execution_count="7">
+<div id="6d216c00" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rf_unfit <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>rf_fit <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">3</span>)<span class="op">\</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    .fit([[<span class="dv">1</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">1</span>]], [[<span class="fl">0.5</span>], [<span class="fl">0.5</span>]]) <span class="co"># random numbers</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(read_attr(rf_unfit)), <span class="bu">list</span>(read_attr(rf_fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>([{'_estimator_type': 'regressor'}],
  [{'_estimator_type': 'regressor'},
   {'estimator_': DecisionTreeRegressor()},
-  {'estimators_': [DecisionTreeRegressor(max_features=1.0, random_state=662456808),
-    DecisionTreeRegressor(max_features=1.0, random_state=2115260158),
-    DecisionTreeRegressor(max_features=1.0, random_state=1570210276)]},
-  {'estimators_samples_': [array([0, 1], dtype=int32),
-    array([1, 1], dtype=int32),
-    array([1, 1], dtype=int32)]},
+  {'estimators_': [DecisionTreeRegressor(max_features=1.0, random_state=352967703),
+    DecisionTreeRegressor(max_features=1.0, random_state=1346575655),
+    DecisionTreeRegressor(max_features=1.0, random_state=168455287)]},
+  {'estimators_samples_': [array([1, 0]), array([1, 1]), array([1, 0])]},
   {'feature_importances_': array([0., 0.])},
   {'n_features_in_': 2},
   {'n_outputs_': 1}])</code></pre>
@@ -336,7 +341,7 @@ Args:
 Args:
     X (np.ndarray): Array-like data of shape (n_samples, n_features).
     y: Array-like data of shape (n_samples,) or (n_samples, n_targets) or None.
-    
+
 Returns:
     self: A fitted version of the `Lag` instance.</pre>
 </section>
@@ -349,7 +354,7 @@ Returns:
 
 Args:
     X (np.ndarray): Array-like data of shape (n_samples, n_features).
-    
+
 Returns:
     A lagged version of `X`.</pre>
 </section>
@@ -379,11 +384,11 @@ Returns
 X_new : ndarray array of shape (n_samples, n_features_new)
     Transformed array.</pre>
 <p>The code below demonstrates how <code>Lag</code> works in practice. Note in particular that, because <code>Lag</code> is a transformer, it can be used as part of a <code>scikit-learn</code>’s <code>Pipeline</code>.</p>
-<div id="b73882b6" class="cell" data-execution_count="12">
+<div id="1c3d430d" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="61f3f7ef" class="cell" data-execution_count="13">
+<div id="ea42cdbb" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>randomX <span class="op">=</span> np.random.rand(<span class="dv">15</span>, <span class="dv">2</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>randomY <span class="op">=</span> np.random.rand(<span class="dv">15</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -396,7 +401,7 @@ X_new : ndarray array of shape (n_samples, n_features_new)
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>]).fit_transform(randomX, randomY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below we confirm that the lagger removes the correct number of rows corresponding to the lagged observations:</p>
-<div id="3b2e129e" class="cell" data-execution_count="14">
+<div id="fd3c178f" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> randomX.shape[<span class="dv">0</span>] <span class="op">-</span> lags <span class="op">-</span> jump <span class="op">==</span> pipe.shape[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And because <code>Lag</code> is a transformer, its parameters (<code>lags</code> and <code>jump</code>) can be calibrated using hyperparameter tuning to achieve the best performance for a model.</p>
@@ -426,7 +431,7 @@ Note
 
 Returns:
     The list of codes representing the SDMX sources available for data download.</pre>
-<div id="075681ed" class="cell" data-execution_count="16">
+<div id="748808bf" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sources <span class="op">=</span> list_SDMX_sources()</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sources)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -449,23 +454,149 @@ or to the `load_SDMX_data` function, set `codes_only=True`"
 Args:
     codes_only (bool): Whether to return only the dataflow codes.
     return_pandas (bool): Whether to return the result in a pandas DataFrame format.
-    
+
 Returns:
     All available dataflows for all SDMX sources.</pre>
-<div id="b2495abf" class="cell" data-execution_count="18">
+<div id="9c09f544" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(dflows, <span class="bu">dict</span>)</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>all_sources <span class="op">=</span> list_SDMX_sources()</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>([s <span class="cf">for</span> s <span class="kw">in</span> dflows.keys() <span class="cf">if</span> s <span class="kw">in</span> all_sources]) <span class="op">==</span> <span class="bu">len</span>(dflows.keys())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+
+--- SS without structure ---
+1 (140728747105224) False
+
+--- &lt;class 'sdmx.message.StructureMessage'&gt; ---
+2 (2860620953424) &lt;sdmx.StructureMessage&gt;
+  &lt;Header&gt;
+    id: 'C2C8DEB97684424693070ED3366216DD'
+    prepared: '2024-10-21T11:23:21.319000+00:00'
+    sender: &lt;Agency ESTAT&gt;
+    source: 
+    test: False
+
+--- &lt;class 'sdmx.model.common.Annotation'&gt; ---
+10 (2860615702224) Annotation(id=None, title='DATASET', type='DISSEMINATION_OBJECT_TYPE', url=None, text=)
+14 (2860615702672) Annotation(id=None, title='685', type='OBS_COUNT', url=None, text=)
+18 (2860620797776) Annotation(id=None, title='1999', type='OBS_PERIOD_OVERALL_OLDEST', url=None, text=)
+22 (2860589958992) Annotation(id=None, title='2022', type='OBS_PERIOD_OVERALL_LATEST', url=None, text=)
+26 (2860620511824) Annotation(id=None, title='2020-09-17T13:28:00+0200', type='CREATED', url=None, text=)
+30 (2860620376976) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_STRUCTURE', url=None, text=)
+34 (2860619886928) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_DATA', url=None, text=)
+39 (2860614709072) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_HTML', url='https://ec.europa.eu/eurostat/cache/metadata/en/reg_lmk_esms.htm', text=)
+44 (2860620804880) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_SDMX', url='https://ec.europa.eu/eurostat/api/dissemination/files?file=metadata/reg_lmk_esms.sdmx.zip', text=)
+50 (2860620718096) Annotation(id=None, title=None, type='SOURCE_INSTITUTIONS', url=None, text=de: Eurostat
+en: Eurostat
+fr: Eurostat)
+54 (2860605908496) Annotation(id=None, title='&lt;adms:identifier xmlns:adms="http://www.w3.org/ns/adms#" xmlns:skos="http://www.w3.org/2004/02/skos/core.html" xmlns:dct="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;&lt;adms:Identifier rdf:about="https://doi.org/10.2908/LFST_R_LMDGEG"&gt;&lt;skos:notation rdf:datatype="http://purl.org/spar/datacite/doi"&gt;10.2908/LFST_R_LMDGEG&lt;/skos:notation&gt;&lt;dct:creator rdf:resource="http://publications.europa.eu/resource/authority/corporate-body/ESTAT"/&gt;&lt;dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date"&gt;2023-01-19&lt;/dct:issued&gt;&lt;/adms:Identifier&gt;&lt;/adms:identifier&gt;', type='DISSEMINATION_DOI_XML', url=None, text=)
+
+--- Name ---
+55 (2860621135168) ('de', 'Regionale Disparitäten bei den geschlechtsspezifischen Unterschieden in der Beschäftigung (NUTS-Ebene 2)')
+56 (2860621695040) ('fr', "Disparités régionales des écarts d'emploi entre les hommes et les femmes (niveau NUTS 2)")
+57 (2860621434304) ('en', 'Regional disparities in gender employment gap (NUTS level 2)')
+
+--- Structure ---
+LFST_R_LMDGEG (2860621808256) DataStructureDefinition=ESTAT:LFST_R_LMDGEG(26.0) → DataStructureDefinition=LFST_R_LMDGEG
+
+
+Ignore:
+ {140728747158792}
+&lt;s:Dataflow xmlns:s="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/structure" xmlns:m="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/message" xmlns:c="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/common" id="LFST_R_LMDGEG" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:LFST_R_LMDGEG(1.0)" agencyID="ESTAT" version="1.0"&gt;
+  &lt;c:Annotations&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+  &lt;/c:Annotations&gt;
+  &lt;c:Name/&gt;
+  &lt;c:Name/&gt;
+  &lt;c:Name/&gt;
+  &lt;s:Structure/&gt;
+&lt;/s:Dataflow&gt;
+</code></pre>
+</div>
 </div>
 <p><code>list_all_dataflows</code> returns by default a pandas Series, facilitating data discovery by users like so:</p>
-<div id="0ef2a27b" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(dflows) <span class="op">==</span> pd.core.series.Series</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>dflows</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="41">
+<div id="b8133e6e" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(dflows) <span class="op">==</span> pd.core.series.Series</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>dflows</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+
+--- SS without structure ---
+1 (140728747105224) False
+
+--- &lt;class 'sdmx.message.StructureMessage'&gt; ---
+2 (2860529403664) &lt;sdmx.StructureMessage&gt;
+  &lt;Header&gt;
+    id: 'C2C8DEB97684424693070ED3366216DD'
+    prepared: '2024-10-21T11:23:21.319000+00:00'
+    sender: &lt;Agency ESTAT&gt;
+    source: 
+    test: False
+
+--- &lt;class 'sdmx.model.common.Annotation'&gt; ---
+10 (2860526463632) Annotation(id=None, title='DATASET', type='DISSEMINATION_OBJECT_TYPE', url=None, text=)
+14 (2860527187024) Annotation(id=None, title='685', type='OBS_COUNT', url=None, text=)
+18 (2860526431696) Annotation(id=None, title='1999', type='OBS_PERIOD_OVERALL_OLDEST', url=None, text=)
+22 (2860526429520) Annotation(id=None, title='2022', type='OBS_PERIOD_OVERALL_LATEST', url=None, text=)
+26 (2860529408848) Annotation(id=None, title='2020-09-17T13:28:00+0200', type='CREATED', url=None, text=)
+30 (2860529411344) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_STRUCTURE', url=None, text=)
+34 (2860526462160) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_DATA', url=None, text=)
+39 (2860529412048) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_HTML', url='https://ec.europa.eu/eurostat/cache/metadata/en/reg_lmk_esms.htm', text=)
+44 (2860526361040) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_SDMX', url='https://ec.europa.eu/eurostat/api/dissemination/files?file=metadata/reg_lmk_esms.sdmx.zip', text=)
+50 (2860527178768) Annotation(id=None, title=None, type='SOURCE_INSTITUTIONS', url=None, text=de: Eurostat
+en: Eurostat
+fr: Eurostat)
+54 (2860526655056) Annotation(id=None, title='&lt;adms:identifier xmlns:adms="http://www.w3.org/ns/adms#" xmlns:skos="http://www.w3.org/2004/02/skos/core.html" xmlns:dct="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;&lt;adms:Identifier rdf:about="https://doi.org/10.2908/LFST_R_LMDGEG"&gt;&lt;skos:notation rdf:datatype="http://purl.org/spar/datacite/doi"&gt;10.2908/LFST_R_LMDGEG&lt;/skos:notation&gt;&lt;dct:creator rdf:resource="http://publications.europa.eu/resource/authority/corporate-body/ESTAT"/&gt;&lt;dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date"&gt;2023-01-19&lt;/dct:issued&gt;&lt;/adms:Identifier&gt;&lt;/adms:identifier&gt;', type='DISSEMINATION_DOI_XML', url=None, text=)
+
+--- Name ---
+55 (2860528919552) ('de', 'Regionale Disparitäten bei den geschlechtsspezifischen Unterschieden in der Beschäftigung (NUTS-Ebene 2)')
+56 (2860528936256) ('fr', "Disparités régionales des écarts d'emploi entre les hommes et les femmes (niveau NUTS 2)")
+57 (2860526197696) ('en', 'Regional disparities in gender employment gap (NUTS level 2)')
+
+--- Structure ---
+LFST_R_LMDGEG (2860526809536) DataStructureDefinition=ESTAT:LFST_R_LMDGEG(26.0) → DataStructureDefinition=LFST_R_LMDGEG
+
+
+Ignore:
+ {140728747158792}
+&lt;s:Dataflow xmlns:s="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/structure" xmlns:m="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/message" xmlns:c="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/common" id="LFST_R_LMDGEG" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:LFST_R_LMDGEG(1.0)" agencyID="ESTAT" version="1.0"&gt;
+  &lt;c:Annotations&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+  &lt;/c:Annotations&gt;
+  &lt;c:Name/&gt;
+  &lt;c:Name/&gt;
+  &lt;c:Name/&gt;
+  &lt;s:Structure/&gt;
+&lt;/s:Dataflow&gt;
+</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>ABS   ABORIGINAL_POP_PROJ                 Projected population, Aboriginal and Torres St...
       ABORIGINAL_POP_PROJ_REMOTE          Projected population, Aboriginal and Torres St...
       ABS_ABORIGINAL_POPPROJ_INDREGION    Projected population, Aboriginal and Torres St...
@@ -477,13 +608,76 @@ WB    DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAINS 
       DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
       DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
       DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
-Name: dataflow, Length: 31499, dtype: object</code></pre>
+Name: dataflow, Length: 24655, dtype: object</code></pre>
 </div>
 </div>
 <p>This format allows for more easily searching <code>dflows</code> by source:</p>
-<div id="14a54877" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>list_all_dataflows(codes_only<span class="op">=</span><span class="va">True</span>, return_pandas<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="42">
+<div id="b2fb2e14" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>list_all_dataflows(codes_only<span class="op">=</span><span class="va">True</span>, return_pandas<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+
+--- SS without structure ---
+1 (140728747105224) False
+
+--- &lt;class 'sdmx.message.StructureMessage'&gt; ---
+2 (2860575408592) &lt;sdmx.StructureMessage&gt;
+  &lt;Header&gt;
+    id: 'C2C8DEB97684424693070ED3366216DD'
+    prepared: '2024-10-21T11:23:21.319000+00:00'
+    sender: &lt;Agency ESTAT&gt;
+    source: 
+    test: False
+
+--- &lt;class 'sdmx.model.common.Annotation'&gt; ---
+10 (2860575415824) Annotation(id=None, title='DATASET', type='DISSEMINATION_OBJECT_TYPE', url=None, text=)
+14 (2860575409424) Annotation(id=None, title='685', type='OBS_COUNT', url=None, text=)
+18 (2860577871056) Annotation(id=None, title='1999', type='OBS_PERIOD_OVERALL_OLDEST', url=None, text=)
+22 (2860577867088) Annotation(id=None, title='2022', type='OBS_PERIOD_OVERALL_LATEST', url=None, text=)
+26 (2860577866320) Annotation(id=None, title='2020-09-17T13:28:00+0200', type='CREATED', url=None, text=)
+30 (2860576861328) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_STRUCTURE', url=None, text=)
+34 (2860576271760) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_DATA', url=None, text=)
+39 (2860577376464) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_HTML', url='https://ec.europa.eu/eurostat/cache/metadata/en/reg_lmk_esms.htm', text=)
+44 (2860576952656) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_SDMX', url='https://ec.europa.eu/eurostat/api/dissemination/files?file=metadata/reg_lmk_esms.sdmx.zip', text=)
+50 (2860576755536) Annotation(id=None, title=None, type='SOURCE_INSTITUTIONS', url=None, text=de: Eurostat
+en: Eurostat
+fr: Eurostat)
+54 (2860577875280) Annotation(id=None, title='&lt;adms:identifier xmlns:adms="http://www.w3.org/ns/adms#" xmlns:skos="http://www.w3.org/2004/02/skos/core.html" xmlns:dct="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;&lt;adms:Identifier rdf:about="https://doi.org/10.2908/LFST_R_LMDGEG"&gt;&lt;skos:notation rdf:datatype="http://purl.org/spar/datacite/doi"&gt;10.2908/LFST_R_LMDGEG&lt;/skos:notation&gt;&lt;dct:creator rdf:resource="http://publications.europa.eu/resource/authority/corporate-body/ESTAT"/&gt;&lt;dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date"&gt;2023-01-19&lt;/dct:issued&gt;&lt;/adms:Identifier&gt;&lt;/adms:identifier&gt;', type='DISSEMINATION_DOI_XML', url=None, text=)
+
+--- Name ---
+55 (2860530071360) ('de', 'Regionale Disparitäten bei den geschlechtsspezifischen Unterschieden in der Beschäftigung (NUTS-Ebene 2)')
+56 (2860529467264) ('fr', "Disparités régionales des écarts d'emploi entre les hommes et les femmes (niveau NUTS 2)")
+57 (2860530507712) ('en', 'Regional disparities in gender employment gap (NUTS level 2)')
+
+--- Structure ---
+LFST_R_LMDGEG (2860554480880) DataStructureDefinition=ESTAT:LFST_R_LMDGEG(26.0) → DataStructureDefinition=LFST_R_LMDGEG
+
+
+Ignore:
+ {140728747158792}
+&lt;s:Dataflow xmlns:s="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/structure" xmlns:m="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/message" xmlns:c="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/common" id="LFST_R_LMDGEG" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:LFST_R_LMDGEG(1.0)" agencyID="ESTAT" version="1.0"&gt;
+  &lt;c:Annotations&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+    &lt;c:Annotation/&gt;
+  &lt;/c:Annotations&gt;
+  &lt;c:Name/&gt;
+  &lt;c:Name/&gt;
+  &lt;c:Name/&gt;
+  &lt;s:Structure/&gt;
+&lt;/s:Dataflow&gt;
+</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>ABS   0                 ABORIGINAL_POP_PROJ
       1          ABORIGINAL_POP_PROJ_REMOTE
       2    ABS_ABORIGINAL_POPPROJ_INDREGION
@@ -495,15 +689,16 @@ WB    0               DF_WITS_Tariff_TRAINS
       1      DF_WITS_TradeStats_Development
       2           DF_WITS_TradeStats_Tariff
       3            DF_WITS_TradeStats_Trade
-Name: dataflow, Length: 31499, dtype: object</code></pre>
+Name: dataflow, Length: 24655, dtype: object</code></pre>
 </div>
 </div>
-<div id="c177fd11" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dflows[<span class="st">'BIS'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="43">
+<div id="b2f711ec" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dflows[<span class="st">'BIS'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>BIS_REL_CAL                                     BIS_RELEASE_CALENDAR
 WS_CBPOL                                                 Policy rate
 WS_CBS_PUB                                  BIS consolidated banking
+WS_CBTA                                    Central bank total assets
 WS_CPMI_CASHLESS                      CPMI cashless payments (T5,T6)
 WS_CPMI_CT1                           CPMI comparative tables type 1
 WS_CPMI_CT2                           CPMI comparative tables type 2
@@ -533,33 +728,25 @@ Name: dataflow, dtype: object</code></pre>
 </div>
 </div>
 <p>Or the user can search dataflows by their human-readable name instead of their code. For example, this is one way to see if any dataflow has information on interest rates:</p>
-<div id="1b61f803" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'Interest rate'</span>, case<span class="op">=</span><span class="va">False</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="44">
-<pre><code>ECB     IRS                                            Interest rate statistics
-        MIR                                        MFI Interest Rate Statistics
-        RIR                                               Retail Interest Rates
-ESTAT   TEIMF040                                          3-month-interest rate
-        TEIMF100                         Day-to-day money market interest rates
-        IRT_ST_A                      Money market interest rates - annual data
-        IRT_ST_M                     Money market interest rates - monthly data
-        IRT_ST_Q                   Money market interest rates - quarterly data
-        EI_MFIR_M                                 Interest rates - monthly data
-        ENPE_IRT_LD                     Loan and deposit one year interest rate
-        ENPE_IRT_ST                                 Money market interest rates
-ESTAT3  IRT_ST_A                      Money market interest rates - annual data
-        IRT_ST_M                     Money market interest rates - monthly data
-        IRT_ST_Q                   Money market interest rates - quarterly data
-        EI_MFIR_M                                 Interest rates - monthly data
-        ENPE_IRT_LD                     Loan and deposit one year interest rate
-        ENPE_IRT_ST                                 Money market interest rates
-        TEIMF040                                          3-month-interest rate
-        TEIMF100                         Day-to-day money market interest rates
-IMF     6SR                   M&amp;B: Interest Rates and Share Prices (6SR) for...
-        INR                                                      Interest rates
-        INR_NSTD                                    Interest rates_Non-Standard
-NB      GOVT_GENERIC_RATES                               Generic interest rates
-        GOVT_IRS                                            Interest rate swaps
+<div id="3bd88fe6" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'Interest rate'</span>, case<span class="op">=</span><span class="va">False</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>ECB    IRS                                            Interest rate statistics
+       MIR                                        MFI Interest Rate Statistics
+       RIR                                               Retail Interest Rates
+ESTAT  EI_MFIR_M                                 Interest rates - monthly data
+       ENPE_IRT_LD                     Loan and deposit one year interest rate
+       ENPE_IRT_ST                                 Money market interest rates
+       TEIMF040                                          3-month-interest rate
+       TEIMF100                         Day-to-day money market interest rates
+       IRT_ST_A                      Money market interest rates - annual data
+       IRT_ST_M                     Money market interest rates - monthly data
+       IRT_ST_Q                   Money market interest rates - quarterly data
+IMF    6SR                   M&amp;B: Interest Rates and Share Prices (6SR) for...
+       INR                                                      Interest rates
+       INR_NSTD                                    Interest rates_Non-Standard
+NB     GOVT_GENERIC_RATES                               Generic interest rates
+       GOVT_IRS                                            Interest rate swaps
 Name: dataflow, dtype: object</code></pre>
 </div>
 </div>
@@ -577,18 +764,575 @@ Args:
     keys (dict): The keys to be used in the SDMX query.
     params (dict): The parameters to be used in the SDMX query.
     verbose (bool): Whether to communicate download steps to the user.
-    
+
 Returns:
     A pandas DataFrame with data from SDMX or None if no data matches the sources, keys, and parameters.</pre>
-<div id="9074ff3c" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> load_SDMX_data(sources<span class="op">=</span>{<span class="st">'ECB'</span>: <span class="st">'CISS'</span>, <span class="st">'BIS'</span>: <span class="st">'WS_CBPOL_D'</span>}, keys<span class="op">=</span>{<span class="st">'FREQ'</span>: <span class="st">'D'</span>}, params<span class="op">=</span>{<span class="st">'startPeriod'</span>: <span class="dv">2003</span>})</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(df) <span class="op">==</span> pd.DataFrame</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> df.shape[<span class="dv">0</span>] <span class="op">&gt;</span> <span class="dv">0</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> df.shape[<span class="dv">1</span>] <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="694439b5" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> load_SDMX_data(sources<span class="op">=</span>{<span class="st">'ECB'</span>: <span class="st">'CISS'</span>, <span class="st">'BIS'</span>: <span class="st">'WS_CBPOL_D'</span>}, keys<span class="op">=</span>{<span class="st">'FREQ'</span>: <span class="st">'D'</span>}, params<span class="op">=</span>{<span class="st">'startPeriod'</span>: <span class="dv">2003</span>})</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(df) <span class="op">==</span> pd.DataFrame</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> df.shape[<span class="dv">0</span>] <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> df.shape[<span class="dv">1</span>] <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
 Querying data from BIS's dataflow 'WS_CBPOL' - Policy rate...</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="temporal-features" class="level2">
+<h2 class="anchored" data-anchor-id="temporal-features">Temporal features</h2>
+<p>Temporal features, such as the day of the week, month, or hour, provide valuable information for time series data, helping to capture seasonality, trends, and cyclic patterns. These features are especially useful because they represent known future information that can enhance model predictions. The gingado library offers the <code>get_timefeat</code> method to extract these features from a time series:</p>
+<section id="get_timefeat" class="level3">
+<h3 class="anchored" data-anchor-id="get_timefeat"><a id="get_timefeat">get_timefeat</a></h3>
+<blockquote class="blockquote">
+<p>get_timefeat <code>(df: pandas.core.frame.DataFrame | pandas.core.series.Series, freq: str | gingado.internals.Frequency, columns: list[str] | None = None, add_to_df: bool = True) -&gt; pandas.core.frame.DataFrame</code></p>
+</blockquote>
+<pre>Generate temporal features from a DataFrame with a DatetimeIndex.
+
+This function creates various time-based features such as day of week,
+day of month, week of year, etc., based on the DatetimeIndex of the input DataFrame.
+
+Args:
+    df (pd.DataFrame | pd.Series): Input DataFrame or Series with a DatetimeIndex.
+    freq (FrequencyLike): Frequency of the input DataFrame. Can either be a string which is
+        a supported pandas frequency alias or an gingado-interal Frequency object.
+    columns (list[str], optional): List of colums with temporal feature names that should be
+        kept. If None, all default temporal features are returned. Defaults to None.
+    add_to_df (bool, optional): If True, append the generated features to the input DataFrame.
+        If False, return only the generated features. Defaults to True.
+
+Returns:
+    pd.DataFrame: A DataFrame containing the generated temporal features,
+        either appended to the input DataFrame or as a separate DataFrame.
+
+Raises:
+    ValueError: If the input DataFrame's index is not a DatetimeIndex.</pre>
+<p>For instance, using daily data from a DataFrame:</p>
+<div id="1e095bcb" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the first few rows of the DataFrame</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>display(df.head())</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract temporal features for daily data</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>temporal <span class="op">=</span> get_timefeat(df, freq<span class="op">=</span><span class="st">"D"</span>, add_to_df<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>display(temporal.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__AT__Z0Z__4F__EC__SS_CIN__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__BE__Z0Z__4F__EC__SS_CIN__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__CN__Z0Z__4F__EC__SS_CIN__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__DE__Z0Z__4F__EC__SS_CIN__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__ES__Z0Z__4F__EC__SS_CIN__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__FI__Z0Z__4F__EC__SS_CIN__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__FR__Z0Z__4F__EC__SS_CIN__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__GB__Z0Z__4F__EC__SS_CIN__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__IE__Z0Z__4F__EC__SS_CIN__IDX</th>
+<th data-quarto-table-cell-role="th">ECB__CISS_D__IT__Z0Z__4F__EC__SS_CIN__IDX</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__TR</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__US</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__XM</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__ZA</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__AU</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__AR</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CH</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CL</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CN</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CO</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TIME_PERIOD</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2003-01-01</td>
+<td>0.017774</td>
+<td>0.042273</td>
+<td>NaN</td>
+<td>0.107753</td>
+<td>0.028552</td>
+<td>0.053814</td>
+<td>0.005528</td>
+<td>0.061118</td>
+<td>0.004191</td>
+<td>0.057108</td>
+<td>...</td>
+<td>NaN</td>
+<td>1.25</td>
+<td>2.75</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0.75</td>
+<td>NaN</td>
+<td>5.31</td>
+<td>5.25</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2003-01-02</td>
+<td>0.023427</td>
+<td>0.047823</td>
+<td>NaN</td>
+<td>0.148028</td>
+<td>0.039988</td>
+<td>0.075186</td>
+<td>0.013415</td>
+<td>0.048480</td>
+<td>0.014820</td>
+<td>0.064289</td>
+<td>...</td>
+<td>44.0</td>
+<td>1.25</td>
+<td>2.75</td>
+<td>13.5</td>
+<td>4.75</td>
+<td>5.99</td>
+<td>0.75</td>
+<td>3.0</td>
+<td>5.31</td>
+<td>5.25</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2003-01-03</td>
+<td>0.021899</td>
+<td>0.043292</td>
+<td>NaN</td>
+<td>0.141700</td>
+<td>0.040378</td>
+<td>0.077400</td>
+<td>0.014249</td>
+<td>0.047644</td>
+<td>0.016874</td>
+<td>0.064880</td>
+<td>...</td>
+<td>44.0</td>
+<td>1.25</td>
+<td>2.75</td>
+<td>13.5</td>
+<td>4.75</td>
+<td>6.05</td>
+<td>0.75</td>
+<td>3.0</td>
+<td>5.31</td>
+<td>5.25</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2003-01-04</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>...</td>
+<td>NaN</td>
+<td>1.25</td>
+<td>2.75</td>
+<td>13.5</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>5.31</td>
+<td>5.25</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2003-01-05</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>...</td>
+<td>NaN</td>
+<td>1.25</td>
+<td>2.75</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>5.31</td>
+<td>5.25</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 61 columns</p>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">day_of_week</th>
+<th data-quarto-table-cell-role="th">day_of_month</th>
+<th data-quarto-table-cell-role="th">day_of_quarter</th>
+<th data-quarto-table-cell-role="th">day_of_year</th>
+<th data-quarto-table-cell-role="th">week_of_month</th>
+<th data-quarto-table-cell-role="th">week_of_quarter</th>
+<th data-quarto-table-cell-role="th">week_of_year</th>
+<th data-quarto-table-cell-role="th">month_of_quarter</th>
+<th data-quarto-table-cell-role="th">month_of_year</th>
+<th data-quarto-table-cell-role="th">quarter_of_year</th>
+<th data-quarto-table-cell-role="th">quarter_end</th>
+<th data-quarto-table-cell-role="th">year_end</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TIME_PERIOD</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2003-01-01</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2003-01-02</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2003-01-03</td>
+<td>4</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2003-01-04</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2003-01-05</td>
+<td>6</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>You can also integrate the temporal features directly into the original DataFrame by setting the <code>add_to_df</code> parameter to True:</p>
+<div id="ac6cd7c4" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sample DataFrame with a weekly index</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>df_weekly <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{<span class="st">"value"</span>: rng.normal(size<span class="op">=</span><span class="dv">100</span>)},</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>pd.date_range(<span class="st">'2000-01-01'</span>, periods<span class="op">=</span><span class="dv">100</span>, freq<span class="op">=</span><span class="st">'W-MON'</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add temporal features to the weekly data</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>df_with_timefeat <span class="op">=</span> get_timefeat(df_weekly, freq<span class="op">=</span><span class="st">"W"</span>, add_to_df<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>display(df_with_timefeat.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">value</th>
+<th data-quarto-table-cell-role="th">week_of_month</th>
+<th data-quarto-table-cell-role="th">week_of_quarter</th>
+<th data-quarto-table-cell-role="th">week_of_year</th>
+<th data-quarto-table-cell-role="th">month_of_quarter</th>
+<th data-quarto-table-cell-role="th">month_of_year</th>
+<th data-quarto-table-cell-role="th">quarter_of_year</th>
+<th data-quarto-table-cell-role="th">quarter_end</th>
+<th data-quarto-table-cell-role="th">year_end</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2000-01-03</td>
+<td>0.304717</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2000-01-10</td>
+<td>-1.039984</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2000-01-17</td>
+<td>0.750451</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2000-01-24</td>
+<td>0.940565</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2000-01-31</td>
+<td>-1.951035</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>If you only need a subset of the temporal features, you can specify the desired feature names:</p>
+<div id="ea9dba43" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a new DataFrame with a monthly index</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>df_monthly <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{<span class="st">"value"</span>: rng.normal(size<span class="op">=</span><span class="dv">24</span>)},</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>pd.date_range(<span class="st">"2023-01-01"</span>, periods<span class="op">=</span><span class="dv">24</span>, freq<span class="op">=</span><span class="st">'MS'</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Only select a subset of temporal features:</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>df_with_timefeat <span class="op">=</span> get_timefeat(df_monthly, freq<span class="op">=</span><span class="st">"MS"</span>, columns<span class="op">=</span>[<span class="st">"month_of_year"</span>, <span class="st">"quarter_of_year"</span>])</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>display(df_with_timefeat.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">value</th>
+<th data-quarto-table-cell-role="th">month_of_year</th>
+<th data-quarto-table-cell-role="th">quarter_of_year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2023-01-01</td>
+<td>-0.378163</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2023-02-01</td>
+<td>1.299228</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2023-03-01</td>
+<td>-0.356264</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2023-04-01</td>
+<td>0.737516</td>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2023-05-01</td>
+<td>-0.933618</td>
+<td>5</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>In addition to <code>get_timefeat</code>, the gingado library provides the <code>TemporalFeatureTransformer</code> class, which can be used to transform a DataFrame with a temporal index into a DataFrame with additional features:</p>
+<div id="6238dbf6" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>temp_trf <span class="op">=</span> TemporalFeatureTransformer(freq<span class="op">=</span><span class="st">"W"</span>, features<span class="op">=</span>[<span class="st">"week_of_month"</span>, <span class="st">"week_of_year"</span>, <span class="st">"quarter_of_year"</span>])</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>df_with_timefeat <span class="op">=</span> temp_trf.fit_transform(df_weekly)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>display(df_with_timefeat.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">value</th>
+<th data-quarto-table-cell-role="th">week_of_month</th>
+<th data-quarto-table-cell-role="th">week_of_year</th>
+<th data-quarto-table-cell-role="th">quarter_of_year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2000-01-03</td>
+<td>0.304717</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2000-01-10</td>
+<td>-1.039984</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2000-01-17</td>
+<td>0.750451</td>
+<td>3</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2000-01-24</td>
+<td>0.940565</td>
+<td>4</td>
+<td>4</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2000-01-31</td>
+<td>-1.951035</td>
+<td>5</td>
+<td>5</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
 </div>
 </div>
 
@@ -776,18 +1520,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -819,7 +1552,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -827,10 +1582,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
           // default icon
           link.classList.add("external");
       }
@@ -869,7 +1629,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');

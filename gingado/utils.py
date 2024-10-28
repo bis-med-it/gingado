@@ -2,6 +2,8 @@ import sdmx
 import datetime
 import numpy as np
 import pandas as pd
+import sdmx
+
 from gingado.internals import DayFeatures, WeekFeatures, MonthFeatures, QuarterFeatures, DateTimeLike, Frequency, FrequencyLike, validate_and_get_freq, _check_valid_features, _get_day_features, _get_week_features, _get_month_features, _get_quarter_features
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_is_fitted
@@ -190,6 +192,22 @@ def load_SDMX_data(
     df.columns = ['_'.join(col) for col in df.columns.to_flat_index()]
     return df
 
+
+def codelists(dflow):
+    """
+    Retrieves the codelist for a specific SDMX dataflow.
+
+    Args:
+        dflow (dict): A dictionary specifying the source as the key and the dataflow as the value.
+
+    Returns:
+        pandas.DataFrame: A DataFrame containing the codelist for the specified dataflow, 
+        detailing code information relevant to the SDMX data structure.
+    """
+    source = list(dflow.keys())[0]
+    dataflow = list(dflow.values())
+    dflow_msg = sdmx.Client(source).dataflow(dataflow[0])
+    return sdmx.to_pandas(dflow_msg.codelist)
 
 def get_timefeat(
     df: pd.DataFrame | pd.Series,

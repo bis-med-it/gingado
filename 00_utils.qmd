@@ -32,6 +32,7 @@ from gingado.utils import (
     Lag,
     list_SDMX_sources,
     list_all_dataflows,
+    codelists,
     get_timefeat,
     TemporalFeatureTransformer
 )
@@ -208,6 +209,40 @@ Or the user can search dataflows by their human-readable name instead of their c
 
 dflows[dflows.str.contains('Interest rate', case=False)]
 ```
+
+
+```{python}
+#| output: asis
+#| echo: false
+show_doc(codelists)
+```
+
+Once the user finds a dataflow of interest, the function `codelists` returns a dictionary where each key is a dimension of that dataflow, and each value is that dimension's codelist.
+
+For example, the dimensions and codelists of the BIS' dataflow on OTC derivatives outstanding are the following:
+
+```{python}
+print(dflows[dflows.str.contains("OTC", case=False)])
+
+cl_OTC = codelists(dflow={"BIS": "WS_OTC_DERIV2"})
+```
+
+Here is a list of all dimensions for the OTC derivatives outstanding dataflow:
+
+```{python}
+cl_OTC.keys()
+```
+
+Below are the codelists of the frequency dimension ("CL_FREQ") and the counterparty sector ("CL_SECTOR_CPY"):
+
+```{python}
+cl_OTC["CL_FREQ"]
+```
+
+```{python}
+cl_OTC["CL_SECTOR_CPY"]
+```
+
 
 The function `load_SDMX_data` is a convenience function that downloads data from SDMX sources (and any specific dataflows passed as arguments) if they match the key and parameters set by the user.
 

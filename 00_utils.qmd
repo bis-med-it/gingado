@@ -25,11 +25,23 @@ import datetime
 import os
 import numpy as np
 import pandas as pd
-from gingado.utils import get_datetime, load_SDMX_data, read_attr, Lag, list_SDMX_sources, list_all_dataflows
+from gingado.utils import (
+    get_datetime,
+    load_SDMX_data,
+    read_attr,
+    Lag,
+    list_SDMX_sources,
+    list_all_dataflows,
+    get_timefeat,
+    TemporalFeatureTransformer
+)
 
 # Code below included to ensure compatibility with scikit-learn v1.1.x
 from sklearn import set_config
 set_config(display='text')
+
+# Code below for reproducibility of random numbers
+rng = np.random.default_rng(seed=42)
 ```
 
 ```{python}
@@ -214,3 +226,58 @@ assert df.shape[0] > 0
 assert df.shape[1] > 0
 ```
 
+
+## Temporal features
+Temporal features, such as the day of the week, month, or hour, provide valuable information for time series data, helping to capture seasonality, trends, and cyclic patterns. These features are especially useful because they represent known future information that can enhance model predictions.
+The gingado library offers the `get_timefeat` method to extract these features from a time series:
+```{python}
+#| output: asis
+#| echo: false
+show_doc(get_timefeat)
+```
+
+For instance, using daily data from a DataFrame:
+```{python}	
+# Display the first few rows of the DataFrame
+display(df.head())
+
+# Extract temporal features for daily data
+temporal = get_timefeat(df, freq="D", add_to_df=False)
+display(temporal.head())
+```
+
+You can also integrate the temporal features directly into the original DataFrame by setting the `add_to_df` parameter to True:
+```{python}
+# Generate a sample DataFrame with a weekly index
+df_weekly = pd.DataFrame(
+    data={"value": rng.normal(size=100)},
+    index=pd.date_range('2000-01-01', periods=100, freq='W-MON')
+)
+
+# Add temporal features to the weekly data
+df_with_timefeat = get_timefeat(df_weekly, freq="W", add_to_df=True)
+display(df_with_timefeat.head())
+```
+
+If you only need a subset of the temporal features, you can specify the desired feature names:
+
+```{python}
+# Generate a new DataFrame with a monthly index
+df_monthly = pd.DataFrame(
+    data={"value": rng.normal(size=24)},
+    index=pd.date_range("2023-01-01", periods=24, freq='MS')
+)
+# Only select a subset of temporal features:
+df_with_timefeat = get_timefeat(df_monthly, freq="MS", columns=["month_of_year", "quarter_of_year"])
+display(df_with_timefeat.head())
+
+```
+
+
+In addition to `get_timefeat`, the gingado library provides the `TemporalFeatureTransformer` class, which can be used to transform a DataFrame with a temporal index into a DataFrame with additional features:
+
+```{python}
+temp_trf = TemporalFeatureTransformer(freq="W", features=["week_of_month", "week_of_year", "quarter_of_year"])
+df_with_timefeat = temp_trf.fit_transform(df_weekly)
+display(df_with_timefeat.head())
+```

@@ -3,4 +3,6 @@ torch
 statsmodels
 nbformat
 nbclient
+pandas-stubs
 pre-commit
+pytest

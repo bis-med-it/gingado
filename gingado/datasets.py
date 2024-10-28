@@ -119,6 +119,50 @@ def load_CB_speeches(
     # Concat all dataframes into single dataframe and return
     return pd.concat(cb_speeches_dfs)
 
+def load_lr_tanzania_data(wide_format: bool = False) -> dict[str, pd.DataFrame]:
+    """
+    Loads liquidity risk data from CSV files.
+
+    This function loads monthly and weekly liquidity risk data. The data is sourced from the paper
+    "Using machine learning for detecting liquidity risk in banks" by Rweyemamu Ignatius Barongo and
+    Jimmy Tibangayuka Mbelwa. The dataset includes data from 38 Tanzanian banks (2010-2021) provided
+    by the Bank of Tanzania (BOT). Banks are identified by anonymous bank codes.
+
+
+    Parameters:
+    wide_format (bool): If True, returns data in wide format with pivoted columns. Column names will
+        be in the format BANK_CODE__VAR_NAME.
+
+    Returns:
+    dict[str, pd.DataFrame]: A dictionary with keys 'w' for weekly data and 'm' for monthly data.
+        The values are pandas DataFrames containing the data for each frequency.
+    """
+    data_dir = f"{os.path.dirname(os.path.abspath(__file__))}/data"
+    df_monthly = pd.read_csv(
+        f"{data_dir}/dataset_lr_monthly.csv",
+        index_col=0,
+        parse_dates=["BSH_REPORTINGDATE"],
+        date_format="%d/%m/%Y",
+    )
+    df_weekly = pd.read_csv(
+        f"{data_dir}/dataset_lr_weekly.csv",
+        index_col=0,
+        parse_dates=["REPORTINGDATE"]
+    )
+
+    # Rename the column to match the naming of the weekly dataframe
+    df_monthly.rename(columns={"BSH_REPORTINGDATE": "REPORTINGDATE"}, inplace=True)
+
+    if wide_format:
+        def pivot_lr(df):
+            df_pivot = df.pivot(index="REPORTINGDATE", columns="INSTITUTIONCODE")
+            # flatten the column headers to a format of INSTITUTIONCODE__VAR_NAME
+            df_pivot.columns = [f"{col[1]}__{col[0]}" for col in df_pivot.columns]
+            return df_pivot
+        df_monthly = pivot_lr(df_monthly)
+        df_weekly = pivot_lr(df_weekly)
+
+    return {"w": df_weekly, "m": df_monthly}
 
 def load_monpol_statements(
     year: str | int | list = 'all',

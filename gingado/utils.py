@@ -2,7 +2,7 @@ import sdmx
 import datetime
 import numpy as np
 import pandas as pd
-from gingado.internals import DateTimeLike, Frequency, FrequencyLike, validate_and_get_freq, _get_day_features, _get_week_features, _get_month_features, _get_quarter_features
+from gingado.internals import DayFeatures, WeekFeatures, MonthFeatures, QuarterFeatures, DateTimeLike, Frequency, FrequencyLike, validate_and_get_freq, _check_valid_features, _get_day_features, _get_week_features, _get_month_features, _get_quarter_features
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_is_fitted
 

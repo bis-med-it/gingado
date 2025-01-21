@@ -200,13 +200,13 @@ def codelists(dflow):
         dflow (dict): A dictionary specifying the source as the key and the dataflow as the value.
 
     Returns:
-        pandas.DataFrame: A DataFrame containing the codelist for the specified dataflow, 
-        detailing code information relevant to the SDMX data structure.
+        dict: A dictionary with each source as a key and the values containing the codelist for the specified dataflow, detailing code information relevant to the SDMX data structure.
     """
-    source = list(dflow.keys())[0]
-    dataflow = list(dflow.values())
-    dflow_msg = sdmx.Client(source).dataflow(dataflow[0])
-    return sdmx.to_pandas(dflow_msg.codelist)
+    codelists = {
+        k: sdmx.to_pandas(sdmx.Client(k).dataflow(v).codelist) 
+        for k, v in dfl.items()
+    }
+    return codelists
 
 def get_timefeat(
     df: pd.DataFrame | pd.Series,

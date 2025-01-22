@@ -194,18 +194,20 @@ def load_SDMX_data(
 
 def codelists(dflow):
     """
-    Retrieves the codelist for a specific SDMX dataflow.
+    Retrieves the codelist for specific SDMX dataflows.
 
     Args:
-        dflow (dict): A dictionary specifying the source as the key and the dataflow as the value.
+        dflow (dict): A dictionary specifying the source as the key and the dataflow (or list of dataflows) as the value.
 
     Returns:
-        dict: A dictionary with each source as a key and the values containing the codelist for the specified dataflow, detailing code information relevant to the SDMX data structure.
+        dict: A dictionary with each source as a key and the values containing the codelist for the specified dataflow(s),detailing code information relevant to the SDMX data structure.
     """
-    codelists = {
-        k: sdmx.to_pandas(sdmx.Client(k).dataflow(v).codelist) 
-        for k, v in dfl.items()
-    }
+    codelists = {}
+    for k, v in dflow.items():
+        if isinstance(v, list):  # If v is a list of dataflows
+            codelists[k] = {dataflow: sdmx.to_pandas(sdmx.Client(k).dataflow(dataflow).codelist) for dataflow in v}
+        else:  # If v is a single dataflow
+            codelists[k] = sdmx.to_pandas(sdmx.Client(k).dataflow(v).codelist)
     return codelists
 
 def get_timefeat(

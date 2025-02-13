@@ -230,19 +230,38 @@ cl_OTC = codelists(dflow={"BIS": "WS_OTC_DERIV2"})
 Here is a list of all dimensions for the OTC derivatives outstanding dataflow:
 
 ```{python}
-cl_OTC.keys()
+cl_OTC_BIS = cl_OTC["BIS"]
+cl_OTC_BIS.keys()
 ```
 
 Below are the codelists of the frequency dimension ("CL_FREQ") and the counterparty sector ("CL_SECTOR_CPY"):
 
 ```{python}
-cl_OTC["CL_FREQ"]
+cl_OTC_BIS["CL_FREQ"]
 ```
 
 ```{python}
-cl_OTC["CL_SECTOR_CPY"]
+cl_OTC_BIS["CL_SECTOR_CPY"]
 ```
 
+You can also get codelists for multiple dataflows from the same source:
+```{python}	
+# Get codelists for both Exchange Rates and Consumer Prices
+cl_multiple = codelists({"ECB": ["EXR", "ICP"]})
+
+# Show dimensions for each dataflow
+for dataflow, codelist in cl_multiple["ECB"].items():
+    print(f"\nDimensions in {dataflow} dataflow:")
+    print(codelist.keys())
+```
+
+In addition, you can also get codelists from multiple sources:
+
+```{python}
+cl_sources = codelists({"ECB": "EXR", "BIS": "WS_OTC_DERIV2"})
+
+print("Available sources:", cl_sources.keys())
+```
 
 The function `load_SDMX_data` is a convenience function that downloads data from SDMX sources (and any specific dataflows passed as arguments) if they match the key and parameters set by the user.
 

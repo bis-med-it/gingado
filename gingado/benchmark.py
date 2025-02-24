@@ -56,7 +56,7 @@ class ggdBenchmark(BaseEstimator):
     def _fit(self, X, y):
         self._check_is_time_series(X, y)
 
-        X, y = validate_data(X, y)
+        X, y = validate_data(self, X, y)
 
         if hasattr(self.estimator, "random_state"):
             self.estimator.random_state = self.random_state

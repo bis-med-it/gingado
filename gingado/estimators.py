@@ -8,6 +8,7 @@ from sklearn.cluster import AffinityPropagation
 from sklearn.manifold import TSNE
 from sklearn.metrics import mean_squared_error
 from sklearn.pipeline import Pipeline
+from sklearn.utils.validation import validate_data
 
 from .benchmark import ggdBenchmark, RegressionBenchmark
 from .model_documentation import ModelCard, ggdModelDocumentation
@@ -270,7 +271,7 @@ class MachineControl(BaseEstimator):
         if self.with_placebo:
             self._fit_placebo_models(X=X, y=y)
 
-        X_donor_pool, y = self._validate_data(X[self.donor_pool_], y)
+        X_donor_pool, y = validate_data(self, X[self.donor_pool_], y)
         
         self.estimator.fit(X=X_donor_pool, y=y)
         

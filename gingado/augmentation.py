@@ -6,7 +6,7 @@ import pandas as pd
 
 from .utils import load_SDMX_data
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.utils.validation import check_is_fitted
+from sklearn.utils.validation import check_is_fitted, validate_data
 from sklearn.feature_selection import VarianceThreshold
 
 __all__ = ['AugmentSDMX']
@@ -117,7 +117,7 @@ class AugmentSDMX(BaseEstimator, TransformerMixin):
             raise
         self.index_ = X.index
         self.keys_ = {'FREQ': self.data_freq_}
-        X = self._validate_data(X)
+        X = validate_data(X)
 
         # this variable below is only included to test for consistency \
         # if `fit` and `transform` are called separately with the same `X`

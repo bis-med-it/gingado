@@ -88,15 +88,14 @@ class Lag(BaseEstimator, TransformerMixin):
         X = validate_data(self, X)
         check_is_fitted(self)
         X_lags = []
-        X_colnames = list(self.feature_names_in_) if self.keep_contemporaneous_X else []
+        X_colnames = _check_feature_names_in(self)
         for lag in range(self.effective_lags_):
             if lag < self.jump:
                 continue
             lag_count = lag+1
             lag_X = np.roll(X_forlag, lag_count, axis=0)
             X_lags.append(lag_X)
-            if hasattr(self, "feature_names_in_"):
-                X_colnames = X_colnames + [col+"_lag_"+str(lag+1) for col in list(self.feature_names_in_)]
+            X_colnames = X_colnames + [col+"_lag_"+str(lag+1) for col in X_colnames]
         X = np.concatenate(X_lags, axis=1)
         if self.keep_contemporaneous_X:
             X = np.concatenate([X_forlag, X], axis=1)

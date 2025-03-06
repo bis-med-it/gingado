@@ -276,7 +276,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>get_datetime <code>()</code></p>
 </blockquote>
 <pre>Returns the time now</pre>
-<div id="81997b30" class="cell" data-execution_count="4">
+<div id="f411e9fc" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> get_datetime()</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(d, <span class="bu">str</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(d) <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -294,10 +294,10 @@ Args:
 <p>Function <code>read_attr</code> helps gingado Documenters to read the object behind the scenes.</p>
 <p>It collects the type of estimator, and any attributes resulting from fitting an object (in ie, those that end in “_” without being double underscores).</p>
 <p>For example, the attributes of an untrained and a trained random forest are, in sequence:</p>
-<div id="cd5f97c0" class="cell" data-execution_count="6">
+<div id="6aca983c" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="4604f2ae" class="cell" data-execution_count="7">
+<div id="6bf6a1e1" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rf_unfit <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>rf_fit <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">3</span>)<span class="op">\</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    .fit([[<span class="dv">1</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">1</span>]], [[<span class="fl">0.5</span>], [<span class="fl">0.5</span>]]) <span class="co"># random numbers</span></span>
@@ -306,12 +306,12 @@ Args:
 <pre><code>([{'_estimator_type': 'regressor'}],
  [{'_estimator_type': 'regressor'},
   {'estimator_': DecisionTreeRegressor()},
-  {'estimators_': [DecisionTreeRegressor(max_features=1.0, random_state=307035849),
-    DecisionTreeRegressor(max_features=1.0, random_state=157047997),
-    DecisionTreeRegressor(max_features=1.0, random_state=1041815400)]},
-  {'estimators_samples_': [array([0, 0], dtype=int32),
-    array([0, 0], dtype=int32),
-    array([0, 1], dtype=int32)]},
+  {'estimators_': [DecisionTreeRegressor(max_features=1.0, random_state=1247572020),
+    DecisionTreeRegressor(max_features=1.0, random_state=487026338),
+    DecisionTreeRegressor(max_features=1.0, random_state=1149396190)]},
+  {'estimators_samples_': [array([1, 1], dtype=int32),
+    array([0, 1], dtype=int32),
+    array([0, 0], dtype=int32)]},
   {'feature_importances_': array([0., 0.])},
   {'n_features_in_': 2},
   {'n_outputs_': 1}])</code></pre>
@@ -387,11 +387,11 @@ Returns
 X_new : ndarray array of shape (n_samples, n_features_new)
     Transformed array.</pre>
 <p>The code below demonstrates how <code>Lag</code> works in practice. Note in particular that, because <code>Lag</code> is a transformer, it can be used as part of a <code>scikit-learn</code>’s <code>Pipeline</code>.</p>
-<div id="0c56d9b8" class="cell" data-execution_count="12">
+<div id="4ae0c4a7" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ceed7346" class="cell" data-execution_count="13">
+<div id="2622c380" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>randomX <span class="op">=</span> np.random.rand(<span class="dv">15</span>, <span class="dv">2</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>randomY <span class="op">=</span> np.random.rand(<span class="dv">15</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -404,7 +404,7 @@ X_new : ndarray array of shape (n_samples, n_features_new)
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>]).fit_transform(randomX, randomY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below we confirm that the lagger removes the correct number of rows corresponding to the lagged observations:</p>
-<div id="223218ab" class="cell" data-execution_count="14">
+<div id="ca14f2e5" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> randomX.shape[<span class="dv">0</span>] <span class="op">-</span> lags <span class="op">-</span> jump <span class="op">==</span> pipe.shape[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And because <code>Lag</code> is a transformer, its parameters (<code>lags</code> and <code>jump</code>) can be calibrated using hyperparameter tuning to achieve the best performance for a model.</p>
@@ -434,7 +434,7 @@ Note
 
 Returns:
     The list of codes representing the SDMX sources available for data download.</pre>
-<div id="174eef6f" class="cell" data-execution_count="16">
+<div id="366607f9" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sources <span class="op">=</span> list_SDMX_sources()</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sources)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -460,7 +460,7 @@ Args:
     
 Returns:
     All available dataflows for all SDMX sources.</pre>
-<div id="b98700a5" class="cell" data-execution_count="18">
+<div id="253ba6ea" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(dflows, <span class="bu">dict</span>)</span>
@@ -468,7 +468,7 @@ Returns:
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>([s <span class="cf">for</span> s <span class="kw">in</span> dflows.keys() <span class="cf">if</span> s <span class="kw">in</span> all_sources]) <span class="op">==</span> <span class="bu">len</span>(dflows.keys())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><code>list_all_dataflows</code> returns by default a pandas Series, facilitating data discovery by users like so:</p>
-<div id="baa55c12" class="cell" data-execution_count="19">
+<div id="e5fc1372" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(dflows) <span class="op">==</span> pd.core.series.Series</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -485,11 +485,11 @@ WB     DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAINS
        DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
        DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
        DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
-Name: dataflow, Length: 33070, dtype: object</code></pre>
+Name: dataflow, Length: 33145, dtype: object</code></pre>
 </div>
 </div>
 <p>This format allows for more easily searching <code>dflows</code> by source:</p>
-<div id="56f760fb" class="cell" data-execution_count="20">
+<div id="0add85fc" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>list_all_dataflows(codes_only<span class="op">=</span><span class="va">True</span>, return_pandas<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>ABS    0                  ABORIGINAL_POP_PROJ
@@ -503,10 +503,10 @@ WB     0                DF_WITS_Tariff_TRAINS
        1       DF_WITS_TradeStats_Development
        2            DF_WITS_TradeStats_Tariff
        3             DF_WITS_TradeStats_Trade
-Name: dataflow, Length: 33070, dtype: object</code></pre>
+Name: dataflow, Length: 33145, dtype: object</code></pre>
 </div>
 </div>
-<div id="5b473732" class="cell" data-execution_count="21">
+<div id="71e572da" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dflows[<span class="st">'BIS'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>BIS_REL_CAL                                     BIS_RELEASE_CALENDAR
@@ -542,28 +542,28 @@ Name: dataflow, dtype: object</code></pre>
 </div>
 </div>
 <p>Or the user can search dataflows by their human-readable name instead of their code. For example, this is one way to see if any dataflow has information on interest rates:</p>
-<div id="4a12600d" class="cell" data-execution_count="22">
+<div id="14a0d744" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'Interest rate'</span>, case<span class="op">=</span><span class="va">False</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>ECB     IRS                                            Interest rate statistics
         MIR                                        MFI Interest Rate Statistics
         RIR                                               Retail Interest Rates
-ESTAT   TEIMF040                                          3-month-interest rate
-        TEIMF100                         Day-to-day money market interest rates
-        IRT_ST_A                      Money market interest rates - annual data
+ESTAT   IRT_ST_A                      Money market interest rates - annual data
         IRT_ST_M                     Money market interest rates - monthly data
         IRT_ST_Q                   Money market interest rates - quarterly data
         EI_MFIR_M                                 Interest rates - monthly data
         ENPE_IRT_LD                     Loan and deposit one year interest rate
         ENPE_IRT_ST                                 Money market interest rates
+        TEIMF040                                          3-month-interest rate
+        TEIMF100                         Day-to-day money market interest rates
 ESTAT3  IRT_ST_A                      Money market interest rates - annual data
         IRT_ST_M                     Money market interest rates - monthly data
         IRT_ST_Q                   Money market interest rates - quarterly data
-        TEIMF040                                          3-month-interest rate
-        TEIMF100                         Day-to-day money market interest rates
         EI_MFIR_M                                 Interest rates - monthly data
         ENPE_IRT_LD                     Loan and deposit one year interest rate
         ENPE_IRT_ST                                 Money market interest rates
+        TEIMF040                                          3-month-interest rate
+        TEIMF100                         Day-to-day money market interest rates
 IMF     6SR                   M&amp;B: Interest Rates and Share Prices (6SR) for...
         INR                                                      Interest rates
         INR_NSTD                                    Interest rates_Non-Standard
@@ -587,7 +587,7 @@ Returns:
     dict: A dictionary with each source as a key and the values containing the codelist for the specified dataflow(s),detailing code information relevant to the SDMX data structure.</pre>
 <p>Once the user finds a dataflow of interest, the function <code>codelists</code> returns a dictionary where each key is a dimension of that dataflow, and each value is that dimension’s codelist.</p>
 <p>For example, the dimensions and codelists of the BIS’ dataflow on OTC derivatives outstanding are the following:</p>
-<div id="6af9a40c" class="cell" data-execution_count="24">
+<div id="743de598" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dflows[dflows.<span class="bu">str</span>.contains(<span class="st">"OTC"</span>, case<span class="op">=</span><span class="va">False</span>)])</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>cl_OTC <span class="op">=</span> codelists(dflow<span class="op">=</span>{<span class="st">"BIS"</span>: <span class="st">"WS_OTC_DERIV2"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -598,7 +598,7 @@ Name: dataflow, dtype: object</code></pre>
 </div>
 </div>
 <p>Here is a list of all dimensions for the OTC derivatives outstanding dataflow:</p>
-<div id="c694622b" class="cell" data-execution_count="25">
+<div id="caf1eaed" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cl_OTC_BIS <span class="op">=</span> cl_OTC[<span class="st">"BIS"</span>]</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>cl_OTC_BIS.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
@@ -606,7 +606,7 @@ Name: dataflow, dtype: object</code></pre>
 </div>
 </div>
 <p>Below are the codelists of the frequency dimension (“CL_FREQ”) and the counterparty sector (“CL_SECTOR_CPY”):</p>
-<div id="9c6072e9" class="cell" data-execution_count="26">
+<div id="c818fccc" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>cl_OTC_BIS[<span class="st">"CL_FREQ"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>CL_FREQ
@@ -621,7 +621,7 @@ W                                   Weekly
 Name: Code list for Frequency (FREQ), dtype: object</code></pre>
 </div>
 </div>
-<div id="5e5b7e8f" class="cell" data-execution_count="27">
+<div id="9df936e2" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cl_OTC_BIS[<span class="st">"CL_SECTOR_CPY"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
 <div>
@@ -783,7 +783,7 @@ Name: Code list for Frequency (FREQ), dtype: object</code></pre>
 </div>
 </div>
 <p>You can also get codelists for multiple dataflows from the same source:</p>
-<div id="cb51e69a" class="cell" data-execution_count="28">
+<div id="8e5ce10a" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get codelists for both Exchange Rates and Consumer Prices</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>cl_multiple <span class="op">=</span> codelists({<span class="st">"ECB"</span>: [<span class="st">"EXR"</span>, <span class="st">"ICP"</span>]})</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -801,7 +801,7 @@ dict_keys(['CL_ADJUSTMENT', 'CL_AREA_EE', 'CL_COLLECTION', 'CL_DECIMALS', 'CL_FR
 </div>
 </div>
 <p>In addition, you can also get codelists from multiple sources:</p>
-<div id="6cd5a4e3" class="cell" data-execution_count="29">
+<div id="43d87dd1" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>cl_sources <span class="op">=</span> codelists({<span class="st">"ECB"</span>: <span class="st">"EXR"</span>, <span class="st">"BIS"</span>: <span class="st">"WS_OTC_DERIV2"</span>})</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Available sources:"</span>, cl_sources.keys())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -826,7 +826,7 @@ Args:
     
 Returns:
     A pandas DataFrame with data from SDMX or None if no data matches the sources, keys, and parameters.</pre>
-<div id="ab359592" class="cell" data-execution_count="31">
+<div id="a552a093" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> load_SDMX_data(sources<span class="op">=</span>{<span class="st">'ECB'</span>: <span class="st">'CISS'</span>, <span class="st">'BIS'</span>: <span class="st">'WS_CBPOL_D'</span>}, keys<span class="op">=</span>{<span class="st">'FREQ'</span>: <span class="st">'D'</span>}, params<span class="op">=</span>{<span class="st">'startPeriod'</span>: <span class="dv">2003</span>})</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(df) <span class="op">==</span> pd.DataFrame</span>
@@ -868,7 +868,7 @@ Returns:
 Raises:
     ValueError: If the input DataFrame's index is not a DatetimeIndex.</pre>
 <p>For instance, using daily data from a DataFrame:</p>
-<div id="3d82b38f" class="cell" data-execution_count="33">
+<div id="46603a49" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the first few rows of the DataFrame</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>display(df.head())</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -894,16 +894,16 @@ Raises:
 <th data-quarto-table-cell-role="th">ECB__CISS_D__IE__Z0Z__4F__EC__SS_CIN__IDX</th>
 <th data-quarto-table-cell-role="th">ECB__CISS_D__IT__Z0Z__4F__EC__SS_CIN__IDX</th>
 <th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__SA</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__SE</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__TH</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__TR</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__US</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__XM</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__ZA</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__AU</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__AR</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CH</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CL</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__AU</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__BR</th>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">TIME_PERIOD</th>
@@ -944,6 +944,7 @@ Raises:
 <td>0.004191</td>
 <td>0.057108</td>
 <td>...</td>
+<td>2.0</td>
 <td>NaN</td>
 <td>1.75</td>
 <td>NaN</td>
@@ -952,8 +953,7 @@ Raises:
 <td>NaN</td>
 <td>NaN</td>
 <td>NaN</td>
-<td>0.75</td>
-<td>NaN</td>
+<td>25.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2003-01-02</td>
@@ -968,16 +968,16 @@ Raises:
 <td>0.014820</td>
 <td>0.064289</td>
 <td>...</td>
+<td>NaN</td>
 <td>3.75</td>
 <td>1.75</td>
 <td>44.0</td>
 <td>1.25</td>
 <td>2.75</td>
 <td>13.5</td>
-<td>4.75</td>
 <td>5.99</td>
-<td>0.75</td>
-<td>3.0</td>
+<td>4.75</td>
+<td>25.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2003-01-03</td>
@@ -992,16 +992,16 @@ Raises:
 <td>0.016874</td>
 <td>0.064880</td>
 <td>...</td>
+<td>NaN</td>
 <td>3.75</td>
 <td>1.75</td>
 <td>44.0</td>
 <td>1.25</td>
 <td>2.75</td>
 <td>13.5</td>
-<td>4.75</td>
 <td>6.05</td>
-<td>0.75</td>
-<td>3.0</td>
+<td>4.75</td>
+<td>25.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2003-01-04</td>
@@ -1016,6 +1016,7 @@ Raises:
 <td>NaN</td>
 <td>NaN</td>
 <td>...</td>
+<td>2.0</td>
 <td>NaN</td>
 <td>1.75</td>
 <td>NaN</td>
@@ -1024,8 +1025,7 @@ Raises:
 <td>13.5</td>
 <td>NaN</td>
 <td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
+<td>25.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2003-01-05</td>
@@ -1040,6 +1040,7 @@ Raises:
 <td>NaN</td>
 <td>NaN</td>
 <td>...</td>
+<td>2.0</td>
 <td>NaN</td>
 <td>1.75</td>
 <td>NaN</td>
@@ -1048,13 +1049,12 @@ Raises:
 <td>NaN</td>
 <td>NaN</td>
 <td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
+<td>25.0</td>
 </tr>
 </tbody>
 </table>
 
-<p>5 rows × 61 columns</p>
+<p>5 rows × 62 columns</p>
 </div>
 </div>
 <div class="cell-output cell-output-display">
@@ -1177,7 +1177,7 @@ Raises:
 </div>
 </div>
 <p>You can also integrate the temporal features directly into the original DataFrame by setting the <code>add_to_df</code> parameter to True:</p>
-<div id="eac7aefc" class="cell" data-execution_count="34">
+<div id="40dfeece" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sample DataFrame with a weekly index</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>df_weekly <span class="op">=</span> pd.DataFrame(</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{<span class="st">"value"</span>: rng.normal(size<span class="op">=</span><span class="dv">100</span>)},</span>
@@ -1274,7 +1274,7 @@ Raises:
 </div>
 </div>
 <p>If you only need a subset of the temporal features, you can specify the desired feature names:</p>
-<div id="265f727f" class="cell" data-execution_count="35">
+<div id="d5b10df9" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a new DataFrame with a monthly index</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>df_monthly <span class="op">=</span> pd.DataFrame(</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{<span class="st">"value"</span>: rng.normal(size<span class="op">=</span><span class="dv">24</span>)},</span>
@@ -1334,7 +1334,7 @@ Raises:
 </div>
 </div>
 <p>In addition to <code>get_timefeat</code>, the gingado library provides the <code>TemporalFeatureTransformer</code> class, which can be used to transform a DataFrame with a temporal index into a DataFrame with additional features:</p>
-<div id="923d3c95" class="cell" data-execution_count="36">
+<div id="94c0a3ed" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>temp_trf <span class="op">=</span> TemporalFeatureTransformer(freq<span class="op">=</span><span class="st">"W"</span>, features<span class="op">=</span>[<span class="st">"week_of_month"</span>, <span class="st">"week_of_year"</span>, <span class="st">"quarter_of_year"</span>])</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>df_with_timefeat <span class="op">=</span> temp_trf.fit_transform(df_weekly)</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>display(df_with_timefeat.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

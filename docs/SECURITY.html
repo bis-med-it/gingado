@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>contributing – gingado</title>
+<title>security – gingado</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,7 +72,6 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="gingado">
-<meta property="og:description" content="">
 <meta property="og:site_name" content="gingado">
 </head>
 
@@ -177,21 +176,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#contributing-to-gingado" id="toc-contributing-to-gingado" class="nav-link active" data-scroll-target="#contributing-to-gingado">Contributing to <code>gingado</code></a>
+  <li><a href="#security-policy" id="toc-security-policy" class="nav-link active" data-scroll-target="#security-policy">Security Policy</a>
   <ul>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a>
-  <ul class="collapse">
-  <li><a href="#setting-up-for-development" id="toc-setting-up-for-development" class="nav-link" data-scroll-target="#setting-up-for-development">Setting Up for Development</a></li>
-  <li><a href="#modifying-the-index-page-and-readme.md" id="toc-modifying-the-index-page-and-readme.md" class="nav-link" data-scroll-target="#modifying-the-index-page-and-readme.md">Modifying the index page and README.md</a></li>
-  <li><a href="#reporting-issues-and-suggestions" id="toc-reporting-issues-and-suggestions" class="nav-link" data-scroll-target="#reporting-issues-and-suggestions">Reporting Issues and Suggestions</a></li>
-  <li><a href="#contributing-code" id="toc-contributing-code" class="nav-link" data-scroll-target="#contributing-code">Contributing Code</a>
-  <ul class="collapse">
-  <li><a href="#changes-to-codebase" id="toc-changes-to-codebase" class="nav-link" data-scroll-target="#changes-to-codebase">Changes to Codebase</a></li>
-  <li><a href="#pull-request-pr-guidelines" id="toc-pull-request-pr-guidelines" class="nav-link" data-scroll-target="#pull-request-pr-guidelines">Pull Request (PR) Guidelines</a></li>
-  </ul></li>
-  <li><a href="#documentation-contributions" id="toc-documentation-contributions" class="nav-link" data-scroll-target="#documentation-contributions">Documentation Contributions</a></li>
-  </ul></li>
-  <li><a href="#your-contributions-make-a-difference" id="toc-your-contributions-make-a-difference" class="nav-link" data-scroll-target="#your-contributions-make-a-difference">Your Contributions Make a Difference</a></li>
+  <li><a href="#supported-versions" id="toc-supported-versions" class="nav-link" data-scroll-target="#supported-versions">Supported Versions</a></li>
+  <li><a href="#reporting-a-vulnerability" id="toc-reporting-a-vulnerability" class="nav-link" data-scroll-target="#reporting-a-vulnerability">Reporting a Vulnerability</a></li>
+  <li><a href="#security-patch-release-process" id="toc-security-patch-release-process" class="nav-link" data-scroll-target="#security-patch-release-process">Security Patch Release Process</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
@@ -202,68 +191,39 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="contributing-to-gingado" class="level1">
-<h1>Contributing to <code>gingado</code></h1>
-<p>Welcome, and thank you for your interest in contributing to <code>gingado</code>! Whether it’s reporting issues, suggesting new features, or contributing to the code, documentation, or tests, your involvement is highly appreciated.</p>
-<section id="getting-started" class="level2">
-<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
-<section id="setting-up-for-development" class="level3">
-<h3 class="anchored" data-anchor-id="setting-up-for-development">Setting Up for Development</h3>
-<p>To get started with contributing to <code>gingado</code>, you need to set up your development environment. This includes installing necessary tools and configuring your system to work efficiently with our codebase.</p>
-<p>To install the dependencies to work with gingado, you need to install the execution dependencies and the development dependencies of gingado:</p>
-<pre><code>pip install -r requirements.txt
-pip install -r dev_requirements.txt</code></pre>
-<p>To work with the documentation an tests, we use <code>quarto</code>. You can either use RStudio or Visual Studio Code with the Quarto extension installed for editing <code>.qmd</code> files which are used for generating documentation. Here’s how you can set up your environment:</p>
+<section id="security-policy" class="level1">
+<h1>Security Policy</h1>
+<section id="supported-versions" class="level2">
+<h2 class="anchored" data-anchor-id="supported-versions">Supported Versions</h2>
+<p>We are committed to maintaining the security of our software. However, our resources are limited to providing security patches only for the latest combination of minor and major versions of our software.</p>
+</section>
+<section id="reporting-a-vulnerability" class="level2">
+<h2 class="anchored" data-anchor-id="reporting-a-vulnerability">Reporting a Vulnerability</h2>
+<p>We take the security of our software seriously. If you believe you have found a security vulnerability in our software, we encourage you to report it to us as soon as possible. Please follow these steps:</p>
 <ol type="1">
-<li><strong>Install Quarto</strong>: If you haven’t already, install Quarto from <a href="https://quarto.org/docs/get-started/">Quarto’s official website</a>. Follow the instructions for your operating system.</li>
-<li><strong>Configure Your Editor</strong>:
+<li><p><strong>Do Not Publish the Vulnerability</strong>: Publicly disclosing a vulnerability can put the entire community at risk. We ask that you do not share or publicize an unresolved vulnerability to/with third parties.</p></li>
+<li><p><strong>Report Confidentially</strong>: Please email us at <a href="mailto:contact.gingado@bis.org">contact.gingado@bis.org</a> with the details of the vulnerability. The report should include:</p>
 <ul>
-<li><strong>For RStudio</strong>: Quarto is integrated with RStudio. Ensure you have the latest version of RStudio to work with Quarto seamlessly.</li>
-<li><strong>For Visual Studio Code</strong>: Install the Quarto extension from the Visual Studio Code marketplace. This extension provides support for <code>.qmd</code> files, including syntax highlighting and preview capabilities.</li>
+<li>A description of the vulnerability and its potential impact.</li>
+<li>Steps to reproduce or proof-of-concept (PoC).</li>
+<li>Any relevant screenshots or output.</li>
 </ul></li>
+<li><p><strong>Response and Collaboration</strong>: Our security team will review your report and may contact you for further information. Once the vulnerability is confirmed, we will work with you to assess and understand its impact and develop a mitigation or fix.</p></li>
+<li><p><strong>Acknowledgment</strong>: After the vulnerability has been resolved, we will acknowledge your contribution in our release notes, unless you prefer to remain anonymous.</p></li>
 </ol>
 </section>
-<section id="modifying-the-index-page-and-readme.md" class="level3">
-<h3 class="anchored" data-anchor-id="modifying-the-index-page-and-readme.md">Modifying the index page and README.md</h3>
-<p>To modify the index page or the README.md file in the repository root, please only edit the index.qmd file. All changes in the index.qmd file will be rendered to the README.md file and moved automatically to the repository root via a post-render script <code>move_readme_to_root.py</code>.</p>
-</section>
-<section id="reporting-issues-and-suggestions" class="level3">
-<h3 class="anchored" data-anchor-id="reporting-issues-and-suggestions">Reporting Issues and Suggestions</h3>
-<p>If you encounter a bug, have suggestions, or want to propose new functionalities:</p>
-<ul>
-<li><strong>Check Existing Issues</strong>: Ensure the bug or suggestion hasn’t been reported/mentioned before by searching under <a href="https://github.com/bis-med-it/gingado/issues">Issues</a> on GitHub.</li>
-<li><strong>Create a New Issue</strong>: If no existing issue addresses the problem or suggestion, please <a href="https://github.com/bis-med-it/gingado/issues">create a new issue</a>, providing a descriptive title, a clear description, and as much relevant information as possible. For bugs, include a code sample or an executable test case demonstrating the expected behavior that is not occurring, along with complete error messages.</li>
-</ul>
-</section>
-<section id="contributing-code" class="level3">
-<h3 class="anchored" data-anchor-id="contributing-code">Contributing Code</h3>
-<section id="changes-to-codebase" class="level4">
-<h4 class="anchored" data-anchor-id="changes-to-codebase">Changes to Codebase</h4>
-<p>To contribute changes to the codebase, including documentation and tests, follow these guidelines:</p>
-<ul>
-<li><strong>Document New Features</strong>: Clearly document new functions or classes in the <code>.qmd</code> files. Write clear descriptions, specify expected inputs and outputs, and include any relevant information to understand the functionality.</li>
-<li><strong>Include Tests</strong>: Implement tests for new functionalities as part of the <code>.qmd</code> files to ensure the integrity and reliability of the code. Make sure your tests cover the expected behavior and edge cases.</li>
-</ul>
-</section>
-<section id="pull-request-pr-guidelines" class="level4">
-<h4 class="anchored" data-anchor-id="pull-request-pr-guidelines">Pull Request (PR) Guidelines</h4>
-<ul>
-<li><strong>Focused PRs</strong>: Each PR should be focused on a single topic. Avoid combining unrelated changes.</li>
-<li><strong>Separate Style and Functional Changes</strong>: Do not mix style changes with functional changes in the same PR.</li>
-<li><strong>Preserve File Style</strong>: Avoid adding or removing vertical whitespace unnecessarily. Keep the original style of the files you edit.</li>
-<li><strong>Development Process</strong>: Do not use a submitted PR as a development playground. If additional work is needed, consider closing the PR, completing the work, and then submitting a new PR.</li>
-<li><strong>Responding to Feedback</strong>: If your PR requires changes based on feedback, continue committing to the same PR unless the changes are substantial. In that case, it might be better to start a new PR.</li>
-</ul>
-</section>
-</section>
-<section id="documentation-contributions" class="level3">
-<h3 class="anchored" data-anchor-id="documentation-contributions">Documentation Contributions</h3>
-<p>When contributing to the documentation, ensure your contributions are made within <code>.qmd</code> files. This is essential for the changes to be correctly reflected in the generated documentation through Quarto.</p>
-</section>
-</section>
-<section id="your-contributions-make-a-difference" class="level2">
-<h2 class="anchored" data-anchor-id="your-contributions-make-a-difference">Your Contributions Make a Difference</h2>
-<p>By contributing to <code>gingado</code>, you are part of a community that values collaboration, innovation, and learning. We look forward to your contributions and are excited to see what we can build together.</p>
+<section id="security-patch-release-process" class="level2">
+<h2 class="anchored" data-anchor-id="security-patch-release-process">Security Patch Release Process</h2>
+<p>When a vulnerability is discovered, either through internal processes or via an external report, the following process will be followed:</p>
+<ol type="1">
+<li><p><strong>Vulnerability Assessment</strong>: Our security team will assess the severity and impact of the vulnerability.</p></li>
+<li><p><strong>Patch Development</strong>: A patch will be developed for the latest supported version.</p></li>
+<li><p><strong>Release and Notification</strong>: Once the patch is ready, it will be released as part of a new version. We will notify users of the need to update through our communication channels (e.g., repository release notes).</p></li>
+<li><p><strong>Backporting</strong>: In exceptional cases, where a vulnerability has a high impact, we may consider backporting the patch to earlier versions. This decision will be made on a case-by-case basis.</p></li>
+</ol>
+<p>Thank you for helping us keep our software secure.</p>
+<hr>
+<p>This policy is subject to change at the discretion of the project maintainers.</p>
 
 
 </section>

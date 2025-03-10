@@ -6,7 +6,7 @@ from scipy.spatial.distance import pdist, squareform
 from sklearn.base import BaseEstimator, ClusterMixin, check_is_fitted, clone
 from sklearn.cluster import AffinityPropagation
 from sklearn.manifold import TSNE
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import root_mean_squared_error
 from sklearn.pipeline import Pipeline
 from sklearn.utils.validation import validate_data
 
@@ -207,10 +207,9 @@ class MachineControl(BaseEstimator):
             X_pl, y_pl = self._create_placebo_df(X, y, entity)
             self.placebo_models_[entity] = clone(self.estimator)
             self.placebo_models_[entity].fit(X_pl, y_pl)
-            self.placebo_score_pre_[entity] = mean_squared_error(
+            self.placebo_score_pre_[entity] = root_mean_squared_error(
                 y_true=y_pl, 
-                y_pred=self.placebo_models_[entity].predict(X=X_pl),
-                squared=False
+                y_pred=self.placebo_models_[entity].predict(X=X_pl)
             )
 
     def _select_controls(
@@ -271,7 +270,7 @@ class MachineControl(BaseEstimator):
         if self.with_placebo:
             self._fit_placebo_models(X=X, y=y)
 
-        X_donor_pool, y = validate_data(X[self.donor_pool_], y)
+        X_donor_pool, y = validate_data(self, X[self.donor_pool_], y)
         
         self.estimator.fit(X=X_donor_pool, y=y)
         
@@ -311,10 +310,9 @@ class MachineControl(BaseEstimator):
             for entity, model in self.placebo_models_.items():
                 X_pl, y_pl = self._create_placebo_df(X=X, y=y, entity=entity)
                 self.placebo_predict_[entity] = model.predict(X=X_pl)
-                self.placebo_score_all_[entity] = mean_squared_error(
+                self.placebo_score_all_[entity] = root_mean_squared_error(
                     y_true=y_pl,
-                    y_pred=self.placebo_predict_[entity],
-                    squared=False
+                    y_pred=self.placebo_predict_[entity]
                 )
                 self.placebo_diff_[entity] = y_pl - self.placebo_predict_[entity]
             self.placebo_predict_ = pd.DataFrame(self.placebo_predict_, index=X.index)

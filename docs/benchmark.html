@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="description" content="Functions to create a relevant, fast and reasonably well-performing benchmark">
 
-<title>gingado - Automatic benchmark model</title>
+<title>Automatic benchmark model – gingado</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -70,12 +70,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-9b8f6c33b8a184d254b5eaa30f9d0661.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-db77c3ec39dfe3474f9f96fa411a1105.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -109,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="gingado - Automatic benchmark model">
+<meta property="og:title" content="Automatic benchmark model – gingado">
 <meta property="og:description" content="Functions to create a relevant, fast and reasonably well-performing benchmark">
 <meta property="og:site_name" content="gingado">
 </head>
@@ -126,13 +126,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Examples</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-examples">    
@@ -151,7 +151,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Reference</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-reference">    
@@ -195,7 +195,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -401,10 +401,10 @@ Args:
 
 Returns:
     ClassificationBenchmark: The instance of the model after fitting.</pre>
-<div id="07df60c0" class="cell" data-execution_count="17">
+<div id="761c63b5" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_classification</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="9920fb97" class="cell" data-execution_count="18">
+<div id="776e764b" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># some mock up data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_classification()</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -415,123 +415,122 @@ Returns:
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bm.predict(X).shape <span class="op">==</span> y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Fitting 10 folds for each of 6 candidates, totalling 60 fits
-[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=log2, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=log2, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=log2, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=log2, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=log2, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=log2, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=log2, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=log2, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=log2, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=log2, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=log2, n_estimators=250; total time=   0.5s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=None, n_estimators=100; total time=   0.2s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.6s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.6s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.6s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.6s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.6s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.6s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.6s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.6s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.6s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.6s</code></pre>
+[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=sqrt, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=sqrt, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=log2, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=log2, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=log2, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=log2, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=log2, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=log2, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=log2, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=log2, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=log2, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=log2, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=log2, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=None, n_estimators=100; total time=   0.0s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.2s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.2s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.1s</code></pre>
 </div>
 </div>
 <p>Importantly, <code>gingado</code> automatically provides some information to help the user documentat the benchmark model. More specifically, <code>ggdBenchmark</code> objects collect model information and pass it to a dictionary with key <code>info</code> in a field called <code>model_details</code>.</p>
-<div id="dd3bf77f" class="cell" data-execution_count="19">
+<div id="db38e681" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bm.model_documentation.show_json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>{'model_details': {'developer': 'Person or organisation developing the model',
-  'datetime': '2024-06-20 23:11:57 ',
+  'datetime': '2025-03-10 15:25:42 ',
   'version': 'Model version',
   'type': 'Model type',
   'info': {'_estimator_type': 'classifier',
-   'best_estimator_': RandomForestClassifier(max_features=None, n_estimators=250, oob_score=True),
-   'best_index_': 5,
-   'best_params_': {'max_features': None, 'n_estimators': 250},
-   'best_score_': 0.8800000000000001,
+   'best_estimator_': RandomForestClassifier(oob_score=True),
+   'best_index_': np.int64(0),
+   'best_params_': {'max_features': 'sqrt', 'n_estimators': 100},
+   'best_score_': np.float64(0.93),
    'classes_': array([0, 1]),
-   'cv_results_': {'mean_fit_time': array([0.19944484, 0.49079413, 0.1985281 , 0.50103121, 0.2273536 ,
-           0.55590255]),
-    'std_fit_time': array([0.00253929, 0.00309827, 0.00089202, 0.01321682, 0.00281543,
-           0.00344071]),
-    'mean_score_time': array([0.00645785, 0.01405029, 0.00631735, 0.0143662 , 0.00627313,
-           0.0141314 ]),
-    'std_score_time': array([0.00055059, 0.00018452, 0.00022965, 0.00041602, 0.00013258,
-           0.00024788]),
+   'cv_results_': {'mean_fit_time': array([0.08137186, 0.19892728, 0.08025815, 0.19829376, 0.09665287,
+           0.23911378]),
+    'std_fit_time': array([0.00134808, 0.00263441, 0.00292575, 0.00140519, 0.00466968,
+           0.00702469]),
+    'mean_score_time': array([0.00305088, 0.00765185, 0.00306253, 0.00781262, 0.00335233,
+           0.00723748]),
+    'std_score_time': array([0.00015249, 0.00122778, 0.00045129, 0.00126342, 0.00045032,
+           0.00069368]),
     'param_max_features': masked_array(data=['sqrt', 'sqrt', 'log2', 'log2', None, None],
                  mask=[False, False, False, False, False, False],
-           fill_value='?',
+           fill_value=np.str_('?'),
                 dtype=object),
     'param_n_estimators': masked_array(data=[100, 250, 100, 250, 100, 250],
                  mask=[False, False, False, False, False, False],
-           fill_value='?',
-                dtype=object),
+           fill_value=999999),
     'params': [{'max_features': 'sqrt', 'n_estimators': 100},
      {'max_features': 'sqrt', 'n_estimators': 250},
      {'max_features': 'log2', 'n_estimators': 100},
      {'max_features': 'log2', 'n_estimators': 250},
      {'max_features': None, 'n_estimators': 100},
      {'max_features': None, 'n_estimators': 250}],
-    'split0_test_score': array([0.8, 0.8, 0.8, 0.8, 0.8, 0.8]),
+    'split0_test_score': array([1., 1., 1., 1., 1., 1.]),
     'split1_test_score': array([0.8, 0.8, 0.8, 0.8, 0.8, 0.8]),
-    'split2_test_score': array([0.9, 0.8, 0.8, 0.8, 0.8, 0.8]),
-    'split3_test_score': array([1., 1., 1., 1., 1., 1.]),
-    'split4_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
-    'split5_test_score': array([0.8, 0.8, 0.8, 0.8, 0.8, 0.8]),
-    'split6_test_score': array([0.8, 0.8, 0.8, 0.8, 0.9, 0.9]),
-    'split7_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
-    'split8_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
-    'split9_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 1. ]),
-    'mean_test_score': array([0.87, 0.86, 0.86, 0.86, 0.87, 0.88]),
-    'std_test_score': array([0.06403124, 0.0663325 , 0.0663325 , 0.0663325 , 0.06403124,
-           0.07483315]),
-    'rank_test_score': array([2, 4, 4, 4, 2, 1], dtype=int32)},
+    'split2_test_score': array([0.8, 0.8, 0.8, 0.8, 0.8, 0.8]),
+    'split3_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
+    'split4_test_score': array([0.9, 0.9, 0.9, 0.9, 0.8, 0.9]),
+    'split5_test_score': array([1., 1., 1., 1., 1., 1.]),
+    'split6_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
+    'split7_test_score': array([1. , 0.9, 1. , 1. , 1. , 1. ]),
+    'split8_test_score': array([1., 1., 1., 1., 1., 1.]),
+    'split9_test_score': array([1., 1., 1., 1., 1., 1.]),
+    'mean_test_score': array([0.93, 0.92, 0.93, 0.93, 0.92, 0.93]),
+    'std_test_score': array([0.0781025 , 0.07483315, 0.0781025 , 0.0781025 , 0.08717798,
+           0.0781025 ]),
+    'rank_test_score': array([1, 5, 1, 1, 5, 1], dtype=int32)},
    'multimetric_': False,
    'n_features_in_': 20,
    'n_splits_': 10,
-   'refit_time_': 0.5836849212646484,
-   'scorer_': &lt;sklearn.metrics._scorer._PassthroughScorer at 0x1473a7a60&gt;},
+   'refit_time_': 0.0833120346069336,
+   'scorer_': &lt;class 'sklearn.ensemble._forest.RandomForestClassifier'&gt;.score},
   'paper': 'Paper or other resource for more information',
   'citation': 'Citation details',
   'license': 'License',
@@ -561,10 +560,10 @@ Returns:
 </div>
 </div>
 <p>It is also simple to define as benchmark a model that you already fitted and still benefit from the other functionalities provided by <code>Benchmark</code> class. This can also be done in case you are using a saved version of a fitted model (eg, the model you are using in production) and want to have that as the benchmark.</p>
-<div id="02d8a6a1" class="cell" data-execution_count="20">
+<div id="0176e3c2" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="7b373f7f" class="cell" data-execution_count="21">
+<div id="f75857ae" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>forest <span class="op">=</span> RandomForestClassifier().fit(X, y)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>bm.set_benchmark(estimator<span class="op">=</span>forest)</span>
@@ -598,11 +597,11 @@ Args:
 
 Returns:
     RegressionBenchmark: The instance of the model.</pre>
-<div id="f0dec7ab" class="cell" data-execution_count="24">
+<div id="7debf51b" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_regression</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> AdaBoostRegressor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="b854fe39" class="cell" data-execution_count="25">
+<div id="25404244" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># some mock up data</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_regression()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -621,11 +620,11 @@ Returns:
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bm.predict(X).shape <span class="op">==</span> y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below we compare the benchmark (set above manually to be the adaboost algorithm) with two other candidate models: a Gaussian process and a linear Support Vector Machine (SVM).</p>
-<div id="d19e04f5" class="cell" data-execution_count="26">
+<div id="d8766c1c" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.gaussian_process <span class="im">import</span> GaussianProcessRegressor</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> LinearSVR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="d1ae9fb4" class="cell" data-execution_count="27">
+<div id="effccaae" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>gauss_reg <span class="op">=</span> GaussianProcessRegressor().fit(X, y)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>svm_reg <span class="op">=</span> LinearSVR().fit(X, y)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -638,14 +637,13 @@ Pipeline(steps=[('candidate_estimator', LinearSVR())])</code></pre>
 </div>
 <p>Note that when the benchmark object finds a model that performs better than it does, the user is informed that the benchmark is updated and the new benchmark model is shown. This only happens when the argument <code>update_benchmark</code> is set to True (as default).</p>
 <p>Below we can see by how much it outperformed the other candidates, including the previous benchmark model and an ensemble of the previous benchmark and all the candidates. It is also a good opportunity to see how stable the performance of each model was, as judged by the standard deviation of the scores across the validation folds.</p>
-<div id="8db48081" class="cell" data-execution_count="28">
+<div id="a14c4e88" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(bm.benchmark.cv_results_)[[<span class="st">'params'</span>, <span class="st">'mean_test_score'</span>, <span class="st">'std_test_score'</span>, <span class="st">'rank_test_score'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
 <div>
-<div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -659,35 +657,34 @@ Pipeline(steps=[('candidate_estimator', LinearSVR())])</code></pre>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>{'candidate_estimator': (DecisionTreeRegressor...</td>
-<td>0.371883</td>
-<td>0.183710</td>
+<td>0.287485</td>
+<td>0.166474</td>
 <td>2</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>{'candidate_estimator': GaussianProcessRegress...</td>
-<td>-0.157062</td>
-<td>0.242157</td>
+<td>-0.150231</td>
+<td>0.151002</td>
 <td>4</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>{'candidate_estimator': LinearSVR(), 'candidat...</td>
-<td>0.480159</td>
-<td>0.114643</td>
+<td>0.363217</td>
+<td>0.179497</td>
 <td>1</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>{'candidate_estimator': VotingRegressor(estima...</td>
-<td>0.275088</td>
-<td>0.161351</td>
+<td>0.236340</td>
+<td>0.105371</td>
 <td>3</td>
 </tr>
 </tbody>
 </table>
 
-</div>
 </div>
 </div>
 </div>
@@ -704,7 +701,7 @@ Pipeline(steps=[('candidate_estimator', LinearSVR())])</code></pre>
 <h2 class="anchored" data-anchor-id="data-split">Data split</h2>
 <p><code>gingado</code> benchmarks rely on hyperparameter tuning to discover the benchmark specification that is most likely to perform better with the user data. This tuning in turn depends on a data splitting strategy for the cross-validation. By default, <code>gingado</code> uses <code>StratifiedShuffleSplit</code> (in classification problems) or <code>ShuffleSplit</code> (in regression problems) if the data is not time series and <code>TimeSeriesSplit</code> otherwise.</p>
 <p>The user may overrun these defaults either by directly setting the parameter <code>cv</code> or <code>default_cv</code> when instanciating the <code>gingado</code> benchmark class. The difference is that <code>default_cv</code> is only used after <code>gingado</code> checks that the data is not a time series (if a time dimension exists, then <code>TimeSeriesSplit</code> is used).</p>
-<div id="2599e259" class="cell" data-execution_count="29">
+<div id="c3cc5543" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_classification()</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>bm_cls <span class="op">=</span> ClassificationBenchmark(cv<span class="op">=</span>TimeSeriesSplit(n_splits<span class="op">=</span><span class="dv">3</span>)).fit(X, y)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bm_cls.benchmark.n_splits_ <span class="op">==</span> <span class="dv">3</span></span>
@@ -911,18 +908,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -954,7 +940,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -962,10 +968,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
           // default icon
           link.classList.add("external");
       }
@@ -1004,7 +1015,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -1052,7 +1067,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

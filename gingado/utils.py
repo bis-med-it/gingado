@@ -65,7 +65,7 @@ class Lag(BaseEstimator, TransformerMixin):
         else:
             if y is not None and hasattr(y, "index"):
                 self.index = y.index
-        X = validate_data(X)
+        X = validate_data(self, X)
 
         self.effective_lags_ = self.lags + self.jump
         return self
@@ -85,7 +85,7 @@ class Lag(BaseEstimator, TransformerMixin):
         """
         X_forlag = X
         
-        X = validate_data(X)
+        X = validate_data(self, X)
         check_is_fitted(self)
         X_lags = []
         X_colnames = list(self.feature_names_in_) if self.keep_contemporaneous_X else []

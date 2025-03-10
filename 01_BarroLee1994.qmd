@@ -109,7 +109,7 @@ The values above are calculated with $R^2$, the default scoring function for a r
 
 ```{python}
 
-benchmark_lower_worsterror = RegressionBenchmark(scoring='max_error', verbose_grid=2)
+benchmark_lower_worsterror = RegressionBenchmark(scoring='neg_max_error', verbose_grid=2)
 benchmark_lower_worsterror.fit(X, y)
 ```
 

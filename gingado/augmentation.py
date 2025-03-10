@@ -117,7 +117,7 @@ class AugmentSDMX(BaseEstimator, TransformerMixin):
             raise
         self.index_ = X.index
         self.keys_ = {'FREQ': self.data_freq_}
-        X = validate_data(X)
+        X = validate_data(self, X)
 
         # this variable below is only included to test for consistency \
         # if `fit` and `transform` are called separately with the same `X`

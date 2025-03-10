@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="This page documents the sources and transformations of actual datasets into a standardised format for distribution with gingado">
 
-<title>Dataset transformation for uploading – gingado</title>
+<title>security – gingado</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,44 +20,10 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -103,14 +68,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Dataset transformation for uploading – gingado">
-<meta property="og:description" content="This page documents the sources and transformations of actual datasets into a standardised format for distribution with gingado">
+<meta property="og:title" content="gingado">
 <meta property="og:site_name" content="gingado">
 </head>
 
@@ -215,762 +176,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#barro-and-lee-1994" id="toc-barro-and-lee-1994" class="nav-link active" data-scroll-target="#barro-and-lee-1994">Barro and Lee, 1994</a></li>
+  <li><a href="#security-policy" id="toc-security-policy" class="nav-link active" data-scroll-target="#security-policy">Security Policy</a>
+  <ul>
+  <li><a href="#supported-versions" id="toc-supported-versions" class="nav-link" data-scroll-target="#supported-versions">Supported Versions</a></li>
+  <li><a href="#reporting-a-vulnerability" id="toc-reporting-a-vulnerability" class="nav-link" data-scroll-target="#reporting-a-vulnerability">Reporting a Vulnerability</a></li>
+  <li><a href="#security-patch-release-process" id="toc-security-patch-release-process" class="nav-link" data-scroll-target="#security-patch-release-process">Security Patch Release Process</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Dataset transformation for uploading</h1>
-</div>
-
-<div>
-  <div class="description">
-    This page documents the sources and transformations of actual datasets into a standardised format for distribution with <code>gingado</code>
-  </div>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
 
 
-</header>
+<section id="security-policy" class="level1">
+<h1>Security Policy</h1>
+<section id="supported-versions" class="level2">
+<h2 class="anchored" data-anchor-id="supported-versions">Supported Versions</h2>
+<p>We are committed to maintaining the security of our software. However, our resources are limited to providing security patches only for the latest combination of minor and major versions of our software.</p>
+</section>
+<section id="reporting-a-vulnerability" class="level2">
+<h2 class="anchored" data-anchor-id="reporting-a-vulnerability">Reporting a Vulnerability</h2>
+<p>We take the security of our software seriously. If you believe you have found a security vulnerability in our software, we encourage you to report it to us as soon as possible. Please follow these steps:</p>
+<ol type="1">
+<li><p><strong>Do Not Publish the Vulnerability</strong>: Publicly disclosing a vulnerability can put the entire community at risk. We ask that you do not share or publicize an unresolved vulnerability to/with third parties.</p></li>
+<li><p><strong>Report Confidentially</strong>: Please email us at <a href="mailto:contact.gingado@bis.org">contact.gingado@bis.org</a> with the details of the vulnerability. The report should include:</p>
+<ul>
+<li>A description of the vulnerability and its potential impact.</li>
+<li>Steps to reproduce or proof-of-concept (PoC).</li>
+<li>Any relevant screenshots or output.</li>
+</ul></li>
+<li><p><strong>Response and Collaboration</strong>: Our security team will review your report and may contact you for further information. Once the vulnerability is confirmed, we will work with you to assess and understand its impact and develop a mitigation or fix.</p></li>
+<li><p><strong>Acknowledgment</strong>: After the vulnerability has been resolved, we will acknowledge your contribution in our release notes, unless you prefer to remain anonymous.</p></li>
+</ol>
+</section>
+<section id="security-patch-release-process" class="level2">
+<h2 class="anchored" data-anchor-id="security-patch-release-process">Security Patch Release Process</h2>
+<p>When a vulnerability is discovered, either through internal processes or via an external report, the following process will be followed:</p>
+<ol type="1">
+<li><p><strong>Vulnerability Assessment</strong>: Our security team will assess the severity and impact of the vulnerability.</p></li>
+<li><p><strong>Patch Development</strong>: A patch will be developed for the latest supported version.</p></li>
+<li><p><strong>Release and Notification</strong>: Once the patch is ready, it will be released as part of a new version. We will notify users of the need to update through our communication channels (e.g., repository release notes).</p></li>
+<li><p><strong>Backporting</strong>: In exceptional cases, where a vulnerability has a high impact, we may consider backporting the patch to earlier versions. This decision will be made on a case-by-case basis.</p></li>
+</ol>
+<p>Thank you for helping us keep our software secure.</p>
+<hr>
+<p>This policy is subject to change at the discretion of the project maintainers.</p>
 
 
-<section id="barro-and-lee-1994" class="level2">
-<h2 class="anchored" data-anchor-id="barro-and-lee-1994">Barro and Lee, 1994</h2>
-<p>For more information on this data, consult the <code>datasets</code> page.</p>
-<div id="effa1c62" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> io</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>growth_data <span class="op">=</span> io.loadmat(<span class="st">'gingado/data/GrowthData.mat'</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>colnames <span class="op">=</span> [m[<span class="dv">0</span>].strip() <span class="cf">for</span> m <span class="kw">in</span> growth_data[<span class="st">'Mnem'</span>][<span class="dv">0</span>]]</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(growth_data[<span class="st">'data'</span>], columns<span class="op">=</span>colnames)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">'gingado/data/dataset_BarroLee_1994.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="aa92d7cd" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_rows'</span>, <span class="va">None</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df.describe().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">count</th>
-<th data-quarto-table-cell-role="th">mean</th>
-<th data-quarto-table-cell-role="th">std</th>
-<th data-quarto-table-cell-role="th">min</th>
-<th data-quarto-table-cell-role="th">25%</th>
-<th data-quarto-table-cell-role="th">50%</th>
-<th data-quarto-table-cell-role="th">75%</th>
-<th data-quarto-table-cell-role="th">max</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">gdpsh465</td>
-<td>90.0</td>
-<td>7.702907</td>
-<td>0.896179</td>
-<td>5.762051</td>
-<td>7.131539</td>
-<td>7.725700</td>
-<td>8.441914</td>
-<td>9.229849</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">bmp1l</td>
-<td>90.0</td>
-<td>0.168747</td>
-<td>0.249116</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0.063800</td>
-<td>0.274550</td>
-<td>1.637800</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">freeop</td>
-<td>90.0</td>
-<td>0.220102</td>
-<td>0.074861</td>
-<td>0.078488</td>
-<td>0.166044</td>
-<td>0.203972</td>
-<td>0.286425</td>
-<td>0.416234</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">freetar</td>
-<td>90.0</td>
-<td>0.028334</td>
-<td>0.021855</td>
-<td>0.000000</td>
-<td>0.011589</td>
-<td>0.025426</td>
-<td>0.039745</td>
-<td>0.109921</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">h65</td>
-<td>90.0</td>
-<td>0.111556</td>
-<td>0.101361</td>
-<td>0.002000</td>
-<td>0.032250</td>
-<td>0.089000</td>
-<td>0.147500</td>
-<td>0.573000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">hm65</td>
-<td>90.0</td>
-<td>0.137156</td>
-<td>0.116826</td>
-<td>0.004000</td>
-<td>0.042250</td>
-<td>0.114500</td>
-<td>0.181000</td>
-<td>0.635000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">hf65</td>
-<td>90.0</td>
-<td>0.082233</td>
-<td>0.091549</td>
-<td>0.000000</td>
-<td>0.014000</td>
-<td>0.055000</td>
-<td>0.113000</td>
-<td>0.527000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">p65</td>
-<td>90.0</td>
-<td>0.893333</td>
-<td>0.164938</td>
-<td>0.290000</td>
-<td>0.832500</td>
-<td>0.985000</td>
-<td>1.000000</td>
-<td>1.000000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">pm65</td>
-<td>90.0</td>
-<td>0.919556</td>
-<td>0.134632</td>
-<td>0.370000</td>
-<td>0.882500</td>
-<td>1.000000</td>
-<td>1.000000</td>
-<td>1.000000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">pf65</td>
-<td>90.0</td>
-<td>0.849556</td>
-<td>0.210899</td>
-<td>0.210000</td>
-<td>0.762500</td>
-<td>0.970000</td>
-<td>1.000000</td>
-<td>1.000000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">s65</td>
-<td>90.0</td>
-<td>0.406556</td>
-<td>0.247219</td>
-<td>0.020000</td>
-<td>0.182500</td>
-<td>0.395000</td>
-<td>0.555000</td>
-<td>0.910000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">sm65</td>
-<td>90.0</td>
-<td>0.436222</td>
-<td>0.246543</td>
-<td>0.030000</td>
-<td>0.220000</td>
-<td>0.420000</td>
-<td>0.607500</td>
-<td>0.950000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">sf65</td>
-<td>90.0</td>
-<td>0.379778</td>
-<td>0.265800</td>
-<td>0.010000</td>
-<td>0.140000</td>
-<td>0.345000</td>
-<td>0.530000</td>
-<td>0.920000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">fert65</td>
-<td>90.0</td>
-<td>4.742000</td>
-<td>1.974886</td>
-<td>1.450000</td>
-<td>2.845000</td>
-<td>5.060000</td>
-<td>6.560000</td>
-<td>8.000000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">mort65</td>
-<td>90.0</td>
-<td>0.070467</td>
-<td>0.047166</td>
-<td>0.009000</td>
-<td>0.024000</td>
-<td>0.064500</td>
-<td>0.110750</td>
-<td>0.183000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">lifee065</td>
-<td>90.0</td>
-<td>4.102025</td>
-<td>0.167895</td>
-<td>3.693867</td>
-<td>3.994061</td>
-<td>4.110874</td>
-<td>4.258443</td>
-<td>4.317488</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">gpop1</td>
-<td>90.0</td>
-<td>0.021301</td>
-<td>0.009851</td>
-<td>0.002600</td>
-<td>0.013150</td>
-<td>0.022900</td>
-<td>0.029900</td>
-<td>0.039000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">fert1</td>
-<td>90.0</td>
-<td>4.962444</td>
-<td>1.936886</td>
-<td>1.742000</td>
-<td>2.906500</td>
-<td>5.394000</td>
-<td>6.680000</td>
-<td>8.000000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">mort1</td>
-<td>90.0</td>
-<td>0.087211</td>
-<td>0.051937</td>
-<td>0.015000</td>
-<td>0.031500</td>
-<td>0.085000</td>
-<td>0.131000</td>
-<td>0.204000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">invsh41</td>
-<td>90.0</td>
-<td>0.196663</td>
-<td>0.086981</td>
-<td>0.027133</td>
-<td>0.129175</td>
-<td>0.191680</td>
-<td>0.254760</td>
-<td>0.475500</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">geetot1</td>
-<td>90.0</td>
-<td>0.035594</td>
-<td>0.014543</td>
-<td>0.011700</td>
-<td>0.024325</td>
-<td>0.033900</td>
-<td>0.046400</td>
-<td>0.077000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">geerec1</td>
-<td>90.0</td>
-<td>0.029782</td>
-<td>0.012673</td>
-<td>0.004100</td>
-<td>0.020925</td>
-<td>0.028350</td>
-<td>0.038250</td>
-<td>0.068700</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">gde1</td>
-<td>90.0</td>
-<td>0.032133</td>
-<td>0.033750</td>
-<td>0.005000</td>
-<td>0.015250</td>
-<td>0.020500</td>
-<td>0.039750</td>
-<td>0.251000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">govwb1</td>
-<td>90.0</td>
-<td>0.126661</td>
-<td>0.045588</td>
-<td>0.061500</td>
-<td>0.096000</td>
-<td>0.120950</td>
-<td>0.145125</td>
-<td>0.352300</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">govsh41</td>
-<td>90.0</td>
-<td>0.155161</td>
-<td>0.061317</td>
-<td>0.035500</td>
-<td>0.118350</td>
-<td>0.147250</td>
-<td>0.183850</td>
-<td>0.385900</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">gvxdxe41</td>
-<td>90.0</td>
-<td>0.094915</td>
-<td>0.053846</td>
-<td>0.010000</td>
-<td>0.058965</td>
-<td>0.086585</td>
-<td>0.122365</td>
-<td>0.310460</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">high65</td>
-<td>90.0</td>
-<td>4.203000</td>
-<td>5.252551</td>
-<td>0.120000</td>
-<td>1.302500</td>
-<td>2.735000</td>
-<td>4.952500</td>
-<td>30.900000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">highm65</td>
-<td>90.0</td>
-<td>5.531556</td>
-<td>5.908117</td>
-<td>0.230000</td>
-<td>1.890000</td>
-<td>3.990000</td>
-<td>6.525000</td>
-<td>33.400000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">highf65</td>
-<td>90.0</td>
-<td>2.946889</td>
-<td>4.781800</td>
-<td>0.010000</td>
-<td>0.667500</td>
-<td>1.320000</td>
-<td>2.992500</td>
-<td>28.500000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">highc65</td>
-<td>90.0</td>
-<td>2.455556</td>
-<td>2.487163</td>
-<td>0.090000</td>
-<td>1.007500</td>
-<td>1.695000</td>
-<td>3.135000</td>
-<td>15.630000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">highcm65</td>
-<td>90.0</td>
-<td>3.434222</td>
-<td>3.111632</td>
-<td>0.180000</td>
-<td>1.347500</td>
-<td>2.445000</td>
-<td>4.517500</td>
-<td>18.830000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">highcf65</td>
-<td>90.0</td>
-<td>1.529667</td>
-<td>2.066383</td>
-<td>0.010000</td>
-<td>0.432500</td>
-<td>0.765000</td>
-<td>1.925000</td>
-<td>12.770000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">human65</td>
-<td>90.0</td>
-<td>4.214878</td>
-<td>2.530420</td>
-<td>0.301000</td>
-<td>2.212000</td>
-<td>3.803500</td>
-<td>5.674000</td>
-<td>11.158000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">humanm65</td>
-<td>90.0</td>
-<td>4.698267</td>
-<td>2.423311</td>
-<td>0.568000</td>
-<td>2.888000</td>
-<td>4.244500</td>
-<td>6.030250</td>
-<td>11.535000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">humanf65</td>
-<td>90.0</td>
-<td>3.745967</td>
-<td>2.692534</td>
-<td>0.043000</td>
-<td>1.605250</td>
-<td>3.194000</td>
-<td>5.178250</td>
-<td>10.798000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">hyr65</td>
-<td>90.0</td>
-<td>0.133178</td>
-<td>0.151704</td>
-<td>0.004000</td>
-<td>0.046500</td>
-<td>0.087000</td>
-<td>0.161500</td>
-<td>0.829000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">hyrm65</td>
-<td>90.0</td>
-<td>0.179300</td>
-<td>0.177153</td>
-<td>0.008000</td>
-<td>0.066250</td>
-<td>0.125500</td>
-<td>0.215250</td>
-<td>0.960000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">hyrf65</td>
-<td>90.0</td>
-<td>0.089533</td>
-<td>0.133602</td>
-<td>0.000000</td>
-<td>0.021250</td>
-<td>0.043500</td>
-<td>0.095000</td>
-<td>0.712000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">no65</td>
-<td>90.0</td>
-<td>34.723111</td>
-<td>29.101051</td>
-<td>0.000000</td>
-<td>4.527500</td>
-<td>31.110000</td>
-<td>59.075000</td>
-<td>89.460000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">nom65</td>
-<td>90.0</td>
-<td>28.999889</td>
-<td>25.307305</td>
-<td>0.000000</td>
-<td>4.227500</td>
-<td>25.180000</td>
-<td>49.545000</td>
-<td>82.350000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">nof65</td>
-<td>90.0</td>
-<td>40.327111</td>
-<td>33.446850</td>
-<td>0.000000</td>
-<td>4.275000</td>
-<td>36.400000</td>
-<td>69.550000</td>
-<td>98.610000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">pinstab1</td>
-<td>90.0</td>
-<td>0.114160</td>
-<td>0.214415</td>
-<td>0.000000</td>
-<td>0.000000</td>
-<td>0.000706</td>
-<td>0.103919</td>
-<td>1.068500</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">pop65</td>
-<td>90.0</td>
-<td>39825.300000</td>
-<td>87794.312844</td>
-<td>1482.000000</td>
-<td>4961.000000</td>
-<td>12275.000000</td>
-<td>42263.500000</td>
-<td>620701.000000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">worker65</td>
-<td>90.0</td>
-<td>0.369268</td>
-<td>0.069487</td>
-<td>0.215600</td>
-<td>0.311050</td>
-<td>0.369400</td>
-<td>0.410075</td>
-<td>0.526000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">pop1565</td>
-<td>90.0</td>
-<td>0.375158</td>
-<td>0.093359</td>
-<td>0.201800</td>
-<td>0.280600</td>
-<td>0.421100</td>
-<td>0.456325</td>
-<td>0.515800</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">pop6565</td>
-<td>90.0</td>
-<td>0.059175</td>
-<td>0.037660</td>
-<td>0.021548</td>
-<td>0.031189</td>
-<td>0.036967</td>
-<td>0.086604</td>
-<td>0.151105</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">sec65</td>
-<td>90.0</td>
-<td>15.318000</td>
-<td>13.039270</td>
-<td>0.450000</td>
-<td>5.700000</td>
-<td>11.200000</td>
-<td>18.865000</td>
-<td>57.100000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">secm65</td>
-<td>90.0</td>
-<td>16.622111</td>
-<td>12.421347</td>
-<td>0.750000</td>
-<td>7.730000</td>
-<td>12.780000</td>
-<td>22.307500</td>
-<td>56.370000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">secf65</td>
-<td>90.0</td>
-<td>14.024111</td>
-<td>14.121763</td>
-<td>0.170000</td>
-<td>3.747500</td>
-<td>8.865000</td>
-<td>16.840000</td>
-<td>57.800000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">secc65</td>
-<td>90.0</td>
-<td>6.444111</td>
-<td>6.351368</td>
-<td>0.130000</td>
-<td>2.352500</td>
-<td>4.005000</td>
-<td>7.870000</td>
-<td>34.090000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">seccm65</td>
-<td>90.0</td>
-<td>6.702889</td>
-<td>6.182263</td>
-<td>0.150000</td>
-<td>2.635000</td>
-<td>4.735000</td>
-<td>8.910000</td>
-<td>31.270000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">seccf65</td>
-<td>90.0</td>
-<td>6.171778</td>
-<td>6.857261</td>
-<td>0.040000</td>
-<td>1.500000</td>
-<td>3.870000</td>
-<td>8.042500</td>
-<td>36.610000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">syr65</td>
-<td>90.0</td>
-<td>0.912422</td>
-<td>0.823222</td>
-<td>0.033000</td>
-<td>0.357750</td>
-<td>0.678500</td>
-<td>1.130750</td>
-<td>4.211000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">syrm65</td>
-<td>90.0</td>
-<td>1.045444</td>
-<td>0.831756</td>
-<td>0.057000</td>
-<td>0.467500</td>
-<td>0.770500</td>
-<td>1.246750</td>
-<td>4.227000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">syrf65</td>
-<td>90.0</td>
-<td>0.783767</td>
-<td>0.839486</td>
-<td>0.010000</td>
-<td>0.215250</td>
-<td>0.512500</td>
-<td>1.002000</td>
-<td>4.198000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">teapri65</td>
-<td>90.0</td>
-<td>33.203333</td>
-<td>9.818516</td>
-<td>18.200000</td>
-<td>27.425000</td>
-<td>32.200000</td>
-<td>37.475000</td>
-<td>62.400000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">teasec65</td>
-<td>90.0</td>
-<td>19.412222</td>
-<td>6.384194</td>
-<td>7.200000</td>
-<td>15.350000</td>
-<td>18.400000</td>
-<td>22.800000</td>
-<td>37.100000</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">ex1</td>
-<td>90.0</td>
-<td>0.133981</td>
-<td>0.118708</td>
-<td>0.017800</td>
-<td>0.063450</td>
-<td>0.092300</td>
-<td>0.169225</td>
-<td>0.747000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">im1</td>
-<td>90.0</td>
-<td>0.144356</td>
-<td>0.120937</td>
-<td>0.022200</td>
-<td>0.070625</td>
-<td>0.116300</td>
-<td>0.181475</td>
-<td>0.848900</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">xr65</td>
-<td>90.0</td>
-<td>42.663856</td>
-<td>119.335089</td>
-<td>0.003000</td>
-<td>1.099000</td>
-<td>4.762000</td>
-<td>19.619000</td>
-<td>652.850000</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">tot1</td>
-<td>90.0</td>
-<td>0.009236</td>
-<td>0.059182</td>
-<td>-0.156878</td>
-<td>-0.016877</td>
-<td>0.004890</td>
-<td>0.018526</td>
-<td>0.207492</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">Outcome</td>
-<td>90.0</td>
-<td>0.045349</td>
-<td>0.051314</td>
-<td>-0.100990</td>
-<td>0.021045</td>
-<td>0.046209</td>
-<td>0.074029</td>
-<td>0.185526</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-
-
+</section>
 </section>
 
 </main> <!-- /main -->

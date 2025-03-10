@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="description" content="Functions to jumpstart and facilitate model documentation">
 
-<title>gingado - Model documentation</title>
+<title>Model documentation – gingado</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,7 +23,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -59,6 +59,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -89,19 +90,25 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-9b8f6c33b8a184d254b5eaa30f9d0661.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-db77c3ec39dfe3474f9f96fa411a1105.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -110,81 +117,83 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="gingado - Model documentation">
+<meta property="og:title" content="Model documentation – gingado">
 <meta property="og:description" content="Functions to jumpstart and facilitate model documentation">
-<meta property="og:site-name" content="gingado">
+<meta property="og:site_name" content="gingado">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">gingado</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-examples" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Examples</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-examples">    
         <li>
-    <a class="dropdown-item" href="./barrolee1994.html" rel="" target="">
+    <a class="dropdown-item" href="./barrolee1994.html">
  <span class="dropdown-text">Economic growth</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./forecast.html" rel="" target="">
+    <a class="dropdown-item" href="./forecast.html">
  <span class="dropdown-text">Forecasting FX rates</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./machine_controls.html" rel="" target="">
+    <a class="dropdown-item" href="./machine_controls.html">
  <span class="dropdown-text">Effects of labour reform</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Reference</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-reference">    
         <li>
-    <a class="dropdown-item" href="./augmentation.html" rel="" target="">
+    <a class="dropdown-item" href="./augmentation.html">
  <span class="dropdown-text">gingado.augmentation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./datasets.html" rel="" target="">
+    <a class="dropdown-item" href="./datasets.html">
  <span class="dropdown-text">gingado.datasets</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./benchmark.html" rel="" target="">
+    <a class="dropdown-item" href="./benchmark.html">
  <span class="dropdown-text">gingado.benchmark</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./estimators.html" rel="" target="">
+    <a class="dropdown-item" href="./estimators.html">
  <span class="dropdown-text">gingado.estimators</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./documentation.html" rel="" target="">
+    <a class="dropdown-item" href="./documentation.html">
  <span class="dropdown-text">gingado.model_documentation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./utils.html" rel="" target="">
+    <a class="dropdown-item" href="./utils.html">
  <span class="dropdown-text">gingado.utils</span></a>
   </li>  
     </ul>
@@ -192,16 +201,17 @@ div.csl-indent {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/bis-med-it/gingado" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/bis-med-it/gingado"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.sdmx.io" rel="" target=""><i class="bi bi-house-fill" role="img">
+    <a class="nav-link" href="https://www.sdmx.io"> <i class="bi bi-house-fill" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
@@ -210,7 +220,6 @@ div.csl-indent {
   </div>
 </a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -268,7 +277,7 @@ div.csl-indent {
   <li><a href="#sec-custom" id="toc-sec-custom" class="nav-link" data-scroll-target="#sec-custom">Creating a custom Documenter</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -293,7 +302,9 @@ div.csl-indent {
   </div>
   
 
+
 </header>
+
 
 <p>Each user has a specific documentation need, ranging from simply logging the model training to a more complex description of the model pipeline with a discusson of the model outcomes. <code>gingado</code> addresses this variety of needs by offering a class of objects, “Documenters”, that facilitate model documentation. A base class facilitates the creation of generic ways to document models, and <code>gingado</code> includes two specific model documentation templates off-the-shelf as described below.</p>
 <p>The model documentation is performed by Documenters, objects that subclass from the base class <code>ggdModelDocumentation</code>. This base class offers code that can be used by any Documenter to read the model in question, format the information according to a template and save the resulting documentation in a JSON format. Documenters save the underlying information using the JSON format. With the JSON documentation file at hand, the user can then deploy existing third-party libraries to transform the information stored in JSON into a variety of formats (eg, HTML, PDF) as needed.</p>
@@ -301,7 +312,7 @@ div.csl-indent {
 <section id="base-class" class="level1">
 <h1>Base class</h1>
 <p><code>gingado</code> has a <code>ggdModelDocumentation</code> base class that contains the basic functionalities for Documenters. It is not meant to be used by itself, but only as a hyperclass for Documenters objects. <code>gingado</code> ships with two such objects that subclass <code>ggdModelDocumentation</code>: <code>ModelCard</code> and <code>ForecastCard</code>. They are both described below in their respective sections.</p>
-<p>Users are encouraged to submit a PR with their own Documenter models subclassing <code>ggdModelDocumentation</code>; see <a href="#sec-custom">Section&nbsp;5</a> for more information.</p>
+<p>Users are encouraged to submit a PR with their own Documenter models subclassing <code>ggdModelDocumentation</code>; see <a href="#sec-custom" class="quarto-xref">Section&nbsp;5</a> for more information.</p>
 <section id="ggdmodeldocumentation" class="level3">
 <h3 class="anchored" data-anchor-id="ggdmodeldocumentation"><a id="ggdmodeldocumentation">ggdModelDocumentation</a></h3>
 <blockquote class="blockquote">
@@ -405,20 +416,20 @@ Args:
 <h2 class="anchored" data-anchor-id="modelcard">ModelCard</h2>
 <p><code>ModelCard</code> - the model documentation template inspired by the work of <span class="citation" data-cites="ModelCards">Mitchell et al. (<a href="#ref-ModelCards" role="doc-biblioref">2018</a>)</span> already comes with <code>gingado</code>. Its template can be used by users as is, or tweaked according to each need. The <code>ModelCard</code> template can also serve as inspiration for any custom documentation needs. Users with documentation needs beyond the out-of-the-box solutions provided by <code>gingado</code> can create their own class of Documenters (more information on that below), and compatibility with these custom documentation routines with the rest of the code is ensured. Users are encouraged to submit a pull request with their own documentation models subclassing <code>ggdModelDocumentation</code> if these custom templates can also benefit other users.</p>
 <p>Like all <code>gingado</code> Documenters, a <code>ModelCard</code> is can be easily created on a standalone basis as shown below, or as part of a <code>gingado.ggdBenchmark</code> object.</p>
-<div class="cell" data-execution_count="14">
+<div id="f9a38919" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>model_doc <span class="op">=</span> ModelCard()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>By default, it autofills the template with the current date and time. Users can add other information to be automatically added by a customised Documenter object.</p>
-<div class="cell" data-execution_count="15">
+<div id="f50916ab" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model_doc_with_autofill <span class="op">=</span> ModelCard(autofill<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>model_doc_no_autofill <span class="op">=</span> ModelCard(autofill<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below is a comparison of the <code>model_details</code> section of the model document, with and without the autofill.</p>
-<div class="cell" data-execution_count="16">
+<div id="59131a11" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model_doc_with_autofill.show_json()[<span class="st">'model_details'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>{'developer': 'Person or organisation developing the model',
- 'datetime': '2024-02-27 08:47:49 ',
+ 'datetime': '2025-03-10 15:26:38 ',
  'version': 'Model version',
  'type': 'Model type',
  'info': 'Information about training algorithms, parameters, fairness constraints or other applied approaches, and features',
@@ -428,7 +439,7 @@ Args:
  'contact': 'Where to send questions or comments about the model'}</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="17">
+<div id="bbad0336" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model_doc_no_autofill.show_json()[<span class="st">'model_details'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>{'developer': 'Person or organisation developing the model',
@@ -461,7 +472,7 @@ Args:
 <h2 class="anchored" data-anchor-id="forecastcard">ForecastCard</h2>
 <p><code>ForecastCard</code> is a model documentation template inspired by <span class="citation" data-cites="ModelCards">Mitchell et al. (<a href="#ref-ModelCards" role="doc-biblioref">2018</a>)</span>, but with fields that are more specifically targeted towards forecasting or nowcasting use cases.</p>
 <p>Because a <code>ForecastCard</code> Documenter object is targeted to forecasting and nowcasting models, it contains some specialised fields, as illustrated below.</p>
-<div class="cell" data-execution_count="20">
+<div id="6750afb1" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model_doc <span class="op">=</span> ForecastCard()</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>model_doc.show_template()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -520,13 +531,13 @@ Args:
 }</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="21">
+<div id="60f2dc66" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model_doc.show_json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>{'model_details': {'variable': 'Variable(s) being forecasted or nowcasted',
   'jurisdiction': 'Jurisdiction(s) of the variable being forecasted or nowcasted',
   'developer': 'Person or organisation developing the model',
-  'datetime': '2024-02-27 08:47:50 ',
+  'datetime': '2025-03-10 15:26:38 ',
   'version': 'Model version',
   'type': 'Model type',
   'pipeline': 'Description of the pipeline steps being used',
@@ -573,7 +584,7 @@ Args:
 <section id="basic-functioning-of-model-documentation" class="level1">
 <h1>Basic functioning of model documentation</h1>
 <p>After a Documenter object, such as <code>ModelCard</code> or <code>ForecastCard</code> is instanciated, the user can see the underlying template with the module <code>show_template</code>, as below:</p>
-<div class="cell" data-execution_count="24">
+<div id="9d32555d" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model_doc <span class="op">=</span> ModelCard(autofill<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> model_doc.show_template(indent<span class="op">=</span><span class="va">False</span>) <span class="op">==</span> ModelCard.template</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -642,12 +653,12 @@ Args:
 </div>
 </div>
 <p>The method <code>show_json</code> prints the Documenter’s documentation template, where the unfilled information retains the descriptions from the original template:</p>
-<div class="cell" data-execution_count="25">
+<div id="626f1e78" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model_doc <span class="op">=</span> ModelCard(autofill<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>model_doc.show_json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>{'model_details': {'developer': 'Person or organisation developing the model',
-  'datetime': '2024-02-27 08:47:51 ',
+  'datetime': '2025-03-10 15:26:39 ',
   'version': 'Model version',
   'type': 'Model type',
   'info': 'Information about training algorithms, parameters, fairness constraints or other applied approaches, and features',
@@ -680,7 +691,7 @@ Args:
 </div>
 </div>
 <p>The template is protected from editing once a Documenter has been created. This way, even if a user unwarrantedly changes the template, this does not interfere with the Documenter functionality.</p>
-<div class="cell" data-execution_count="26">
+<div id="022c6342" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model_doc.template <span class="op">=</span> <span class="va">None</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>model_doc.show_template()</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -750,7 +761,7 @@ Args:
 </div>
 <p>Users can find which fields in their templates are still open by using the module <code>open_questions</code>. The levels of the template are reflected in the resulting dictionary, with double underscores separating the different dictionary levels in the underlying template.</p>
 <p>Below we see that after inputting information for the item <code>caveats</code> in the section <code>caveats_recommendations</code>, this item does not appear in the results of the <code>open_questions</code> method.</p>
-<div class="cell" data-execution_count="27">
+<div id="ef09e146" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>model_doc.fill_info({<span class="st">'caveats_recommendations'</span>: {<span class="st">'caveats'</span>: <span class="st">'This is another test'</span>}})</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> model_doc.json_doc[<span class="st">'caveats_recommendations'</span>][<span class="st">'caveats'</span>] <span class="op">==</span> <span class="st">"This is another test"</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -762,7 +773,7 @@ Args:
 </div>
 </div>
 <p>And now the complete result of the <code>open_questions</code> method:</p>
-<div class="cell" data-execution_count="28">
+<div id="18eac1d5" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>model_doc.open_questions()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>['model_details__developer',
@@ -811,7 +822,7 @@ Note
 </div>
 </div>
 <p>The template serves to provide specific instances of the Documenter object with a form-like structure, indicating which fields are open and thus require some answers or information. Consequently, the template does not change when the actual document object changes after information is added by <code>fill_info</code>.</p>
-<div class="cell" data-execution_count="29">
+<div id="81cc5199" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>new_info <span class="op">=</span> {</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'metrics'</span>: {<span class="st">'performance_measures'</span>: <span class="st">"This is a test"</span>},</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'caveats_recommendations'</span>: {<span class="st">'caveats'</span>: <span class="st">"This is another test"</span>}</span>
@@ -846,10 +857,10 @@ Note
 <section id="preliminaries" class="level2">
 <h2 class="anchored" data-anchor-id="preliminaries">Preliminaries</h2>
 <p>The mock dataset below is used to construct models using different libraries, to demonstrate how they are read by Documenters.</p>
-<div class="cell" data-execution_count="30">
+<div id="e1c32e71" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_classification</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="31">
+<div id="41cd3d68" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># some mock up data</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_classification()</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -861,17 +872,17 @@ Note
 </section>
 <section id="gingado-benchmark" class="level2">
 <h2 class="anchored" data-anchor-id="gingado-benchmark">gingado Benchmark</h2>
-<div class="cell" data-execution_count="32">
+<div id="b56e58f9" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.benchmark <span class="im">import</span> ClassificationBenchmark</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="33">
+<div id="88a4ec72" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the gingado benchmark</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>gingado_clf <span class="op">=</span> ClassificationBenchmark(verbose_grid<span class="op">=</span><span class="dv">1</span>).fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Fitting 10 folds for each of 6 candidates, totalling 60 fits</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="34">
+<div id="884aa473" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a new instance of ModelCard is created and used to document the model</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>model_doc_gingado <span class="op">=</span> ModelCard()</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>model_doc_gingado.read_model(gingado_clf.benchmark)</span>
@@ -880,607 +891,698 @@ Note
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># but given that gingado Benchmark objects already document the best model at every fit, we can check that they are equal:</span></span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> model_doc_gingado.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>] <span class="op">==</span> gingado_clf.model_documentation.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'_estimator_type': 'classifier', 'best_estimator_': RandomForestClassifier(max_features=None, n_estimators=250, oob_score=True), 'best_index_': 5, 'best_params_': {'max_features': None, 'n_estimators': 250}, 'best_score_': 0.93, 'classes_': array([0, 1]), 'cv_results_': {'mean_fit_time': array([0.17820907, 0.48922832, 0.19631364, 0.42252822, 0.24131639,
-       0.57173564]), 'std_fit_time': array([0.01348286, 0.03802951, 0.02532672, 0.01887258, 0.02557295,
-       0.06991078]), 'mean_score_time': array([0.0051146 , 0.01220322, 0.00839796, 0.01019723, 0.00599849,
-       0.01011045]), 'std_score_time': array([0.00056082, 0.00302682, 0.00915481, 0.00059421, 0.00319521,
-       0.00068275]), 'param_max_features': masked_array(data=['sqrt', 'sqrt', 'log2', 'log2', None, None],
+<pre><code>{'_estimator_type': 'classifier', 'best_estimator_': RandomForestClassifier(oob_score=True), 'best_index_': np.int64(0), 'best_params_': {'max_features': 'sqrt', 'n_estimators': 100}, 'best_score_': np.float64(0.9400000000000001), 'classes_': array([0, 1]), 'cv_results_': {'mean_fit_time': array([0.08123505, 0.19908056, 0.08026097, 0.20600495, 0.10554535,
+       0.24992638]), 'std_fit_time': array([0.00290019, 0.00398425, 0.00149383, 0.00557538, 0.00534669,
+       0.00667927]), 'mean_score_time': array([0.00339904, 0.00710275, 0.00310166, 0.00732138, 0.00335174,
+       0.00695179]), 'std_score_time': array([0.00048836, 0.00049227, 0.00037441, 0.00050553, 0.00045202,
+       0.00056926]), 'param_max_features': masked_array(data=['sqrt', 'sqrt', 'log2', 'log2', None, None],
              mask=[False, False, False, False, False, False],
-       fill_value='?',
+       fill_value=np.str_('?'),
             dtype=object), 'param_n_estimators': masked_array(data=[100, 250, 100, 250, 100, 250],
              mask=[False, False, False, False, False, False],
-       fill_value='?',
-            dtype=object), 'params': [{'max_features': 'sqrt', 'n_estimators': 100}, {'max_features': 'sqrt', 'n_estimators': 250}, {'max_features': 'log2', 'n_estimators': 100}, {'max_features': 'log2', 'n_estimators': 250}, {'max_features': None, 'n_estimators': 100}, {'max_features': None, 'n_estimators': 250}], 'split0_test_score': array([0.8, 0.8, 0.9, 0.9, 0.9, 0.9]), 'split1_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 1. ]), 'split2_test_score': array([0.8, 0.8, 0.9, 0.8, 0.9, 0.9]), 'split3_test_score': array([1. , 0.9, 1. , 1. , 1. , 1. ]), 'split4_test_score': array([0.9, 1. , 0.9, 1. , 1. , 1. ]), 'split5_test_score': array([0.8, 0.8, 0.9, 0.8, 0.8, 0.8]), 'split6_test_score': array([1., 1., 1., 1., 1., 1.]), 'split7_test_score': array([0.8, 0.8, 0.8, 0.7, 0.8, 0.8]), 'split8_test_score': array([1. , 1. , 1. , 1. , 0.9, 1. ]), 'split9_test_score': array([1. , 0.9, 0.9, 0.9, 0.9, 0.9]), 'mean_test_score': array([0.9 , 0.89, 0.92, 0.9 , 0.91, 0.93]), 'std_test_score': array([0.08944272, 0.08306624, 0.06      , 0.1       , 0.07      ,
-       0.0781025 ]), 'rank_test_score': array([4, 6, 2, 4, 3, 1])}, 'multimetric_': False, 'n_features_in_': 20, 'n_splits_': 10, 'refit_time_': 0.6470375061035156, 'scorer_': &lt;sklearn.metrics._scorer._PassthroughScorer object at 0x000001D1015FB190&gt;}</code></pre>
+       fill_value=999999), 'params': [{'max_features': 'sqrt', 'n_estimators': 100}, {'max_features': 'sqrt', 'n_estimators': 250}, {'max_features': 'log2', 'n_estimators': 100}, {'max_features': 'log2', 'n_estimators': 250}, {'max_features': None, 'n_estimators': 100}, {'max_features': None, 'n_estimators': 250}], 'split0_test_score': array([0.9, 0.8, 0.8, 0.8, 0.9, 0.8]), 'split1_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]), 'split2_test_score': array([1. , 1. , 1. , 1. , 0.9, 0.9]), 'split3_test_score': array([1. , 1. , 0.9, 1. , 1. , 1. ]), 'split4_test_score': array([1. , 1. , 1. , 1. , 0.9, 1. ]), 'split5_test_score': array([0.8, 0.9, 0.8, 0.8, 0.8, 0.8]), 'split6_test_score': array([1., 1., 1., 1., 1., 1.]), 'split7_test_score': array([0.9, 0.8, 0.8, 0.9, 0.9, 0.9]), 'split8_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]), 'split9_test_score': array([1., 1., 1., 1., 1., 1.]), 'mean_test_score': array([0.94, 0.93, 0.91, 0.93, 0.92, 0.92]), 'std_test_score': array([0.0663325 , 0.0781025 , 0.08306624, 0.0781025 , 0.06      ,
+       0.07483315]), 'rank_test_score': array([1, 2, 6, 2, 4, 4], dtype=int32)}, 'multimetric_': False, 'n_features_in_': 20, 'n_splits_': 10, 'refit_time_': 0.08061051368713379, 'scorer_': &lt;class 'sklearn.ensemble._forest.RandomForestClassifier'&gt;.score}</code></pre>
 </div>
 </div>
 </section>
 <section id="scikit-learn" class="level2">
 <h2 class="anchored" data-anchor-id="scikit-learn">scikit-learn</h2>
-<div class="cell" data-execution_count="35">
+<div id="fc2f5363" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="36">
+<div id="f5c69f0c" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>sklearn_clf <span class="op">=</span> RandomForestClassifier().fit(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="37">
+<div id="a96225ca" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>model_doc_sklearn <span class="op">=</span> ModelCard()</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>model_doc_sklearn.read_model(sklearn_clf)</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model_doc_sklearn.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'_estimator_type': 'classifier', 'classes_': array([0, 1]), 'estimator_': DecisionTreeClassifier(), 'estimators_': [DecisionTreeClassifier(max_features='sqrt', random_state=984336080), DecisionTreeClassifier(max_features='sqrt', random_state=387935964), DecisionTreeClassifier(max_features='sqrt', random_state=1119873145), DecisionTreeClassifier(max_features='sqrt', random_state=1050144277), DecisionTreeClassifier(max_features='sqrt', random_state=941639386), DecisionTreeClassifier(max_features='sqrt', random_state=844869905), DecisionTreeClassifier(max_features='sqrt', random_state=1084376571), DecisionTreeClassifier(max_features='sqrt', random_state=838680530), DecisionTreeClassifier(max_features='sqrt', random_state=2131844637), DecisionTreeClassifier(max_features='sqrt', random_state=281664374), DecisionTreeClassifier(max_features='sqrt', random_state=387195694), DecisionTreeClassifier(max_features='sqrt', random_state=1900725751), DecisionTreeClassifier(max_features='sqrt', random_state=1398287329), DecisionTreeClassifier(max_features='sqrt', random_state=107007245), DecisionTreeClassifier(max_features='sqrt', random_state=851863750), DecisionTreeClassifier(max_features='sqrt', random_state=1383879282), DecisionTreeClassifier(max_features='sqrt', random_state=217952844), DecisionTreeClassifier(max_features='sqrt', random_state=320258304), DecisionTreeClassifier(max_features='sqrt', random_state=653524562), DecisionTreeClassifier(max_features='sqrt', random_state=547335341), DecisionTreeClassifier(max_features='sqrt', random_state=65298601), DecisionTreeClassifier(max_features='sqrt', random_state=90961819), DecisionTreeClassifier(max_features='sqrt', random_state=1684018311), DecisionTreeClassifier(max_features='sqrt', random_state=655454563), DecisionTreeClassifier(max_features='sqrt', random_state=1786516343), DecisionTreeClassifier(max_features='sqrt', random_state=994298205), DecisionTreeClassifier(max_features='sqrt', random_state=1293597554), DecisionTreeClassifier(max_features='sqrt', random_state=1133785409), DecisionTreeClassifier(max_features='sqrt', random_state=847212468), DecisionTreeClassifier(max_features='sqrt', random_state=1194070920), DecisionTreeClassifier(max_features='sqrt', random_state=1506960310), DecisionTreeClassifier(max_features='sqrt', random_state=705803780), DecisionTreeClassifier(max_features='sqrt', random_state=1531279072), DecisionTreeClassifier(max_features='sqrt', random_state=1780828084), DecisionTreeClassifier(max_features='sqrt', random_state=815253514), DecisionTreeClassifier(max_features='sqrt', random_state=935926288), DecisionTreeClassifier(max_features='sqrt', random_state=19607747), DecisionTreeClassifier(max_features='sqrt', random_state=2111856427), DecisionTreeClassifier(max_features='sqrt', random_state=784991697), DecisionTreeClassifier(max_features='sqrt', random_state=1241164616), DecisionTreeClassifier(max_features='sqrt', random_state=1387079999), DecisionTreeClassifier(max_features='sqrt', random_state=168074365), DecisionTreeClassifier(max_features='sqrt', random_state=1788266150), DecisionTreeClassifier(max_features='sqrt', random_state=1189226461), DecisionTreeClassifier(max_features='sqrt', random_state=991777677), DecisionTreeClassifier(max_features='sqrt', random_state=242884733), DecisionTreeClassifier(max_features='sqrt', random_state=157311037), DecisionTreeClassifier(max_features='sqrt', random_state=2055890918), DecisionTreeClassifier(max_features='sqrt', random_state=1727577809), DecisionTreeClassifier(max_features='sqrt', random_state=269422783), DecisionTreeClassifier(max_features='sqrt', random_state=1389820690), DecisionTreeClassifier(max_features='sqrt', random_state=1929534429), DecisionTreeClassifier(max_features='sqrt', random_state=1414737041), DecisionTreeClassifier(max_features='sqrt', random_state=1247576130), DecisionTreeClassifier(max_features='sqrt', random_state=1353547520), DecisionTreeClassifier(max_features='sqrt', random_state=894390039), DecisionTreeClassifier(max_features='sqrt', random_state=158653442), DecisionTreeClassifier(max_features='sqrt', random_state=243266945), DecisionTreeClassifier(max_features='sqrt', random_state=455577999), DecisionTreeClassifier(max_features='sqrt', random_state=1371394730), DecisionTreeClassifier(max_features='sqrt', random_state=1451808483), DecisionTreeClassifier(max_features='sqrt', random_state=1589801337), DecisionTreeClassifier(max_features='sqrt', random_state=1380089697), DecisionTreeClassifier(max_features='sqrt', random_state=1541728708), DecisionTreeClassifier(max_features='sqrt', random_state=1730746642), DecisionTreeClassifier(max_features='sqrt', random_state=1569100702), DecisionTreeClassifier(max_features='sqrt', random_state=87894264), DecisionTreeClassifier(max_features='sqrt', random_state=182251102), DecisionTreeClassifier(max_features='sqrt', random_state=1598824537), DecisionTreeClassifier(max_features='sqrt', random_state=1566880189), DecisionTreeClassifier(max_features='sqrt', random_state=2036645957), DecisionTreeClassifier(max_features='sqrt', random_state=69788070), DecisionTreeClassifier(max_features='sqrt', random_state=725498370), DecisionTreeClassifier(max_features='sqrt', random_state=886772744), DecisionTreeClassifier(max_features='sqrt', random_state=1619512775), DecisionTreeClassifier(max_features='sqrt', random_state=847881750), DecisionTreeClassifier(max_features='sqrt', random_state=505640702), DecisionTreeClassifier(max_features='sqrt', random_state=338379070), DecisionTreeClassifier(max_features='sqrt', random_state=1789388801), DecisionTreeClassifier(max_features='sqrt', random_state=184042237), DecisionTreeClassifier(max_features='sqrt', random_state=796977047), DecisionTreeClassifier(max_features='sqrt', random_state=1147247523), DecisionTreeClassifier(max_features='sqrt', random_state=2106557009), DecisionTreeClassifier(max_features='sqrt', random_state=1638844864), DecisionTreeClassifier(max_features='sqrt', random_state=1373057286), DecisionTreeClassifier(max_features='sqrt', random_state=1356063932), DecisionTreeClassifier(max_features='sqrt', random_state=1318119814), DecisionTreeClassifier(max_features='sqrt', random_state=1196983038), DecisionTreeClassifier(max_features='sqrt', random_state=132896044), DecisionTreeClassifier(max_features='sqrt', random_state=152120878), DecisionTreeClassifier(max_features='sqrt', random_state=2100501339), DecisionTreeClassifier(max_features='sqrt', random_state=197690499), DecisionTreeClassifier(max_features='sqrt', random_state=1765855662), DecisionTreeClassifier(max_features='sqrt', random_state=1579978128), DecisionTreeClassifier(max_features='sqrt', random_state=1581716817), DecisionTreeClassifier(max_features='sqrt', random_state=1439289735), DecisionTreeClassifier(max_features='sqrt', random_state=1808084503), DecisionTreeClassifier(max_features='sqrt', random_state=1398215665), DecisionTreeClassifier(max_features='sqrt', random_state=2058382938), DecisionTreeClassifier(max_features='sqrt', random_state=304859939)], 'estimators_samples_': [array([73, 68, 87, 11, 98, 49, 84, 67,  6, 53, 16, 59, 41, 13, 23, 79, 30,
-        1, 62, 40, 36, 25, 46, 66, 30, 71, 26, 72, 22, 69, 68, 10, 60, 72,
-       96, 59, 77, 67, 77, 89, 59, 81, 49, 84, 11, 44, 40, 29, 46, 33, 43,
-       78, 48, 82, 77, 60, 67, 24, 59,  3, 33, 28, 62, 36,  0, 16, 88, 85,
-       44, 88,  9, 67, 83, 27, 41, 41, 24,  0, 35, 59, 82, 99, 66, 72,  2,
-       27, 61, 54, 61, 55,  3, 97, 38, 12,  8, 48, 99, 35, 61,  8]), array([58, 87,  7, 15, 26, 50, 50, 23, 37, 50, 13, 53, 61, 56, 76, 42, 52,
-       64, 32,  1, 50,  9, 94, 56, 44, 93,  6, 47, 61, 87, 33, 50, 37,  5,
-       58, 68, 27, 33, 42, 86, 71, 11, 14, 60, 78, 11, 86, 97, 27, 95, 38,
-       85, 66, 43, 85, 58, 10, 66, 62, 17, 76, 42, 43,  8, 85,  8, 97, 41,
-       46, 68, 28, 71, 18, 21, 33, 66, 92, 24, 65, 91,  6, 21, 39, 99, 78,
-       68, 57, 28,  3, 56, 82, 82, 68, 21, 85, 39, 37, 19, 18,  4]), array([98, 52, 38, 15, 45, 45, 59, 63, 63,  5,  0, 95, 88, 22, 34,  9, 79,
-       49, 15,  8, 80, 44, 45, 20, 16, 92, 51, 94, 76, 20, 42, 65, 98, 52,
-       19, 19, 38, 75, 50, 24,  7, 34, 91,  5, 18, 15, 95, 60, 90, 94, 42,
-       16, 54, 44, 28, 80, 85,  3, 17,  3, 12, 29, 20, 29, 28, 87, 10, 21,
-       98, 17, 78, 90, 59, 60, 20,  0, 95, 13, 16,  3, 93, 14, 26, 38, 17,
-       58, 37, 81, 47, 92,  6, 32, 55,  1, 76,  3, 81, 33, 53, 63]), array([21, 55, 28, 35, 51, 79, 78, 70, 19, 66, 19, 20, 67, 21, 96, 18, 20,
-       79, 51, 87, 69, 54, 99,  3, 99, 35, 94, 42, 97, 37, 64, 91, 64, 75,
-       73,  2, 53, 10, 59, 97, 42, 21, 84, 61, 65, 29,  2,  6, 26, 46, 37,
-       66, 78, 17, 17, 83, 63, 27, 64, 53, 25, 10, 18, 97, 84,  7, 95, 59,
-       54, 55, 33, 56,  5,  5, 65,  1,  1, 91, 67, 99, 22, 14, 13, 14, 88,
-       84,  8, 74, 39, 26, 33, 88, 81, 56, 61, 49, 76, 40, 14, 73]), array([68, 98, 66, 11, 17, 79, 81, 54, 46, 92, 82,  9, 91, 98, 61, 77, 16,
-       23, 68, 58, 36, 98, 43, 74, 51, 69, 78, 41, 56, 57, 70, 84, 39, 52,
-       93,  0, 96,  9, 55, 54, 68,  9, 34, 94, 28, 13, 63, 28, 58, 18, 46,
-       56, 42, 74, 45, 77, 43, 68, 35, 55,  9,  5,  3, 49, 59, 27,  6, 42,
-       49, 23, 61, 13, 50, 19, 41, 30, 28, 23, 27, 20, 63, 57, 68, 82,  4,
-       72, 66, 70, 86, 95, 60, 78,  9, 37, 65, 13, 88,  0, 20, 73]), array([56, 30, 68, 59, 97, 18, 96, 63, 78, 42, 32, 51, 16, 51, 92, 85, 74,
-       26, 42, 43, 65, 34, 55, 40, 97, 48, 87, 38, 93, 79, 11, 94, 84, 11,
-       58, 10, 90, 79, 62,  3, 46, 22,  0, 53, 54, 45, 75, 71, 45, 15, 95,
-       13, 84, 58, 35, 48, 12, 48, 99, 71, 44, 98, 86, 28, 89, 51,  4,  0,
-       68, 28, 66, 81, 93, 64, 37, 50, 48, 90, 68, 77, 56, 73, 87, 60, 57,
-       88, 36, 87, 28, 71, 50, 25, 75, 27, 54,  5, 76,  6,  0, 70]), array([29, 87, 45, 48,  6, 96, 86, 96,  0, 83, 18, 61,  7, 70, 37, 29, 33,
-       50, 45, 85,  4, 57, 67, 19, 57, 84,  8, 58, 36, 11,  5, 60, 88, 75,
-       65, 79, 15, 67, 87, 34, 11, 83, 66, 55, 99,  7, 17, 53, 68, 23, 64,
-       90, 41, 43, 88, 71,  8, 30, 94, 74, 92, 48, 97, 76,  1, 27, 47, 43,
-        4, 41, 27, 74,  5,  4, 50, 43, 80, 75, 72, 30, 70, 74, 53, 64, 69,
-       40, 15, 81, 65, 61, 68,  8, 54, 43,  0, 63, 54, 74, 71, 93]), array([32, 45, 35, 17, 32, 88,  7, 56, 31, 10, 75, 58, 41, 29, 32, 10, 32,
-       22, 99, 17, 74, 55,  1,  3, 95, 82,  7, 79, 86, 90, 80, 33, 89, 30,
-       33, 60, 33, 20, 24, 54,  5,  3, 97, 77, 36, 53, 54, 22, 46, 88,  1,
-       98, 50, 54,  4, 58, 77, 57, 15, 38, 19, 59, 91, 90,  8, 68, 89, 20,
-       84, 77, 79, 42, 35, 72, 93,  5, 33, 52, 50, 63, 92, 73,  7, 72, 45,
-       76, 58, 78, 50, 31, 16,  8, 20, 73, 48,  4, 76, 61, 19, 41]), array([32, 21, 68, 10, 21, 53, 29, 64, 76, 40, 57, 36, 67, 44, 28, 96, 67,
-       37, 85, 17, 60, 78, 74, 96, 28, 70, 60, 75, 61, 71, 41, 14, 40, 61,
-       96, 67, 58, 19, 81, 14, 90, 52, 26, 47, 10, 77, 82,  0, 29, 27,  8,
-       87, 23, 65, 65, 66, 32, 97,  7, 65, 59, 91, 84, 11, 32, 53, 48, 93,
-       76, 94, 55, 68, 56, 98, 61, 89, 85, 86, 73, 71, 81,  0, 93, 53, 68,
-       83, 31,  9, 42, 63, 40, 22, 53, 18, 87, 56, 90, 46, 87, 81]), array([85, 15, 91, 50, 60, 63, 66, 80, 80, 94, 62, 39, 90, 86, 85, 62, 28,
-       12, 42, 78, 21, 32, 99, 92, 72, 24, 56, 93, 43, 61,  6, 23, 34, 28,
-       29, 13, 49, 96, 22, 65, 73, 81, 87, 46, 37, 21, 31, 55, 42, 20, 44,
-       84, 13, 52, 56,  7, 68, 53, 65, 40, 95, 40,  8, 28,  5, 50, 53, 71,
-       84, 51, 79, 74, 14, 57, 58, 81, 38, 60, 27, 32, 30, 35, 29, 70, 11,
-       96, 28, 46, 22, 14, 83, 14, 37, 73, 30, 70,  4, 54, 15, 43]), array([23, 56, 70,  4, 69, 20, 43,  4, 16, 16, 60, 70, 82, 78, 37, 68, 29,
-       47,  7, 25, 59, 16, 99, 50, 52, 90, 52,  3, 11, 71, 96, 14, 94, 48,
-       73, 49, 43, 70, 65, 99,  8, 66, 37, 61, 91, 32, 35, 74, 14, 82, 79,
-       68, 18, 75, 30, 83, 77, 10, 57, 74, 48, 53,  6, 65, 62, 57, 39, 46,
-       59, 76, 86, 95, 79,  4, 51, 67, 14, 40, 31, 75, 44, 61, 83,  9, 14,
-       94, 57, 44,  6, 74, 95,  3,  9, 12, 53, 87,  6, 23, 96, 27]), array([60,  0, 43, 16, 83, 67, 14, 51, 66, 89, 19, 69, 12, 33, 30, 45,  4,
-       55, 99, 65, 29, 82, 17,  9, 47, 54, 26, 94, 28, 12, 12, 76, 53, 10,
-       31, 63, 83, 47, 55, 34, 86, 91, 18, 72, 87,  4, 26, 87,  1, 97, 40,
-       98, 75, 71, 38, 53, 84, 61, 66,  5, 25, 67, 55, 39, 98, 11, 71, 89,
-       36, 64, 79, 80, 42, 37, 51, 64, 67, 97, 85, 61,  9, 84, 82, 60, 46,
-        4, 70, 51, 39, 90, 66, 90,  5, 66, 28, 59, 34, 79, 91, 95]), array([29,  0,  8, 93, 93, 85, 60, 63, 60, 94,  9, 28, 93, 14, 52, 96, 24,
-       28, 14, 86,  7, 95,  1, 48,  0, 58, 45, 82, 59, 37,  1, 70,  3, 17,
-        2, 88, 56, 68, 60, 59,  7, 28, 60, 49, 59, 78, 60, 32, 99, 50, 97,
-       93, 55, 90, 65, 30, 88, 11, 34, 76,  4, 85, 50, 77, 47, 15, 98, 28,
-       26, 97, 55, 84, 53, 88, 19, 28, 12, 44, 68, 99, 11, 94, 76, 18, 52,
-       76, 52, 56, 39, 74, 16, 38, 52,  1, 12, 59,  5, 16, 86, 74]), array([54, 40, 31, 33, 71, 43, 46, 71, 69, 23, 29, 77, 34, 18, 47, 62, 73,
-       97, 84, 84, 41, 32, 89,  2, 94, 20,  0, 65, 65,  8, 26, 95, 75, 77,
-       35, 92, 25, 23, 62, 44, 59, 18,  3, 32, 65, 43, 24, 19, 26,  0, 31,
-       63, 20, 66, 93, 24, 56, 13, 95, 70, 22, 96, 55, 41, 34, 30, 93, 92,
-       66, 93, 60, 39, 76, 36, 68, 93,  0, 15, 19, 96, 93, 65, 86, 69, 78,
-       39, 19, 76, 75, 96, 55, 41, 99, 26,  5, 69, 34,  6, 91, 30]), array([16,  2, 21, 98, 71,  0, 50, 62, 14, 36, 72, 56, 12, 52, 60, 26, 17,
-       51, 81, 33, 76, 20, 60, 45,  2, 72, 66, 10, 54, 16, 77,  7, 50,  3,
-        9, 68, 91, 34, 24, 38, 84, 10, 89, 14, 68, 49, 81, 64, 17, 72,  8,
-       35, 84, 80, 99, 57, 67, 30, 16, 73, 22, 71, 64,  4, 22, 56,  6, 38,
-       36, 70, 89, 81, 88, 88, 99, 91, 94, 60, 10, 82, 79, 94, 33, 34, 12,
-       52, 52, 64, 40, 73, 85, 85, 19, 26, 42, 69, 86,  0, 67,  4]), array([67, 92, 11, 45, 50, 97, 30, 11, 96, 96, 46,  0, 78, 43, 40, 16, 80,
-       73, 46,  4, 95, 40, 60, 17, 17,  6, 10, 96, 24,  7, 99, 71, 52, 35,
-       30, 82, 97, 49, 21, 58, 12, 77, 76, 98, 79, 20,  6,  2, 27, 25, 82,
-       24,  9, 19, 70, 82, 27, 61, 78, 23, 76, 44,  7, 23, 21, 85, 50, 92,
-       76, 40,  0, 73, 55, 51, 47, 65, 15, 64, 14, 29, 84, 82, 91, 97, 84,
-       78, 63, 34, 45, 97, 70, 10, 13, 69, 37, 49, 70, 48,  7,  5]), array([71, 80, 94, 34, 87, 33, 12, 88, 61, 92, 74, 88, 38, 11, 20, 17, 14,
-        2, 69, 43, 38, 24, 42, 81, 17, 75, 23, 49, 15, 46, 89, 70,  7,  3,
-       44, 28, 49, 35, 78, 22, 60, 30, 57, 97, 10, 60, 10, 65, 52, 14, 87,
-       91, 87, 44, 78, 22,  9, 21, 19, 63, 23, 41, 98, 70, 12, 66, 33,  1,
-       51, 95, 55, 10, 52,  2,  2, 98, 67, 82, 30, 43, 90, 46, 88, 78, 45,
-       82, 86, 49, 15, 66,  4, 32, 64, 53,  2, 94, 56, 19, 97, 53]), array([56, 88,  4,  4, 40, 43, 43, 75, 60, 37,  0,  8, 40, 24, 24, 15,  2,
-       79, 12, 81, 26, 70, 61,  6, 67, 88, 26, 23, 49, 86, 36, 98, 56,  3,
-       26, 40, 76, 50, 58, 55, 83, 88, 41, 51, 60, 86, 88, 48, 36, 19, 43,
-       69, 20, 80, 42, 74, 93, 94, 55, 82, 79, 12, 81, 37, 98, 33, 12, 44,
-       44, 86, 79, 63, 66, 32, 66,  5, 89, 27, 12, 53, 64, 29, 24, 78, 86,
-       82, 44, 59, 87, 59, 66, 49, 95, 44, 20, 78, 94, 24,  2, 18]), array([33, 44, 27, 12,  5, 62, 31, 17, 12, 74,  7, 37, 38, 40, 48, 50, 68,
-       80, 45, 77, 16,  5, 65,  0, 24, 88, 78, 57, 73, 46, 65, 59, 87,  5,
-       24, 80, 96, 25, 95, 95, 65, 60, 41, 57, 24, 98, 38, 63, 12, 10, 28,
-       20, 71, 17, 53, 94,  7, 11, 74, 39, 32, 14, 64,  9, 77, 47, 73,  4,
-       31, 73, 29,  6, 50, 26, 98, 51, 10, 53, 50, 37, 90, 50, 67, 12, 71,
-       79, 44, 29, 14, 88, 14, 27, 91, 99, 89, 52,  6, 28, 46, 73]), array([38, 85, 25, 18, 53, 18, 68,  8, 41, 75, 87, 38, 80, 43, 54, 92, 74,
-       10, 81, 32, 74, 98, 93,  7, 10, 69, 63,  0, 74, 32, 27, 28, 83,  5,
-       81, 55, 80, 56, 95, 86, 79, 63, 11, 53, 87, 87, 21,  1, 99, 95, 74,
-       69, 83, 65, 38,  1, 65, 49, 67, 98, 43, 19, 77, 42, 40, 43, 76, 19,
-       29, 26, 98, 88, 67,  5, 35, 67, 56, 89, 98, 45, 72, 51, 43, 95, 31,
-       26, 81, 77, 58, 19,  3, 30,  6, 15, 69, 72, 28, 28, 64, 67]), array([64, 26, 75, 91, 87, 78, 16, 14, 85, 95, 84, 94, 54, 62, 71, 51, 77,
-       17, 92, 84, 18, 56, 37, 34, 63, 13, 26, 39, 24, 83, 61, 49, 28, 19,
-       14,  3, 11, 15, 13, 28, 11, 69, 73, 36, 77, 91, 19,  3, 29, 32, 38,
-       24,  9, 73, 16, 48, 26, 36, 62, 27, 60, 57, 73, 64, 15, 19, 18, 47,
-       90, 71, 32, 55, 65, 47, 81, 10, 64, 82, 67, 59, 41, 59, 36, 92, 46,
-       87, 88, 54, 55,  3, 64, 22, 85, 18, 71, 80, 16, 58, 52, 96]), array([57, 85, 23, 40, 66, 75, 57, 77, 30, 58, 74, 24, 64, 22, 55, 34, 66,
-        5, 86, 15, 31, 50, 89, 83, 11, 88, 75, 52, 93, 78, 91, 39, 38, 23,
-       66, 36,  5, 95, 82, 69, 90, 93, 50, 16, 60, 44, 97, 59, 27, 11, 16,
-        9, 59, 18, 73, 12, 82, 34,  0,  3, 51, 78, 96, 40, 41, 23, 53, 80,
-       31, 12,  7, 31, 72,  0, 36, 78,  3, 81, 34, 48, 97,  0, 53, 22, 32,
-       56,  2, 37, 18, 27, 42, 46,  0, 68, 95, 43, 59, 46, 68,  6]), array([ 3, 35, 99, 10, 52, 57, 12, 70,  3, 18, 23, 34, 26, 76, 97, 55, 92,
-       54, 53, 50, 70, 85, 60, 66, 15, 61, 14, 69, 99, 93, 43, 55, 95, 16,
-       61, 14, 84, 65, 17, 63,  0, 44, 74, 27, 44, 75, 31, 68, 94, 32, 45,
-       88, 32, 39, 80, 21, 15, 63, 41, 41,  7, 21,  6, 76, 30, 92, 59, 64,
-       53, 24, 56, 33, 89, 48, 64, 79, 55, 37, 22, 85, 81, 19, 14, 53, 61,
-       74, 27, 12, 72, 52, 37, 68, 88, 63, 84,  3, 93, 29,  9, 90]), array([79,  4, 55,  6,  2, 48, 40, 56, 47, 17, 27, 85, 79, 92, 68,  0, 21,
-        2, 78, 65, 74, 12, 92, 67, 13, 86, 60, 90, 48, 20, 15, 59, 30,  2,
-       36, 81, 76, 87, 76, 64, 45, 43, 27, 48, 17, 15, 61, 27, 52, 69, 32,
-       44, 39, 76,  4, 23, 82, 12, 37, 15, 94, 82, 90,  5, 12, 55,  4, 21,
-       73, 94, 37, 21, 39, 25, 99, 93, 29, 93, 16,  3, 51,  4, 54, 45, 32,
-       23, 93, 25, 45, 85, 77,  5, 79, 98,  8, 57, 91, 47, 90, 59]), array([67, 73, 32, 90, 72, 19,  1, 64, 19, 49, 55, 84, 95, 56, 65, 63, 73,
-       23, 50, 22, 43, 17, 32, 19, 66, 65, 62,  3, 88, 40, 44, 80,  0, 55,
-       23,  1, 50, 68, 22,  7, 46, 58, 71, 71,  7, 96,  4, 29, 71,  3, 32,
-       49, 98, 69, 65,  6, 62, 43, 40, 74, 20, 25, 94, 25, 71, 12,  2, 41,
-       73, 70, 73, 62, 71, 73,  4, 34, 41,  4, 37,  5, 58, 63, 52, 14, 87,
-       65, 53, 90, 52, 97, 52, 95, 80, 19, 17,  9, 98, 40, 87, 29]), array([38, 31,  0, 89, 85, 86, 99, 45, 92, 35,  0, 68, 82, 85, 28, 85, 12,
-        3, 80, 34,  7, 39, 22, 62, 73, 12,  4, 13, 31, 90, 85, 88, 61, 54,
-       84, 80,  0, 64, 47, 99, 50, 93, 35, 92, 24,  4, 11, 22, 21,  1, 96,
-       85,  3, 59, 36, 39, 52, 99, 43, 69, 81, 19, 16, 43, 38, 30, 14, 77,
-       68, 79, 47, 51, 90, 67, 89, 51, 28, 95, 82,  3, 33,  7,  4, 67, 70,
-       57, 34, 64, 47, 21, 85, 97,  1, 36, 22, 36, 36, 66, 26, 59]), array([74, 93, 27, 12, 95, 28, 45, 93, 96, 11, 77, 43, 66, 31, 23, 11, 52,
-        6, 20, 53, 53, 95, 41, 35, 70, 68, 96, 41, 71, 86,  1,  8, 56, 47,
-       81, 65, 99,  7, 93, 95, 89, 68, 86, 68, 65, 37,  1, 16, 59,  2,  1,
-       58, 50, 98, 53, 58, 16, 62, 87, 56, 18, 38, 32, 86, 35, 50, 10, 33,
-       40,  3, 37, 68,  5, 92, 78, 84, 24, 68,  9, 89, 43, 21, 55,  4, 34,
-       12, 73, 43, 70, 55, 39, 61, 55, 69, 40, 15,  5, 52, 27, 53]), array([ 2, 59, 35, 11, 82, 39, 32, 81, 23, 33, 52, 27, 31,  3, 32,  7, 79,
-        9, 45, 69, 53, 77, 56, 14, 83, 50, 76, 41, 52, 10, 91, 74, 37, 33,
-       43, 49, 46, 38, 85, 24, 19, 47, 87, 80, 93, 61, 81, 41, 77,  8, 47,
-       89, 47, 45, 88, 31, 96, 19, 41, 36, 16, 47, 76, 73, 74, 84, 30, 40,
-       92, 27, 34, 68, 65, 99, 75, 30, 26, 66, 43, 58, 15, 19, 12, 16,  2,
-       20, 98, 74, 65, 45, 55,  8, 31, 84, 47,  8, 55, 78, 91, 42]), array([39, 14, 19, 95, 31, 92,  3, 22, 19, 59, 25, 78, 85, 44, 36, 82, 38,
-        1, 39, 67, 49, 63, 24, 67,  4, 10, 66, 76, 66, 87, 37, 14, 57, 39,
-       17, 69, 46,  3, 42, 74, 24, 74, 68,  7, 81, 81, 13,  6, 10, 51, 82,
-       61, 98, 60, 37, 27, 44,  4, 21, 13, 31, 91,  7, 36, 12, 84, 85, 11,
-       16, 17, 52, 23, 98, 18, 70, 47, 72, 45, 34, 56, 76, 80, 66,  1, 56,
-       89, 51, 56, 53, 38, 71, 10, 57, 88, 50, 60, 38, 28, 33, 78]), array([68, 31, 77, 50, 19, 49, 87, 59, 32, 10, 52, 40, 42,  9, 49, 32, 91,
-       91, 30, 92, 88, 45, 85, 17, 85, 95, 33, 60, 30, 76, 71,  6, 38, 30,
-       74, 83, 89, 39, 38, 30, 13, 42, 89, 87, 79, 77, 69, 53, 34,  3, 13,
-       32, 98, 80, 99, 50, 33, 38,  8, 62, 93, 79, 97, 46, 64, 72, 37, 52,
-       79,  3, 27, 72, 39, 39, 12, 32, 42, 28, 78, 39, 76, 11, 60, 57, 85,
-        1, 96, 69,  5,  5, 55, 14, 85, 89, 40, 51, 74, 57, 58, 50]), array([17, 42, 16, 57, 12, 17, 69, 84, 57, 74, 30, 47, 21, 44, 23, 50, 76,
-       86, 92, 84, 53, 49, 54, 81, 84, 23, 89, 13, 52, 65, 81, 77, 93, 25,
-       91, 81, 17, 42, 14, 32, 65, 83,  2, 86, 52, 64, 23, 82, 74, 82, 17,
-       97, 87, 72, 73, 77, 87,  6, 87,  6, 46, 76,  0, 30, 79, 32, 43, 98,
-       42, 51, 71, 69, 57, 45, 30, 12, 18, 54, 90, 11, 32, 92, 88, 56, 26,
-       43, 62, 57, 90, 96, 61, 76, 79, 55, 76, 58, 64,  1, 23, 59]), array([74, 54, 90, 19, 62, 90, 40, 28, 29, 68, 13, 80, 49, 65, 98, 20, 61,
-       71, 71, 55, 22, 74, 13, 17,  1, 58, 57, 66, 80, 70, 86, 42, 44, 88,
-       62, 36, 79,  4, 92, 44, 65, 11, 63, 47, 91, 58, 45, 44, 75, 27, 47,
-        4, 36, 43, 17, 20, 10,  8, 30, 67, 60, 74, 52, 48, 49, 76, 12, 31,
-       18, 43, 85, 53, 41, 46,  0, 31, 81, 75, 52, 77, 33, 52, 39, 77, 67,
-        6, 51, 90, 91, 63, 40, 69, 79, 14, 51, 35,  4, 89, 62, 47]), array([20, 35, 99, 91, 15, 45, 78, 27, 68, 25, 98,  1, 40, 16,  7, 52, 44,
-        5, 65, 43, 27, 25, 61,  5, 54,  5, 72, 79, 71,  8, 34, 45, 61, 82,
-       95, 18, 56, 84, 70,  7, 42, 35, 95, 65, 37, 63, 96, 73, 39, 44, 64,
-       99, 55, 69, 45, 94, 55, 83, 86, 64, 41, 67, 65, 64, 75, 80, 48, 87,
-       98,  5, 83, 42, 12, 51,  3, 56, 70, 32, 70, 90, 86, 19, 52, 22, 11,
-        9, 46, 61, 72, 75, 39,  8, 39, 72, 82, 56, 12, 60, 55, 33]), array([64, 97, 63, 50, 28, 93, 62, 97, 24, 57, 91, 19, 99, 81, 48, 40, 39,
-       46, 36, 87, 20, 66, 30, 71, 96, 54, 54, 41, 59, 19, 42, 89, 38, 42,
-       20, 69, 62, 46,  8, 93, 91, 92, 12, 72, 10, 86, 92, 30, 38, 73, 61,
-       99, 53, 56, 80, 88,  3, 79, 28, 95, 27,  7, 73, 83, 52, 67, 55, 59,
-       43, 61, 80, 73, 45, 57,  4, 96, 92, 26, 92, 29, 42, 63, 51, 74, 72,
-       86, 68, 17, 85, 13, 24, 82, 26, 96, 23, 41, 54, 50,  4, 68]), array([56, 32, 39,  8, 36, 49, 51, 68, 48, 50, 51, 48, 29, 94, 78, 95, 79,
-       18, 91, 17, 90, 95, 59, 70, 26, 68, 83, 88, 13, 61, 84, 98, 76, 87,
-       73, 35, 83, 39, 34, 14, 80,  6, 44, 58, 82, 25, 62, 69, 42, 72, 46,
-       97, 36, 46, 39, 33, 68, 48, 98,  4, 33, 85, 88, 29, 68, 95, 42, 11,
-       83,  3,  0, 54, 44, 36, 34, 48, 96, 37, 37, 38, 18, 71, 41, 67, 46,
-       93, 73, 74, 81, 93, 58, 99, 48, 51, 75,  7, 33, 45, 38, 61]), array([67, 91, 21, 53, 95, 93, 66, 77, 43, 34, 35,  5, 87, 58,  4, 12,  1,
-       40, 93, 26, 36, 37, 95, 34, 31, 44, 58, 16,  1, 99, 20, 83, 46, 16,
-       26, 71, 19,  7, 55, 57, 32, 57, 97, 48, 59,  0, 82, 15, 90, 27, 71,
-       99, 69, 59, 93, 99,  3, 64, 20,  4, 62, 17,  8, 23, 47,  8, 23, 45,
-       38, 35, 53, 90, 55, 47, 72, 67, 90, 23, 76, 67, 57, 97, 40, 28, 15,
-       26, 81,  5, 99, 15, 23, 35, 45, 24, 68, 71, 72, 20, 50, 34]), array([52, 43, 20,  4, 48, 89,  4, 19, 31, 40,  3,  3, 20, 42, 81, 27, 30,
-        4, 80,  8,  1, 24,  2, 99, 17, 20, 18, 28, 43, 96, 23, 78, 38, 88,
-       10, 87, 97, 77, 83, 68, 22,  5,  8,  2, 43, 25,  1, 65, 76, 79, 11,
-        2, 45, 33, 92,  6,  9, 54,  8, 29, 66, 11, 79, 79, 82,  8, 43, 22,
-        5, 92, 32, 71, 60, 44, 10, 66, 35, 36, 10, 10, 75,  2, 32,  0, 27,
-       69, 65, 93, 45, 71, 42, 73, 23, 91, 12, 15, 22, 60, 82, 31]), array([58, 51, 73, 14, 19, 61, 63, 96, 22, 51, 11, 43, 19,  7,  9, 36, 62,
-       11, 61, 60, 85, 30, 12, 63, 56, 56, 48, 52, 20, 22, 50, 78, 58, 82,
-       71, 96, 44, 76, 54, 64, 98, 26, 65, 22, 91, 35, 29,  9,  0, 67, 88,
-       77, 83,  6, 21, 24,  8, 51, 38, 10, 22, 71, 89, 90, 39, 10, 96, 51,
-       63, 30, 98, 50, 66, 74, 18, 52, 67, 98, 98, 56, 99, 82, 52, 79, 38,
-       58, 98, 96,  6, 76, 33, 27,  8, 79, 40, 29, 72, 61, 63, 26]), array([83, 47, 88, 61, 37, 12, 56, 40, 64, 48, 58, 98, 22, 21,  4, 19, 86,
-       66, 22, 25, 60, 35, 48, 54, 18, 43, 53, 42, 54, 48, 49, 44, 14, 38,
-       19, 86, 52, 85, 12, 17,  8, 51, 42, 47, 26, 99, 66, 77, 97, 21, 53,
-       25, 72, 87, 44,  4,  5, 22, 14, 46, 50, 67, 63, 28, 55, 38, 77, 61,
-       64,  7, 96, 68, 47, 40, 52, 27,  1, 39, 44, 70, 36, 71, 75, 31, 15,
-       66, 15, 46,  8, 94, 90, 75, 13, 87, 12, 75, 64, 43, 18, 25]), array([27, 53, 21,  7, 28, 95, 74,  6,  9, 72, 63, 41, 19, 71, 62, 29, 93,
-       14, 80, 21, 29, 67, 28,  0,  1, 10, 99, 27, 23, 17, 11, 99,  0, 65,
-       40, 68, 42, 47, 93, 34, 19,  3, 35, 43, 13, 44, 68, 30, 74, 94, 31,
-       77, 21, 41, 65,  9, 24, 77, 54, 54, 30, 12,  7, 91, 27, 24, 29, 13,
-       73, 88, 10, 93, 65, 59, 76, 22,  4,  6, 45, 16, 98, 70, 82, 64, 23,
-       18, 39,  8, 67, 19,  5, 34, 49, 26, 73, 28,  5, 67, 35, 14]), array([60, 72, 55, 77, 95, 65, 49, 87, 32, 83, 96,  1, 60, 42, 31, 26, 65,
-       47, 46, 15, 26, 42, 87, 48, 70, 61, 57, 74, 33, 16, 23, 41, 52, 46,
-       46, 19, 51, 51, 76, 57, 34,  2, 28, 91, 88,  1, 39, 36, 70, 99, 86,
-       33, 11, 90, 66, 38, 15, 50, 88, 43, 77, 70, 76, 75, 74, 24, 16, 39,
-       50, 46, 39, 68, 61, 45, 22, 50, 32, 93, 66, 62,  6, 43, 97, 39, 87,
-       89, 71, 75, 19, 98,  6, 69, 88, 23, 62, 28, 68, 11, 35, 30]), array([88, 60,  8, 59, 74, 64, 60, 27,  0, 50,  0, 33, 34, 48, 62, 39, 50,
-       23, 35, 19, 14, 33, 54, 95, 37, 83, 21, 89, 88,  2, 58,  7, 75, 91,
-       64, 79, 16, 84, 49, 91, 98, 76, 77, 38, 29, 21, 54,  5, 72, 41, 25,
-       45, 50, 35, 28,  3, 84, 84, 91, 49, 33, 68, 96, 27,  4, 13, 53, 31,
-        2, 90, 77, 48, 73, 25, 65, 80, 80, 79,  8, 50,  3, 18, 82,  8, 92,
-       58, 27, 24, 26, 95,  2, 15,  4, 33, 27, 78, 91, 76, 87, 29]), array([44, 65, 62, 18, 59, 85, 45, 27, 61, 70, 42,  1,  3, 34, 86,  6, 82,
-       68, 66, 77, 34, 11,  5,  2, 81, 93, 76, 44, 89, 76, 86, 82, 59, 50,
-       56, 15, 60, 94, 82, 63, 16, 93,  4, 67, 48, 67, 14, 35,  0, 99, 53,
-       62, 25, 85, 37, 87, 26,  3, 98, 26, 40, 39, 70, 63, 91, 32, 90, 26,
-       60, 44,  5, 55, 37, 61,  6, 98, 15,  7, 15, 47, 69, 72, 98, 27, 98,
-       65, 70, 27, 56, 66, 99, 28,  3, 27, 35, 20, 32, 43, 91, 37]), array([ 2, 50, 10, 16, 14, 99, 92, 35, 30, 47, 48,  4, 79, 49, 89, 29, 28,
-       11, 91, 34, 16,  2, 50, 96, 20, 76,  8, 27, 31, 58,  7, 84, 39, 24,
-       28, 66, 55, 18, 14, 24, 69, 11, 63, 47, 67, 99, 13, 94, 19, 46, 55,
-       58, 62, 97, 29, 47,  8, 38, 53, 51,  2, 38, 11, 70, 36, 40, 88,  3,
-       77,  1, 72, 67, 22, 51, 22, 41, 73, 18, 84, 96, 77, 62, 46, 55, 10,
-       95, 31, 32, 34, 49, 46, 46, 82, 13, 71, 32, 24, 55, 10, 34]), array([55, 13,  3, 80, 54, 41, 17, 86, 35, 56, 46, 44, 39, 79, 63, 62, 94,
-       26, 43, 77, 85, 74, 32, 67, 57,  0, 29, 74, 45, 20, 48, 99, 35, 91,
-       47,  3, 26, 52,  4, 89, 90,  7,  3, 32, 50, 33,  7, 97, 98, 91, 88,
-       28, 18, 41,  0, 34, 49, 40, 46, 53, 62, 68, 19, 77, 57,  2, 45, 14,
-       54,  5, 70, 33, 46, 47, 66, 60, 39, 39, 77, 99, 68, 33, 66, 14, 73,
-       66, 68, 40, 85, 24, 81, 66, 54, 68, 24, 63, 64,  5, 32, 35]), array([15, 59, 71, 53, 30, 15, 16, 75, 60, 86, 46, 76, 90, 21, 66, 33, 73,
-       54, 50, 99, 93, 51, 67, 82, 41,  5, 89, 51, 67, 23, 70, 97, 47, 33,
-       23, 46, 80, 44, 43, 52, 51, 83, 84, 33, 27, 98, 99, 91, 10, 61, 92,
-       39, 28, 71, 26,  3, 21, 14, 32, 53, 94, 86, 91, 38, 82, 39, 15, 18,
-       75, 35,  5, 84, 91,  7, 70, 42, 11, 61,  3, 35, 67, 44, 21, 94, 26,
-       29, 72, 52, 44, 97, 14, 24, 83, 65, 24,  2, 32, 35, 21, 32]), array([ 9, 68, 62, 70, 52, 89, 91, 35,  5, 70, 44, 47, 11, 15, 66,  7, 87,
-       58, 36, 39, 73, 85, 12,  1, 64, 46, 37, 95, 14, 75, 80, 64, 88, 75,
-       64,  2,  0, 16, 57,  5,  7, 80, 74, 55, 17, 43, 72, 10, 75, 58, 95,
-       38, 89, 18, 11, 12, 69, 65, 90, 61, 35, 36, 15, 45, 52, 22, 89, 28,
-       63, 28, 71, 58, 73, 78, 37, 90, 56, 69, 98,  4, 25, 91, 45, 86, 96,
-       74, 91, 40, 80, 12,  8, 38, 15, 64, 95, 62, 27, 66, 63, 89]), array([54, 82, 84, 80, 27,  9, 74, 67,  1, 25, 79, 50, 24, 45, 32, 89, 14,
-       98, 41, 72, 35, 56, 68, 46, 32, 64,  8, 41, 72, 16, 67, 13, 75, 27,
-       42,  5, 42, 60, 53, 22, 27, 48, 65,  6, 86, 39, 60, 74, 85, 23, 76,
-       17, 95, 20, 41, 60,  7, 27, 93, 33, 95, 26,  7, 98, 57, 92, 96, 38,
-       94,  7, 83, 98, 71, 27, 13, 96,  4, 55, 46, 77, 41, 91, 35, 23, 44,
-       13,  6, 61, 24, 36, 31, 68,  6, 37, 66, 97, 98, 29, 76, 92]), array([ 3, 65, 89, 14, 43, 68, 38, 22, 48, 97, 20, 38, 67, 84, 53, 22, 36,
-       77, 29, 50, 58, 48, 65, 29, 41, 45, 60, 49, 60, 61, 53,  5, 65, 76,
-       83, 23, 86, 22, 37,  3, 31, 12, 91, 28, 86, 84, 28, 49, 39, 96, 60,
-       87, 30, 51, 78,  5, 84, 97, 43, 10, 82, 49, 45, 12, 87, 25, 51, 46,
-       10,  5,  2, 15, 74, 10,  2, 12, 91, 19, 78, 57, 48, 60, 49, 94, 70,
-       31, 30,  3, 67, 67, 70, 22, 12, 90, 31, 60, 53, 30, 49, 99]), array([21, 12, 99, 58, 95, 21, 64, 36, 88,  3, 66, 87, 65, 74, 64, 70, 88,
-       26, 63, 34, 47,  2, 49,  7, 78, 67, 17, 61, 95, 85, 27, 50, 94, 10,
-       96,  1, 70, 93, 38, 56, 96, 93, 94, 87, 58, 22,  5, 11,  7, 45, 79,
-       21, 36, 90,  9, 43, 57, 69, 76,  2, 19, 29, 35, 92, 16, 49, 24, 88,
-       30, 20, 72, 95, 41, 43, 75, 28, 61, 72, 46, 25, 10, 10, 25,  5, 66,
-       79, 39, 25, 71, 35, 33, 87, 78, 72, 37, 29, 20, 90,  2, 92]), array([65, 99, 12, 95, 57, 89, 24,  7, 40, 99, 31, 49, 25, 37, 47, 38, 22,
-       95, 61, 58, 61,  4, 93, 40,  2, 61, 97, 53, 38, 12, 12, 66, 45, 71,
-       88, 36, 71, 55, 86, 53, 49,  0, 25,  1, 28, 10, 65,  2, 76, 15,  8,
-       65,  9, 82, 44, 30, 80, 84,  8, 85, 53, 95, 51,  4, 87, 66, 67, 31,
-       43, 98, 22,  0, 64, 78, 32, 13, 36,  5, 87, 41, 70, 89, 92, 77, 88,
-       11, 19, 80, 53, 14, 96, 64, 21, 30, 12, 79,  5, 85, 90, 73]), array([12, 77,  4, 60, 78, 44, 83, 77, 71, 70, 76, 49, 88, 30,  6, 48, 45,
-       26, 44, 23, 52, 47, 41, 72, 94, 16, 45, 93, 17, 42,  0, 11, 77, 23,
-       12, 67, 22, 37,  9, 48, 50, 74,  5, 54, 81, 75, 76, 14, 56, 70, 14,
-       39, 19, 88, 70, 83, 98, 71,  1, 23, 89, 52,  3, 78, 14, 69, 79, 42,
-       11, 29,  5, 47, 77, 99, 69, 43, 91, 11, 93, 29, 84, 20, 75, 22, 43,
-       75, 32, 97, 79, 57, 69,  2,  2, 42,  7, 47, 49, 15, 41, 43]), array([ 2, 88, 65, 34,  1, 85, 40, 22, 77, 96, 47, 12, 47, 37,  5,  7, 62,
-       42, 96, 95, 51, 12, 47, 78, 19, 66, 17, 33,  7, 75, 97, 53, 22, 53,
-        5, 36, 33, 33, 46, 24, 31, 46, 92, 32, 18, 68,  7, 10, 87, 35,  7,
-       51, 17, 78, 98, 39, 32, 21, 38, 22, 41, 74, 71, 64, 24, 17, 40, 22,
-       97, 57, 15, 12, 33, 32, 84, 32, 22, 34, 91, 93, 76, 88, 24, 34,  3,
-       66, 51,  4, 23, 22, 38, 81,  0, 51, 59, 21, 99, 47, 48, 48]), array([46, 77, 97, 66, 73, 71, 82, 54, 19, 28, 91, 38, 88, 94, 32, 23, 85,
-       52, 27, 17, 26, 66, 82,  9, 68, 78, 75, 31, 45, 96, 23, 30, 51, 76,
-       95, 22, 42, 53, 77, 13, 73, 19, 99, 57, 87, 29, 16, 72, 86, 84, 40,
-       37, 78, 76, 11, 67, 86, 88, 32, 82, 64, 12, 94, 95,  2, 33, 31, 33,
-       23, 33, 48, 40,  4, 76, 40, 65, 56, 15, 76, 36, 91, 41, 88, 69, 71,
-       86,  8, 58,  7, 94, 41, 80,  2, 64, 34, 72, 99, 29, 76, 56]), array([ 3, 56, 61, 92, 33, 22, 37, 88, 97,  1, 57, 98, 65, 16,  9, 14, 61,
-       82, 47, 25, 92, 65, 56, 57, 44, 83, 85, 58, 61, 56, 50, 76,  4, 51,
-       77, 12, 49, 33, 44, 48, 67, 39, 68, 49, 82, 69, 39, 84, 34, 66, 38,
-       30, 78, 75, 96, 63, 51, 10, 77, 63, 90, 75, 48, 18, 38, 27, 79, 72,
-       89, 27, 19, 24, 37, 97, 61, 86, 30, 81, 99, 40, 20, 96, 17, 13, 72,
-       70, 60, 75, 76, 50, 41,  0, 29, 49, 57, 96, 15, 92, 17, 93]), array([23, 39, 59, 91, 65, 34, 14, 82, 77, 60, 32, 63, 71, 88, 86, 89, 27,
-       19, 29, 86, 46, 99, 43, 29, 75, 17, 90, 74, 32, 81,  3, 82, 58, 63,
-       85, 80, 74,  4, 39, 94, 98, 74, 86, 18, 65, 66, 85, 36,  1, 98, 23,
-       70, 71, 86, 32, 37,  1, 73,  8, 87,  9, 51, 68, 22, 79, 44, 71, 18,
-       80, 48, 14,  7, 17,  9, 75, 79, 67, 22, 35, 99, 74, 65, 73,  1, 91,
-       87, 42, 85,  2, 91, 82,  6, 46, 33, 34, 76,  8,  0, 42, 70]), array([52, 69, 44, 75, 31,  1, 90, 27, 61, 20, 94, 65, 59, 59, 73, 92, 39,
-       34, 49,  8, 63, 94, 88, 95, 16, 61, 85, 57, 92, 73, 28, 90, 39, 41,
-       83, 15, 22, 62, 39, 37, 19, 67, 87, 47, 90, 25, 75, 38, 28, 65, 58,
-       81, 40, 18, 20, 66, 21, 90, 44, 90, 61, 26, 52, 44, 35, 31,  1, 86,
-       34, 36, 68, 19, 95, 50, 51, 84,  6, 19, 87, 54, 94, 44, 72, 89, 87,
-       51, 39, 27, 18, 64, 91, 88, 63, 33,  3, 75, 45, 25, 99, 18]), array([15, 27, 16, 71, 47, 86, 41,  2, 77, 38, 18, 27, 64, 80, 75, 53,  7,
-       20, 18, 98, 95, 43, 88, 20, 60, 30, 38, 74, 86, 77, 45, 13, 41, 89,
-        2, 72, 68, 92, 84, 99, 21, 55, 76, 55, 28, 70, 70, 33, 84,  0, 70,
-       96, 84, 31, 34, 11,  6, 90, 60, 36, 27, 85, 16,  8, 52, 55, 97, 37,
-       80, 16,  2, 66, 49, 68, 69, 69, 56,  4, 23, 92, 24,  0, 80, 15, 88,
-       59, 88, 22, 64, 77, 66, 35, 23, 99, 37, 37,  4, 59, 79, 98]), array([89, 28, 17, 57, 95, 77, 12, 98, 39, 86,  5, 26, 58, 81, 83, 35, 55,
-       22, 18,  4,  8, 19, 27, 47,  4, 16, 15, 44, 73, 27, 99, 34, 84, 71,
-       74, 94, 23, 80,  0, 35, 42, 65, 60, 31, 84, 55, 24, 91, 11,  7, 55,
-       93, 79, 66,  3,  1, 27, 21, 52, 29,  4, 35, 93, 57, 85, 27, 83, 86,
-       43, 92, 98, 80, 41, 11, 58, 99, 88, 14, 45, 81, 27, 89, 98, 63, 49,
-        8, 84, 21, 63, 62, 50,  9, 67,  1, 62, 19, 72, 21, 25, 78]), array([14, 70, 58, 39, 97, 67, 46, 75, 91, 74,  2, 91, 97, 61, 70, 12,  7,
-        6, 82, 97, 24, 90, 95, 58, 29, 34,  6, 77, 27, 88, 47, 37, 39, 38,
-       42,  6, 87, 30,  2, 86, 66, 73, 29, 44, 54, 95, 44, 22, 19, 55, 90,
-        6, 60, 46, 13, 31, 42, 34, 48, 22, 72, 57, 75, 85, 96, 88, 15,  4,
-       40,  9, 99, 62, 19, 59, 54,  3,  1, 26, 91, 66, 35, 36, 11, 51, 12,
-       93, 18, 77, 72, 70, 85, 95, 95, 68, 55, 90, 21, 11, 34, 54]), array([80,  0,  4,  1, 21, 37, 25, 31, 64, 84, 34, 91, 78, 47, 12, 40,  5,
-       23, 25, 95, 41, 50, 71, 89,  5, 85, 48, 31, 92, 98, 81,  7, 67, 37,
-       67, 27, 66, 86, 28, 47, 96, 47, 98, 31, 17, 89, 78, 13, 66, 61, 57,
-        8, 60, 31, 30, 72, 25, 69, 55, 78, 67, 18, 62, 54, 26, 32, 72, 75,
-       25, 64, 58, 51, 47, 41, 38, 52, 30, 32,  5, 13,  3, 95, 37, 64, 43,
-       71, 87,  2, 40, 95, 46, 34,  7, 20, 85, 87, 56,  7, 95,  9]), array([32, 12, 94,  7, 64, 17,  2, 69, 93,  3, 97, 15, 50, 55, 40, 90, 98,
-       50, 75, 80, 21,  1, 99, 70, 67, 44,  7, 99, 77,  4, 12, 99, 84, 59,
-       28, 70, 75, 42, 87,  8,  4, 74,  6, 55, 42, 84, 78, 51, 57, 55, 78,
-       10, 28, 96, 25, 61,  1,  7, 87, 55, 16,  9, 23, 42, 18, 59, 14, 80,
-       33, 28,  5, 21, 46, 65, 61, 97, 30, 50, 64, 78, 99, 26, 16, 45, 20,
-       24, 41, 52, 98, 78,  6, 73, 21, 43, 37, 45,  9, 49, 47, 23]), array([25, 58, 85, 56, 96, 68, 98, 30, 13, 65, 27, 23,  7, 48, 17, 82, 63,
-       98, 26, 19, 49,  6, 40, 88,  3, 17, 31, 99, 28, 51, 57,  9, 49, 26,
-       25, 63, 53, 40, 85, 54, 39, 50, 12, 68, 33, 93, 38, 98, 29, 64, 16,
-       97, 78, 16, 36, 51, 91, 11, 91, 71, 89, 29, 61, 26, 98, 92, 92, 85,
-       61, 39,  1,  1, 81,  9, 50, 27,  2, 84, 64, 76, 26, 55,  9, 52, 43,
-       49, 44, 62, 43, 25, 93, 34, 61, 60,  4, 47, 15, 88, 79, 92]), array([85, 96,  7, 68, 39, 50, 18, 60, 38, 50, 89, 84, 83, 75, 22, 39, 51,
-       66, 63,  0, 99, 56, 95, 29, 69,  9, 24, 81, 88, 89, 94,  8, 30, 94,
-        5, 37, 84, 43, 63, 33,  2, 30, 92, 94, 49,  8, 51, 99, 43, 57, 35,
-       23, 78, 90, 37, 71, 28, 70, 41, 20, 87,  5,  4, 23, 44, 89, 67, 32,
-       13, 90, 53, 43, 48, 30, 53, 57, 96, 41, 69, 58, 24, 32, 47, 92,  2,
-       24, 99, 52, 78, 47, 90,  5, 84, 70,  2, 37, 15, 64, 59, 55]), array([ 8, 58, 33, 29, 59, 91, 37, 70, 62, 50, 14, 76, 22,  5, 67, 90, 99,
-       10, 45, 27, 51, 15, 90, 65, 69, 50, 72, 97, 56, 75, 79, 36,  6, 33,
-       82, 77,  8, 26, 29, 80, 54,  3, 72,  8, 45, 45, 93, 62, 90, 86, 84,
-       81, 41,  8,  0, 15, 72, 24, 93, 59, 78, 78, 27,  7, 99, 46, 63, 53,
-       56, 42, 63, 70, 25, 51, 40, 42, 36, 80,  6, 44, 87, 27, 97, 30, 23,
-       13, 41, 48, 68, 39, 79, 22, 48, 30, 48, 29,  8,  0, 59,  6]), array([92, 40, 45, 14, 89, 27, 21, 14, 51, 67, 57, 55, 11, 66, 53, 39, 69,
-       44, 51, 79,  2, 41, 77, 82, 19, 57, 34, 31, 67, 76, 16, 81, 57, 49,
-       17, 92, 48, 33, 26,  3, 18, 17, 54, 10, 42, 56, 55, 66, 25, 76, 47,
-       53, 27, 33, 52, 29, 67, 98,  3, 62, 95, 76, 69, 91, 29, 57, 44,  2,
-       63, 57, 82, 25, 88,  6,  2, 61, 14, 41, 27, 24, 93, 46, 98, 99, 49,
-       43, 78,  1, 60, 54, 97, 74, 33, 67, 96, 13, 89, 50, 50, 33]), array([64, 76, 81, 89, 25, 36, 56, 20, 65, 43, 21, 88, 35, 11, 52, 95, 41,
-       41, 22,  4, 69, 20,  1, 45, 24,  6,  7, 49, 40, 20, 52, 20, 22, 95,
-       79,  7, 68, 43, 16, 50, 89, 41, 99, 52, 42, 70, 50, 73, 90, 72,  3,
-       24, 50,  7, 42, 20, 83, 27, 32, 58, 76, 99, 89, 45, 78, 43, 88, 26,
-       62, 23, 10, 12, 89, 73, 78,  3, 36, 43, 64, 41, 42, 94, 40, 57,  4,
-       76, 49, 21, 53, 17,  0, 51,  5, 27, 40, 98, 48, 92, 56, 48]), array([33, 29, 27, 77, 20,  1, 22, 16, 59, 83,  3,  7, 45, 84, 48, 80,  6,
-       18, 66, 92, 10, 40,  2, 96, 11, 17, 77, 73, 80, 58, 87,  4, 21, 16,
-       37, 38, 38,  8, 33, 88, 54, 18, 24,  8, 75, 94, 55, 24, 98, 25, 82,
-       30, 95, 55, 88, 71, 55, 83, 11,  5, 75, 83,  9, 33, 26, 39, 66, 20,
-       88, 60, 41, 84, 65, 47, 89, 87, 99, 41, 29, 34, 96, 49, 67, 14, 80,
-       15, 47, 31, 25, 50, 98, 73, 43, 86, 25, 54, 82,  2, 26, 97]), array([75, 83, 81, 80, 99,  5, 39, 45, 74, 67, 54, 10, 82, 82, 27, 29, 47,
-       25, 94, 54, 57, 42, 91, 79,  9, 82, 63, 58, 94, 28, 72, 93, 16, 73,
-       99, 35, 36,  3, 90, 56, 88, 99, 97, 68,  7, 27, 49, 85, 89, 86, 45,
-       21, 53, 33, 95, 70, 27, 26, 70, 79, 79, 49, 73, 28, 24, 70, 15, 44,
-       71, 20, 40, 91, 64,  3, 43, 71,  7, 43, 88, 16, 25, 85, 27, 62, 85,
-       25, 27, 31, 98, 62, 41, 44, 59, 73, 65, 18,  5, 91, 10, 90]), array([41, 19, 25, 39, 42,  6, 25, 53, 61, 48, 79, 64, 47, 38, 34,  1, 47,
-        4, 48, 19,  9, 88, 42, 68, 10, 63, 99,  9, 92, 44, 50, 75, 88, 29,
-       81, 51, 45, 29, 26, 71, 88, 30, 48, 58, 14, 32, 50, 83, 14, 67, 65,
-       18, 72,  1, 42,  5, 76, 10, 78, 77, 83, 29, 11, 84, 58, 51, 55, 25,
-       91, 37, 56, 38, 46,  9, 97, 93, 38,  0, 93, 26,  3, 86, 60, 62, 69,
-       26, 30, 95, 77, 48, 36, 23, 78, 18, 13, 98, 46, 19, 28, 59]), array([30, 56, 29,  3, 50, 40, 26, 16, 11, 40, 77, 17, 49, 64, 77, 81,  1,
-       82,  8,  7, 57, 74, 60, 17, 32, 88, 59, 75, 60, 45, 21, 27, 42, 42,
-       55, 65, 71, 68, 42,  3,  7, 54, 86, 97, 42, 24, 51, 56,  0, 23, 39,
-        2, 68, 89, 40, 92, 47, 90, 16, 13, 69,  2, 55, 28, 69, 93, 46, 61,
-       65, 64,  1, 19, 27, 91,  6, 88, 83, 21, 94, 47, 31, 18, 32, 90, 39,
-       53, 83, 35, 80,  3, 23, 63, 65, 97, 55, 67, 72, 30, 94, 66]), array([38, 65, 93, 91, 76, 76, 48, 42, 82, 83, 80,  4, 79, 28, 25, 10, 78,
-       86, 86,  3, 86, 62, 44, 95, 85, 16, 26, 47, 30, 44, 78, 85, 10, 67,
-       94, 44, 31, 38, 72, 30,  9, 54, 41, 31, 63, 95, 94, 42, 48,  8, 69,
-        1, 60, 78, 23, 26, 10, 17, 35, 84, 42, 50, 41, 53, 51, 83,  5, 68,
-       15, 36, 16, 91, 12, 36, 29, 58, 92, 83, 28, 41, 10,  3, 27, 22, 88,
-       28, 12, 78, 32, 50, 92, 65,  3, 82, 73,  7, 60, 32, 48, 38]), array([78,  5, 85, 82, 38, 95, 58, 71, 91, 91, 38,  5, 42, 38, 84, 44, 44,
-       67, 73, 98, 15, 78, 35, 43, 87, 19, 50, 90, 94, 12, 39,  2, 24, 55,
-       39,  2,  5, 22,  9, 95, 54, 20, 24, 67, 84, 37, 98, 80, 34, 84, 70,
-        2, 37, 37, 62, 40, 40, 26, 84, 20, 79, 48, 99, 95, 87, 45, 34, 82,
-       17, 52, 50, 36, 89, 26, 22, 18, 58, 73, 52, 25, 93, 28,  9, 32, 67,
-        7, 76, 35, 95, 82, 79, 36,  6, 13, 58, 97, 92, 91, 81, 29]), array([ 0, 67, 37, 47, 54, 64, 42, 73, 53, 75,  9,  5, 78, 64, 98, 55, 10,
-       84, 85,  9, 90, 63, 34, 49, 66, 70, 51, 55, 29, 59, 57, 92,  2, 79,
-        5,  8, 78, 22, 95, 10, 37, 73, 13, 77, 51, 53, 50, 50, 24, 24, 87,
-        2, 53, 42, 96, 11, 46, 85, 83, 25, 29, 17, 18, 79, 45, 28, 19, 13,
-       87,  7, 44, 98, 70, 65, 89, 15, 80, 71, 67, 40,  9, 64, 42, 65, 76,
-        4,  2, 37,  3, 82,  2,  9, 13, 48,  3, 40,  3, 34, 31, 56]), array([29, 15, 64, 97, 37, 25, 20,  2,  0, 41, 57,  1, 36, 91, 97, 98, 95,
-       37, 33, 40, 55, 14, 44, 72, 99, 82, 20, 16, 89, 40, 27, 26,  1, 26,
-       40, 95, 31, 82, 33,  6, 19, 98, 93, 27, 74, 23, 32,  7, 52, 95, 71,
-       59, 42, 67, 29, 13, 41, 90, 83, 47, 76,  0, 84,  8, 36, 32, 39, 35,
-       84, 42, 10, 95, 58, 11, 52, 75, 56, 63,  0, 60, 35, 78, 24, 79, 60,
-       62, 47, 18, 98, 22, 91, 71, 51, 18, 37, 53, 61,  1, 72, 34]), array([84, 12, 19,  7, 60, 60, 97, 68, 77, 10, 60, 13, 22, 32, 96, 13,  3,
-       25,  1, 32, 65, 79, 73, 78, 86, 85, 59, 87, 20, 59, 15, 27, 21, 14,
-       79, 87, 73, 27, 15, 20, 97, 38, 30, 61, 74, 77, 27, 28, 14, 68, 24,
-        2, 93, 60, 98, 17, 57, 52, 79, 32, 19, 79, 34, 77, 41, 49,  5, 14,
-       90, 29, 39, 92, 16, 45, 84, 99, 90, 11, 66, 43, 82, 88, 45, 82, 68,
-       96, 79, 76, 51, 85, 20,  9, 64, 30, 44, 58,  2, 88, 64, 52]), array([95, 23, 94, 45, 67, 51, 83, 38, 79, 73, 47, 47, 42, 48, 72, 36, 97,
-       17, 58, 75, 14, 87, 66, 12, 37, 43, 92, 18, 57, 76, 34, 91, 83, 27,
-       92, 48, 59, 66,  4, 55, 46, 30, 88, 19, 43, 91, 12, 62, 74, 20, 17,
-       30,  1, 35, 72, 19, 82, 13,  8, 72, 40, 81, 56, 71, 23,  9, 39, 82,
-       86, 75, 41,  4, 39, 83, 63, 58, 51, 20, 95, 83, 30, 82, 80, 74, 93,
-       10, 71, 78, 60, 33, 46, 22, 78, 71, 13, 41, 77, 55, 78, 51]), array([ 1,  8,  1, 16, 70,  5, 39, 31, 79, 12, 84, 51, 43, 47, 85, 73, 42,
-       11, 31, 33, 41, 82,  3, 72, 43, 25, 38, 20, 22, 40, 73, 40, 30, 23,
-       57, 71, 22, 40, 85, 96,  5, 24, 77, 57, 11, 63, 62, 32, 99, 44, 70,
-       11, 43, 60, 71, 65, 95, 62, 29, 42,  7, 23, 83,  6, 72, 50, 34, 22,
-       70, 40, 11, 51, 85, 57, 41, 20, 43, 27, 67, 95, 59,  9, 43, 97, 27,
-       39, 23, 90, 50, 43, 21, 68,  0, 17, 35, 41, 41, 31, 42,  2]), array([90, 78, 70, 32,  0, 53,  4, 60,  5, 73,  5, 69, 59, 55, 61, 34, 99,
-       92, 68, 54, 23, 91, 26, 28, 42, 70, 83, 58, 26, 40, 48, 52,  9,  3,
-       14, 53,  5, 75, 72, 79, 19, 23, 61, 21, 60, 87, 35, 67, 30, 36, 73,
-       50, 86, 15, 65, 48, 34, 50, 59, 53, 84, 59, 56, 25, 23, 91, 71, 29,
-       43,  4,  0, 14, 18, 65,  1,  6, 94,  8, 81, 85, 61, 77, 40, 54, 38,
-       92, 34, 92, 32, 38, 47, 91,  7,  4, 58,  0, 38, 78, 85, 40]), array([25, 24, 63, 35, 31, 79,  6, 47,  8, 76, 79, 51, 16, 88, 92, 16, 61,
-       73, 59, 34, 18, 53, 59, 30, 31, 60, 49, 52, 37, 61, 91, 30, 66, 70,
-       35,  7, 67, 50, 75, 21, 34, 67, 68, 85, 21, 39, 48, 44, 56, 77, 74,
-       43, 55, 61, 44, 44,  7, 56, 99, 91, 83, 88, 26,  0, 17, 70, 84, 72,
-        2, 89,  0, 44, 36,  4, 58, 16, 84, 20, 87, 57, 74, 39, 30, 49, 20,
-        3, 48, 76, 62, 52, 33,  1,  1, 64, 47, 39, 74,  3, 23, 13]), array([24, 16, 26, 27, 48, 11, 25, 22, 35, 62, 13, 41, 43, 74, 34, 15, 30,
-       70, 13, 87, 39, 66, 11, 37, 98, 12, 38, 85, 51, 28, 33, 58,  0, 56,
-       70, 28, 19, 88, 47, 17,  6, 96, 99, 72, 95, 78, 13, 18, 70, 53, 60,
-       62,  0, 35, 35, 34, 69, 91, 53, 41, 95, 24, 57, 21,  3, 91, 21, 74,
-        3,  9, 73, 30,  6, 65, 36, 38, 36, 30, 15,  0, 39, 64,  8, 21, 96,
-       82, 54, 45, 49, 26, 18, 67, 89, 27, 76, 51,  2, 77, 56, 48]), array([76,  2, 17, 83, 71, 15, 38,  2, 62, 50, 75, 47, 95, 55, 48, 88, 73,
-       53, 86, 78, 84, 86, 96, 46, 42, 84, 73, 52, 84, 59, 88, 11, 35,  6,
-       56, 66, 60, 53, 29, 28, 97, 37,  8, 35,  7, 90, 29, 80, 48, 62, 53,
-       27, 90, 63,  7, 53,  5, 68, 42, 31, 52, 42, 83, 63, 62, 41, 80,  6,
-       16, 36, 13, 49, 48, 66, 45, 25, 88, 52, 36, 30, 99, 16, 48, 64, 64,
-       65, 12, 12, 50, 67, 77, 53, 47, 18, 73, 55, 46, 30, 63, 24]), array([96, 70,  4, 46, 67, 29, 73, 28, 42, 82, 98, 20, 56, 71, 30, 53, 68,
-       74, 29, 47, 85,  4, 49, 57, 45, 16, 97, 16, 17, 30, 13, 77, 34, 17,
-       14, 29, 85, 22, 10, 82, 79, 77, 18, 32, 34, 94, 32, 41, 33, 71,  8,
-       55, 23, 55, 39, 80, 58, 75, 87, 48,  4, 18, 96, 45,  3, 81,  5, 92,
-       61, 23, 98,  9,  0, 28, 44, 85, 26, 17, 39, 72, 79,  2, 19, 60, 82,
-       14,  7, 41, 52, 17, 49, 71, 53, 51, 26, 77, 68, 20, 40, 57]), array([61,  9, 24, 28, 56, 63, 63, 17, 47,  0, 38, 67, 46, 55, 11, 57, 46,
-       70, 14, 35, 36, 84, 50, 21, 21, 48, 28, 47, 71,  7, 94, 25, 96, 37,
-       23, 98, 39,  0, 36,  2, 41, 95, 46, 44, 10, 67, 61, 92, 84, 49, 89,
-       22, 13, 53,  6, 56, 17,  6, 61, 52,  4, 41, 34, 50, 14, 73,  2, 36,
-       82, 38, 48, 62, 77, 83, 44, 26, 89, 31, 49,  4, 78, 45, 11, 12, 71,
-       23, 90, 97, 88, 29, 97, 12, 81, 99, 43, 85, 62, 76, 75, 41]), array([58, 94,  6,  7, 99, 65, 18, 17, 42, 99, 93, 48, 68,  6, 34, 50, 30,
-       42, 18, 40,  6,  6,  1, 17, 79, 99, 55, 65, 91, 32, 19, 16, 64, 93,
-       42,  7, 78, 29, 25, 64, 93, 35, 22, 98,  4, 80, 21, 96, 61, 48, 86,
-       31, 83, 59, 89, 42, 75, 95, 67, 40, 87, 12, 64,  0,  5, 17, 69, 99,
-        9, 72, 11, 65, 40, 86, 68, 71, 11, 86, 67, 64, 77, 53, 42, 57, 85,
-       92, 53, 98,  6, 59, 51, 99, 24, 71, 55, 64, 38, 52, 95, 79]), array([10, 95, 87, 17, 83,  9, 31, 47, 24, 50, 72, 73, 48, 45, 58, 24, 49,
-       91, 20, 32, 62, 15, 30, 80, 57, 33, 26, 54, 58, 35,  4, 26, 94, 27,
-       55, 96, 28, 24, 25, 57, 80,  5, 98,  6, 10, 59,  0, 97, 75, 69, 97,
-       20, 23, 49, 98, 93, 54, 17, 52, 41, 69, 44, 95, 27, 42, 18, 82, 17,
-       48, 70, 56, 84, 86, 87, 59, 68, 58,  2, 46, 41, 15, 51, 12, 94, 54,
-       18, 40, 50,  7, 97,  7, 36, 16, 94, 87, 77, 58, 98,  6, 66]), array([ 7, 12, 95, 55, 94,  4, 26,  3, 68, 74, 15, 25,  2, 23, 16, 80, 11,
-       18, 88,  0, 32, 34, 76, 11, 49, 96, 20, 75, 11, 37, 43, 74, 90, 78,
-       51, 42,  4, 77, 40, 51, 73, 11, 16, 82, 70, 56, 94, 54,  3, 17, 37,
-       95, 13, 13, 94, 65,  6, 10, 92, 16, 15, 42, 10, 11, 11, 74,  3, 33,
-        5, 83,  2, 26, 31, 67, 88, 90,  6, 57, 44, 34, 70, 20, 24, 27, 41,
-       65, 42, 94, 25, 78, 31, 48, 75, 53,  7, 11, 90, 11, 40, 99]), array([71, 99, 89, 27,  4, 97, 67, 75, 99,  7, 80, 28, 71, 67, 67, 27, 88,
-       16, 53, 95, 49, 53, 56, 89, 25,  1, 45, 86, 23, 15, 46, 28, 75,  8,
-       11, 57, 67, 42, 21, 78, 49, 51, 68,  0, 98, 36, 76, 87,  6, 45, 94,
-       52,  5, 29, 72, 92, 92, 41, 30, 33, 37, 53, 80, 16, 55, 45, 89, 62,
-       84, 12, 21, 92, 59,  6, 39, 54,  4, 22, 29, 44, 19, 92, 81, 52, 73,
-       86, 41, 76, 82, 22, 51, 54, 66, 99, 25, 32, 39, 77, 26, 13]), array([43, 11, 47, 44, 57, 40, 81,  0, 37, 73, 27, 62, 29,  5, 78, 39, 30,
-       13,  8, 12, 16, 57, 54, 21, 72,  0, 36, 67, 51, 66, 81, 99, 26, 41,
-       38, 39, 90, 92, 87, 52, 89, 40, 16, 96,  1,  3, 38, 86, 32, 35, 82,
-       57, 47,  7, 36, 73, 88, 48, 15, 19, 85, 30, 28, 76, 45, 93, 91, 83,
-        6, 85, 37, 38, 76, 21, 57, 93, 58, 63, 78, 16, 69, 16, 71, 51, 27,
-       20, 94, 85, 68, 71, 95, 38,  8, 29,  6, 55, 36, 59, 37, 87]), array([70, 16,  0, 88, 37, 76, 98, 16, 46, 20, 96, 76, 94, 46, 46, 73, 17,
-       29, 98, 76, 96, 83, 80, 17, 40, 69, 27, 66, 54, 85, 87, 37, 58, 82,
-       25, 76, 27, 99,  2, 60, 89, 80, 93,  7, 16, 27, 38, 77, 35, 91, 76,
-       64, 54, 46, 27, 51, 85, 31, 94, 18, 37, 79, 21, 10, 91, 28, 37, 59,
-       30, 46, 43,  2, 97,  5, 18, 43, 85, 77, 52,  7, 89, 46, 33, 87, 24,
-        6, 35, 60, 80, 97, 52, 11, 32, 47,  5,  6, 16, 85, 12, 52]), array([40, 13, 57, 35, 71, 49, 37, 60, 87, 22, 81, 39, 52, 92,  3, 34, 37,
-       18, 28, 36, 25, 40, 45, 22, 33, 88, 65, 30, 63, 45, 13,  0,  2, 62,
-        3, 43, 47, 54,  2, 24, 35, 91, 53, 56, 34, 30, 43, 11, 56, 27, 82,
-       19,  9, 70, 56, 99, 62, 32, 31, 26,  7, 54, 18, 98, 82, 22, 75, 62,
-       32,  5, 99, 75, 52, 84, 28, 94,  3, 53, 94, 45, 60, 61, 48, 55, 14,
-       76, 99, 46, 93, 42, 61, 44, 84, 16, 30, 19, 22, 93, 26, 23]), array([17, 85,  8, 10, 16, 30, 51, 61, 42, 70,  5, 36,  2, 55, 97, 77, 29,
-       13, 98, 64, 74, 21, 70, 58, 30, 83,  1, 27, 67, 25,  1, 48, 31, 90,
-       48, 40, 80, 45, 59, 98,  5, 39, 91, 28, 53, 33, 64, 40, 38, 51, 94,
-       65, 97, 32, 41, 78, 71, 28, 49, 54,  4, 86, 79, 78, 88, 96, 59, 74,
-       39, 75, 28, 30, 70,  2, 57,  1, 54, 96, 38, 62, 86, 66, 98, 87, 27,
-       52, 74, 73, 48, 77, 73, 24, 30, 75, 77, 52, 75, 30, 61,  0]), array([56, 11, 67,  2, 62, 52,  2, 73, 94, 65, 94, 88, 73, 30, 44, 44, 75,
-       17, 22, 69, 78, 25,  5, 73,  2, 91, 81, 52, 66, 97, 13, 88, 68, 33,
-       56, 29, 34, 59, 53, 15, 90, 87, 30, 59, 12, 54, 25, 86, 13, 56,  0,
-        1, 47, 60, 49, 86, 72, 49,  6,  1,  7, 43, 89, 77, 78, 57, 82, 42,
-       13, 84, 34,  4, 39, 22, 36, 31, 30, 43, 83, 24, 78, 63, 80, 96, 22,
-       83,  3, 28, 73, 91, 20,  3, 73, 26, 58, 66, 84, 82, 12, 89]), array([18, 85, 69, 91, 37,  6, 65, 82, 50,  3, 40, 84, 31, 30, 19, 73, 31,
-        1, 50, 51, 92, 91, 51, 14, 59, 57, 65, 32, 50, 65, 31, 98, 13, 74,
-       21, 39, 33, 63, 21, 88, 36, 37, 62, 35,  8, 86,  6, 97, 88,  0, 60,
-       41, 85, 72,  5, 98,  8, 77, 60,  9, 33, 85,  1, 86, 22, 89, 31, 88,
-       90, 28, 91, 67, 80, 57, 89, 95, 67, 17,  3, 44, 40, 70, 69, 63, 84,
-        7, 69, 44, 34, 26, 13, 52,  3, 58, 23, 98, 58, 10, 84, 21]), array([57, 18, 16, 80, 70,  8, 34, 40, 73, 52, 34, 25, 64, 24, 26, 59, 44,
-       70, 93, 57, 78, 16, 91, 65,  1, 91, 74, 71, 67, 67, 32, 21, 53, 10,
-       67, 31, 47, 73, 48, 22, 54,  9, 93, 53, 56, 63, 24, 98, 15, 12, 91,
-       29, 86,  5, 25, 21, 61, 20, 20, 95, 31, 38, 20, 13, 51, 47, 61, 26,
-       85, 46, 69, 60, 74, 64, 25, 92, 77, 35,  3, 64, 39, 56, 22, 86,  2,
-       91, 23, 43, 94, 38, 93, 29, 91, 61, 71, 56, 46, 92,  3, 52]), array([96, 22, 30, 91, 71, 26, 20, 94, 42, 72, 63, 43, 25, 87, 40, 44, 41,
-       10, 29, 54, 95, 97, 59, 63, 92, 49, 97, 68, 31, 35, 59, 20, 45, 64,
-        9, 69, 81, 93, 88, 32, 90, 76, 84, 85, 34, 48, 29, 36, 24, 51, 80,
-       89, 79, 15, 63, 53, 49, 20, 41,  0, 20, 39, 21, 99, 77,  9, 34, 96,
-       29, 89, 80, 98, 58, 98, 23, 83, 53, 27, 90, 92, 94, 95, 65, 42, 33,
-       35,  2,  5, 64, 79, 61,  4, 81, 72, 67, 43, 96, 59, 77, 16]), array([95, 98, 63, 57, 74, 47, 48, 74, 41, 88, 93, 59, 56,  4, 53, 24, 44,
-       17, 58, 45, 41, 43, 32, 26, 22, 92, 75, 49, 94,  1, 42, 84, 64, 77,
-       73, 43, 38,  5, 59, 38, 95, 52, 70, 55, 49, 74, 97, 95, 39, 19, 25,
-       31, 74, 87, 21, 43,  5, 10, 29, 44, 25, 39, 74, 57, 19, 58, 22, 22,
-        6, 36, 91, 69, 39, 41, 11, 20, 77, 62, 78, 38, 21, 54,  3,  6, 99,
-       12, 30, 33,  5, 57, 18, 36, 61, 66, 71, 16, 23,  7, 85,  9]), array([96, 30,  5, 84, 91, 64, 39,  9, 95, 36, 56, 25, 53, 75, 47, 54, 67,
-       61, 87, 87,  0, 71, 46, 64, 87, 88, 45, 83, 83, 98, 93, 75, 61, 74,
-       46, 77, 26, 91, 60, 23, 21, 61,  8,  1,  7, 23, 20,  6, 54, 33, 28,
-       56, 23, 54, 85, 93, 59, 75, 29, 40, 43, 18, 67, 94, 63, 32, 75, 17,
-       93,  3, 28, 72, 20, 47, 11, 92, 18, 70, 61, 22, 25, 20, 97, 18, 87,
-        2, 48, 53, 99, 24, 86, 85, 36, 50, 49, 52, 64, 41, 79, 45]), array([51, 11, 98, 23, 94, 94, 19, 22, 51,  2, 37, 15,  2, 46, 19, 31, 10,
-       72, 92, 26, 59, 37, 35, 33, 38, 99, 66, 80,  8, 71, 25, 62, 47, 53,
-       21, 64, 98, 64, 39, 15, 19,  1, 52, 16, 49, 92, 10, 40, 43, 93,  5,
-       70, 33, 54, 86, 17, 42, 33, 32, 47, 51, 14, 79, 35, 20, 75, 88, 62,
-       99, 86, 71, 27,  8, 47, 23, 65, 86, 52, 72, 97, 49, 94, 13, 75, 32,
-       68, 15, 27, 13, 15, 59, 78, 83, 32, 68, 22, 31, 92,  0, 80]), array([48, 73, 51, 54, 69, 54,  1, 54, 66, 42, 65, 87, 18, 35, 15, 29, 77,
-       96, 42, 96, 10, 63, 93, 50, 83, 58, 96, 71, 10, 37, 66, 55, 17,  3,
-       50, 59, 32, 17, 71, 16, 49, 10, 52, 21, 61, 12, 61, 73, 60, 55, 80,
-       87, 16, 75, 59, 26, 13, 22,  1, 79, 73, 59, 73, 36, 97, 17, 12, 95,
-       28, 65, 97,  7, 81, 91, 92, 97, 59, 59, 34, 12, 29, 25, 27, 19, 31,
-       19, 26, 29, 60, 19, 48, 73, 44,  8, 37, 34, 13, 51, 23, 68])], 'feature_importances_': array([0.02255645, 0.02748645, 0.01537776, 0.03050232, 0.0208906 ,
-       0.02155879, 0.02768038, 0.03659055, 0.03612084, 0.09769932,
-       0.07244548, 0.01221973, 0.28028859, 0.0344751 , 0.01857089,
-       0.14272386, 0.01528442, 0.01722933, 0.0509372 , 0.01936194]), 'n_classes_': 2, 'n_features_in_': 20, 'n_outputs_': 1}</code></pre>
+<pre><code>{'_estimator_type': 'classifier', 'classes_': array([0, 1]), 'estimator_': DecisionTreeClassifier(), 'estimators_': [DecisionTreeClassifier(max_features='sqrt', random_state=775289050), DecisionTreeClassifier(max_features='sqrt', random_state=419849108), DecisionTreeClassifier(max_features='sqrt', random_state=1970022122), DecisionTreeClassifier(max_features='sqrt', random_state=278543060), DecisionTreeClassifier(max_features='sqrt', random_state=1268219825), DecisionTreeClassifier(max_features='sqrt', random_state=1999703732), DecisionTreeClassifier(max_features='sqrt', random_state=667329713), DecisionTreeClassifier(max_features='sqrt', random_state=448197770), DecisionTreeClassifier(max_features='sqrt', random_state=219804112), DecisionTreeClassifier(max_features='sqrt', random_state=1418665057), DecisionTreeClassifier(max_features='sqrt', random_state=533293421), DecisionTreeClassifier(max_features='sqrt', random_state=1993926676), DecisionTreeClassifier(max_features='sqrt', random_state=167761142), DecisionTreeClassifier(max_features='sqrt', random_state=323236664), DecisionTreeClassifier(max_features='sqrt', random_state=1196501197), DecisionTreeClassifier(max_features='sqrt', random_state=53844823), DecisionTreeClassifier(max_features='sqrt', random_state=1611498506), DecisionTreeClassifier(max_features='sqrt', random_state=1429565297), DecisionTreeClassifier(max_features='sqrt', random_state=1100051603), DecisionTreeClassifier(max_features='sqrt', random_state=1009408432), DecisionTreeClassifier(max_features='sqrt', random_state=1475758232), DecisionTreeClassifier(max_features='sqrt', random_state=1105678954), DecisionTreeClassifier(max_features='sqrt', random_state=646885788), DecisionTreeClassifier(max_features='sqrt', random_state=1707113924), DecisionTreeClassifier(max_features='sqrt', random_state=1981540164), DecisionTreeClassifier(max_features='sqrt', random_state=1569944640), DecisionTreeClassifier(max_features='sqrt', random_state=1180772613), DecisionTreeClassifier(max_features='sqrt', random_state=1425835155), DecisionTreeClassifier(max_features='sqrt', random_state=742419297), DecisionTreeClassifier(max_features='sqrt', random_state=1122789668), DecisionTreeClassifier(max_features='sqrt', random_state=431337235), DecisionTreeClassifier(max_features='sqrt', random_state=1822436227), DecisionTreeClassifier(max_features='sqrt', random_state=2102113819), DecisionTreeClassifier(max_features='sqrt', random_state=1045961153), DecisionTreeClassifier(max_features='sqrt', random_state=705280581), DecisionTreeClassifier(max_features='sqrt', random_state=1654328488), DecisionTreeClassifier(max_features='sqrt', random_state=1474807304), DecisionTreeClassifier(max_features='sqrt', random_state=258576690), DecisionTreeClassifier(max_features='sqrt', random_state=2040207689), DecisionTreeClassifier(max_features='sqrt', random_state=1486041337), DecisionTreeClassifier(max_features='sqrt', random_state=1461996460), DecisionTreeClassifier(max_features='sqrt', random_state=1452991758), DecisionTreeClassifier(max_features='sqrt', random_state=208564106), DecisionTreeClassifier(max_features='sqrt', random_state=384992001), DecisionTreeClassifier(max_features='sqrt', random_state=1310904439), DecisionTreeClassifier(max_features='sqrt', random_state=377241012), DecisionTreeClassifier(max_features='sqrt', random_state=1622238873), DecisionTreeClassifier(max_features='sqrt', random_state=786944496), DecisionTreeClassifier(max_features='sqrt', random_state=603399795), DecisionTreeClassifier(max_features='sqrt', random_state=378548455), DecisionTreeClassifier(max_features='sqrt', random_state=1999575642), DecisionTreeClassifier(max_features='sqrt', random_state=1410908970), DecisionTreeClassifier(max_features='sqrt', random_state=700480881), DecisionTreeClassifier(max_features='sqrt', random_state=1982329318), DecisionTreeClassifier(max_features='sqrt', random_state=604408218), DecisionTreeClassifier(max_features='sqrt', random_state=1095693693), DecisionTreeClassifier(max_features='sqrt', random_state=1642275496), DecisionTreeClassifier(max_features='sqrt', random_state=1096513961), DecisionTreeClassifier(max_features='sqrt', random_state=1491723546), DecisionTreeClassifier(max_features='sqrt', random_state=1699428204), DecisionTreeClassifier(max_features='sqrt', random_state=877990213), DecisionTreeClassifier(max_features='sqrt', random_state=2455996), DecisionTreeClassifier(max_features='sqrt', random_state=1056985532), DecisionTreeClassifier(max_features='sqrt', random_state=283682409), DecisionTreeClassifier(max_features='sqrt', random_state=379641615), DecisionTreeClassifier(max_features='sqrt', random_state=1624128077), DecisionTreeClassifier(max_features='sqrt', random_state=30440845), DecisionTreeClassifier(max_features='sqrt', random_state=61824053), DecisionTreeClassifier(max_features='sqrt', random_state=1506341515), DecisionTreeClassifier(max_features='sqrt', random_state=705321888), DecisionTreeClassifier(max_features='sqrt', random_state=1969614017), DecisionTreeClassifier(max_features='sqrt', random_state=251222303), DecisionTreeClassifier(max_features='sqrt', random_state=920044158), DecisionTreeClassifier(max_features='sqrt', random_state=965887727), DecisionTreeClassifier(max_features='sqrt', random_state=738680201), DecisionTreeClassifier(max_features='sqrt', random_state=600188267), DecisionTreeClassifier(max_features='sqrt', random_state=718238962), DecisionTreeClassifier(max_features='sqrt', random_state=325451689), DecisionTreeClassifier(max_features='sqrt', random_state=990277450), DecisionTreeClassifier(max_features='sqrt', random_state=185529090), DecisionTreeClassifier(max_features='sqrt', random_state=1267828129), DecisionTreeClassifier(max_features='sqrt', random_state=963569632), DecisionTreeClassifier(max_features='sqrt', random_state=1498178425), DecisionTreeClassifier(max_features='sqrt', random_state=1239779579), DecisionTreeClassifier(max_features='sqrt', random_state=55170504), DecisionTreeClassifier(max_features='sqrt', random_state=1475397582), DecisionTreeClassifier(max_features='sqrt', random_state=927576010), DecisionTreeClassifier(max_features='sqrt', random_state=474316588), DecisionTreeClassifier(max_features='sqrt', random_state=1941919411), DecisionTreeClassifier(max_features='sqrt', random_state=2025547937), DecisionTreeClassifier(max_features='sqrt', random_state=60005936), DecisionTreeClassifier(max_features='sqrt', random_state=1222082926), DecisionTreeClassifier(max_features='sqrt', random_state=574349555), DecisionTreeClassifier(max_features='sqrt', random_state=637118691), DecisionTreeClassifier(max_features='sqrt', random_state=677170684), DecisionTreeClassifier(max_features='sqrt', random_state=1497315405), DecisionTreeClassifier(max_features='sqrt', random_state=2025522411), DecisionTreeClassifier(max_features='sqrt', random_state=1859909039), DecisionTreeClassifier(max_features='sqrt', random_state=610403503), DecisionTreeClassifier(max_features='sqrt', random_state=58838569)], 'estimators_samples_': [array([31, 99, 96, 98, 87, 58, 99, 86, 92, 39, 81, 47, 44, 20, 82, 12, 80,
+        7, 50, 26,  9, 52, 23, 82, 65, 53, 22, 37, 79, 98,  2, 43, 95,  8,
+       34, 62,  4, 59, 12, 41, 91, 87, 50, 42, 98, 70, 21, 54, 10, 70, 23,
+       70, 44, 44, 56, 31, 27, 29, 66, 82,  3, 23, 56, 89,  7,  9,  4, 93,
+        7, 78, 86, 20, 78, 21, 40, 82,  6, 75, 82, 34,  4, 53, 66, 60, 59,
+       99, 51, 68, 15, 81, 90, 85, 90, 53,  6, 59, 88, 32, 64, 45],
+      dtype=int32), array([ 4, 81, 39, 21, 98, 37, 17, 61, 88, 75, 93, 52, 20, 94, 77, 32, 46,
+       42, 74, 14, 65, 19, 36, 47, 56, 73, 10, 10, 75, 65, 98, 93, 12, 71,
+        0, 81, 91, 16, 35,  0, 93, 20, 65, 49, 99, 16, 30, 52, 53, 14, 10,
+       72, 62, 53, 96, 63, 76, 52, 22, 71, 90,  8, 31, 89, 78,  0, 31, 96,
+       22,  3, 75, 38, 89,  9, 86, 14, 86, 46, 61, 32, 22, 19, 26, 14, 91,
+       66, 95, 37, 61, 73, 13, 29, 65, 53, 38, 78, 28, 87, 36, 84],
+      dtype=int32), array([40, 18, 76, 51, 15, 73, 87, 79, 25, 64, 51,  3, 91, 42, 97, 41, 45,
+       59, 45, 74, 13,  8, 42,  5, 48, 17, 52, 94, 69, 90, 82, 74, 62, 76,
+       86, 52, 13, 90, 21, 44, 96, 80, 13, 16, 86,  1, 65, 71, 40, 13, 80,
+       68, 62, 68,  4, 17, 14, 58, 67, 25, 83, 32, 77, 17, 65, 73, 52,  2,
+        9, 92, 98, 61, 80, 89, 79, 27, 15, 57, 43, 72, 44, 45, 74, 78, 21,
+        8, 51, 47, 28, 52, 68, 28, 50, 47, 96, 33, 20, 59, 45, 33],
+      dtype=int32), array([47, 24,  9, 11, 34, 36, 14, 86, 33, 60, 40, 31, 52, 21, 16, 50, 25,
+       47, 38, 46, 77,  8, 53, 39, 93, 18, 99, 66, 67, 70, 15, 59, 10, 77,
+       75, 55, 40, 60, 23, 19, 45, 63, 14, 24, 76,  2, 48, 31, 44, 52, 49,
+        1, 13, 52, 80, 95, 72, 44, 66, 52, 91, 32, 83, 53, 16, 68, 63, 21,
+       45, 96, 60, 29, 11, 96, 82, 49, 50,  1, 60, 79, 64, 47, 73, 42, 98,
+       61, 12, 85,  7, 22, 97, 28, 40, 69, 85, 23, 56, 61, 44, 29],
+      dtype=int32), array([10, 17, 13, 57, 50, 48, 74, 17, 78, 75, 63, 51, 46, 95, 48, 82, 18,
+       52, 80, 31, 59, 15, 14, 43, 53, 12, 13, 45, 90, 92, 52, 15, 80, 86,
+       86, 54, 81, 82, 19,  2,  4, 83, 85, 23, 12, 97, 73, 45, 71, 78, 25,
+        2, 24, 24, 95, 42, 19, 11,  5, 96, 11, 11, 61, 53, 78, 65, 93, 58,
+       14, 44, 87,  6, 83, 73, 21,  3, 64, 79, 22, 45, 90, 30, 67, 16, 85,
+       92,  1, 32, 45, 97, 81, 15, 34, 49, 57, 63, 80, 56, 82, 45],
+      dtype=int32), array([97,  7, 48,  0, 73, 88, 28, 91, 79, 95, 32, 63, 38, 15, 40, 50, 32,
+       99, 92, 99, 45, 16, 77, 12, 93, 73,  6, 84, 77, 22, 47, 81, 88, 81,
+       17, 94, 17, 46, 44, 73, 92, 44, 10, 61, 97,  9,  4, 17, 14, 77, 86,
+       63,  4, 20, 13, 21, 27, 33, 73, 52, 10, 43, 67, 39, 65,  3, 85, 79,
+       64, 12, 78, 61,  5, 41, 56, 12,  2,  8, 19, 26, 30, 63, 52, 13, 87,
+       63, 84, 16, 91, 29, 57, 57, 19, 18, 18, 73, 55, 83, 69, 12],
+      dtype=int32), array([99, 97, 87, 54, 86, 45, 46, 44, 11, 77, 42, 56, 12, 12, 89, 91, 45,
+        7, 69, 23, 36, 55, 50, 97, 33, 82, 47, 85, 83, 13, 42, 64, 65, 16,
+       77, 46, 20,  2, 33, 48, 67, 70, 36, 52, 68, 62, 23, 97, 68, 61, 91,
+       31, 44, 12, 14, 36, 34, 89, 85, 50, 27, 72, 52, 20, 39, 32, 27, 70,
+       68, 60, 30, 30, 85, 36, 16, 83, 70, 51, 63,  4, 19, 87,  7, 43, 17,
+       34, 90, 52, 82, 32, 41,  7,  4, 76, 86, 28, 90, 66, 79, 40],
+      dtype=int32), array([48, 93, 46,  6, 35, 62, 80, 48, 71, 31, 28, 73,  1, 36,  2, 57, 63,
+       10, 51, 30, 10, 47, 48, 80, 83, 87, 79, 29, 72, 37, 79, 31, 75, 82,
+       45, 17, 75, 46, 44,  3, 20, 92, 56, 76, 56, 14, 17, 61, 46, 85, 20,
+       85, 12, 22, 35, 29, 96,  3, 39, 19, 30, 94, 77, 29, 11, 62, 49, 68,
+       30, 81, 45, 13, 27, 24, 19,  1, 77, 82, 76, 47, 53, 37, 43, 35, 24,
+       71, 30, 57, 37, 99, 93, 32, 90, 89, 69,  5, 16, 49, 21, 41],
+      dtype=int32), array([21,  9, 68, 70, 71,  9,  8,  5, 90, 68,  3, 38, 45, 96, 10, 82, 16,
+       88, 56, 34, 65, 81, 61, 20, 44, 34, 97, 11, 93, 18, 86, 36,  9, 91,
+       31, 35, 60, 79, 80, 20, 61, 23, 20, 61, 61, 49, 38, 33,  4, 82, 36,
+       27, 97,  9, 28, 99, 63, 40, 75,  9,  6, 18, 23, 32, 69, 66, 23, 14,
+       58, 10, 74, 71, 35, 11, 21, 86, 49, 33, 47, 91, 67, 25, 20, 15, 29,
+       74, 77, 39, 83, 53,  4, 19, 58,  8, 27, 60, 53, 38, 81, 12],
+      dtype=int32), array([20, 42, 18, 92, 82, 95, 53, 87, 84, 48, 13, 25, 90, 50,  6, 93, 46,
+       56, 41,  2, 32,  8, 67, 88, 56, 39, 87, 36, 81,  3, 22, 93, 63, 47,
+       80, 27, 76, 35, 39, 99, 30, 65, 20,  5, 29, 51, 82, 58,  0, 87, 98,
+       53, 58, 54, 60, 13, 43, 89, 34, 23, 97, 40, 88, 24, 88, 87, 40, 92,
+       66, 16, 59, 44, 65, 43, 82, 51, 43, 49, 44, 84, 25, 31, 89, 79, 52,
+       99, 54, 95, 54, 29, 18, 98, 87, 69, 20, 88, 71, 74, 61, 73],
+      dtype=int32), array([15, 61, 66, 57, 19, 20, 39, 49, 41,  6, 11,  9, 59, 56, 39, 60, 71,
+       21, 26, 64, 33, 30, 44, 28, 20, 55, 70, 88, 43, 23, 29, 51,  2, 78,
+       87, 72, 83, 22, 37, 22, 16, 98, 40, 98, 73, 98, 85, 73, 67, 26, 44,
+       22, 89, 92, 59, 33, 95, 87, 42, 69, 80, 28, 70, 10, 92, 49, 79, 62,
+        3, 97, 90, 68, 11, 38, 48, 91, 95, 47, 79, 20, 22,  9,  5,  9, 22,
+       71, 68, 12, 47, 29, 71, 56, 52, 30, 60, 47, 27, 39, 97, 14],
+      dtype=int32), array([25, 25, 55, 90, 41, 16, 84, 54, 10, 34, 42, 61, 27, 63, 29, 24, 41,
+       13, 80, 24, 46, 26, 44, 22, 12, 53, 77, 62, 48, 65,  5, 40, 81, 20,
+       72,  5, 70, 44, 99, 42, 29, 79, 53, 39, 56, 26, 10, 41, 48, 79, 34,
+       87, 38, 96, 40, 66, 10, 97, 37, 29, 98, 67, 45, 64, 93, 25, 70, 92,
+       34,  0, 91,  7, 34, 10, 52, 56, 61,  1, 69,  0,  4, 85, 14, 35, 43,
+       39, 95, 17, 69, 26, 52, 12, 56, 85,  2,  8, 47, 86, 44, 74],
+      dtype=int32), array([90, 37, 97, 80, 28, 92, 89, 80, 45, 20,  0, 53, 80, 21, 20, 27, 35,
+       71, 81, 44, 89, 36, 80, 45, 10, 17, 37, 59, 74, 16, 60, 22, 48, 21,
+       62, 14, 82, 46, 81, 88,  8, 68, 99, 96,  9,  8, 69, 21, 17, 48, 36,
+       72, 39, 58, 63, 14, 27,  8, 54, 67, 51, 25, 84, 93, 16,  3, 49, 97,
+       46, 90, 15, 92, 92, 40, 44, 56, 62,  4, 21, 65,  4, 89, 32, 59, 20,
+        5, 18, 78,  2, 53, 44, 91, 65, 15, 86, 37, 59, 67, 70,  7],
+      dtype=int32), array([65, 91, 38, 32, 52, 72, 62, 95, 35,  2, 91, 45, 45,  7, 91, 81, 29,
+       38, 42, 46, 15, 30,  5, 63, 25, 39, 17, 28, 75, 24,  3, 13, 33, 88,
+       47, 16, 91, 67, 46, 56,  8, 55, 20, 88, 73, 60, 62, 79, 49, 29, 73,
+       29, 43, 16,  2, 24, 82, 63, 58, 24, 80, 14, 58, 48, 90, 31, 13, 30,
+       65, 11, 38, 64, 85, 32, 50, 90, 41, 38, 93, 61, 40, 59, 98, 30, 79,
+       17, 11, 76, 43, 55, 43, 82, 93, 97, 97,  0, 76, 35, 29, 15],
+      dtype=int32), array([46, 65, 28, 87, 19, 63, 95, 86, 78, 78, 27,  6, 64, 88,  4, 63, 50,
+       64,  3, 87, 26, 35, 81, 35, 63, 65, 79, 73, 43, 99, 67, 49, 67, 72,
+       14, 64, 59,  7, 84, 61, 88, 75, 45, 72, 33,  6, 12, 75,  0, 34, 83,
+       18, 67, 60, 19, 87, 70, 65, 92, 20, 39, 69, 50, 82, 61, 44, 73, 88,
+       84, 50, 19, 95, 97, 93, 82, 35, 78, 79, 68, 80, 67, 58, 40, 58, 77,
+       68, 32, 63, 22, 30, 95, 58, 93,  5, 87, 43, 37, 63, 32,  1],
+      dtype=int32), array([73, 97, 86, 31, 21, 22, 97, 54, 93, 11, 87, 12, 80, 56,  2,  2, 32,
+       59, 93, 52, 60, 37, 77, 17, 60, 23, 72, 14, 15, 60, 21, 89, 19, 56,
+       76, 52, 34, 69, 45, 15, 76, 54, 96, 97, 90, 82, 65, 75, 40, 94, 18,
+       58, 96, 99, 51, 21, 67,  8, 15, 87, 47, 97, 94, 50, 51,  0,  5, 69,
+       62,  1, 43, 42, 36, 33,  1, 77, 59, 92, 72, 42, 30, 52, 70, 65, 41,
+       47, 95, 98, 44, 89, 64, 55, 37, 85, 26, 14, 41, 99,  5, 28],
+      dtype=int32), array([ 9,  6, 86,  1, 69, 62, 23, 82,  7, 20, 31, 39, 77, 67, 65, 72, 16,
+       26, 80, 52, 85,  4, 21, 86, 40, 50, 81, 74, 57,  0, 61, 17, 30, 87,
+       41, 16, 64, 93,  6, 90, 81, 10,  4, 39, 37, 73,  4, 52, 29, 61,  0,
+       98, 27, 99, 52, 76, 47, 65, 97, 21,  2,  5, 30, 99, 52, 50, 69, 22,
+       42, 10, 49, 61, 17, 94, 10, 82, 17, 54, 14, 20,  4, 66, 81,  6, 95,
+       14, 94, 76,  4, 57, 86, 95, 39, 19, 13, 39, 79, 55, 39, 70],
+      dtype=int32), array([72, 15, 33, 73, 50, 88, 35, 78, 70, 92, 56, 24, 46, 65, 22, 51, 39,
+       55,  2, 51, 41,  1, 44, 93, 67, 74, 19, 44,  2, 59, 19, 94, 38,  4,
+       27, 45,  1, 76, 65, 31, 15, 29,  9, 75,  3, 84, 44, 43, 94, 93, 80,
+       16, 50, 53, 24, 80, 28, 10, 40, 48, 53, 19, 36, 73,  0, 86,  0, 46,
+       90, 27,  8, 72, 18,  5, 98, 77, 42, 74, 43, 58, 88,  4, 60, 47, 17,
+       84, 75, 78, 40, 43,  9,  1, 87, 31, 86, 19,  8, 93,  5, 63],
+      dtype=int32), array([63, 77, 11, 59, 77, 63, 42, 90, 86, 47, 43, 18, 55,  3, 38, 90, 86,
+       38,  7, 22, 50, 13, 58, 43, 89, 91, 17, 66, 86, 27, 78, 33, 79, 26,
+       51, 79, 91, 19, 98, 99, 31, 85,  1, 75, 27, 40, 77, 54, 86, 35, 50,
+       34, 15, 51, 43, 58, 30, 39, 78, 79,  7, 38, 66, 83, 56, 49, 64, 87,
+       91, 60, 97, 86, 11, 32, 14, 59, 22, 66,  2, 54, 88, 55, 18,  6, 57,
+       12, 47, 24, 89, 64, 15, 75, 63, 63, 96, 90, 85, 87,  6, 92],
+      dtype=int32), array([16, 60, 98, 92,  4, 10, 15, 56, 11, 92, 57, 57, 26, 55, 94, 47, 51,
+       37, 84, 20, 65, 68,  5, 70, 22, 85, 48, 31,  6, 47, 14,  9, 46, 25,
+       57, 88, 64, 45, 19, 82, 60, 20, 56, 14, 64, 88, 85,  0, 78, 27, 15,
+       42, 72, 51, 39, 46, 34, 71, 66, 61, 40,  1, 31, 29,  4, 40, 76,  7,
+       82, 48, 87, 94, 79, 85, 81, 93, 22, 41, 64, 28, 41, 54, 12, 58,  5,
+       23, 90, 57, 42, 84, 30, 32, 10, 67, 11, 74, 50, 81, 35, 98],
+      dtype=int32), array([79, 51, 65, 79, 49, 48,  7, 33, 57, 40, 65, 32, 66, 88, 30, 43, 56,
+       78, 65, 15,  8, 30, 64, 80, 62, 54, 58, 10, 13, 88, 92,  1, 76, 16,
+       47,  3, 89, 18, 38, 78, 38, 27, 84, 11, 84, 59, 95, 26, 20, 44, 20,
+       58, 57, 68, 23, 66, 40, 45, 85,  4, 32, 44, 26, 75, 31,  8, 67, 55,
+       50, 45, 61,  6, 44, 99,  0, 76, 14, 15, 44,  4, 18, 38, 48, 86, 51,
+       63, 91, 87, 27, 68, 41, 61, 55,  3,  7, 88,  7, 35,  2, 79],
+      dtype=int32), array([54, 65, 78, 73, 40, 46, 81,  5, 19, 84, 23, 29, 93, 34, 74, 11, 89,
+       66, 92, 62, 23, 97, 52, 16,  2, 23, 31, 83, 74,  1, 18, 65, 43,  8,
+       73, 51,  8, 70,  4, 95,  8, 86, 25, 96, 84, 44, 26, 96, 47,  1, 81,
+       95, 67, 96, 40, 82,  2, 75, 34, 24, 45, 38, 67, 98, 66, 91, 49, 96,
+       80, 40, 39, 81, 12, 22, 57,  9, 30, 48, 51, 18, 78, 48, 62, 65, 47,
+       48, 24, 67, 76, 96, 81,  7, 61, 44, 94, 75, 82,  9, 45, 62],
+      dtype=int32), array([67, 11, 79, 97, 46, 97, 92, 55, 25, 98,  5, 17, 27, 26, 93, 68, 84,
+        6, 33, 85, 12, 22, 89, 95,  4, 28, 98, 63, 94, 71, 64, 46, 68, 34,
+       94, 15, 14, 23,  4, 29, 75, 94, 10,  0, 55,  9, 43, 18, 24, 22, 44,
+       13,  8, 54, 39, 62, 92, 69, 68, 63, 26, 98, 10, 79, 10, 79, 89, 75,
+       66, 39, 14, 62, 95, 36,  1, 92, 53, 42, 93, 26, 10, 15, 76, 17, 94,
+        1, 91, 74, 96, 29, 92, 29,  0, 28, 63, 46, 47, 60, 41,  1],
+      dtype=int32), array([ 7, 65, 94, 12, 27, 80, 67, 81, 25,  3,  3, 25, 71,  5, 22, 58, 92,
+       77, 37, 72, 35, 56, 75, 53, 71, 55, 85, 73, 10, 58, 10, 55, 72, 18,
+       69, 77, 58, 71, 94, 97, 33, 42, 16, 32, 75, 56, 66, 69, 15, 47, 37,
+       44, 86, 46, 58, 70, 73, 27, 27, 66, 68, 64, 51, 60, 93, 95, 98,  7,
+       25, 17, 18, 89, 33, 26,  7,  1, 44, 78, 33, 31, 39, 18, 64, 82, 88,
+        5, 76, 44, 20, 69, 61, 48, 74, 29, 27, 83, 88, 93, 64, 31],
+      dtype=int32), array([73, 32, 95, 12, 38, 42, 43, 20, 63, 70, 42, 62, 60, 19, 77, 96, 28,
+       89, 89, 74, 19, 17, 91, 84, 85,  3, 16, 98, 38, 26, 58, 32, 99, 79,
+       88, 79, 77, 11, 90, 89, 35, 57, 43, 36, 33, 41, 53, 92, 32, 65, 99,
+       61, 33, 11, 76, 49, 30,  1, 98, 79, 19,  3, 54,  7, 92, 55, 61, 55,
+        1, 55,  3,  4, 90, 52, 46, 21, 54,  9, 80, 32, 18,  4, 66, 48, 52,
+       52, 71, 54,  5, 60, 34, 64,  9, 94, 69, 82, 77, 73, 92, 86],
+      dtype=int32), array([57, 71, 40, 56, 67,  6, 45,  1, 34, 41, 15, 45, 41,  6,  4, 63, 90,
+       41, 87, 17, 70, 32,  6, 39, 18, 22, 56, 75, 54,  4, 41, 98,  2, 44,
+       54, 41,  8, 67, 79, 66, 55, 14, 42, 27, 47, 62, 96, 89, 45, 49,  8,
+        0, 65, 85, 81, 70, 12, 84, 76, 85, 15, 41, 74, 59, 89, 73, 63, 92,
+       16, 26, 14,  8, 13, 10,  6, 59, 32,  9, 41,  8, 25, 67, 80, 54, 64,
+       56, 43, 20,  3, 48, 54, 65, 96, 43, 62, 15, 48, 62, 15, 41],
+      dtype=int32), array([74, 31, 28, 42, 88, 57,  1, 48, 99, 17, 46, 34, 83, 35, 21, 38,  9,
+       87, 96, 36, 24, 10, 99, 74, 62, 40, 48, 56, 39, 60, 56, 81, 17, 30,
+       58, 37, 89, 73, 65, 66, 86, 49, 46, 61, 15, 98, 22, 43, 27,  5, 90,
+       97, 47, 17, 67, 98, 19, 61, 30, 80, 78, 15, 83, 59, 25, 70, 76, 93,
+       76, 20, 67,  3, 46, 35, 96, 52, 87, 66, 25, 73, 56, 89, 31, 74, 80,
+       74, 45, 33, 31, 72, 94, 56, 30,  4, 13,  3, 57, 69, 15, 15],
+      dtype=int32), array([19,  0, 61, 30, 21, 27,  4, 77, 92, 34, 47, 53,  2, 44, 33, 24, 88,
+       29, 86, 12, 76,  5, 55, 62, 45, 99, 54, 13, 72, 74, 19, 65, 29, 66,
+       89, 43, 22, 32, 60, 23, 89, 20, 86,  6, 48, 51, 49, 90, 15, 50, 71,
+       94,  2, 93, 97, 56, 74, 56, 25, 86, 82, 27, 57, 70, 10, 90,  6, 90,
+       77,  8, 78, 46, 39, 48, 95, 61,  1, 88, 97, 61,  2, 31, 12, 80,  8,
+       82, 76, 85, 16, 15, 34, 47, 53, 43, 78, 82, 33, 82, 96, 60],
+      dtype=int32), array([ 6, 12, 62, 90, 33, 63,  5, 94, 35, 25, 49, 75, 79,  1, 36, 13, 33,
+        3, 28, 40, 26, 31, 24,  1, 44, 63, 23, 19, 39, 36,  0, 66, 10, 26,
+       23,  7, 98, 54, 91, 83, 83, 47, 73, 87, 19,  2, 62, 21, 16, 65, 89,
+       39, 97, 12, 84, 25, 31, 59, 55, 90, 90, 78, 27,  9, 32, 27, 81, 88,
+       71, 12,  7, 13, 53, 54, 78, 93, 27, 40, 78, 86, 44, 46, 49, 26, 98,
+       12,  9, 70, 33, 95, 15,  9, 58, 67,  7, 76, 39, 10,  9, 87],
+      dtype=int32), array([16, 83, 25, 33, 37, 36, 98, 93, 36, 93,  5, 21, 35, 65, 62, 44, 25,
+       81, 77, 45, 96, 98, 11, 28, 93, 76, 69, 94, 91, 23, 61, 19,  7, 87,
+       44, 29,  0, 22, 40, 15, 93,  1,  0,  4, 26,  2, 72, 65, 82, 80, 60,
+        9, 76, 74, 35, 37, 35, 48, 50, 86, 56, 91, 69, 21, 20, 48,  4, 94,
+       87, 47, 94, 88, 41, 84, 59, 69, 99, 67, 85, 48,  1, 45, 34, 92, 88,
+       91, 75, 60, 50, 27, 99,  1, 69,  4,  3, 37, 33, 92,  2, 46],
+      dtype=int32), array([68, 68, 54, 15, 19, 84, 44, 21, 98, 87, 75, 20, 70, 59, 48, 43, 14,
+       14, 32, 93, 41, 69, 10,  9, 26, 64, 62, 36, 67, 86, 55, 96, 54, 53,
+       75, 28, 37,  7, 12, 87, 25, 57, 18, 57, 56, 12,  9, 39, 14, 18, 73,
+       63, 30, 99,  4, 99, 92, 84, 48, 35, 73, 49, 86, 38, 23, 40, 39, 32,
+       46, 93, 97, 36, 59, 60, 34, 35, 65, 56,  5, 90, 95,  3, 19, 60, 31,
+       88, 40, 22, 54, 91, 66, 36, 47, 45, 54, 31, 97, 62, 51, 97],
+      dtype=int32), array([12, 46, 92,  8, 78, 27, 38, 92, 33,  7, 96, 71, 73, 57, 67, 60, 27,
+       53, 19, 25, 53, 50, 41, 44, 56, 77, 26, 42, 55,  7, 79, 95, 69, 51,
+       21, 10, 66, 15, 60, 18, 49, 56, 68, 10, 44, 91, 27, 68, 89, 87, 51,
+       53, 47, 43, 66, 52, 38, 91, 57, 45, 16, 63, 41,  5, 69, 23, 51, 66,
+       17, 69, 90, 57, 27, 49, 44, 33, 36, 24, 27, 46, 10, 36, 14, 95, 41,
+       45, 99, 93, 34, 35, 48, 46, 29, 21, 15, 33, 22, 97, 27, 36],
+      dtype=int32), array([ 3, 18, 13, 51,  7, 49,  8, 87, 30, 97, 26,  7, 41, 50, 22, 70, 74,
+       26, 18, 12, 55, 77, 60, 14, 48, 19, 44, 22, 38, 21, 13,  5, 85, 12,
+       69, 72, 46, 49, 23, 82,  2, 78, 74, 58, 70, 82, 32, 19, 71, 32,  4,
+        4, 45, 35, 39, 78, 84,  5, 88, 98, 91, 65, 19, 41, 26, 35, 24, 19,
+       71, 14, 37, 19, 72, 55, 33, 19, 59, 71, 69, 31, 99, 75, 62, 64, 23,
+       35, 34, 37, 99, 92, 46, 49,  8, 62, 90,  4, 37, 13, 80, 19],
+      dtype=int32), array([89, 14, 52, 51,  7, 54, 86, 89, 73, 95, 19, 43, 30, 12, 75, 16, 74,
+       82, 99, 56, 34, 20, 59, 60, 97,  5, 95, 24, 71, 80, 32, 86,  7,  7,
+        1, 43, 31, 52, 48, 23, 63, 66, 80, 33, 26, 91, 11, 88, 91, 70,  4,
+       18, 59, 62, 39, 67,  5, 51, 11, 56, 53, 82, 16, 92, 22, 66, 35, 25,
+       18, 69, 67, 59, 13, 61, 10, 54,  4, 31, 16, 27, 82, 25, 56, 74, 60,
+       79, 34, 16, 58, 66, 51, 13, 26, 96, 56, 33, 35, 63, 94, 34],
+      dtype=int32), array([40, 26, 23, 80, 91, 47, 14, 91, 32, 95, 10, 78, 26,  8, 98, 21, 66,
+       61, 88,  6, 13, 47, 81, 22, 89, 26, 64, 77, 56, 38, 50, 25, 73,  1,
+       68, 93, 45, 38, 19, 88, 26,  6, 61, 89, 81, 52, 96, 53, 84,  5, 18,
+       62, 42, 83, 98, 27, 87, 13, 61, 24, 15, 31, 11, 55, 62,  3, 27, 27,
+       71, 47, 40, 83, 23, 96, 52, 13, 93, 53, 97, 58,  0, 72, 30, 20, 85,
+       10, 22,  0, 88, 43, 44, 28,  1, 40, 38,  6, 77, 29, 85, 59],
+      dtype=int32), array([23, 18, 38, 61, 72, 94, 12, 93, 54, 62, 71,  0, 73, 12, 58, 85, 77,
+       60, 52, 58, 54, 28, 77, 22, 68, 79, 21, 50, 39, 59,  5, 35, 78, 99,
+       27, 86, 10, 82, 14, 90, 47,  3, 53, 51, 62, 28, 52, 56, 36, 11, 53,
+       81, 48, 53, 21, 39, 14, 15, 73, 23, 63, 87, 39, 10, 20, 52, 30, 83,
+       36, 78,  8, 65, 20, 17,  4, 11, 19,  6, 46, 32, 42, 87, 43, 10, 60,
+       30, 15, 87, 68, 41, 35, 46, 50, 41, 21, 33, 69, 10, 36, 53],
+      dtype=int32), array([21, 38, 80, 15, 25, 46, 32, 32, 83, 93, 49, 63, 32, 15, 86, 98, 90,
+       92, 60, 46, 45, 14, 76, 20, 35, 19, 89, 91, 12, 41,  1, 17, 33, 39,
+       56, 66, 28, 13, 17, 36, 27, 94, 18, 99, 10, 42, 83, 74, 97, 61,  5,
+       74, 14, 13, 81,  9, 10, 89, 93,  2, 33, 35, 46, 54, 14, 82,  4, 23,
+       30, 34, 93, 30,  4, 76, 86, 66, 79,  9, 27, 66, 75, 28, 20, 76, 62,
+       70, 55, 25, 70, 21, 24, 13, 79,  1,  7, 80, 98, 96, 43, 13],
+      dtype=int32), array([85, 92, 62, 82, 81, 99, 95, 47, 52, 49, 85, 37, 35, 93, 86, 16, 23,
+       78, 10, 23, 35, 31, 27, 94, 93, 54, 61, 44, 33, 48, 69, 39, 49, 22,
+       52,  0, 40, 33, 91, 99, 52, 26, 10, 95, 68, 43, 63, 68, 41, 34, 77,
+       53, 57, 34, 71, 57, 74, 13, 83, 84, 37, 23, 89, 69, 48, 23, 54, 83,
+       83, 94, 35, 72, 57, 78, 70, 13, 15, 98, 36, 38, 83, 51, 85, 42, 29,
+       63, 58,  4, 80,  4, 78, 31, 41, 86, 96, 92, 93, 97, 67, 75],
+      dtype=int32), array([44, 90, 31, 62, 46, 93, 31, 31, 68, 93, 88, 45, 89, 54,  9, 92, 40,
+       11, 76,  3, 55, 81, 63,  4, 47, 25, 41, 99,  7,  8, 64, 26, 15, 23,
+       15, 26, 67, 30,  5, 48, 44, 71, 74, 48, 90, 95, 75, 55, 11, 16, 85,
+        0, 44, 20, 20, 62, 41, 43, 24, 76, 82, 25, 38, 42, 80, 95, 62, 76,
+       96, 39, 16,  0, 16, 51, 44, 59, 35, 69, 15, 13,  0, 66, 17, 44, 81,
+       20, 37, 79, 92, 44, 51, 30, 52, 68, 90, 77, 53,  6,  9, 18],
+      dtype=int32), array([93, 93, 92, 22, 60, 81, 89, 76, 38, 55, 10, 30, 12, 87, 35, 15, 49,
+       87, 98, 40, 57, 70,  8, 65, 80, 27, 81, 26, 52, 57,  9, 82, 16,  7,
+       53, 42,  6, 45, 90, 45, 63, 28, 85, 40, 26, 70,  8, 82, 22, 84, 40,
+       80, 98, 19, 94, 65, 45, 23, 25, 40, 31, 81, 83, 58, 44, 64, 95, 70,
+       66, 94,  7, 88, 87, 51, 29, 90, 66, 58, 70, 94, 57,  6,  7,  3, 36,
+       26, 38, 51, 59, 47, 99, 73, 95, 28, 67, 94,  4, 70, 43, 48],
+      dtype=int32), array([44,  7, 39, 58, 25, 77, 14, 35, 71, 60, 86, 49, 13, 40, 80, 42, 54,
+       95,  7, 95,  4, 87, 53, 66,  5, 96, 56, 99, 41, 50, 91,  8, 84,  1,
+       74, 33, 23,  5, 57, 30, 42, 99,  1, 95, 31, 16, 21,  8, 59, 85, 80,
+       68, 55, 14, 39, 51, 26, 89, 57, 14, 96, 19,  4, 27,  2, 90, 96, 81,
+        5, 78, 54, 67, 39,  3,  5, 12, 11, 19, 37, 89, 59, 48, 28, 81, 68,
+       31, 60, 12, 69, 88, 75, 72, 90, 44,  6, 14, 28, 13, 99, 45],
+      dtype=int32), array([76, 75, 57, 57, 83, 49,  3, 37, 90, 82, 70, 82, 83, 24,  4, 73, 19,
+       59, 57, 74, 95, 19, 46,  9, 40, 42, 91, 30, 25,  2, 44, 34, 62, 21,
+       24,  1,  5, 60, 56, 15,  4, 39,  2, 85, 41, 67, 87, 12, 41,  2, 23,
+       41, 76,  3, 47, 73, 49, 24, 41, 76, 46, 10, 99, 79, 54, 72, 91, 15,
+       80, 83,  1, 12, 87, 76, 22, 22, 58, 63, 23, 48,  0, 20, 43, 79, 28,
+       31, 16, 14, 11,  5, 42, 63,  4, 21, 69, 86, 24, 40, 68,  7],
+      dtype=int32), array([42, 94, 51, 75, 48, 85, 42,  2,  7, 54,  5,  9, 42, 99, 40, 35, 60,
+        7, 85, 31, 45,  2, 46, 24, 11, 94, 73,  6, 43, 71, 69, 29, 40, 69,
+       32, 31, 15, 14, 30, 79, 51, 21, 92, 90, 58, 60, 20, 15, 17,  5,  6,
+       23, 87, 15, 20, 30, 14, 97, 26, 76, 42, 49, 93, 43, 85, 95, 92,  8,
+       89, 45, 37, 34, 18, 54, 67, 30,  5, 84, 59, 83, 30, 16, 40, 65, 47,
+       31, 19, 63, 99, 43, 86,  3, 36, 77, 35, 17, 40, 62, 10, 48],
+      dtype=int32), array([21, 26, 70, 76, 88, 60, 43, 82, 36, 82, 52, 20, 69, 94, 19, 88, 93,
+       33, 86, 57, 24, 59, 54, 48, 82, 29,  4, 44, 91, 36, 15, 67,  1, 37,
+       23, 15,  7, 29, 78,  4, 88, 97,  9, 37, 27,  1, 83,  0, 20, 86, 97,
+       18, 66, 70, 62, 37, 96, 59, 47, 15, 14, 37, 72, 11, 94,  1, 80, 39,
+       16,  4, 24, 64, 29, 43, 85, 25, 38, 56, 90, 41, 39, 30, 88, 73, 26,
+       61, 42, 51, 93, 90, 66, 52, 87, 40, 13, 71,  2, 11, 73, 92],
+      dtype=int32), array([ 7, 98, 20, 20, 66, 42, 38, 87, 64, 29, 57,  7, 31, 57, 26, 92, 87,
+       37,  6, 70,  3, 47, 76,  1, 81, 29, 35, 30, 60, 44, 46,  8, 64, 48,
+       89, 52, 35, 87, 75, 27, 59, 82, 12, 61, 29, 17, 20, 39, 15, 97, 96,
+        9, 37, 87, 65, 27,  8, 63, 32, 94, 65, 12, 71, 27, 42,  5, 25, 60,
+       71, 42, 38, 58, 98, 91, 91, 45, 14, 86, 77,  8, 25, 22,  0, 46, 68,
+        1, 14, 89, 83, 26, 33,  2, 12, 20, 67, 12, 57, 30, 46, 37],
+      dtype=int32), array([79, 74, 93, 73, 97, 31,  4, 58, 33, 29,  8, 83, 44, 90, 41, 30,  8,
+       51, 66, 91, 93, 29, 14,  0, 99, 35, 89, 15, 87, 94, 18, 12, 50, 63,
+       42,  9, 68, 16, 56, 36, 17, 46, 51, 31, 93, 56, 27, 18, 13, 51, 34,
+       20, 55, 40, 14, 67, 70, 56, 38, 70, 34,  0, 58, 40, 25, 47, 31, 31,
+        8, 38, 95, 60, 50, 57, 11, 37, 39, 49, 95,  0, 89, 78, 11, 53, 46,
+       43, 21, 59, 59, 31, 80,  5, 97, 58, 73, 18, 83, 25, 53, 70],
+      dtype=int32), array([95, 60, 33, 93,  9, 37, 39, 81, 11, 15, 34, 34,  3,  9, 52, 90, 18,
+       51, 41, 78, 45,  1, 47, 49, 73, 43, 29, 85, 84, 97, 97, 49, 92, 37,
+       41, 56, 65, 58, 78, 56, 95, 86, 65, 38,  3,  5, 94, 17, 90, 91, 12,
+       48, 97, 88, 31, 83, 18, 67, 56, 91, 21, 86, 99, 39, 49, 13,  6,  2,
+       99, 99, 58, 49, 88, 34, 69, 58, 76, 42, 15, 44, 55, 91, 73, 70, 42,
+       43, 12, 93, 75, 79, 87, 19, 46, 11, 84, 80,  5, 80, 27,  3],
+      dtype=int32), array([68, 33, 16, 45, 63, 43, 93, 59, 17, 14, 94,  3, 70, 96, 45,  5, 63,
+       29, 98, 17, 18,  0, 59, 36, 65, 99, 65, 84, 88, 61, 51, 16, 57, 66,
+       45,  3, 33, 48, 91, 29, 98,  7, 75, 67, 41, 99, 85, 37, 12, 59, 93,
+       67, 28, 67, 35, 72, 84, 70, 73, 83,  1, 82, 87, 60, 27, 57,  9, 89,
+       65, 62, 34, 77, 80, 23, 93, 62, 66,  2, 36, 87, 11, 45, 85, 77,  2,
+       54, 69, 21, 16, 50, 60, 57, 66, 55, 82, 46, 70, 53, 91, 58],
+      dtype=int32), array([87, 16, 89, 69,  3, 78, 16, 25, 14, 25, 56, 41, 90, 73, 80,  5, 24,
+       72, 82, 11, 80, 68, 34, 25, 19, 55, 19, 44, 84, 11, 39, 35, 78, 87,
+        0, 85, 59, 98, 23, 62, 26,  6, 86, 64, 61, 48, 30, 49, 90, 48, 69,
+       71, 14, 77,  5, 33, 91, 17, 60, 60, 13, 54, 29, 16, 59, 50, 56, 34,
+       56, 96, 51, 49, 88, 41, 86, 23, 39, 83, 13, 85, 27, 72, 35, 55, 18,
+       38, 34, 86, 78, 77, 25, 14, 73, 12, 86, 20, 21, 10, 62, 39],
+      dtype=int32), array([43, 54, 26,  0, 35, 16, 57, 22, 36, 10, 14, 67, 56, 45, 40, 57, 77,
+       17, 19, 36, 96, 46, 98, 13, 83, 84, 43, 76, 32, 85,  3, 79, 55, 89,
+       95, 29, 20,  6, 22, 14, 50, 97, 56, 26, 79, 99,  6, 41,  1, 55, 18,
+       96, 23, 83, 95,  7, 34, 34, 51, 10, 10, 19, 46, 38, 14, 25, 81, 14,
+       72, 78, 55, 21, 45,  6, 69, 38, 81, 88, 14,  2, 73, 23, 27, 38, 60,
+       82, 40, 81, 64, 49, 34, 31, 23, 41, 91,  2, 74, 85, 82, 88],
+      dtype=int32), array([48, 56,  0, 77, 41, 54, 56, 11, 79, 90, 89, 51, 57, 86, 98, 25, 69,
+       31, 90, 44, 31, 51, 26, 71, 85, 93, 16,  6, 34, 13, 76, 45, 17, 10,
+       90, 98, 51,  8, 38, 65,  7, 37, 88, 80, 65, 86, 28, 79, 95,  0, 44,
+       14, 81,  4, 68, 14, 17, 83, 44, 94, 40, 15, 19, 65, 64,  6, 87, 75,
+       73, 47,  9, 13, 92, 39,  3, 84, 33, 39, 46, 45, 74, 83,  0, 47, 41,
+       57, 48, 29, 60, 65, 54, 60,  6, 82,  9, 40, 36, 92, 87,  8],
+      dtype=int32), array([ 1, 58, 96, 56,  4, 91, 36, 57, 45, 12, 92, 24, 46, 22, 64, 24, 72,
+       44, 66, 97, 93, 49, 75, 12,  9, 25,  6, 61, 51, 39, 35, 36, 12, 30,
+       34,  5, 53, 26, 49, 28, 88, 88, 86, 88, 29,  5, 16, 54, 55, 70, 16,
+       95, 75, 61, 18, 88, 84, 26, 54, 20, 31, 71,  7, 35, 70, 52, 21, 50,
+       66, 97,  2, 15, 36, 97, 43, 73, 28, 14, 63, 13, 29, 49, 39, 58, 99,
+       88, 94, 52, 34, 61, 61, 10, 28, 66, 46, 78, 22, 88, 26, 64],
+      dtype=int32), array([91, 58, 15, 39, 45, 63, 43, 29, 91, 49, 63, 40, 57,  5, 90, 80, 15,
+       96, 65, 87, 66, 66, 11, 52, 39, 45,  0, 53, 63, 49, 94, 66, 43, 76,
+       91, 50, 55, 42, 50, 78, 21, 56, 69, 14, 95, 36, 27, 20, 97,  5, 13,
+       46, 29, 52, 36, 14, 54, 40,  8, 70, 98,  6, 56,  8, 39, 69, 43, 42,
+       54, 96, 17, 21, 92, 41, 70, 98, 41, 44, 25, 93, 32, 77, 20, 97, 11,
+       37, 13, 77, 26, 98, 97, 48, 41, 65, 87,  3, 53, 23, 85, 59],
+      dtype=int32), array([10, 29, 42, 25,  1, 57, 21, 88, 36, 43, 42, 88, 83, 76, 31, 75, 16,
+       42, 24,  5, 97, 87, 49, 32,  2, 63, 24, 10, 99, 64,  1, 19, 75, 70,
+       52, 15, 68, 67, 99, 41, 24, 85, 73, 31, 11, 44, 60, 44, 97, 21, 94,
+       15, 86, 68,  3, 16, 79, 85, 26, 34, 21, 18, 53, 83, 19, 40, 73, 91,
+       96, 48, 92, 47, 88, 41, 75, 35, 92, 26, 44, 98, 66, 19, 81, 55, 50,
+       86, 78, 66, 32, 98, 33, 59, 32, 56, 76, 12, 76, 72, 19, 91],
+      dtype=int32), array([62,  9, 79, 66, 49, 72, 22, 76, 42, 41, 94, 52, 55, 24, 89, 36, 16,
+       22, 31, 14, 95, 29, 17, 29, 90, 25, 49, 42, 96, 25, 68, 14, 48, 48,
+       69, 22, 98, 99, 38, 86, 31, 55, 45, 92, 64, 50, 58, 10,  2, 96, 80,
+       75, 20, 26, 82, 97, 13, 13,  0, 49, 58, 21, 68, 41,  4,  4, 60, 74,
+       28, 90, 99, 64, 99, 10, 13, 42, 64, 24, 17, 69, 52, 14,  9, 73, 38,
+       89, 98, 18, 34,  9, 33, 46, 66, 37, 41, 63, 57, 98,  0, 21],
+      dtype=int32), array([65, 21,  0, 57, 45, 94, 48, 91, 10,  8, 61,  2, 83, 80, 40,  4, 43,
+       79, 10, 78, 16, 13, 12, 91, 48, 93, 98, 92, 75, 51, 70, 83, 79, 82,
+       20, 62, 65, 71, 19, 21, 58, 21, 17,  9, 84, 18, 45, 76, 18,  8, 53,
+       20,  0, 15, 36, 90, 16, 59, 23, 97, 58, 58, 91, 69, 49, 45, 19, 28,
+       97, 70, 13, 15, 39, 99, 52, 65, 81, 36, 51, 86, 53, 50, 69, 79, 93,
+       22, 73, 98,  6, 41, 96, 19, 21, 54, 34, 67, 32,  0, 18, 93],
+      dtype=int32), array([31, 65, 72, 80,  8, 96, 28, 18, 29, 17, 18, 48, 92, 39, 67, 62, 50,
+       12,  5, 28,  6, 46, 48, 66, 55, 70,  6, 52,  7, 17, 90, 47, 54, 68,
+       45, 43, 75, 48, 97, 40, 65, 50, 72, 75, 42, 22, 88, 80, 86, 67, 34,
+       33, 54, 86, 35,  7, 37,  2, 40, 81, 84, 97, 14, 57, 51, 87, 45, 87,
+       79, 85, 19, 30,  5, 64, 10, 58, 58, 62, 72, 83, 53, 24, 77, 26, 70,
+        2, 32, 91, 47, 28, 89,  8, 87,  9, 74, 24,  5, 92, 42, 99],
+      dtype=int32), array([ 9, 59, 13, 71,  9, 68, 89, 14, 79, 64, 54, 32, 80, 62, 88,  1, 57,
+       31, 31, 29, 59, 89, 79, 14, 84, 72, 72, 17, 62, 94, 41, 47,  4, 61,
+       41, 13, 89, 24, 45, 55, 88, 39, 77, 32, 73, 13, 50, 33,  3, 97, 21,
+       57, 55, 32, 19, 93, 55, 96,  4, 79, 22, 56, 66, 54, 52, 83, 30, 48,
+       55,  1, 67, 73, 83, 50, 87, 43, 65, 75, 19, 99, 77, 85, 46,  0, 34,
+       81, 98, 18, 37, 37, 79, 42, 45,  3, 20, 99, 59, 97, 41, 39],
+      dtype=int32), array([65, 43, 54, 23, 46,  4, 19, 84, 32, 39, 20,  5, 90, 81, 49, 54, 97,
+       90, 32, 53, 58, 56, 35, 18, 53, 86, 54, 57, 18, 86, 18, 74,  2, 90,
+       20,  9,  4, 82,  2, 68,  6, 73, 74, 27, 38, 18, 21, 33,  2, 74, 94,
+       95, 33, 62, 70,  8, 17, 21, 96, 36, 85, 60, 58, 80, 36, 48, 49, 26,
+       86, 21, 14, 24, 90,  0, 44, 24, 72, 26, 47, 18, 61, 11, 64, 23, 24,
+       64, 72, 51, 72, 56, 84, 93, 49, 43, 77, 61, 13, 84, 54, 64],
+      dtype=int32), array([19,  7, 21, 54, 52, 43, 83, 82,  7,  3, 38, 62, 54, 72, 82, 12, 98,
+       82, 59, 38, 23,  3,  9, 87, 59, 98, 75, 10, 20, 39, 41, 71,  2, 13,
+       95, 38,  8, 18, 85, 44, 93, 54, 47, 52, 58, 60, 48, 54, 54, 13, 64,
+       92, 47, 28, 89, 34, 33, 46, 31, 60, 17, 39, 70, 62, 95, 48, 95, 71,
+       32, 60, 40, 35, 30,  1, 76, 41, 21, 38,  4, 97,  1, 41, 44, 78, 98,
+       93, 16, 68, 28, 90, 51, 49, 71, 91, 28, 83, 22, 43, 28, 84],
+      dtype=int32), array([86, 67, 51,  6, 81, 18,  1,  2, 23, 46, 86, 26, 49, 45, 94,  0, 56,
+       97, 45, 53, 22, 67,  8, 55, 79, 45, 80, 30, 83,  2, 93, 32, 51, 72,
+       72, 59, 43, 85, 10, 49, 96, 43, 75, 34, 73, 13,  7,  3, 87, 14, 15,
+        8, 32, 29, 63, 92, 15, 60, 64,  2, 34, 38, 36, 35, 72, 85, 51, 88,
+       93, 29,  7, 94, 51, 38, 72, 12, 74, 73,  6, 75, 37, 94, 37, 33, 40,
+       90, 92, 14, 90, 71, 89, 34, 51, 97, 91,  8, 16, 82, 31, 39],
+      dtype=int32), array([87, 90, 94, 42, 44, 35, 96, 41, 76, 76, 12, 47, 30, 68, 34, 75, 57,
+       74, 88, 65, 44,  2,  3, 60, 69, 31, 12, 38,  9,  3,  9, 43,  5, 82,
+       58, 32, 45, 62, 13, 73, 88,  3, 69, 84,  8, 66, 75, 58, 49, 54, 51,
+       74,  5, 93,  4, 90, 23, 78, 59, 16, 30, 96, 46, 13, 17, 43, 75, 93,
+       54, 61, 96, 75, 86, 98, 66,  5, 72, 61, 65,  3, 69, 18, 89, 72, 31,
+       93,  7, 54, 37,  0, 10, 67, 75, 32, 87, 17, 28, 30, 37, 30],
+      dtype=int32), array([93, 35, 40, 25, 84, 68, 71, 67, 99, 47, 32, 34, 75, 35, 24, 13,  9,
+       85, 29, 90, 61, 96, 42, 76, 19, 13, 42,  8, 82,  7, 71, 82, 89, 78,
+       33, 70, 55, 72, 92, 29, 38, 22, 40, 43,  5, 34, 97, 92,  6, 44, 12,
+        5, 69, 48, 50, 36, 63, 16, 45, 48,  5, 35,  0, 73, 70, 94, 24, 35,
+       52, 89, 43, 90, 47, 42,  6, 10, 59, 97, 66, 69, 33, 36, 87, 68, 19,
+       67, 39, 54, 26, 93, 56, 70, 16, 93,  8, 52, 24,  6, 86, 94],
+      dtype=int32), array([90, 83,  9, 77, 50, 14, 16, 14, 86, 84, 68, 71, 42, 99, 94, 13, 25,
+       40, 81, 51, 22, 84, 16, 78, 33, 36, 25, 73, 60, 64, 96, 13, 34, 21,
+       19, 84, 12, 53, 87, 45, 55,  1, 97, 95, 93, 37, 69,  7, 89, 77,  4,
+        9, 85, 42,  6, 24, 92, 27, 81, 23, 82,  2, 67,  2, 35, 46, 92, 61,
+       17, 69, 53, 48, 49, 26, 90, 87, 12, 24, 31, 96, 50,  1, 68, 64, 50,
+       78, 82, 72, 65, 81, 75, 37, 77, 52, 81, 86,  2, 73, 86, 89],
+      dtype=int32), array([18,  2, 64, 85, 92,  1, 71, 22, 70, 94, 36, 69, 41, 18, 72, 96, 73,
+       26, 18, 91, 75, 53, 67, 32, 47, 32, 66, 18, 96, 23,  3, 56, 10, 44,
+       62, 77, 92, 14, 51, 86, 51, 35, 80, 90, 28, 86, 45, 91, 44, 94, 24,
+       72, 89,  8, 62, 55,  6, 17, 91, 20, 45,  3, 73, 40, 85,  1, 33, 69,
+       92, 23, 70, 74, 16, 75, 46, 11, 53, 31, 86, 73, 23,  9, 20, 52,  4,
+       31, 38, 87, 99, 55, 90, 85, 80, 96, 31, 34, 89, 20, 47, 99],
+      dtype=int32), array([68,  5, 57, 49, 33, 71, 63, 47, 37, 96, 82, 84, 43, 58, 78, 28,  6,
+       34, 41, 20,  2, 82, 57, 82, 86, 53, 41, 30, 28, 77, 53, 74, 76, 59,
+        9, 45, 85, 80, 33, 70, 97, 97, 48, 50, 14, 75, 91, 85,  1, 65, 65,
+       91,  6, 50,  7,  9, 61, 17, 73, 65, 28, 31, 80, 60, 97, 66, 10,  2,
+       43, 54,  0, 23, 74, 83, 75, 11,  6, 14, 50, 50,  3, 70, 28, 23, 34,
+       86, 85, 25, 59, 61, 26, 52, 51, 63,  2,  6, 60,  2, 19, 77],
+      dtype=int32), array([26, 78, 10, 83, 87, 99, 97, 64, 59, 97,  2,  4, 10, 75, 12, 81, 18,
+       22, 15, 14, 37, 49, 13, 36, 26, 34, 36, 29, 24,  7, 27,  8, 53, 73,
+       23, 83, 46, 41, 64, 18, 57,  9, 40, 58, 48, 44, 64, 77, 25, 89, 50,
+       71, 73, 77, 49, 32, 11, 54, 95, 58, 60, 75, 49, 28, 31, 61, 64, 19,
+       78, 32, 15, 51,  6,  6, 44, 22, 47, 49, 54, 48,  0,  0,  4, 63, 36,
+       73, 35, 54, 82, 78, 34, 56, 44, 80, 80, 28,  7, 59, 32,  2],
+      dtype=int32), array([96, 17, 19, 62, 63, 96, 23, 72, 18,  9, 14, 14, 81,  6, 51, 35,  5,
+       28, 19, 81,  7, 90, 20, 12, 72,  2, 29, 46, 92, 86, 81, 89, 58, 81,
+       96, 59, 36, 50, 75, 50, 38, 23, 48, 89, 24, 73, 37, 76, 49, 84, 68,
+       11, 34, 56, 20, 49, 72, 60, 78, 47, 66, 89, 31, 71, 94, 32, 31, 97,
+       97,  4, 11, 98, 77, 92, 92, 89, 20, 52, 50, 92, 10, 20, 40, 32, 37,
+       60, 22, 68,  1,  7, 14, 21, 42, 10, 23, 44, 85, 11, 70, 97],
+      dtype=int32), array([75, 39, 12, 91, 15, 89, 55, 12, 83, 25, 80, 94, 22, 48, 62, 63, 82,
+       53, 25, 85, 95, 90, 75, 48, 64, 76, 94, 52, 68, 51, 80, 21, 55, 40,
+       60, 20,  6, 95, 32, 65, 44, 76, 11, 68, 20, 36, 77, 19, 47, 69, 12,
+       80, 87, 57,  6, 77, 19, 22, 25, 83, 66, 67, 84, 44, 44, 62, 34, 73,
+       84, 43, 14, 47, 52, 77, 54, 42, 63, 94, 32,  1, 12, 52, 75, 26, 33,
+       51, 29, 50, 85, 98, 33, 95, 27, 51, 62, 54, 80, 94, 23, 29],
+      dtype=int32), array([93,  7, 72,  8, 49, 63, 66, 72, 80,  0, 53, 13,  8, 54, 39, 38, 16,
+       45, 26, 84,  9, 55, 74, 17, 89, 91, 78, 81, 29, 31,  7,  7, 68, 87,
+       77, 42,  5, 46, 70, 25, 31, 68, 39,  3, 32, 93, 56, 65, 75, 53, 43,
+        4, 51, 26, 52, 27, 90, 21, 80, 23, 31, 91, 21, 74, 45, 46, 88, 50,
+       92, 71, 80, 73,  8, 58, 47, 89, 34, 38, 35, 40, 99,  4, 77, 94,  7,
+       42, 73, 71, 46, 97, 36, 63, 80,  9, 87, 94, 89, 10, 82, 19],
+      dtype=int32), array([85, 25,  7, 57, 61, 64, 84, 92, 86, 41, 46, 68, 98, 15, 90, 98,  7,
+        5, 69, 72, 95, 64, 52, 92, 85, 15, 39, 94, 58, 41, 60, 38, 27, 82,
+       90, 90, 51,  0, 41, 86, 28,  8, 26, 41, 11, 41,  1, 42, 24, 41, 88,
+       94, 81, 16,  2,  3, 51, 98, 74, 67, 59, 10, 28, 84,  4, 96, 81, 79,
+       46,  9, 65, 60, 35, 75, 88,  6, 95, 71, 40, 31, 48, 90, 84, 97, 76,
+       77, 45, 31, 61, 35, 28, 28, 50, 56, 78, 67,  3, 77, 57, 97],
+      dtype=int32), array([ 5, 31, 58, 16,  7, 80, 38, 22, 43, 37, 83, 61, 51, 33, 36, 68, 51,
+       45, 54, 43, 72, 30, 33,  0, 24, 60, 16, 82, 72, 91, 26, 23, 94, 89,
+       16, 39, 17, 32,  8, 61, 43, 84, 23, 13, 95, 80, 71, 85, 54, 15, 18,
+       45, 21, 63, 66, 90, 18, 27, 30, 93, 21,  7, 75, 34, 50, 78, 41, 38,
+       42, 38,  2, 88, 68, 57, 98,  8, 34, 24, 75, 24, 28, 50, 93, 23, 17,
+       97, 96, 69, 93, 54, 30, 77, 83, 58, 82, 90, 63, 61,  3, 15],
+      dtype=int32), array([14, 55, 55,  4, 77, 38, 97, 35, 97, 18, 92, 25, 83, 18, 10, 66, 29,
+       97,  6, 33, 89,  9, 95, 63, 66, 30, 84, 61, 23, 38, 89, 68, 22, 77,
+       16, 16, 11, 75, 34, 18, 30, 17, 73, 60,  6, 65, 65,  3, 69, 42, 52,
+       30, 15, 26, 32, 89, 63, 89, 68,  0, 27, 52, 95, 77, 78, 96, 64, 22,
+       16,  6, 83,  2,  8, 32, 86,  4, 98, 32, 98, 81, 94, 43, 19, 78, 68,
+       55, 90, 98, 10, 18, 68, 47, 76,  5, 57, 51,  5, 47, 79, 40],
+      dtype=int32), array([68, 19, 82, 43, 20, 90, 93, 62, 42, 80, 66, 35, 33, 28, 65, 17, 17,
+       57, 11, 57, 17, 83, 55, 12, 95, 14, 18, 67, 73, 44, 36, 81, 32,  5,
+       15, 37, 76, 91,  5, 70, 53, 22, 76, 42, 91, 68, 14, 47, 27, 75, 23,
+        1, 61, 22, 24, 55, 65, 40, 33, 42, 92, 38,  3, 81, 86, 54, 95, 13,
+       75, 19, 54, 76, 87, 51, 27, 24, 44,  1, 44, 36, 44, 87, 18, 13, 81,
+       99, 48, 28, 27, 67, 83,  1, 37, 61,  9, 47,  5, 15, 51, 55],
+      dtype=int32), array([ 6, 57, 91, 80, 85, 85, 81,  9, 35, 47, 61,  2, 10, 47, 42, 37, 22,
+       35,  1,  4, 44, 85, 46, 53, 96, 21, 12, 76, 46, 40, 64, 24, 57, 53,
+       64, 32, 39, 59,  0, 94, 98, 91, 69, 29,  9,  1, 34, 40, 77, 51,  0,
+       74, 51, 86, 23, 14, 89, 53, 75,  1,  5, 50, 91, 45, 67, 67,  6, 84,
+       56, 62, 61, 48, 24, 84, 16, 50, 14, 33, 57, 89, 94, 57, 12,  6, 33,
+        9, 75, 90, 65, 98, 13, 25, 82, 58, 84, 82, 59, 77, 93, 75],
+      dtype=int32), array([27, 93, 23, 69, 59, 54, 75,  1, 29, 62, 87, 28, 54, 19, 89, 50, 33,
+       13, 83, 41, 85, 13,  0,  4, 63, 70, 55, 27, 16, 10, 24, 88, 61, 69,
+        4, 86, 94, 93, 49, 26, 88,  5, 15, 21, 60, 21,  9, 71, 21, 13, 52,
+       96, 89, 75, 30, 22, 30, 87, 78, 59, 43, 87, 46, 45, 11, 29, 57, 15,
+       58, 25, 43, 57,  1, 59, 86, 65,  0, 30, 46, 30, 12, 33, 52, 22, 98,
+       11, 83, 33, 10, 84, 90, 29, 32, 29, 65, 26, 50, 72, 34,  2],
+      dtype=int32), array([ 9, 43, 17, 70, 95, 60, 13, 87, 84, 20, 41, 23, 38,  0, 65, 66, 38,
+        9, 75, 11, 34, 93, 76, 47, 95, 25, 73, 13, 75, 79, 92, 99, 46,  9,
+       86, 73, 14, 79, 84, 62, 90, 30, 69, 56, 88, 10, 66, 24, 61, 28,  0,
+        1, 38, 89, 53,  0, 25, 20, 50, 96, 38, 72, 71,  8, 54, 28, 81, 33,
+       40, 41, 61, 79, 73, 26, 23, 52, 52, 60, 96, 21, 93, 63, 66, 53,  9,
+       99, 49, 79, 85, 20, 30, 49, 45, 79, 73, 17, 29, 91,  8,  9],
+      dtype=int32), array([27, 46,  6, 50, 75, 20, 85, 80,  4, 72, 29, 42, 85, 64,  2, 17, 45,
+       13, 70, 61, 60, 66, 59, 26, 41, 64, 35, 69, 69, 82, 46, 95, 72, 99,
+       33, 79, 28, 57,  9, 37,  3, 51, 30, 31, 49, 70, 97, 56, 19, 63, 84,
+       19, 58, 21, 19, 73, 26, 29, 64, 35,  1, 42, 40, 29, 16,  1, 49, 83,
+       94, 67, 11, 56, 81, 11, 44, 84, 16, 34, 96, 41, 71, 26, 72, 39, 25,
+       61, 74, 82, 57, 65, 80, 12, 66,  0, 33, 91, 50,  4, 43, 84],
+      dtype=int32), array([75, 67, 26, 83, 50, 81, 10, 42, 93, 77, 92, 83, 45,  7,  0, 87, 76,
+       20, 97, 61, 29, 78, 86, 46, 31, 71, 32, 51, 28,  6, 12, 65, 81, 25,
+       91, 17, 76, 27, 99, 35, 49, 21, 87, 70, 30,  3, 88, 88, 95, 38,  9,
+       79, 63, 94, 89, 31,  4, 81, 96,  2, 57, 35, 57, 40, 49,  4, 39, 26,
+       35, 73,  6, 20,  4, 51, 87, 54, 35, 98, 69, 91, 67,  9, 66, 98, 20,
+       95, 52, 58, 45, 52, 59, 39, 47, 75, 23, 16, 26, 91,  9, 95],
+      dtype=int32), array([70, 58, 64, 32, 88, 19, 66, 41, 23, 34, 15, 31, 16, 55, 32, 85, 63,
+       87, 27, 75, 70, 92, 54, 61, 36, 95, 22, 37, 57, 23, 36, 80, 50, 34,
+        7, 82, 34, 16,  0, 48, 60, 18, 56, 65, 99, 54,  9, 63, 44, 24, 53,
+       47, 14, 50, 84, 54, 77,  9, 12, 20, 28, 54, 23, 32, 32, 17, 99, 92,
+        1, 48, 98, 65, 51,  9, 10, 89, 80, 26, 18, 31, 80, 51, 51, 96, 70,
+       11, 13,  8,  9, 54, 99, 23, 97, 38, 51, 87,  8, 89, 18, 19],
+      dtype=int32), array([62, 73, 46, 29, 45,  0, 79, 43, 55,  8, 99, 65, 36, 66, 23, 80, 84,
+       31,  9, 14, 77, 65, 14, 22, 46, 13, 40, 58, 74, 22, 66, 23, 94, 61,
+       97, 42, 28, 79, 12, 96, 82, 97, 10, 96, 13, 73, 65, 70, 34, 69, 99,
+       89, 73, 73, 66,  8, 86,  2, 90, 97, 26, 74,  2, 24, 21,  0, 63, 43,
+       52, 77, 33, 32,  8, 89, 30, 24, 79, 36, 57, 70, 12, 89, 37, 35, 99,
+        3, 31, 17, 59, 95, 75, 85, 90, 50, 32, 79, 16, 16, 25, 12],
+      dtype=int32), array([35, 77, 57, 29, 50, 41, 49, 96, 39, 89, 64,  0, 10, 59, 20, 99,  8,
+       15, 25, 37, 62, 21, 69, 39, 66, 90, 50, 58, 75, 92, 26, 71,  6, 63,
+       47, 16, 78, 89, 86, 89, 92, 54, 86, 35, 79, 26, 59, 80, 36, 92, 82,
+        8, 36, 37, 56, 97, 42, 44, 45, 85, 56,  0, 24, 18, 99, 40, 10, 46,
+        3, 35, 93, 41, 51,  3,  1, 59, 50, 56, 83, 43, 84, 39,  1, 41, 78,
+       97,  2, 64, 79, 18, 87, 21, 47, 11, 62,  1, 38, 51, 30, 33],
+      dtype=int32), array([ 5, 39, 57, 68, 70, 83, 58, 60,  7, 94, 83, 53, 12, 86, 39, 49, 66,
+        2, 61, 78, 57, 58, 59, 95, 79, 99, 42, 77, 20, 67, 13, 70, 18, 75,
+       41, 45, 18, 68, 78, 22,  8, 41, 12, 71, 74, 42, 95, 90, 96, 57, 23,
+       70, 86, 19, 83, 51, 35, 10, 90, 74, 42,  1, 87, 56, 64,  7, 52,  2,
+       59, 87, 21,  7, 75, 27, 44, 70, 50, 82, 29, 28, 27, 80, 92, 56, 75,
+       15, 22, 40, 49, 98, 49,  0,  8,  7, 12, 52, 63, 86, 33, 22],
+      dtype=int32), array([85,  7, 74, 44, 79, 80, 47, 92,  6,  4,  9, 99, 20, 65, 22, 18, 62,
+        9, 39,  3, 22, 71, 49, 32, 66, 95, 64, 24,  4, 31, 97, 56, 71, 29,
+       14, 14, 90, 42, 91, 73, 71, 78, 49, 14, 19, 47, 24, 25, 41,  1, 33,
+       23, 74, 26, 91,  0, 37, 91, 49, 18, 59, 27, 77, 48, 87,  8, 75, 87,
+       37, 68, 25, 39, 60, 45, 29, 42, 78, 77, 85, 12, 75, 57,  6, 31, 79,
+       20,  0, 97, 71, 97, 93, 79, 61, 77,  8, 46, 97, 50, 11, 67],
+      dtype=int32), array([62, 35, 88, 84, 88, 75, 90, 93,  0, 78, 68,  0, 80, 28, 65, 85, 24,
+       31, 69, 13, 91, 52, 16, 97, 25,  5, 31, 86, 93, 63,  7, 82, 18, 86,
+       58, 67, 71, 17, 88, 16, 26, 49, 33,  2, 58, 94, 39, 10, 28,  0, 57,
+       34, 79, 26, 92, 96, 46, 61, 26, 89, 40,  6, 66, 92, 36, 54, 48, 45,
+       98, 63, 96, 43, 43, 30, 62, 55, 97,  8, 56, 80, 86, 29, 32, 35, 12,
+       26, 18, 97, 37, 55, 93, 37, 26, 13, 19, 26,  6, 66, 63, 86],
+      dtype=int32), array([93,  0, 32, 91, 69, 38, 65, 93, 82, 28, 48,  8, 68, 68, 33, 52,  6,
+       35,  3, 41, 57, 84, 96, 67, 81, 71, 74, 66, 23, 71,  1, 17, 65, 32,
+       96, 18,  2, 71, 14, 56, 55, 24, 52, 99, 70,  6, 19, 32, 11, 41,  4,
+       93, 31, 80, 54, 83,  4, 40, 57, 45, 55, 75, 33, 23,  3, 78, 28, 24,
+       98, 72, 29, 71, 78, 55, 54, 99, 41, 82, 51, 51,  5, 51, 41, 44, 93,
+       16, 73, 62, 25, 50, 51, 23, 54, 81, 44, 20, 13, 65, 51, 75],
+      dtype=int32), array([80, 51, 95,  2, 21, 80, 24, 77, 58, 40, 67, 67, 78, 24, 23, 52,  2,
+       70, 25, 66, 46, 41, 69, 26,  1, 13, 35, 60, 73, 52, 52, 49, 59, 13,
+        3, 41, 98, 61, 63, 11, 13, 76, 57, 98, 97, 30, 28, 10, 18, 92, 78,
+       54, 21, 10, 87, 77, 67, 10, 94, 80, 42, 88, 42,  9, 46, 51, 53, 31,
+       74, 30, 96, 87, 24, 62, 50, 48, 92, 72, 44, 39, 44, 17,  8, 48, 89,
+       85, 19, 31, 72, 65, 32, 10,  6, 10, 45, 88, 78, 92, 78, 98],
+      dtype=int32), array([82, 27,  9, 81, 64, 93, 24,  5, 66, 10, 97, 31, 48, 23, 71, 44,  4,
+        6, 19, 68, 51, 21,  1, 39, 33, 72,  8, 70, 51, 99, 32, 87, 48, 44,
+       94, 79, 30, 59, 23, 69,  4, 52, 25, 79,  4, 76, 79, 41,  4, 30, 50,
+       23, 92, 70, 28, 68, 15, 32, 15, 86, 49, 19, 96, 39, 23, 12, 78, 91,
+       94, 34, 70, 69, 25, 74, 52, 39, 70, 26, 67, 72, 82, 92, 37, 90, 14,
+       18, 69, 73, 84, 79, 72,  5, 86, 72, 19, 28, 90, 34, 35, 36],
+      dtype=int32), array([93, 32, 56, 90, 53, 42, 48, 43, 49, 69, 85, 49, 99, 65, 70, 61, 84,
+       69, 73, 37, 63, 31, 65, 34, 16, 91, 63, 27, 78, 50,  9, 25,  9, 22,
+        2, 88, 40,  0, 97, 45, 46, 72, 20,  4, 91, 51, 74, 30, 50, 99, 57,
+       16, 81, 39, 42, 25, 69, 69, 80, 79, 34, 61, 84, 37, 79, 28, 68, 76,
+       54,  4, 15, 24, 52, 26, 28, 85, 38, 60, 72, 94, 51, 17, 35,  0, 36,
+       51, 36, 12, 28, 80, 91, 84, 97, 14, 22, 46, 40,  8, 81, 20],
+      dtype=int32), array([33, 58, 90, 32, 74, 65, 64, 78,  1, 83, 44, 44, 40, 75, 59, 12, 30,
+       10, 23, 38, 82, 64, 62, 74, 37, 66, 15, 79, 71, 76,  8, 25,  7, 94,
+        6, 89, 61, 12, 91, 41, 87, 76, 27, 68, 91,  9, 48, 47, 62, 72, 55,
+       23, 37,  4, 63, 93,  4, 99, 18, 76, 20, 56, 22, 22, 36, 70, 24, 28,
+       87, 95,  4, 31, 56, 26, 93, 64, 63, 84,  3,  0, 16,  1, 42,  7, 13,
+       19, 79, 50, 88,  7, 40, 85, 92, 66, 56, 55, 32, 62, 28, 41],
+      dtype=int32), array([22, 76, 18, 15, 45, 61, 43, 92, 60, 80,  0,  6, 72, 95,  9, 85, 53,
+       80, 73, 66, 47, 57,  5,  5, 84, 68,  6, 83, 55, 96, 21, 24, 29, 24,
+       29, 68, 39,  5, 46, 95, 43, 82, 53, 67, 70, 99, 44, 83, 12, 19, 14,
+       72, 46, 59,  8, 12,  5, 69, 55,  9, 93, 96, 53, 28, 60, 12, 93, 52,
+       52, 79, 14, 73, 79,  7, 60, 70, 95, 41, 90, 36, 28, 67, 64, 42, 28,
+       98, 57, 86, 87,  3, 56, 13, 93, 25, 58, 71, 36, 59, 54, 45],
+      dtype=int32), array([16, 48, 41, 49, 31, 97, 21,  3, 51, 38, 53, 25, 45, 10, 92, 68, 90,
+       82, 36, 24, 25,  6, 43, 49, 46, 74, 84, 47, 41, 47, 33, 59, 11, 87,
+       19, 25,  7, 55, 76, 85, 91, 48, 19, 12,  9, 50, 90,  8, 56, 45, 28,
+       61, 52, 82,  9, 94, 65, 34, 43, 14, 19, 90, 45, 91, 76, 43, 88, 65,
+       65, 60, 92, 87, 45, 47,  0, 89, 93, 22, 78, 92, 62, 61, 14, 80, 99,
+       12, 45,  0, 18, 11, 91, 61, 50, 85, 66, 80, 17,  8, 80, 93],
+      dtype=int32), array([60, 37, 18, 72, 94,  2, 50, 55, 31, 74, 47, 53,  5, 18, 50, 42,  9,
+       71, 88,  5, 12, 39, 39, 66, 10, 90, 13, 99,  2, 48, 22, 63, 20, 78,
+       18, 80, 31, 29, 80, 67, 98, 29, 93, 65, 84, 42, 20, 79, 80, 77, 50,
+       24, 27, 43, 89, 64, 62, 36,  2, 29, 75, 37, 78, 31, 68, 85, 93, 36,
+       69, 39,  7, 68, 10,  1, 90, 95, 40,  7, 46, 26, 91, 81, 77, 38, 67,
+       55, 75, 53, 57, 95, 62, 12, 72, 96, 94, 61, 88, 27, 31, 71],
+      dtype=int32), array([ 1, 72,  9,  4, 58, 22, 96, 97, 29, 43, 36, 55, 24, 81, 20, 10, 98,
+       95, 41, 82, 45, 62,  8, 43, 63, 94, 28, 49, 22, 16, 15, 93, 32, 92,
+       54, 33, 88, 54, 42, 21, 57, 25,  4, 28, 60, 56, 15,  9, 38, 22, 21,
+       13, 62, 97, 96,  3, 69, 74, 51, 93, 24,  1, 11, 93,  4, 10, 95, 13,
+       50, 17,  3, 51, 68, 83, 78, 86, 79, 81, 10, 42, 67, 38,  3, 70, 96,
+       60, 74, 25, 42, 80, 21, 32, 53, 48,  9, 92, 73, 76, 11, 99],
+      dtype=int32), array([66, 31, 95, 13, 50, 55, 42, 63, 25,  5, 80, 48, 22, 57, 63, 99,  4,
+       57, 39, 57, 71, 68, 86, 27, 21, 77, 17, 95, 28, 34, 74, 30, 52, 87,
+       36, 40, 49, 51, 82, 50, 84, 64, 33, 80, 97, 80, 81, 17, 69, 33, 19,
+       81, 94, 18, 59, 24, 25, 93, 86, 17,  7, 67, 13, 25, 26, 82, 57, 80,
+       47, 51, 30, 80,  9, 70, 21, 82, 17, 16, 24, 59, 38, 87, 36, 69, 50,
+       41, 98, 34, 89, 48, 40, 18, 77, 79, 76, 35, 57, 82, 22, 49],
+      dtype=int32), array([45,  0, 38, 68, 94, 23, 95, 23, 77, 31, 90, 38, 26, 94, 58, 71, 59,
+       34, 75, 24, 18, 71, 62, 45, 27, 28, 70, 23, 74, 67, 38, 57, 11, 51,
+       34, 60, 24, 46, 83, 91, 62, 41, 10, 26, 75, 65, 16, 82, 40, 45, 73,
+       76, 26, 18, 19, 72, 56, 26, 31, 56, 90, 40, 16,  9, 97, 59, 64, 56,
+       10, 21, 15, 49, 29, 50, 51, 55, 13, 73, 78, 88, 54, 73, 87, 31, 11,
+       47, 30, 28, 89, 66, 22, 42, 97, 25,  2, 29,  5, 90, 80, 73],
+      dtype=int32), array([59, 52, 55, 64, 48, 59, 66, 61, 35, 61,  9, 79, 45, 53, 43, 98, 30,
+       98, 72,  3, 50, 82, 38, 59, 91, 54, 48, 81, 43, 62, 35,  6, 37, 79,
+       71,  4, 38,  0, 36, 21, 32, 55, 26, 65, 93,  9,  7, 72, 53, 28, 44,
+       69, 73, 78, 65, 55, 11, 85, 95, 31, 81, 23, 53, 28, 13, 22, 16, 49,
+       52,  8, 59, 59, 49, 53, 33, 43, 85,  9, 61, 23, 78, 57,  3, 37, 71,
+       51, 56, 32, 17, 34, 76, 17, 12, 59, 11, 66, 43, 86, 37, 59],
+      dtype=int32), array([ 1, 30, 60, 67, 53, 91, 29, 97, 87, 22, 50, 14, 40, 18, 90, 53, 17,
+       63, 84, 71, 50, 29, 13, 67, 97, 74, 55, 41, 30, 92, 75, 80, 21, 87,
+       94, 20,  0, 31, 69,  7,  0,  0, 90, 11,  4, 83, 63, 98, 16, 80, 69,
+       25, 43, 65, 27,  7, 67, 83, 88, 97,  4, 94, 70, 88, 82, 11, 50, 61,
+       89, 14,  2, 35, 62, 95, 65, 40, 73, 70, 72, 35, 80, 54, 15, 43, 20,
+       23, 94, 48, 56, 91, 86, 79, 39, 77, 80, 45, 32, 34, 22, 73],
+      dtype=int32), array([61, 55, 13, 52, 79, 72, 95, 99, 25, 30, 49, 23, 60, 18, 22, 97,  6,
+       12, 15, 55, 70, 49, 29,  1, 94, 44, 42, 11, 84, 27, 82, 60, 61, 22,
+       42, 99, 39, 29,  7,  3, 74, 39, 49, 76, 59, 53,  3, 80, 66,  6, 43,
+       57,  3, 50, 33,  5, 98,  7, 33, 26, 69, 14, 61, 45,  0, 81, 58, 10,
+       45, 16, 26, 42, 37, 41, 26, 60, 49,  4, 72, 40,  8, 92, 47, 39, 64,
+       36, 96,  1, 86, 96, 96, 44, 83, 93, 53, 76,  3, 70, 41, 14],
+      dtype=int32), array([87, 68, 93, 48, 29, 21, 87, 33, 31, 77, 30, 91, 69, 18, 36, 84,  9,
+       87, 81, 44, 28, 17, 46, 93, 23, 26, 98, 71, 64, 23, 45, 47, 80, 44,
+       43, 99, 55,  4, 62, 26, 83, 69, 30, 49, 59, 67, 46, 61, 74, 16, 10,
+       17, 19, 84, 66, 19, 60, 76, 50, 81, 20, 57, 37,  4, 63, 66, 32, 44,
+       57, 70, 93, 26, 64, 12, 53, 73, 92, 96, 33, 27, 10, 32, 98, 12, 58,
+        2, 17, 83, 89,  0, 83, 48, 75, 79, 73, 22,  2, 50, 86, 86],
+      dtype=int32)], 'feature_importances_': array([0.04863376, 0.19131606, 0.02150943, 0.01747991, 0.02080983,
+       0.01826001, 0.01860911, 0.02088633, 0.0332458 , 0.01665742,
+       0.08156093, 0.34915397, 0.01748912, 0.02746566, 0.02165233,
+       0.02612759, 0.02031731, 0.0128741 , 0.01771998, 0.01823133]), 'n_classes_': 2, 'n_features_in_': 20, 'n_outputs_': 1}</code></pre>
 </div>
 </div>
 </section>
 <section id="keras" class="level2">
 <h2 class="anchored" data-anchor-id="keras">Keras</h2>
-<div class="cell" data-execution_count="38">
+<div id="9f030095" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>WARNING:tensorflow:From C:\Users\st004186\Envs\gingado\lib\site-packages\keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
-</code></pre>
 </div>
-</div>
-<div class="cell" data-execution_count="39">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>keras_clf <span class="op">=</span> keras.Sequential()</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>keras_clf.add(keras.layers.Dense(<span class="dv">16</span>, activation<span class="op">=</span><span class="st">'relu'</span>, input_shape<span class="op">=</span>(<span class="dv">20</span>,)))</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>keras_clf.add(keras.layers.Dense(<span class="dv">8</span>, activation<span class="op">=</span><span class="st">'relu'</span>))</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>keras_clf.add(keras.layers.Dense(<span class="dv">1</span>, activation<span class="op">=</span><span class="st">'sigmoid'</span>))</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>keras_clf.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'binary_crossentropy'</span>)</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>keras_clf.fit(X, y, batch_size<span class="op">=</span><span class="dv">10</span>, epochs<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="c4c0840a" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>keras_clf <span class="op">=</span> keras.Sequential()</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>keras_clf.add(keras.layers.Dense(<span class="dv">16</span>, activation<span class="op">=</span><span class="st">'relu'</span>, input_shape<span class="op">=</span>(<span class="dv">20</span>,)))</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>keras_clf.add(keras.layers.Dense(<span class="dv">8</span>, activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>keras_clf.add(keras.layers.Dense(<span class="dv">1</span>, activation<span class="op">=</span><span class="st">'sigmoid'</span>))</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>keras_clf.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'binary_crossentropy'</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>keras_clf.fit(X, y, batch_size<span class="op">=</span><span class="dv">10</span>, epochs<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>WARNING:tensorflow:From C:\Users\st004186\Envs\gingado\lib\site-packages\keras\src\backend.py:873: The name tf.get_default_graph is deprecated. Please use tf.compat.v1.get_default_graph instead.
-
-WARNING:tensorflow:From C:\Users\st004186\Envs\gingado\lib\site-packages\keras\src\optimizers\__init__.py:309: The name tf.train.Optimizer is deprecated. Please use tf.compat.v1.train.Optimizer instead.
-
-Epoch 1/10
-WARNING:tensorflow:From C:\Users\st004186\Envs\gingado\lib\site-packages\keras\src\utils\tf_utils.py:492: The name tf.ragged.RaggedTensorValue is deprecated. Please use tf.compat.v1.ragged.RaggedTensorValue instead.
-
- 1/10 [==&gt;...........................] - ETA: 8s - loss: 0.721610/10 [==============================] - 1s 3ms/step - loss: 0.7106
+<pre><code>Epoch 1/10</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> 1/10 ━━━━━━━━━━━━━━━━━━━━ 1s 169ms/step - loss: 1.139610/10 ━━━━━━━━━━━━━━━━━━━━ 0s 3ms/step - loss: 0.9150  
 Epoch 2/10
- 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.654510/10 [==============================] - 0s 4ms/step - loss: 0.6968
+ 1/10 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step - loss: 0.581710/10 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - loss: 0.6806 
 Epoch 3/10
- 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.687010/10 [==============================] - 0s 2ms/step - loss: 0.6850
+ 1/10 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step - loss: 0.948810/10 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - loss: 0.7685 
 Epoch 4/10
- 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.712610/10 [==============================] - 0s 2ms/step - loss: 0.6756
+ 1/10 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step - loss: 0.543610/10 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - loss: 0.6197 
 Epoch 5/10
- 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.600810/10 [==============================] - 0s 2ms/step - loss: 0.6654
+ 1/10 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step - loss: 0.646410/10 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - loss: 0.6310 
 Epoch 6/10
- 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.658510/10 [==============================] - 0s 2ms/step - loss: 0.6569
+ 1/10 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step - loss: 0.475910/10 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - loss: 0.5558 
 Epoch 7/10
- 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.624210/10 [==============================] - 0s 2ms/step - loss: 0.6481
+ 1/10 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step - loss: 0.589310/10 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - loss: 0.5617 
 Epoch 8/10
- 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.590610/10 [==============================] - 0s 2ms/step - loss: 0.6399
+ 1/10 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step - loss: 0.457010/10 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - loss: 0.5388 
 Epoch 9/10
- 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.648210/10 [==============================] - 0s 2ms/step - loss: 0.6335
+ 1/10 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step - loss: 0.519310/10 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - loss: 0.5241 
 Epoch 10/10
- 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.489010/10 [==============================] - 0s 2ms/step - loss: 0.6267</code></pre>
+ 1/10 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step - loss: 0.511710/10 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - loss: 0.5044 </code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="39">
-<pre><code>&lt;keras.src.callbacks.History at 0x1d10aea88b0&gt;</code></pre>
+<pre><code>&lt;keras.src.callbacks.history.History at 0x17fb51a00d0&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="40">
+<div id="078b4c25" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>model_doc_keras <span class="op">=</span> ModelCard()</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>model_doc_keras.read_model(keras_clf)</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>model_doc_keras.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="40">
-<pre><code>'{"class_name": "Sequential", "config": {"name": "sequential", "layers": [{"module": "keras.layers", "class_name": "InputLayer", "config": {"batch_input_shape": [null, 20], "dtype": "float32", "sparse": false, "ragged": false, "name": "dense_input"}, "registered_name": null}, {"module": "keras.layers", "class_name": "Dense", "config": {"name": "dense", "trainable": true, "dtype": "float32", "batch_input_shape": [null, 20], "units": 16, "activation": "relu", "use_bias": true, "kernel_initializer": {"module": "keras.initializers", "class_name": "GlorotUniform", "config": {"seed": null}, "registered_name": null}, "bias_initializer": {"module": "keras.initializers", "class_name": "Zeros", "config": {}, "registered_name": null}, "kernel_regularizer": null, "bias_regularizer": null, "activity_regularizer": null, "kernel_constraint": null, "bias_constraint": null}, "registered_name": null, "build_config": {"input_shape": [null, 20]}}, {"module": "keras.layers", "class_name": "Dense", "config": {"name": "dense_1", "trainable": true, "dtype": "float32", "units": 8, "activation": "relu", "use_bias": true, "kernel_initializer": {"module": "keras.initializers", "class_name": "GlorotUniform", "config": {"seed": null}, "registered_name": null}, "bias_initializer": {"module": "keras.initializers", "class_name": "Zeros", "config": {}, "registered_name": null}, "kernel_regularizer": null, "bias_regularizer": null, "activity_regularizer": null, "kernel_constraint": null, "bias_constraint": null}, "registered_name": null, "build_config": {"input_shape": [null, 16]}}, {"module": "keras.layers", "class_name": "Dense", "config": {"name": "dense_2", "trainable": true, "dtype": "float32", "units": 1, "activation": "sigmoid", "use_bias": true, "kernel_initializer": {"module": "keras.initializers", "class_name": "GlorotUniform", "config": {"seed": null}, "registered_name": null}, "bias_initializer": {"module": "keras.initializers", "class_name": "Zeros", "config": {}, "registered_name": null}, "kernel_regularizer": null, "bias_regularizer": null, "activity_regularizer": null, "kernel_constraint": null, "bias_constraint": null}, "registered_name": null, "build_config": {"input_shape": [null, 8]}}]}, "keras_version": "2.15.0", "backend": "tensorflow"}'</code></pre>
+<pre><code>'{"module": "keras", "class_name": "Sequential", "config": {"name": "sequential", "trainable": true, "dtype": {"module": "keras", "class_name": "DTypePolicy", "config": {"name": "float32"}, "registered_name": null}, "layers": [{"module": "keras.layers", "class_name": "InputLayer", "config": {"batch_shape": [null, 20], "dtype": "float32", "sparse": false, "name": "input_layer"}, "registered_name": null}, {"module": "keras.layers", "class_name": "Dense", "config": {"name": "dense", "trainable": true, "dtype": {"module": "keras", "class_name": "DTypePolicy", "config": {"name": "float32"}, "registered_name": null}, "units": 16, "activation": "relu", "use_bias": true, "kernel_initializer": {"module": "keras.initializers", "class_name": "GlorotUniform", "config": {"seed": null}, "registered_name": null}, "bias_initializer": {"module": "keras.initializers", "class_name": "Zeros", "config": {}, "registered_name": null}, "kernel_regularizer": null, "bias_regularizer": null, "kernel_constraint": null, "bias_constraint": null}, "registered_name": null, "build_config": {"input_shape": [null, 20]}}, {"module": "keras.layers", "class_name": "Dense", "config": {"name": "dense_1", "trainable": true, "dtype": {"module": "keras", "class_name": "DTypePolicy", "config": {"name": "float32"}, "registered_name": null}, "units": 8, "activation": "relu", "use_bias": true, "kernel_initializer": {"module": "keras.initializers", "class_name": "GlorotUniform", "config": {"seed": null}, "registered_name": null}, "bias_initializer": {"module": "keras.initializers", "class_name": "Zeros", "config": {}, "registered_name": null}, "kernel_regularizer": null, "bias_regularizer": null, "kernel_constraint": null, "bias_constraint": null}, "registered_name": null, "build_config": {"input_shape": [null, 16]}}, {"module": "keras.layers", "class_name": "Dense", "config": {"name": "dense_2", "trainable": true, "dtype": {"module": "keras", "class_name": "DTypePolicy", "config": {"name": "float32"}, "registered_name": null}, "units": 1, "activation": "sigmoid", "use_bias": true, "kernel_initializer": {"module": "keras.initializers", "class_name": "GlorotUniform", "config": {"seed": null}, "registered_name": null}, "bias_initializer": {"module": "keras.initializers", "class_name": "Zeros", "config": {}, "registered_name": null}, "kernel_regularizer": null, "bias_regularizer": null, "kernel_constraint": null, "bias_constraint": null}, "registered_name": null, "build_config": {"input_shape": [null, 8]}}], "build_input_shape": [null, 20]}, "registered_name": null, "build_config": {"input_shape": [null, 20]}, "compile_config": {"optimizer": {"module": "keras.optimizers", "class_name": "SGD", "config": {"name": "SGD", "learning_rate": 0.009999999776482582, "weight_decay": null, "clipnorm": null, "global_clipnorm": null, "clipvalue": null, "use_ema": false, "ema_momentum": 0.99, "ema_overwrite_frequency": null, "loss_scale_factor": null, "gradient_accumulation_steps": null, "momentum": 0.0, "nesterov": false}, "registered_name": null}, "loss": "binary_crossentropy", "loss_weights": null, "metrics": null, "weighted_metrics": null, "run_eagerly": false, "steps_per_execution": 1, "jit_compile": false}}'</code></pre>
 </div>
 </div>
 </section>
 <section id="other-models" class="level2">
 <h2 class="anchored" data-anchor-id="other-models">Other models</h2>
 <p>Native support for automatic documentation of other model types, such as from <code>fastai</code>, <code>pytorch</code> is expected to be available in future versions. Until then, any models coded form scratch by the user as well as any other model can be documented by passing the information as an argument to the Documenter’s <code>fill_model_info</code> method. This can be done with a string or dictionary. For example:</p>
-<div class="cell" data-execution_count="41">
+<div id="590c6263" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="42">
+<div id="25ea28a8" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MockDataset(torch.utils.data.Dataset):</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, X, y):</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.X <span class="op">=</span> torch.from_numpy(X.astype(np.float32))</span>
@@ -1524,7 +1626,7 @@ Epoch 10/10
 <span id="cb43-41"><a href="#cb43-41" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
 <span id="cb43-42"><a href="#cb43-42" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="43">
+<div id="5653df68" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>model_doc_pytorch <span class="op">=</span> ModelCard()</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>model_doc_pytorch.fill_model_info(<span class="st">"This model is a neural network consisting of two fully connected layers and ending in a linear layer with a sigmoid activation"</span>)</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>model_doc_pytorch.show_json()[<span class="st">'model_details'</span>][<span class="st">'info'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1553,7 +1655,7 @@ Epoch 10/10
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-ModelCards" class="csl-entry" role="listitem">
 Mitchell, Margaret, Simone Wu, Andrew Zaldivar, Parker Barnes, Lucy Vasserman, Ben Hutchinson, Elena Spitzer, Inioluwa Deborah Raji, and Timnit Gebru. 2018. <span>“Model Cards for Model Reporting.”</span> <em>CoRR</em> abs/1810.03993. <a href="http://arxiv.org/abs/1810.03993">http://arxiv.org/abs/1810.03993</a>.
 </div>
@@ -1604,6 +1706,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -1672,13 +1801,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1713,18 +1844,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1756,11 +1876,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1770,8 +1929,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1783,7 +1951,129 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1827,6 +2117,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1852,6 +2143,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1909,24 +2226,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script>
 </div> <!-- /content -->
 
 
 
-</body></html>
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/bis-med-it/gingado/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,12 +70,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-9b8f6c33b8a184d254b5eaa30f9d0661.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-db77c3ec39dfe3474f9f96fa411a1105.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -275,7 +275,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>get_datetime <code>()</code></p>
 </blockquote>
 <pre>Returns the time now</pre>
-<div id="22a56f7e" class="cell" data-execution_count="4">
+<div id="237dd7a2" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> get_datetime()</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(d, <span class="bu">str</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(d) <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -293,10 +293,10 @@ Args:
 <p>Function <code>read_attr</code> helps gingado Documenters to read the object behind the scenes.</p>
 <p>It collects the type of estimator, and any attributes resulting from fitting an object (in ie, those that end in “_” without being double underscores).</p>
 <p>For example, the attributes of an untrained and a trained random forest are, in sequence:</p>
-<div id="2a519166" class="cell" data-execution_count="6">
+<div id="5264f27b" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="6d216c00" class="cell" data-execution_count="7">
+<div id="fafbb920" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rf_unfit <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>rf_fit <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">3</span>)<span class="op">\</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    .fit([[<span class="dv">1</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">1</span>]], [[<span class="fl">0.5</span>], [<span class="fl">0.5</span>]]) <span class="co"># random numbers</span></span>
@@ -305,10 +305,12 @@ Args:
 <pre><code>([{'_estimator_type': 'regressor'}],
  [{'_estimator_type': 'regressor'},
   {'estimator_': DecisionTreeRegressor()},
-  {'estimators_': [DecisionTreeRegressor(max_features=1.0, random_state=352967703),
-    DecisionTreeRegressor(max_features=1.0, random_state=1346575655),
-    DecisionTreeRegressor(max_features=1.0, random_state=168455287)]},
-  {'estimators_samples_': [array([1, 0]), array([1, 1]), array([1, 0])]},
+  {'estimators_': [DecisionTreeRegressor(max_features=1.0, random_state=1360999922),
+    DecisionTreeRegressor(max_features=1.0, random_state=781048087),
+    DecisionTreeRegressor(max_features=1.0, random_state=400176294)]},
+  {'estimators_samples_': [array([0, 0], dtype=int32),
+    array([1, 0], dtype=int32),
+    array([1, 0], dtype=int32)]},
   {'feature_importances_': array([0., 0.])},
   {'n_features_in_': 2},
   {'n_outputs_': 1}])</code></pre>
@@ -341,7 +343,7 @@ Args:
 Args:
     X (np.ndarray): Array-like data of shape (n_samples, n_features).
     y: Array-like data of shape (n_samples,) or (n_samples, n_targets) or None.
-
+    
 Returns:
     self: A fitted version of the `Lag` instance.</pre>
 </section>
@@ -354,7 +356,7 @@ Returns:
 
 Args:
     X (np.ndarray): Array-like data of shape (n_samples, n_features).
-
+    
 Returns:
     A lagged version of `X`.</pre>
 </section>
@@ -384,11 +386,11 @@ Returns
 X_new : ndarray array of shape (n_samples, n_features_new)
     Transformed array.</pre>
 <p>The code below demonstrates how <code>Lag</code> works in practice. Note in particular that, because <code>Lag</code> is a transformer, it can be used as part of a <code>scikit-learn</code>’s <code>Pipeline</code>.</p>
-<div id="1c3d430d" class="cell" data-execution_count="12">
+<div id="bbdac72d" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ea42cdbb" class="cell" data-execution_count="13">
+<div id="0a435231" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>randomX <span class="op">=</span> np.random.rand(<span class="dv">15</span>, <span class="dv">2</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>randomY <span class="op">=</span> np.random.rand(<span class="dv">15</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -401,7 +403,7 @@ X_new : ndarray array of shape (n_samples, n_features_new)
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>]).fit_transform(randomX, randomY)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below we confirm that the lagger removes the correct number of rows corresponding to the lagged observations:</p>
-<div id="fd3c178f" class="cell" data-execution_count="14">
+<div id="75539644" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> randomX.shape[<span class="dv">0</span>] <span class="op">-</span> lags <span class="op">-</span> jump <span class="op">==</span> pipe.shape[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And because <code>Lag</code> is a transformer, its parameters (<code>lags</code> and <code>jump</code>) can be calibrated using hyperparameter tuning to achieve the best performance for a model.</p>
@@ -431,7 +433,7 @@ Note
 
 Returns:
     The list of codes representing the SDMX sources available for data download.</pre>
-<div id="748808bf" class="cell" data-execution_count="16">
+<div id="107df308" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sources <span class="op">=</span> list_SDMX_sources()</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sources)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -439,7 +441,7 @@ Returns:
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># all elements are of type 'str'</span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sum</span>([<span class="bu">isinstance</span>(src, <span class="bu">str</span>) <span class="cf">for</span> src <span class="kw">in</span> sources]) <span class="op">==</span> <span class="bu">len</span>(sources)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>['ABS', 'ABS_JSON', 'BBK', 'BIS', 'COMP', 'ECB', 'EMPL', 'ESTAT', 'ESTAT3', 'ESTAT_COMEXT', 'GROW', 'ILO', 'IMF', 'INEGI', 'INSEE', 'ISTAT', 'LSD', 'NB', 'NBB', 'OECD', 'OECD_JSON', 'SGR', 'SPC', 'STAT_EE', 'UNESCO', 'UNICEF', 'UNSD', 'WB', 'WB_WDI']</code></pre>
+<pre><code>['ABS', 'ABS_JSON', 'AR1', 'BBK', 'BIS', 'COMP', 'ECB', 'EMPL', 'ESTAT', 'ESTAT3', 'ESTAT_COMEXT', 'GROW', 'ILO', 'IMF', 'IMF_beta', 'IMF_beta3', 'INEGI', 'INSEE', 'ISTAT', 'LSD', 'NB', 'NBB', 'OECD', 'OECD_JSON', 'SGR', 'SPC', 'STAT_EE', 'StatCan', 'UNESCO', 'UNICEF', 'UNSD', 'UY110', 'WB', 'WB_WDI']</code></pre>
 </div>
 </div>
 </section>
@@ -454,249 +456,60 @@ or to the `load_SDMX_data` function, set `codes_only=True`"
 Args:
     codes_only (bool): Whether to return only the dataflow codes.
     return_pandas (bool): Whether to return the result in a pandas DataFrame format.
-
+    
 Returns:
     All available dataflows for all SDMX sources.</pre>
-<div id="9c09f544" class="cell" data-execution_count="18">
+<div id="971498ca" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(dflows, <span class="bu">dict</span>)</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>all_sources <span class="op">=</span> list_SDMX_sources()</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>([s <span class="cf">for</span> s <span class="kw">in</span> dflows.keys() <span class="cf">if</span> s <span class="kw">in</span> all_sources]) <span class="op">==</span> <span class="bu">len</span>(dflows.keys())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-
-
---- SS without structure ---
-1 (140728747105224) False
-
---- &lt;class 'sdmx.message.StructureMessage'&gt; ---
-2 (2860620953424) &lt;sdmx.StructureMessage&gt;
-  &lt;Header&gt;
-    id: 'C2C8DEB97684424693070ED3366216DD'
-    prepared: '2024-10-21T11:23:21.319000+00:00'
-    sender: &lt;Agency ESTAT&gt;
-    source: 
-    test: False
-
---- &lt;class 'sdmx.model.common.Annotation'&gt; ---
-10 (2860615702224) Annotation(id=None, title='DATASET', type='DISSEMINATION_OBJECT_TYPE', url=None, text=)
-14 (2860615702672) Annotation(id=None, title='685', type='OBS_COUNT', url=None, text=)
-18 (2860620797776) Annotation(id=None, title='1999', type='OBS_PERIOD_OVERALL_OLDEST', url=None, text=)
-22 (2860589958992) Annotation(id=None, title='2022', type='OBS_PERIOD_OVERALL_LATEST', url=None, text=)
-26 (2860620511824) Annotation(id=None, title='2020-09-17T13:28:00+0200', type='CREATED', url=None, text=)
-30 (2860620376976) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_STRUCTURE', url=None, text=)
-34 (2860619886928) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_DATA', url=None, text=)
-39 (2860614709072) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_HTML', url='https://ec.europa.eu/eurostat/cache/metadata/en/reg_lmk_esms.htm', text=)
-44 (2860620804880) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_SDMX', url='https://ec.europa.eu/eurostat/api/dissemination/files?file=metadata/reg_lmk_esms.sdmx.zip', text=)
-50 (2860620718096) Annotation(id=None, title=None, type='SOURCE_INSTITUTIONS', url=None, text=de: Eurostat
-en: Eurostat
-fr: Eurostat)
-54 (2860605908496) Annotation(id=None, title='&lt;adms:identifier xmlns:adms="http://www.w3.org/ns/adms#" xmlns:skos="http://www.w3.org/2004/02/skos/core.html" xmlns:dct="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;&lt;adms:Identifier rdf:about="https://doi.org/10.2908/LFST_R_LMDGEG"&gt;&lt;skos:notation rdf:datatype="http://purl.org/spar/datacite/doi"&gt;10.2908/LFST_R_LMDGEG&lt;/skos:notation&gt;&lt;dct:creator rdf:resource="http://publications.europa.eu/resource/authority/corporate-body/ESTAT"/&gt;&lt;dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date"&gt;2023-01-19&lt;/dct:issued&gt;&lt;/adms:Identifier&gt;&lt;/adms:identifier&gt;', type='DISSEMINATION_DOI_XML', url=None, text=)
-
---- Name ---
-55 (2860621135168) ('de', 'Regionale Disparitäten bei den geschlechtsspezifischen Unterschieden in der Beschäftigung (NUTS-Ebene 2)')
-56 (2860621695040) ('fr', "Disparités régionales des écarts d'emploi entre les hommes et les femmes (niveau NUTS 2)")
-57 (2860621434304) ('en', 'Regional disparities in gender employment gap (NUTS level 2)')
-
---- Structure ---
-LFST_R_LMDGEG (2860621808256) DataStructureDefinition=ESTAT:LFST_R_LMDGEG(26.0) → DataStructureDefinition=LFST_R_LMDGEG
-
-
-Ignore:
- {140728747158792}
-&lt;s:Dataflow xmlns:s="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/structure" xmlns:m="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/message" xmlns:c="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/common" id="LFST_R_LMDGEG" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:LFST_R_LMDGEG(1.0)" agencyID="ESTAT" version="1.0"&gt;
-  &lt;c:Annotations&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-  &lt;/c:Annotations&gt;
-  &lt;c:Name/&gt;
-  &lt;c:Name/&gt;
-  &lt;c:Name/&gt;
-  &lt;s:Structure/&gt;
-&lt;/s:Dataflow&gt;
-</code></pre>
-</div>
 </div>
 <p><code>list_all_dataflows</code> returns by default a pandas Series, facilitating data discovery by users like so:</p>
-<div id="b8133e6e" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(dflows) <span class="op">==</span> pd.core.series.Series</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>dflows</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-
-
---- SS without structure ---
-1 (140728747105224) False
-
---- &lt;class 'sdmx.message.StructureMessage'&gt; ---
-2 (2860529403664) &lt;sdmx.StructureMessage&gt;
-  &lt;Header&gt;
-    id: 'C2C8DEB97684424693070ED3366216DD'
-    prepared: '2024-10-21T11:23:21.319000+00:00'
-    sender: &lt;Agency ESTAT&gt;
-    source: 
-    test: False
-
---- &lt;class 'sdmx.model.common.Annotation'&gt; ---
-10 (2860526463632) Annotation(id=None, title='DATASET', type='DISSEMINATION_OBJECT_TYPE', url=None, text=)
-14 (2860527187024) Annotation(id=None, title='685', type='OBS_COUNT', url=None, text=)
-18 (2860526431696) Annotation(id=None, title='1999', type='OBS_PERIOD_OVERALL_OLDEST', url=None, text=)
-22 (2860526429520) Annotation(id=None, title='2022', type='OBS_PERIOD_OVERALL_LATEST', url=None, text=)
-26 (2860529408848) Annotation(id=None, title='2020-09-17T13:28:00+0200', type='CREATED', url=None, text=)
-30 (2860529411344) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_STRUCTURE', url=None, text=)
-34 (2860526462160) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_DATA', url=None, text=)
-39 (2860529412048) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_HTML', url='https://ec.europa.eu/eurostat/cache/metadata/en/reg_lmk_esms.htm', text=)
-44 (2860526361040) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_SDMX', url='https://ec.europa.eu/eurostat/api/dissemination/files?file=metadata/reg_lmk_esms.sdmx.zip', text=)
-50 (2860527178768) Annotation(id=None, title=None, type='SOURCE_INSTITUTIONS', url=None, text=de: Eurostat
-en: Eurostat
-fr: Eurostat)
-54 (2860526655056) Annotation(id=None, title='&lt;adms:identifier xmlns:adms="http://www.w3.org/ns/adms#" xmlns:skos="http://www.w3.org/2004/02/skos/core.html" xmlns:dct="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;&lt;adms:Identifier rdf:about="https://doi.org/10.2908/LFST_R_LMDGEG"&gt;&lt;skos:notation rdf:datatype="http://purl.org/spar/datacite/doi"&gt;10.2908/LFST_R_LMDGEG&lt;/skos:notation&gt;&lt;dct:creator rdf:resource="http://publications.europa.eu/resource/authority/corporate-body/ESTAT"/&gt;&lt;dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date"&gt;2023-01-19&lt;/dct:issued&gt;&lt;/adms:Identifier&gt;&lt;/adms:identifier&gt;', type='DISSEMINATION_DOI_XML', url=None, text=)
-
---- Name ---
-55 (2860528919552) ('de', 'Regionale Disparitäten bei den geschlechtsspezifischen Unterschieden in der Beschäftigung (NUTS-Ebene 2)')
-56 (2860528936256) ('fr', "Disparités régionales des écarts d'emploi entre les hommes et les femmes (niveau NUTS 2)")
-57 (2860526197696) ('en', 'Regional disparities in gender employment gap (NUTS level 2)')
-
---- Structure ---
-LFST_R_LMDGEG (2860526809536) DataStructureDefinition=ESTAT:LFST_R_LMDGEG(26.0) → DataStructureDefinition=LFST_R_LMDGEG
-
-
-Ignore:
- {140728747158792}
-&lt;s:Dataflow xmlns:s="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/structure" xmlns:m="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/message" xmlns:c="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/common" id="LFST_R_LMDGEG" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:LFST_R_LMDGEG(1.0)" agencyID="ESTAT" version="1.0"&gt;
-  &lt;c:Annotations&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-  &lt;/c:Annotations&gt;
-  &lt;c:Name/&gt;
-  &lt;c:Name/&gt;
-  &lt;c:Name/&gt;
-  &lt;s:Structure/&gt;
-&lt;/s:Dataflow&gt;
-</code></pre>
-</div>
+<div id="d78c4da2" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(dflows) <span class="op">==</span> pd.core.series.Series</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>dflows</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
-<pre><code>ABS   ABORIGINAL_POP_PROJ                 Projected population, Aboriginal and Torres St...
-      ABORIGINAL_POP_PROJ_REMOTE          Projected population, Aboriginal and Torres St...
-      ABS_ABORIGINAL_POPPROJ_INDREGION    Projected population, Aboriginal and Torres St...
-      ABS_ACLD_LFSTATUS                   Australian Census Longitudinal Dataset (ACLD):...
-      ABS_ACLD_TENURE                     Australian Census Longitudinal Dataset (ACLD):...
-                                                                ...                        
-UNSD  DF_UNData_UNFCC                                                       SDMX_GHG_UNDATA
-WB    DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAINS Tariff Data
-      DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
-      DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
-      DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
-Name: dataflow, Length: 24655, dtype: object</code></pre>
+<pre><code>ABS    ABORIGINAL_POP_PROJ                 Projected population, Aboriginal and Torres St...
+       ABORIGINAL_POP_PROJ_REMOTE          Projected population, Aboriginal and Torres St...
+       ABS_ABORIGINAL_POPPROJ_INDREGION    Projected population, Aboriginal and Torres St...
+       ABS_ACLD_LFSTATUS                   Australian Census Longitudinal Dataset (ACLD):...
+       ABS_ACLD_TENURE                     Australian Census Longitudinal Dataset (ACLD):...
+                                                                 ...                        
+UY110  DF_TTT_SEXO_AREA_REF                Tasa de Teletrabajo por sexo y area de referencia
+WB     DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAINS Tariff Data
+       DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
+       DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
+       DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
+Name: dataflow, Length: 33147, dtype: object</code></pre>
 </div>
 </div>
 <p>This format allows for more easily searching <code>dflows</code> by source:</p>
-<div id="b2fb2e14" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>list_all_dataflows(codes_only<span class="op">=</span><span class="va">True</span>, return_pandas<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-
-
---- SS without structure ---
-1 (140728747105224) False
-
---- &lt;class 'sdmx.message.StructureMessage'&gt; ---
-2 (2860575408592) &lt;sdmx.StructureMessage&gt;
-  &lt;Header&gt;
-    id: 'C2C8DEB97684424693070ED3366216DD'
-    prepared: '2024-10-21T11:23:21.319000+00:00'
-    sender: &lt;Agency ESTAT&gt;
-    source: 
-    test: False
-
---- &lt;class 'sdmx.model.common.Annotation'&gt; ---
-10 (2860575415824) Annotation(id=None, title='DATASET', type='DISSEMINATION_OBJECT_TYPE', url=None, text=)
-14 (2860575409424) Annotation(id=None, title='685', type='OBS_COUNT', url=None, text=)
-18 (2860577871056) Annotation(id=None, title='1999', type='OBS_PERIOD_OVERALL_OLDEST', url=None, text=)
-22 (2860577867088) Annotation(id=None, title='2022', type='OBS_PERIOD_OVERALL_LATEST', url=None, text=)
-26 (2860577866320) Annotation(id=None, title='2020-09-17T13:28:00+0200', type='CREATED', url=None, text=)
-30 (2860576861328) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_STRUCTURE', url=None, text=)
-34 (2860576271760) Annotation(id=None, title='2023-10-25T23:00:00+0200', type='UPDATE_DATA', url=None, text=)
-39 (2860577376464) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_HTML', url='https://ec.europa.eu/eurostat/cache/metadata/en/reg_lmk_esms.htm', text=)
-44 (2860576952656) Annotation(id=None, title='Explanatory texts (metadata)', type='ESMS_SDMX', url='https://ec.europa.eu/eurostat/api/dissemination/files?file=metadata/reg_lmk_esms.sdmx.zip', text=)
-50 (2860576755536) Annotation(id=None, title=None, type='SOURCE_INSTITUTIONS', url=None, text=de: Eurostat
-en: Eurostat
-fr: Eurostat)
-54 (2860577875280) Annotation(id=None, title='&lt;adms:identifier xmlns:adms="http://www.w3.org/ns/adms#" xmlns:skos="http://www.w3.org/2004/02/skos/core.html" xmlns:dct="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;&lt;adms:Identifier rdf:about="https://doi.org/10.2908/LFST_R_LMDGEG"&gt;&lt;skos:notation rdf:datatype="http://purl.org/spar/datacite/doi"&gt;10.2908/LFST_R_LMDGEG&lt;/skos:notation&gt;&lt;dct:creator rdf:resource="http://publications.europa.eu/resource/authority/corporate-body/ESTAT"/&gt;&lt;dct:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date"&gt;2023-01-19&lt;/dct:issued&gt;&lt;/adms:Identifier&gt;&lt;/adms:identifier&gt;', type='DISSEMINATION_DOI_XML', url=None, text=)
-
---- Name ---
-55 (2860530071360) ('de', 'Regionale Disparitäten bei den geschlechtsspezifischen Unterschieden in der Beschäftigung (NUTS-Ebene 2)')
-56 (2860529467264) ('fr', "Disparités régionales des écarts d'emploi entre les hommes et les femmes (niveau NUTS 2)")
-57 (2860530507712) ('en', 'Regional disparities in gender employment gap (NUTS level 2)')
-
---- Structure ---
-LFST_R_LMDGEG (2860554480880) DataStructureDefinition=ESTAT:LFST_R_LMDGEG(26.0) → DataStructureDefinition=LFST_R_LMDGEG
-
-
-Ignore:
- {140728747158792}
-&lt;s:Dataflow xmlns:s="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/structure" xmlns:m="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/message" xmlns:c="http://www.sdmx.org/resources/sdmxml/schemas/v3_0/common" id="LFST_R_LMDGEG" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:LFST_R_LMDGEG(1.0)" agencyID="ESTAT" version="1.0"&gt;
-  &lt;c:Annotations&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-    &lt;c:Annotation/&gt;
-  &lt;/c:Annotations&gt;
-  &lt;c:Name/&gt;
-  &lt;c:Name/&gt;
-  &lt;c:Name/&gt;
-  &lt;s:Structure/&gt;
-&lt;/s:Dataflow&gt;
-</code></pre>
-</div>
+<div id="59a56e09" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>list_all_dataflows(codes_only<span class="op">=</span><span class="va">True</span>, return_pandas<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
-<pre><code>ABS   0                 ABORIGINAL_POP_PROJ
-      1          ABORIGINAL_POP_PROJ_REMOTE
-      2    ABS_ABORIGINAL_POPPROJ_INDREGION
-      3                   ABS_ACLD_LFSTATUS
-      4                     ABS_ACLD_TENURE
-                         ...               
-UNSD  3                     DF_UNData_UNFCC
-WB    0               DF_WITS_Tariff_TRAINS
-      1      DF_WITS_TradeStats_Development
-      2           DF_WITS_TradeStats_Tariff
-      3            DF_WITS_TradeStats_Trade
-Name: dataflow, Length: 24655, dtype: object</code></pre>
+<pre><code>ABS    0                  ABORIGINAL_POP_PROJ
+       1           ABORIGINAL_POP_PROJ_REMOTE
+       2     ABS_ABORIGINAL_POPPROJ_INDREGION
+       3                    ABS_ACLD_LFSTATUS
+       4                      ABS_ACLD_TENURE
+                           ...               
+UY110  86                DF_TTT_SEXO_AREA_REF
+WB     0                DF_WITS_Tariff_TRAINS
+       1       DF_WITS_TradeStats_Development
+       2            DF_WITS_TradeStats_Tariff
+       3             DF_WITS_TradeStats_Trade
+Name: dataflow, Length: 33147, dtype: object</code></pre>
 </div>
 </div>
-<div id="b2f711ec" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dflows[<span class="st">'BIS'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="d03cb9ef" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dflows[<span class="st">'BIS'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>BIS_REL_CAL                                     BIS_RELEASE_CALENDAR
-WS_CBPOL                                                 Policy rate
+WS_CBPOL                                   Central bank policy rates
 WS_CBS_PUB                                  BIS consolidated banking
 WS_CBTA                                    Central bank total assets
 WS_CPMI_CASHLESS                      CPMI cashless payments (T5,T6)
@@ -728,25 +541,33 @@ Name: dataflow, dtype: object</code></pre>
 </div>
 </div>
 <p>Or the user can search dataflows by their human-readable name instead of their code. For example, this is one way to see if any dataflow has information on interest rates:</p>
-<div id="3bd88fe6" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'Interest rate'</span>, case<span class="op">=</span><span class="va">False</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="43196155" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'Interest rate'</span>, case<span class="op">=</span><span class="va">False</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
-<pre><code>ECB    IRS                                            Interest rate statistics
-       MIR                                        MFI Interest Rate Statistics
-       RIR                                               Retail Interest Rates
-ESTAT  EI_MFIR_M                                 Interest rates - monthly data
-       ENPE_IRT_LD                     Loan and deposit one year interest rate
-       ENPE_IRT_ST                                 Money market interest rates
-       TEIMF040                                          3-month-interest rate
-       TEIMF100                         Day-to-day money market interest rates
-       IRT_ST_A                      Money market interest rates - annual data
-       IRT_ST_M                     Money market interest rates - monthly data
-       IRT_ST_Q                   Money market interest rates - quarterly data
-IMF    6SR                   M&amp;B: Interest Rates and Share Prices (6SR) for...
-       INR                                                      Interest rates
-       INR_NSTD                                    Interest rates_Non-Standard
-NB     GOVT_GENERIC_RATES                               Generic interest rates
-       GOVT_IRS                                            Interest rate swaps
+<pre><code>ECB     IRS                                            Interest rate statistics
+        MIR                                        MFI Interest Rate Statistics
+        RIR                                               Retail Interest Rates
+ESTAT   TEIMF040                                          3-month-interest rate
+        TEIMF100                         Day-to-day money market interest rates
+        IRT_ST_A                      Money market interest rates - annual data
+        IRT_ST_M                     Money market interest rates - monthly data
+        IRT_ST_Q                   Money market interest rates - quarterly data
+        EI_MFIR_M                                 Interest rates - monthly data
+        ENPE_IRT_LD                     Loan and deposit one year interest rate
+        ENPE_IRT_ST                                 Money market interest rates
+ESTAT3  IRT_ST_A                      Money market interest rates - annual data
+        IRT_ST_M                     Money market interest rates - monthly data
+        IRT_ST_Q                   Money market interest rates - quarterly data
+        TEIMF040                                          3-month-interest rate
+        TEIMF100                         Day-to-day money market interest rates
+        EI_MFIR_M                                 Interest rates - monthly data
+        ENPE_IRT_LD                     Loan and deposit one year interest rate
+        ENPE_IRT_ST                                 Money market interest rates
+IMF     6SR                   M&amp;B: Interest Rates and Share Prices (6SR) for...
+        INR                                                      Interest rates
+        INR_NSTD                                    Interest rates_Non-Standard
+NB      GOVT_GENERIC_RATES                               Generic interest rates
+        GOVT_IRS                                            Interest rate swaps
 Name: dataflow, dtype: object</code></pre>
 </div>
 </div>
@@ -764,18 +585,18 @@ Args:
     keys (dict): The keys to be used in the SDMX query.
     params (dict): The parameters to be used in the SDMX query.
     verbose (bool): Whether to communicate download steps to the user.
-
+    
 Returns:
     A pandas DataFrame with data from SDMX or None if no data matches the sources, keys, and parameters.</pre>
-<div id="694439b5" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> load_SDMX_data(sources<span class="op">=</span>{<span class="st">'ECB'</span>: <span class="st">'CISS'</span>, <span class="st">'BIS'</span>: <span class="st">'WS_CBPOL_D'</span>}, keys<span class="op">=</span>{<span class="st">'FREQ'</span>: <span class="st">'D'</span>}, params<span class="op">=</span>{<span class="st">'startPeriod'</span>: <span class="dv">2003</span>})</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(df) <span class="op">==</span> pd.DataFrame</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> df.shape[<span class="dv">0</span>] <span class="op">&gt;</span> <span class="dv">0</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> df.shape[<span class="dv">1</span>] <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="937c658c" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> load_SDMX_data(sources<span class="op">=</span>{<span class="st">'ECB'</span>: <span class="st">'CISS'</span>, <span class="st">'BIS'</span>: <span class="st">'WS_CBPOL_D'</span>}, keys<span class="op">=</span>{<span class="st">'FREQ'</span>: <span class="st">'D'</span>}, params<span class="op">=</span>{<span class="st">'startPeriod'</span>: <span class="dv">2003</span>})</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">type</span>(df) <span class="op">==</span> pd.DataFrame</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> df.shape[<span class="dv">0</span>] <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> df.shape[<span class="dv">1</span>] <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-Querying data from BIS's dataflow 'WS_CBPOL' - Policy rate...</code></pre>
+Querying data from BIS's dataflow 'WS_CBPOL' - Central bank policy rates...</code></pre>
 </div>
 </div>
 </section>
@@ -809,13 +630,13 @@ Returns:
 Raises:
     ValueError: If the input DataFrame's index is not a DatetimeIndex.</pre>
 <p>For instance, using daily data from a DataFrame:</p>
-<div id="1e095bcb" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the first few rows of the DataFrame</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>display(df.head())</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract temporal features for daily data</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>temporal <span class="op">=</span> get_timefeat(df, freq<span class="op">=</span><span class="st">"D"</span>, add_to_df<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>display(temporal.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b960e5ba" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the first few rows of the DataFrame</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>display(df.head())</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract temporal features for daily data</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>temporal <span class="op">=</span> get_timefeat(df, freq<span class="op">=</span><span class="st">"D"</span>, add_to_df<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>display(temporal.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 
@@ -835,18 +656,18 @@ Raises:
 <th data-quarto-table-cell-role="th">ECB__CISS_D__IE__Z0Z__4F__EC__SS_CIN__IDX</th>
 <th data-quarto-table-cell-role="th">ECB__CISS_D__IT__Z0Z__4F__EC__SS_CIN__IDX</th>
 <th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__SA</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__SE</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__TH</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__TR</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__US</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__XM</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__ZA</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__AU</th>
 <th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__AR</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CH</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CL</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CN</th>
-<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__CO</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__AU</th>
+<th data-quarto-table-cell-role="th">BIS__WS_CBPOL_D__BR</th>
 </tr>
-<tr class="odd">
+<tr class="even">
 <th data-quarto-table-cell-role="th">TIME_PERIOD</th>
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th"></th>
@@ -881,20 +702,20 @@ Raises:
 <td>0.028552</td>
 <td>0.053814</td>
 <td>0.005528</td>
-<td>0.061118</td>
+<td>0.060809</td>
 <td>0.004191</td>
 <td>0.057108</td>
 <td>...</td>
+<td>2.0</td>
+<td>NaN</td>
+<td>1.75</td>
 <td>NaN</td>
 <td>1.25</td>
 <td>2.75</td>
 <td>NaN</td>
 <td>NaN</td>
 <td>NaN</td>
-<td>0.75</td>
-<td>NaN</td>
-<td>5.31</td>
-<td>5.25</td>
+<td>25.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2003-01-02</td>
@@ -905,20 +726,20 @@ Raises:
 <td>0.039988</td>
 <td>0.075186</td>
 <td>0.013415</td>
-<td>0.048480</td>
+<td>0.049041</td>
 <td>0.014820</td>
 <td>0.064289</td>
 <td>...</td>
+<td>NaN</td>
+<td>3.75</td>
+<td>1.75</td>
 <td>44.0</td>
 <td>1.25</td>
 <td>2.75</td>
 <td>13.5</td>
-<td>4.75</td>
 <td>5.99</td>
-<td>0.75</td>
-<td>3.0</td>
-<td>5.31</td>
-<td>5.25</td>
+<td>4.75</td>
+<td>25.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2003-01-03</td>
@@ -929,20 +750,20 @@ Raises:
 <td>0.040378</td>
 <td>0.077400</td>
 <td>0.014249</td>
-<td>0.047644</td>
+<td>0.047883</td>
 <td>0.016874</td>
 <td>0.064880</td>
 <td>...</td>
+<td>NaN</td>
+<td>3.75</td>
+<td>1.75</td>
 <td>44.0</td>
 <td>1.25</td>
 <td>2.75</td>
 <td>13.5</td>
-<td>4.75</td>
 <td>6.05</td>
-<td>0.75</td>
-<td>3.0</td>
-<td>5.31</td>
-<td>5.25</td>
+<td>4.75</td>
+<td>25.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2003-01-04</td>
@@ -957,16 +778,16 @@ Raises:
 <td>NaN</td>
 <td>NaN</td>
 <td>...</td>
+<td>2.0</td>
+<td>NaN</td>
+<td>1.75</td>
 <td>NaN</td>
 <td>1.25</td>
 <td>2.75</td>
 <td>13.5</td>
 <td>NaN</td>
 <td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>5.31</td>
-<td>5.25</td>
+<td>25.0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2003-01-05</td>
@@ -981,21 +802,21 @@ Raises:
 <td>NaN</td>
 <td>NaN</td>
 <td>...</td>
+<td>2.0</td>
+<td>NaN</td>
+<td>1.75</td>
 <td>NaN</td>
 <td>1.25</td>
 <td>2.75</td>
 <td>NaN</td>
 <td>NaN</td>
 <td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>5.31</td>
-<td>5.25</td>
+<td>25.0</td>
 </tr>
 </tbody>
 </table>
 
-<p>5 rows × 61 columns</p>
+<p>5 rows × 62 columns</p>
 </div>
 </div>
 <div class="cell-output cell-output-display">
@@ -1019,7 +840,7 @@ Raises:
 <th data-quarto-table-cell-role="th">quarter_end</th>
 <th data-quarto-table-cell-role="th">year_end</th>
 </tr>
-<tr class="odd">
+<tr class="even">
 <th data-quarto-table-cell-role="th">TIME_PERIOD</th>
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th"></th>
@@ -1118,16 +939,16 @@ Raises:
 </div>
 </div>
 <p>You can also integrate the temporal features directly into the original DataFrame by setting the <code>add_to_df</code> parameter to True:</p>
-<div id="ac6cd7c4" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sample DataFrame with a weekly index</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>df_weekly <span class="op">=</span> pd.DataFrame(</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{<span class="st">"value"</span>: rng.normal(size<span class="op">=</span><span class="dv">100</span>)},</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>pd.date_range(<span class="st">'2000-01-01'</span>, periods<span class="op">=</span><span class="dv">100</span>, freq<span class="op">=</span><span class="st">'W-MON'</span>)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add temporal features to the weekly data</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>df_with_timefeat <span class="op">=</span> get_timefeat(df_weekly, freq<span class="op">=</span><span class="st">"W"</span>, add_to_df<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>display(df_with_timefeat.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="787da15d" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sample DataFrame with a weekly index</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>df_weekly <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{<span class="st">"value"</span>: rng.normal(size<span class="op">=</span><span class="dv">100</span>)},</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>pd.date_range(<span class="st">'2000-01-01'</span>, periods<span class="op">=</span><span class="dv">100</span>, freq<span class="op">=</span><span class="st">'W-MON'</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add temporal features to the weekly data</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>df_with_timefeat <span class="op">=</span> get_timefeat(df_weekly, freq<span class="op">=</span><span class="st">"W"</span>, add_to_df<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>display(df_with_timefeat.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 
@@ -1215,15 +1036,15 @@ Raises:
 </div>
 </div>
 <p>If you only need a subset of the temporal features, you can specify the desired feature names:</p>
-<div id="ea9dba43" class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a new DataFrame with a monthly index</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>df_monthly <span class="op">=</span> pd.DataFrame(</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{<span class="st">"value"</span>: rng.normal(size<span class="op">=</span><span class="dv">24</span>)},</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>pd.date_range(<span class="st">"2023-01-01"</span>, periods<span class="op">=</span><span class="dv">24</span>, freq<span class="op">=</span><span class="st">'MS'</span>)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Only select a subset of temporal features:</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>df_with_timefeat <span class="op">=</span> get_timefeat(df_monthly, freq<span class="op">=</span><span class="st">"MS"</span>, columns<span class="op">=</span>[<span class="st">"month_of_year"</span>, <span class="st">"quarter_of_year"</span>])</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>display(df_with_timefeat.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="e182ae7c" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a new DataFrame with a monthly index</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>df_monthly <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{<span class="st">"value"</span>: rng.normal(size<span class="op">=</span><span class="dv">24</span>)},</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>pd.date_range(<span class="st">"2023-01-01"</span>, periods<span class="op">=</span><span class="dv">24</span>, freq<span class="op">=</span><span class="st">'MS'</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Only select a subset of temporal features:</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>df_with_timefeat <span class="op">=</span> get_timefeat(df_monthly, freq<span class="op">=</span><span class="st">"MS"</span>, columns<span class="op">=</span>[<span class="st">"month_of_year"</span>, <span class="st">"quarter_of_year"</span>])</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>display(df_with_timefeat.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 
@@ -1275,10 +1096,10 @@ Raises:
 </div>
 </div>
 <p>In addition to <code>get_timefeat</code>, the gingado library provides the <code>TemporalFeatureTransformer</code> class, which can be used to transform a DataFrame with a temporal index into a DataFrame with additional features:</p>
-<div id="6238dbf6" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>temp_trf <span class="op">=</span> TemporalFeatureTransformer(freq<span class="op">=</span><span class="st">"W"</span>, features<span class="op">=</span>[<span class="st">"week_of_month"</span>, <span class="st">"week_of_year"</span>, <span class="st">"quarter_of_year"</span>])</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>df_with_timefeat <span class="op">=</span> temp_trf.fit_transform(df_weekly)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>display(df_with_timefeat.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="85bc59fb" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>temp_trf <span class="op">=</span> TemporalFeatureTransformer(freq<span class="op">=</span><span class="st">"W"</span>, features<span class="op">=</span>[<span class="st">"week_of_month"</span>, <span class="st">"week_of_year"</span>, <span class="st">"quarter_of_year"</span>])</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>df_with_timefeat <span class="op">=</span> temp_trf.fit_transform(df_weekly)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>display(df_with_timefeat.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 
@@ -1567,8 +1388,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1681,7 +1500,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

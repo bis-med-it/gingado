@@ -189,7 +189,6 @@ At this stage, we can extract the list of donor countries, ie, those that will b
 " ".join(synth_BR.donor_pool_)
 ```
 
-These countries are: Albania 🇦🇱, Bulgaria 🇧🇬, Bosnia and Herzegovina 🇧🇦, Belarus 🇧🇾, Barbados 🇧🇧, Botswana 🇧🇼, Colombia 🇨🇴, Cuba 🇨🇺, Dominican Republic 🇩🇴, Algeria 🇩🇿, Egypt 🇪🇬, Fiji 🇫🇯, Guyana 🇬🇾, Iraq 🇮🇶, Kazakhstan 🇰🇿, Saint Lucia 🇱🇨, North Macedonia 🇲🇰, Mauritius 🇲🇺, Namibia 🇳🇦, State of Palestine 🇵🇸, Serbia 🇷🇸, Eswatini 🇸🇿, Tunisia 🇹🇳, Saint Vincent and the Grenadines 🇻🇨, Yemen 🇾🇪 and South Africa 🇿🇦.
 
 > Note: This list does not imply all countries contribute equally to estimating the synthetic version of Brazil. In fact, some might even end up not even contributing in the estimating equation. The selected list also does not imply a causal explanation from any of those countries into the Brazilian dynamics. They are merely closest to Brazil in this clustering exercise, and as such, likely to be a good predictor at the same time period.
 
@@ -243,7 +242,9 @@ plt.show()
 
 ### Treatment effect
 
-The main result is shown below, corresponding to the difference between actual and estimated value for the whole time series (from 2000). If the red line (Brazil) stays close to the other ones - placebo estimations.
+The main result is shown below, corresponding to the difference between actual and estimated value for the whole time series (from 2000). If the red line (Brazil) stays close to the other ones - placebo estimations - then one can conclude that there was no effect from this intervention.
+
+In fact, this seems to be the case with Brazil's labour market deregulation.
 
 ```{python}
 
@@ -265,31 +266,6 @@ plt.title(effect_title)
 plt.show()
 ```
 
-It seems there is some outlier effect with one of the control countries.
-
-```{python}
-
-synth_BR.placebo_diff_.loc['2022-01-01'].sort_values(ascending=False).index[0]
-```
-
-According to the code above, it is Guyana 🇬🇾. Now plotting without this country:
-
-::: {.preview-image}
-
-```{python}
-
-colors = ['grey'] * (synth_BR.placebo_diff_.shape[1] - 1)+ ['red']
-ax = all_diffs[[c for c in all_diffs.columns if c != "GUY"]].plot(legend=False, color=colors)
-ax.axvline(x='2016-12-31', color='black', linestyle='solid')
-ax.axvline(x='2017-11-11', color='red', linestyle='--')
-ax.axhline(y=0, color='black', linewidth=1.2)
-plt.ylabel(y_label)
-plt.xlabel('')
-plt.title(effect_title)
-plt.show()
-```
-
-:::
 
 ## Interpretation
 

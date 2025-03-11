@@ -23,7 +23,8 @@ jobs:
       - name: Install quarto
         run: |
           # download the latest stable release of quarto
-          version=$(curl https://quarto.org/docs/download/_download.json | jq -r '.version')  
+          version=$(curl https://quarto.org/docs/download/_download.json | jq -r '.version')
+          echo "Installing quarto version $version"
           gh release download -R github.com/quarto-dev/quarto-cli $version --pattern "*linux-amd64.deb"
           sudo apt -y install quarto-${version}-linux-amd64.deb
 

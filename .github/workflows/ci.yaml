@@ -20,7 +20,7 @@ jobs:
           python-version: "3.11"
       - run: |
           pip install -r requirements.txt
-          pip install jupyter
+          pip install -r dev_requirements.txt
 
       - name: Install quarto
         run: |

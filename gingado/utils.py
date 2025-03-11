@@ -6,7 +6,7 @@ from gingado.internals import DayFeatures, WeekFeatures, MonthFeatures, QuarterF
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_is_fitted, validate_data
 
-__all__ = ['get_datetime', 'read_attr', 'Lag', 'list_SDMX_sources', 'list_all_dataflows', 'load_SDMX_data']
+__all__ = ['get_datetime', 'read_attr', 'Lag', 'list_SDMX_sources', 'list_all_dataflows', 'load_SDMX_data', 'codelists']
 
 def get_datetime():
     "Returns the time now"
@@ -189,6 +189,25 @@ def load_SDMX_data(
     df = pd.concat(data_sdmx, axis=1)
     df.columns = ['_'.join(col) for col in df.columns.to_flat_index()]
     return df
+
+
+def codelists(dflow):
+    """
+    Retrieves the codelist for specific SDMX dataflows.
+
+    Args:
+        dflow (dict): A dictionary specifying the source as the key and the dataflow (or list of dataflows) as the value.
+
+    Returns:
+        dict: A dictionary with each source as a key and the values containing the codelist for the specified dataflow(s),detailing code information relevant to the SDMX data structure.
+    """
+    codelists = {}
+    for k, v in dflow.items():
+        if isinstance(v, list):  # If v is a list of dataflows
+            codelists[k] = {dataflow: sdmx.to_pandas(sdmx.Client(k).dataflow(dataflow).codelist) for dataflow in v}
+        else:  # If v is a single dataflow
+            codelists[k] = sdmx.to_pandas(sdmx.Client(k).dataflow(v).codelist)
+    return codelists
 
 
 def get_timefeat(

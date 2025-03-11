@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+
+      - name: Install quarto
+        run: |
+          # download the latest stable release of quarto
+          version=$(curl https://quarto.org/docs/download/_download.json | jq -r '.version')  
+          gh release download -R github.com/quarto-dev/quarto-cli $version --pattern "*linux-amd64.deb"
+          sudo apt -y install quarto-${version}-linux-amd64.deb
+
+      - name: Render
+        run: |
+          quarto render

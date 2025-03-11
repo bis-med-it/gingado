@@ -6,3 +6,4 @@ nbclient
 pandas-stubs
 pre-commit
 pytest
+jupyter

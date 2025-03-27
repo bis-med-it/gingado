@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.40">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -91,12 +91,12 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9b8f6c33b8a184d254b5eaa30f9d0661.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-db77c3ec39dfe3474f9f96fa411a1105.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -132,7 +132,6 @@ div.csl-indent {
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Machine controls – gingado">
 <meta property="og:description" content="Effects of labour reform on productivity with synthetic controls (Abadie 2021) using machine learning">
-<meta property="og:image" content="01_machine_controls_files/figure-html/cell-20-output-1.png">
 <meta property="og:site_name" content="gingado">
 </head>
 
@@ -307,7 +306,7 @@ div.csl-indent {
 <blockquote class="blockquote">
 <p>Note: There are many other variables that would be interesting for this study as well, such as various labour market indicators.</p>
 </blockquote>
-<div id="0b7b626d" class="cell" data-execution_count="1">
+<div id="b9bfd757" class="cell" data-execution_count="1">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -324,13 +323,13 @@ div.csl-indent {
 <section id="downloading-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="downloading-the-data">Downloading the data</h2>
 <p>First, we list all dataflows obtainable with SDMX.</p>
-<div id="e1b42cd7" class="cell" data-execution_count="2">
+<div id="d59d2a93" class="cell" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="9f85d80b" class="cell" data-execution_count="3">
+<div id="573cc123" class="cell" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'per worker'</span>, case<span class="op">=</span><span class="va">False</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -344,7 +343,7 @@ Name: dataflow, dtype: object</code></pre>
 </div>
 </div>
 <p>Let’s get the data on output per worker provided by the International Labour Organisation (ILO):</p>
-<div id="3779368e" class="cell" data-execution_count="4">
+<div id="7e2abd47" class="cell" data-execution_count="4">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>outcome_var <span class="op">=</span> load_SDMX_data(</span>
@@ -358,7 +357,7 @@ Name: dataflow, dtype: object</code></pre>
 </div>
 </div>
 <p>This dataflow provides one series for each country, as seen below.</p>
-<div id="9199f87a" class="cell" data-execution_count="5">
+<div id="f040cd4a" class="cell" data-execution_count="5">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>col_fields <span class="op">=</span> pd.DataFrame([c.split(<span class="st">"__"</span>) <span class="cf">for</span> c <span class="kw">in</span> outcome_var.columns])</span>
@@ -384,7 +383,7 @@ First five rows:
 </div>
 <p>Because 271 is much higher than the number of countries that usually report international statistics (close to 200), it is likely some 70 columns or more correspond to aggregations, typically used in statistics for convenience (eg, one code that encompasses all countries in the European Union, etc). We need to take them out, in case Brazil is a constituent of any of those aggregations.</p>
 <p>One common way of spotting these aggregations in international statistics is finding the country codes that begin with “X”.</p>
-<div id="ca76ce9e" class="cell" data-execution_count="6">
+<div id="f510aae1" class="cell" data-execution_count="6">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>([c <span class="cf">for</span> c <span class="kw">in</span> outcome_var.columns <span class="cf">if</span> <span class="st">"DF_GDP_211P_NOC_NB_X"</span> <span class="kw">in</span> c])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -395,7 +394,7 @@ First five rows:
 </div>
 <p>Also, we will take out other countries that have undergone labour reforms more or less around the same time. From <span class="citation" data-cites="serra2022reforma">Serra, Bottega, and Sanches (<a href="#ref-serra2022reforma" role="doc-biblioref">2022</a>)</span>, I am aware of Argentina 🇦🇷, Costa Rica 🇨🇷, Paraguay 🇵🇾, and Uruguay 🇺🇾.</p>
 <p>It is important to note, though, that these countries above were named by <span class="citation" data-cites="serra2022reforma">Serra, Bottega, and Sanches (<a href="#ref-serra2022reforma" role="doc-biblioref">2022</a>)</span> because their synthetic control donor pool consistent of geographically close countries. Other countries might have also enacted labour reforms in that period. For expositional purposes, we can assume no further country needs to be taken out of the same.</p>
-<div id="5a7e3eb2" class="cell" data-execution_count="7">
+<div id="4a03cb43" class="cell" data-execution_count="7">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>col_filter <span class="op">=</span> [</span>
@@ -421,7 +420,7 @@ First five rows:
 </details>
 </div>
 <p>This is what the series of annual output per worker in Brazil looks like. A vertical line marking November 2017, when the labour reforms entered into force.</p>
-<div id="8cf7b8ba" class="cell" data-execution_count="8">
+<div id="23cac1e9" class="cell" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>law_date <span class="op">=</span> <span class="st">'2017-11-11'</span></span>
@@ -439,14 +438,14 @@ First five rows:
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="01_machine_controls_files/figure-html/cell-9-output-2.png" width="610" height="431" class="figure-img"></p>
+<p><img src="01_machine_controls_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Before creating the <code>MachineControl</code> object, a final comment on the intervention date.</p>
 <p>Since the reforms were enacted and entered into force in the same year of 2017, we can be conservative and consider: - pre-intervention data up to end-2016 - post-intervention data from 2018 onwards</p>
-<div id="10541e55" class="cell" data-execution_count="9">
+<div id="d9e8c348" class="cell" data-execution_count="9">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X_pre, y_pre <span class="op">=</span> X[:<span class="st">'2016-12-31'</span>], y[:<span class="st">'2016-12-31'</span>]</span>
@@ -463,7 +462,7 @@ First five rows:
 <h2 class="anchored" data-anchor-id="using-the-machinecontrol-object">Using the <code>MachineControl</code> object</h2>
 <p>The code chunk below shows how a <code>MachineControl</code> object can be created.</p>
 <p>As illustrated below, users can not only choose the clustering, estimator and manifold learning algorithms that best suit their needs, but also pass specific arguments to each of these elements.</p>
-<div id="44c2ab10" class="cell" data-execution_count="10">
+<div id="a5859488" class="cell" data-execution_count="10">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>synth_BR <span class="op">=</span> MachineControl(</span>
@@ -474,7 +473,7 @@ First five rows:
 </details>
 </div>
 <p>Let’s train and then inspect the <code>MachineControl</code> object:</p>
-<div id="d3d3ba97" class="cell" data-execution_count="11">
+<div id="3662662f" class="cell" data-execution_count="11">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>synth_BR.fit(X_pre, y_pre)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -895,7 +894,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-3);
 }
-</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>MachineControl(cluster_alg=AffinityPropagation(max_iter=10000),
+</a></style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>MachineControl(cluster_alg=AffinityPropagation(max_iter=10000),
                estimator=RandomForestRegressor(), manifold=TSNE(perplexity=5))</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox"><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>MachineControl</div></div><div><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted"><pre>MachineControl(cluster_alg=AffinityPropagation(max_iter=10000),
                estimator=RandomForestRegressor(), manifold=TSNE(perplexity=5))</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox"><label for="sk-estimator-id-2" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>cluster_alg: AffinityPropagation</div></div></label><div class="sk-toggleable__content fitted"><pre>AffinityPropagation(max_iter=10000)</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox"><label for="sk-estimator-id-3" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>AffinityPropagation</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.cluster.AffinityPropagation.html">?<span>Documentation for AffinityPropagation</span></a></div></label><div class="sk-toggleable__content fitted"><pre>AffinityPropagation(max_iter=10000)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox"><label for="sk-estimator-id-4" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>estimator: RandomForestRegressor</div></div></label><div class="sk-toggleable__content fitted"><pre>RandomForestRegressor()</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox"><label for="sk-estimator-id-5" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>RandomForestRegressor</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.ensemble.RandomForestRegressor.html">?<span>Documentation for RandomForestRegressor</span></a></div></label><div class="sk-toggleable__content fitted"><pre>RandomForestRegressor()</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-6" type="checkbox"><label for="sk-estimator-id-6" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>manifold: TSNE</div></div></label><div class="sk-toggleable__content fitted"><pre>TSNE(perplexity=5)</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-7" type="checkbox"><label for="sk-estimator-id-7" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>TSNE</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.manifold.TSNE.html">?<span>Documentation for TSNE</span></a></div></label><div class="sk-toggleable__content fitted"><pre>TSNE(perplexity=5)</pre></div> </div></div></div></div></div></div></div></div></div>
 </div>
@@ -907,7 +906,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <li><p>A manifold learning algorithm that summarises the different time series in a 2-dimensional embedding space, enabling easier comparison of Brazil with each other country and with the synthetic control (t-SNE)</p></li>
 </ol>
 <p>At this stage, we can extract the list of donor countries, ie, those that will be used in the control.</p>
-<div id="f52508a2" class="cell" data-execution_count="12">
+<div id="500afc2e" class="cell" data-execution_count="12">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">" "</span>.join(synth_BR.donor_pool_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -916,12 +915,11 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <pre><code>'BGR BIH BLR BWA CUB DOM EGY IRN JOR KAZ LBN LCA MDV MEX MKD MUS NAM PAN SRB STP TUN ZAF'</code></pre>
 </div>
 </div>
-<p>These countries are: Albania 🇦🇱, Bulgaria 🇧🇬, Bosnia and Herzegovina 🇧🇦, Belarus 🇧🇾, Barbados 🇧🇧, Botswana 🇧🇼, Colombia 🇨🇴, Cuba 🇨🇺, Dominican Republic 🇩🇴, Algeria 🇩🇿, Egypt 🇪🇬, Fiji 🇫🇯, Guyana 🇬🇾, Iraq 🇮🇶, Kazakhstan 🇰🇿, Saint Lucia 🇱🇨, North Macedonia 🇲🇰, Mauritius 🇲🇺, Namibia 🇳🇦, State of Palestine 🇵🇸, Serbia 🇷🇸, Eswatini 🇸🇿, Tunisia 🇹🇳, Saint Vincent and the Grenadines 🇻🇨, Yemen 🇾🇪 and South Africa 🇿🇦.</p>
 <blockquote class="blockquote">
-<p>Note: This list does not imply all countries contribute equally to estimating the synthetic version of Brazil. In fact, some might even end up not even contributing in the estimating equation. The selected list also does not imply a causal explanation from any of those countries into the Brazilian dynamics. They are merely closest to Brazil in this clustering exercise, and as such, likely to be a good predictor at the same time period.</p>
+<p>Note: This list does not imply all countries contribute equally to estimating the synthetic version of Brazil. In fact, some might even end up not even contributing in the estimating equation. The selected list also does not imply a causal explanation from any of those countries into the Brazilian dynamics. They are merely closest to Brazilas a group in this clustering exercise, and as such, likely to be a good predictor at the same time period.</p>
 </blockquote>
 <p>And here is how the outcome variable for these countries (grey) compares with Brazil’s (red).</p>
-<div id="6df03649" class="cell" data-execution_count="13">
+<div id="f28cde98" class="cell" data-execution_count="13">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> X_pre[synth_BR.donor_pool_].plot(legend<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">"grey"</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
@@ -930,13 +928,13 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="01_machine_controls_files/figure-html/cell-14-output-1.png" width="608" height="429" class="figure-img"></p>
+<p><img src="01_machine_controls_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Plotting the result of the manifold learning underscores whether the synthetic control seems indeed to come from a similar space in the data distribution as the entity of interest.</p>
-<div id="d1c7008b" class="cell" data-execution_count="14">
+<div id="33cd0a4d" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.35</span>)] <span class="op">*</span> X.shape[<span class="dv">1</span>] <span class="op">+</span> [<span class="st">'red'</span>, <span class="st">'blue'</span>]</span>
@@ -952,28 +950,28 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="01_machine_controls_files/figure-html/cell-15-output-1.png" width="577" height="411" class="figure-img"></p>
+<p><img src="01_machine_controls_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<div id="e10fd71d" class="cell" data-execution_count="15">
+<p>As can be seen in the graph above, the actual Brazil 🇧🇷 (blue) and the machine controls (red) are almost juxtaposed.</p>
+<p>To confirm objectively that the control is good, the Euclidean distance between the embeddings for the control and the actual outcome is in a very low perceentile:</p>
+<div id="e8bc3cd9" class="cell" data-execution_count="15">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>synth_BR.control_quality_test_ <span class="op">/</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="15">
-<pre><code>np.float64(0.015636280373927027)</code></pre>
+<pre><code>np.float64(0.013908977984445512)</code></pre>
 </div>
 </div>
-<p>As can be seen in the graph above, the actual Brazil 🇧🇷 (blue) and the machine controls (red) are almost juxtaposed.</p>
-<p>To confirm objectively that the control is good, the Euclidean distance between the embeddings for the control and the actual outcome are one of the lowest, more specifically at the 2% percentile.</p>
-<p>Together, both point to a strong signal that the control managed to replicate the pre-intervention outcome.</p>
+<p>Together, these results are a strong signal that the control managed to replicate the pre-intervention outcome.</p>
 <p>So now it’s time to look at the results in the years following the event.</p>
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
-<div id="64ed9998" class="cell" data-execution_count="16">
+<div id="eaf978a2" class="cell" data-execution_count="16">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> synth_BR.predict(X, y).plot(legend<span class="op">=</span><span class="va">False</span>)</span>
@@ -986,7 +984,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="01_machine_controls_files/figure-html/cell-17-output-1.png" width="610" height="431" class="figure-img"></p>
+<p><img src="01_machine_controls_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -994,7 +992,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <section id="treatment-effect" class="level3">
 <h3 class="anchored" data-anchor-id="treatment-effect">Treatment effect</h3>
 <p>The main result is shown below, corresponding to the difference between actual and estimated value for the whole time series (from 2000). If the red line (Brazil) stays close to the other ones - placebo estimations.</p>
-<div id="97f758d8" class="cell" data-execution_count="17">
+<div id="1f627ce6" class="cell" data-execution_count="17">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>all_diffs <span class="op">=</span> pd.concat([</span>
@@ -1017,42 +1015,8 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="01_machine_controls_files/figure-html/cell-18-output-1.png" width="621" height="431" class="figure-img"></p>
+<p><img src="01_machine_controls_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
 </figure>
-</div>
-</div>
-</div>
-<p>It seems there is some outlier effect with one of the control countries.</p>
-<div id="c61685d6" class="cell" data-execution_count="18">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>synth_BR.placebo_diff_.loc[<span class="st">'2022-01-01'</span>].sort_values(ascending<span class="op">=</span><span class="va">False</span>).index[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="18">
-<pre><code>'EGY'</code></pre>
-</div>
-</div>
-<p>According to the code above, it is Guyana 🇬🇾. Now plotting without this country:</p>
-<div class="preview-image">
-<div id="d95a57e2" class="cell" data-execution_count="19">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'grey'</span>] <span class="op">*</span> (synth_BR.placebo_diff_.shape[<span class="dv">1</span>] <span class="op">-</span> <span class="dv">1</span>)<span class="op">+</span> [<span class="st">'red'</span>]</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> all_diffs[[c <span class="cf">for</span> c <span class="kw">in</span> all_diffs.columns <span class="cf">if</span> c <span class="op">!=</span> <span class="st">"GUY"</span>]].plot(legend<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span>colors)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span><span class="st">'2016-12-31'</span>, color<span class="op">=</span><span class="st">'black'</span>, linestyle<span class="op">=</span><span class="st">'solid'</span>)</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span><span class="st">'2017-11-11'</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>ax.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'black'</span>, linewidth<span class="op">=</span><span class="fl">1.2</span>)</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(y_label)</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">''</span>)</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>plt.title(effect_title)</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="01_machine_controls_files/figure-html/cell-20-output-1.png" width="621" height="431" class="figure-img"></p>
-</figure>
-</div>
 </div>
 </div>
 </div>
@@ -1305,6 +1269,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1468,6 +1434,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
@@ -1693,285 +1660,259 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb29" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Machine controls</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> 'Effects of labour reform on productivity with synthetic controls [@abadie2021using] using machine learning'</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="an">output-file:</span><span class="co"> machine_controls.html</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> Douglas K. G. Araujo</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="an">code-fold:</span><span class="co"> show</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="an">code-tools:</span><span class="co"> true</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="an">warning:</span><span class="co"> false</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>This notebook illustrates the use of <span class="in">`MachineControl`</span>, the <span class="in">`gingado`</span> estimator that calculates a synthetic control model with machine learning techniques.</span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setting</span></span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>Use of the <span class="in">`MachineControl`</span> estimator is illustrated with an admittedly simplistic estimation of the impact of softening labour regulation on output per worker, measured in constant 2017 international US dollars PPP.</span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>More specifically, the example below focuses on Brazil's 2017 labour reforms (Law No 13,467/2017). The reform markedly deregulated labour markets, with the purpose of increasing productivity and thereby unlocking growth. Some of its main points are:</span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>prominence of collective bargaining between firms and employees over statutory "blanket" provisions</span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>lower costs for employers of employment termination without just cause</span>
-<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>discouraging of labour litigation by employees, previously diagnosed as being excessive and contributing to clogging the judicial system </span>
-<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>The reform was enacted in July 2017 and went into effect in November of the same year.</span>
-<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using machine learning</span></span>
-<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a><span class="in">`MachineControl`</span> does the following:</span>
-<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>automatically select a group of countries from a global list to form a smaller set of control countries</span>
-<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>estimate a GDP value for "synthetic Brazil" using pre-enactment data on the outcome of interest</span>
-<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>check the statistical quality of the synthetic control</span>
-<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>calculates the difference between post-reforms actual Brazilian GDP growth to synthetic Brazil's to measure the effect of the labour reform.</span>
-<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Note: There are many other variables that would be interesting for this study as well, such as various labour market indicators.</span></span>
-<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> list_all_dataflows, load_SDMX_data</span>
-<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.estimators <span class="im">import</span> MachineControl</span>
-<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> AffinityPropagation</span>
-<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
-<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.manifold <span class="im">import</span> TSNE</span>
-<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## Downloading the data</span></span>
-<span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a>First, we list all dataflows obtainable with SDMX.</span>
-<span id="cb29-58"><a href="#cb29-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-61"><a href="#cb29-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-62"><a href="#cb29-62" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb29-63"><a href="#cb29-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-64"><a href="#cb29-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-67"><a href="#cb29-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-68"><a href="#cb29-68" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'per worker'</span>, case<span class="op">=</span><span class="va">False</span>)]</span>
-<span id="cb29-69"><a href="#cb29-69" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-70"><a href="#cb29-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-71"><a href="#cb29-71" aria-hidden="true" tabindex="-1"></a>Let's get the data on output per worker provided by the International Labour Organisation (ILO):</span>
-<span id="cb29-72"><a href="#cb29-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-75"><a href="#cb29-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-76"><a href="#cb29-76" aria-hidden="true" tabindex="-1"></a>outcome_var <span class="op">=</span> load_SDMX_data(</span>
-<span id="cb29-77"><a href="#cb29-77" aria-hidden="true" tabindex="-1"></a>    sources<span class="op">=</span>{<span class="st">'ILO'</span>: <span class="st">'DF_GDP_211P_NOC_NB'</span>}, </span>
-<span id="cb29-78"><a href="#cb29-78" aria-hidden="true" tabindex="-1"></a>    keys<span class="op">=</span>{<span class="st">'FREQ'</span>: <span class="st">'A'</span>}, </span>
-<span id="cb29-79"><a href="#cb29-79" aria-hidden="true" tabindex="-1"></a>    params<span class="op">=</span>{<span class="st">'startPeriod'</span>: <span class="dv">2000</span>, <span class="st">'endPeriod'</span>: <span class="dv">2022</span>}</span>
-<span id="cb29-80"><a href="#cb29-80" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb29-81"><a href="#cb29-81" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-82"><a href="#cb29-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-83"><a href="#cb29-83" aria-hidden="true" tabindex="-1"></a>This dataflow provides one series for each country, as seen below.</span>
-<span id="cb29-84"><a href="#cb29-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-87"><a href="#cb29-87" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-88"><a href="#cb29-88" aria-hidden="true" tabindex="-1"></a>col_fields <span class="op">=</span> pd.DataFrame([c.split(<span class="st">"__"</span>) <span class="cf">for</span> c <span class="kw">in</span> outcome_var.columns])</span>
-<span id="cb29-89"><a href="#cb29-89" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> col_fields.columns:</span>
-<span id="cb29-90"><a href="#cb29-90" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"No of unique values for column No"</span>, col, <span class="st">": "</span>, col_fields[col].nunique())</span>
-<span id="cb29-91"><a href="#cb29-91" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">First five rows:"</span>)</span>
-<span id="cb29-92"><a href="#cb29-92" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(col_fields.head())</span>
-<span id="cb29-93"><a href="#cb29-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-94"><a href="#cb29-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-95"><a href="#cb29-95" aria-hidden="true" tabindex="-1"></a>Because 271 is much higher than the number of countries that usually report international statistics (close to 200), it is likely some 70 columns or more correspond to aggregations, typically used in statistics for convenience (eg, one code that encompasses all countries in the European Union, etc). We need to take them out, in case Brazil is a constituent of any of those aggregations.</span>
-<span id="cb29-96"><a href="#cb29-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-97"><a href="#cb29-97" aria-hidden="true" tabindex="-1"></a>One common way of spotting these aggregations in international statistics is  finding the country codes that begin with "X".</span>
-<span id="cb29-98"><a href="#cb29-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-101"><a href="#cb29-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-102"><a href="#cb29-102" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>([c <span class="cf">for</span> c <span class="kw">in</span> outcome_var.columns <span class="cf">if</span> <span class="st">"DF_GDP_211P_NOC_NB_X"</span> <span class="kw">in</span> c])</span>
-<span id="cb29-103"><a href="#cb29-103" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-104"><a href="#cb29-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-105"><a href="#cb29-105" aria-hidden="true" tabindex="-1"></a>Also, we will take out other countries that have undergone labour reforms more or less around the same time. From @serra2022reforma, I am aware of Argentina 🇦🇷, Costa Rica 🇨🇷, Paraguay 🇵🇾, and Uruguay 🇺🇾. </span>
-<span id="cb29-106"><a href="#cb29-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-107"><a href="#cb29-107" aria-hidden="true" tabindex="-1"></a>It is important to note, though, that these countries above were named by @serra2022reforma because their synthetic control donor pool consistent of geographically close countries. Other countries might have also enacted labour reforms in that period. For expositional purposes, we can assume no further country needs to be taken out of the same.</span>
-<span id="cb29-108"><a href="#cb29-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-111"><a href="#cb29-111" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-112"><a href="#cb29-112" aria-hidden="true" tabindex="-1"></a>col_filter <span class="op">=</span> [</span>
-<span id="cb29-113"><a href="#cb29-113" aria-hidden="true" tabindex="-1"></a>    c <span class="cf">for</span> c <span class="kw">in</span> outcome_var.columns</span>
-<span id="cb29-114"><a href="#cb29-114" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">"DF_GDP_211P_NOC_NB_X"</span> <span class="kw">not</span> <span class="kw">in</span> c</span>
-<span id="cb29-115"><a href="#cb29-115" aria-hidden="true" tabindex="-1"></a>    <span class="kw">and</span> <span class="st">"DF_GDP_211P_NOC_NB_ARG"</span> <span class="kw">not</span> <span class="kw">in</span> c</span>
-<span id="cb29-116"><a href="#cb29-116" aria-hidden="true" tabindex="-1"></a>    <span class="kw">and</span> <span class="st">"DF_GDP_211P_NOC_NB_CRI"</span> <span class="kw">not</span> <span class="kw">in</span> c</span>
-<span id="cb29-117"><a href="#cb29-117" aria-hidden="true" tabindex="-1"></a>    <span class="kw">and</span> <span class="st">"DF_GDP_211P_NOC_NB_PAR"</span> <span class="kw">not</span> <span class="kw">in</span> c</span>
-<span id="cb29-118"><a href="#cb29-118" aria-hidden="true" tabindex="-1"></a>    <span class="kw">and</span> <span class="st">"DF_GDP_211P_NOC_NB_URY"</span> <span class="kw">not</span> <span class="kw">in</span> c</span>
-<span id="cb29-119"><a href="#cb29-119" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb29-120"><a href="#cb29-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-121"><a href="#cb29-121" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> outcome_var[col_filter]</span>
-<span id="cb29-122"><a href="#cb29-122" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> X.dropna(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb29-123"><a href="#cb29-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-124"><a href="#cb29-124" aria-hidden="true" tabindex="-1"></a><span class="co"># cleaning out the name to remove the constant portions across all countries</span></span>
-<span id="cb29-125"><a href="#cb29-125" aria-hidden="true" tabindex="-1"></a>X.columns <span class="op">=</span> [c.replace(<span class="st">"ILO__DF_GDP_211P_NOC_NB_"</span>, <span class="st">""</span>) <span class="op">\</span></span>
-<span id="cb29-126"><a href="#cb29-126" aria-hidden="true" tabindex="-1"></a>    .replace(<span class="st">"__A__GDP_211P_NB"</span>, <span class="st">""</span>) <span class="cf">for</span> c <span class="kw">in</span> X.columns]</span>
-<span id="cb29-127"><a href="#cb29-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-128"><a href="#cb29-128" aria-hidden="true" tabindex="-1"></a>col_BRA <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> X.columns <span class="cf">if</span> c <span class="op">==</span> <span class="st">"BRA"</span>]</span>
-<span id="cb29-129"><a href="#cb29-129" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> X.pop(col_BRA[<span class="dv">0</span>])</span>
-<span id="cb29-130"><a href="#cb29-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-131"><a href="#cb29-131" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> X.shape[<span class="dv">0</span>] <span class="op">==</span> y.shape[<span class="dv">0</span>]</span>
-<span id="cb29-132"><a href="#cb29-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-133"><a href="#cb29-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-134"><a href="#cb29-134" aria-hidden="true" tabindex="-1"></a>This is what the series of annual output per worker in Brazil looks like. A vertical line marking November 2017, when the labour reforms entered into force.</span>
-<span id="cb29-135"><a href="#cb29-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-138"><a href="#cb29-138" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-139"><a href="#cb29-139" aria-hidden="true" tabindex="-1"></a>law_date <span class="op">=</span> <span class="st">'2017-11-11'</span></span>
-<span id="cb29-140"><a href="#cb29-140" aria-hidden="true" tabindex="-1"></a>ylabel <span class="op">=</span> <span class="st">'PPP 2017 US$ per worker'</span></span>
-<span id="cb29-141"><a href="#cb29-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-142"><a href="#cb29-142" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> y.plot(legend<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb29-143"><a href="#cb29-143" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span>law_date, color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb29-144"><a href="#cb29-144" aria-hidden="true" tabindex="-1"></a>plt.ylabel(ylabel)</span>
-<span id="cb29-145"><a href="#cb29-145" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">''</span>)</span>
-<span id="cb29-146"><a href="#cb29-146" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Labour productivity in Brazil'</span>)</span>
-<span id="cb29-147"><a href="#cb29-147" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-148"><a href="#cb29-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-149"><a href="#cb29-149" aria-hidden="true" tabindex="-1"></a>Before creating the <span class="in">`MachineControl`</span> object, a final comment on the intervention date.</span>
-<span id="cb29-150"><a href="#cb29-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-151"><a href="#cb29-151" aria-hidden="true" tabindex="-1"></a>Since the reforms were enacted and entered into force in the same year of 2017, we can be conservative and consider:</span>
-<span id="cb29-152"><a href="#cb29-152" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>pre-intervention data up to end-2016</span>
-<span id="cb29-153"><a href="#cb29-153" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>post-intervention data from 2018 onwards</span>
-<span id="cb29-154"><a href="#cb29-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-157"><a href="#cb29-157" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-158"><a href="#cb29-158" aria-hidden="true" tabindex="-1"></a>X_pre, y_pre <span class="op">=</span> X[:<span class="st">'2016-12-31'</span>], y[:<span class="st">'2016-12-31'</span>]</span>
-<span id="cb29-159"><a href="#cb29-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-160"><a href="#cb29-160" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> X_pre.shape[<span class="dv">0</span>] <span class="op">==</span> y_pre.shape[<span class="dv">0</span>]</span>
-<span id="cb29-161"><a href="#cb29-161" aria-hidden="true" tabindex="-1"></a>X_pre.shape, y_pre.shape</span>
-<span id="cb29-162"><a href="#cb29-162" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-163"><a href="#cb29-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-164"><a href="#cb29-164" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using the `MachineControl` object</span></span>
-<span id="cb29-165"><a href="#cb29-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-166"><a href="#cb29-166" aria-hidden="true" tabindex="-1"></a>The code chunk below shows how a <span class="in">`MachineControl`</span> object can be created.</span>
-<span id="cb29-167"><a href="#cb29-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-168"><a href="#cb29-168" aria-hidden="true" tabindex="-1"></a>As illustrated below, users can not only choose the clustering, estimator and manifold learning algorithms that best suit their needs, but also pass specific arguments to each of these elements.</span>
-<span id="cb29-169"><a href="#cb29-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-172"><a href="#cb29-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-173"><a href="#cb29-173" aria-hidden="true" tabindex="-1"></a>synth_BR <span class="op">=</span> MachineControl(</span>
-<span id="cb29-174"><a href="#cb29-174" aria-hidden="true" tabindex="-1"></a>    cluster_alg<span class="op">=</span>AffinityPropagation(max_iter<span class="op">=</span><span class="dv">10_000</span>),</span>
-<span id="cb29-175"><a href="#cb29-175" aria-hidden="true" tabindex="-1"></a>    estimator<span class="op">=</span>RandomForestRegressor(),</span>
-<span id="cb29-176"><a href="#cb29-176" aria-hidden="true" tabindex="-1"></a>    manifold<span class="op">=</span>TSNE(perplexity<span class="op">=</span><span class="dv">5</span>)</span>
-<span id="cb29-177"><a href="#cb29-177" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb29-178"><a href="#cb29-178" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-179"><a href="#cb29-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-180"><a href="#cb29-180" aria-hidden="true" tabindex="-1"></a>Let's train and then inspect the <span class="in">`MachineControl`</span> object:</span>
-<span id="cb29-181"><a href="#cb29-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-184"><a href="#cb29-184" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-185"><a href="#cb29-185" aria-hidden="true" tabindex="-1"></a>synth_BR.fit(X_pre, y_pre)</span>
-<span id="cb29-186"><a href="#cb29-186" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-187"><a href="#cb29-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-188"><a href="#cb29-188" aria-hidden="true" tabindex="-1"></a>As shown above, the machine control estimator comprises:</span>
-<span id="cb29-189"><a href="#cb29-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-190"><a href="#cb29-190" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>A clustering algorithm that selects the donor pool from the larger population (affinity propagation)</span>
-<span id="cb29-191"><a href="#cb29-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-192"><a href="#cb29-192" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>A supervised learning algorithm that will use the donor pool to estimate contemporanous values for Brazil (random forest)</span>
-<span id="cb29-193"><a href="#cb29-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-194"><a href="#cb29-194" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>A manifold learning algorithm that summarises the different time series in a 2-dimensional embedding space, enabling easier comparison of Brazil with each other country and with the synthetic control (t-SNE)</span>
-<span id="cb29-195"><a href="#cb29-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-196"><a href="#cb29-196" aria-hidden="true" tabindex="-1"></a>At this stage, we can extract the list of donor countries, ie, those that will be used in the control.</span>
-<span id="cb29-197"><a href="#cb29-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-200"><a href="#cb29-200" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-201"><a href="#cb29-201" aria-hidden="true" tabindex="-1"></a><span class="co">" "</span>.join(synth_BR.donor_pool_)</span>
-<span id="cb29-202"><a href="#cb29-202" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-203"><a href="#cb29-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-204"><a href="#cb29-204" aria-hidden="true" tabindex="-1"></a>These countries are: Albania 🇦🇱, Bulgaria 🇧🇬, Bosnia and Herzegovina 🇧🇦, Belarus 🇧🇾, Barbados 🇧🇧, Botswana 🇧🇼, Colombia 🇨🇴, Cuba 🇨🇺, Dominican Republic 🇩🇴, Algeria 🇩🇿, Egypt 🇪🇬, Fiji 🇫🇯, Guyana 🇬🇾, Iraq 🇮🇶, Kazakhstan 🇰🇿, Saint Lucia 🇱🇨, North Macedonia 🇲🇰, Mauritius 🇲🇺, Namibia 🇳🇦, State of Palestine 🇵🇸, Serbia 🇷🇸, Eswatini 🇸🇿, Tunisia 🇹🇳, Saint Vincent and the Grenadines 🇻🇨, Yemen 🇾🇪 and South Africa 🇿🇦.</span>
-<span id="cb29-205"><a href="#cb29-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-206"><a href="#cb29-206" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Note: This list does not imply all countries contribute equally to estimating the synthetic version of Brazil. In fact, some might even end up not even contributing in the estimating equation. The selected list also does not imply a causal explanation from any of those countries into the Brazilian dynamics. They are merely closest to Brazil in this clustering exercise, and as such, likely to be a good predictor at the same time period.</span></span>
-<span id="cb29-207"><a href="#cb29-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-208"><a href="#cb29-208" aria-hidden="true" tabindex="-1"></a>And here is how the outcome variable for these countries (grey) compares with Brazil's (red).</span>
-<span id="cb29-209"><a href="#cb29-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-212"><a href="#cb29-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-213"><a href="#cb29-213" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> X_pre[synth_BR.donor_pool_].plot(legend<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">"grey"</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb29-214"><a href="#cb29-214" aria-hidden="true" tabindex="-1"></a>y_pre.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"red"</span>, linewidth<span class="op">=</span><span class="fl">2.5</span>)</span>
-<span id="cb29-215"><a href="#cb29-215" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-216"><a href="#cb29-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-217"><a href="#cb29-217" aria-hidden="true" tabindex="-1"></a>Plotting the result of the manifold learning underscores whether the synthetic control seems indeed to come from a similar space in the data distribution as the entity of interest.</span>
-<span id="cb29-218"><a href="#cb29-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-221"><a href="#cb29-221" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-222"><a href="#cb29-222" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.35</span>)] <span class="op">*</span> X.shape[<span class="dv">1</span>] <span class="op">+</span> [<span class="st">'red'</span>, <span class="st">'blue'</span>]</span>
-<span id="cb29-223"><a href="#cb29-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-224"><a href="#cb29-224" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb29-225"><a href="#cb29-225" aria-hidden="true" tabindex="-1"></a>ax.scatter(</span>
-<span id="cb29-226"><a href="#cb29-226" aria-hidden="true" tabindex="-1"></a>    synth_BR.manifold_embed_[:, <span class="dv">0</span>], synth_BR.manifold_embed_[:, <span class="dv">1</span>],</span>
-<span id="cb29-227"><a href="#cb29-227" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>colors,</span>
-<span id="cb29-228"><a href="#cb29-228" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb29-229"><a href="#cb29-229" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
-<span id="cb29-230"><a href="#cb29-230" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb29-231"><a href="#cb29-231" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-232"><a href="#cb29-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-235"><a href="#cb29-235" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-236"><a href="#cb29-236" aria-hidden="true" tabindex="-1"></a>synth_BR.control_quality_test_ <span class="op">/</span> <span class="dv">100</span></span>
-<span id="cb29-237"><a href="#cb29-237" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-238"><a href="#cb29-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-239"><a href="#cb29-239" aria-hidden="true" tabindex="-1"></a>As can be seen in the graph above, the actual Brazil 🇧🇷 (blue) and the machine controls (red) are almost juxtaposed.</span>
-<span id="cb29-240"><a href="#cb29-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-241"><a href="#cb29-241" aria-hidden="true" tabindex="-1"></a>To confirm objectively that the control is good, the Euclidean distance between the embeddings for the control and the actual outcome are one of the lowest, more specifically at the 2% percentile. </span>
-<span id="cb29-242"><a href="#cb29-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-243"><a href="#cb29-243" aria-hidden="true" tabindex="-1"></a>Together, both point to a strong signal that the control managed to replicate the pre-intervention outcome.</span>
-<span id="cb29-244"><a href="#cb29-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-245"><a href="#cb29-245" aria-hidden="true" tabindex="-1"></a>So now it's time to look at the results in the years following the event.</span>
-<span id="cb29-246"><a href="#cb29-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-247"><a href="#cb29-247" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results</span></span>
-<span id="cb29-248"><a href="#cb29-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-251"><a href="#cb29-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-252"><a href="#cb29-252" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> synth_BR.predict(X, y).plot(legend<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb29-253"><a href="#cb29-253" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span><span class="st">'2017-11-11'</span>, color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb29-254"><a href="#cb29-254" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'PPP 2017 US$ per worker'</span>)</span>
-<span id="cb29-255"><a href="#cb29-255" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">''</span>)</span>
-<span id="cb29-256"><a href="#cb29-256" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Labour productivity in Brazil"</span>)</span>
-<span id="cb29-257"><a href="#cb29-257" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb29-258"><a href="#cb29-258" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-259"><a href="#cb29-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-260"><a href="#cb29-260" aria-hidden="true" tabindex="-1"></a><span class="fu">### Treatment effect</span></span>
-<span id="cb29-261"><a href="#cb29-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-262"><a href="#cb29-262" aria-hidden="true" tabindex="-1"></a>The main result is shown below, corresponding to the difference between actual and estimated value for the whole time series (from 2000). If the red line (Brazil) stays close to the other ones - placebo estimations.</span>
-<span id="cb29-263"><a href="#cb29-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-266"><a href="#cb29-266" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-267"><a href="#cb29-267" aria-hidden="true" tabindex="-1"></a>all_diffs <span class="op">=</span> pd.concat([</span>
-<span id="cb29-268"><a href="#cb29-268" aria-hidden="true" tabindex="-1"></a>    synth_BR.placebo_diff_,</span>
-<span id="cb29-269"><a href="#cb29-269" aria-hidden="true" tabindex="-1"></a>    synth_BR.diff_</span>
-<span id="cb29-270"><a href="#cb29-270" aria-hidden="true" tabindex="-1"></a>], axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb29-271"><a href="#cb29-271" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'grey'</span>] <span class="op">*</span> synth_BR.placebo_diff_.shape[<span class="dv">1</span>] <span class="op">+</span> [<span class="st">'red'</span>]</span>
-<span id="cb29-272"><a href="#cb29-272" aria-hidden="true" tabindex="-1"></a>y_label <span class="op">=</span> <span class="st">'PPP 2017 US$ per worker'</span></span>
-<span id="cb29-273"><a href="#cb29-273" aria-hidden="true" tabindex="-1"></a>effect_title <span class="op">=</span> <span class="st">"Effect of deregulation on labour productivity in Brazil"</span></span>
-<span id="cb29-274"><a href="#cb29-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-275"><a href="#cb29-275" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> all_diffs.plot(legend<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span>colors)</span>
-<span id="cb29-276"><a href="#cb29-276" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span><span class="st">'2016-12-31'</span>, color<span class="op">=</span><span class="st">'black'</span>, linestyle<span class="op">=</span><span class="st">'solid'</span>)</span>
-<span id="cb29-277"><a href="#cb29-277" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span><span class="st">'2017-11-11'</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb29-278"><a href="#cb29-278" aria-hidden="true" tabindex="-1"></a>ax.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'black'</span>, linewidth<span class="op">=</span><span class="fl">1.2</span>)</span>
-<span id="cb29-279"><a href="#cb29-279" aria-hidden="true" tabindex="-1"></a>plt.ylabel(y_label)</span>
-<span id="cb29-280"><a href="#cb29-280" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">''</span>)</span>
-<span id="cb29-281"><a href="#cb29-281" aria-hidden="true" tabindex="-1"></a>plt.title(effect_title)</span>
-<span id="cb29-282"><a href="#cb29-282" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb29-283"><a href="#cb29-283" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-284"><a href="#cb29-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-285"><a href="#cb29-285" aria-hidden="true" tabindex="-1"></a>It seems there is some outlier effect with one of the control countries.</span>
-<span id="cb29-286"><a href="#cb29-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-289"><a href="#cb29-289" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-290"><a href="#cb29-290" aria-hidden="true" tabindex="-1"></a>synth_BR.placebo_diff_.loc[<span class="st">'2022-01-01'</span>].sort_values(ascending<span class="op">=</span><span class="va">False</span>).index[<span class="dv">0</span>]</span>
-<span id="cb29-291"><a href="#cb29-291" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-292"><a href="#cb29-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-293"><a href="#cb29-293" aria-hidden="true" tabindex="-1"></a>According to the code above, it is Guyana 🇬🇾. Now plotting without this country:</span>
-<span id="cb29-294"><a href="#cb29-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-295"><a href="#cb29-295" aria-hidden="true" tabindex="-1"></a>::: {.preview-image}</span>
-<span id="cb29-296"><a href="#cb29-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-299"><a href="#cb29-299" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb29-300"><a href="#cb29-300" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'grey'</span>] <span class="op">*</span> (synth_BR.placebo_diff_.shape[<span class="dv">1</span>] <span class="op">-</span> <span class="dv">1</span>)<span class="op">+</span> [<span class="st">'red'</span>]</span>
-<span id="cb29-301"><a href="#cb29-301" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> all_diffs[[c <span class="cf">for</span> c <span class="kw">in</span> all_diffs.columns <span class="cf">if</span> c <span class="op">!=</span> <span class="st">"GUY"</span>]].plot(legend<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span>colors)</span>
-<span id="cb29-302"><a href="#cb29-302" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span><span class="st">'2016-12-31'</span>, color<span class="op">=</span><span class="st">'black'</span>, linestyle<span class="op">=</span><span class="st">'solid'</span>)</span>
-<span id="cb29-303"><a href="#cb29-303" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span><span class="st">'2017-11-11'</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb29-304"><a href="#cb29-304" aria-hidden="true" tabindex="-1"></a>ax.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'black'</span>, linewidth<span class="op">=</span><span class="fl">1.2</span>)</span>
-<span id="cb29-305"><a href="#cb29-305" aria-hidden="true" tabindex="-1"></a>plt.ylabel(y_label)</span>
-<span id="cb29-306"><a href="#cb29-306" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">''</span>)</span>
-<span id="cb29-307"><a href="#cb29-307" aria-hidden="true" tabindex="-1"></a>plt.title(effect_title)</span>
-<span id="cb29-308"><a href="#cb29-308" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb29-309"><a href="#cb29-309" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb29-310"><a href="#cb29-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-311"><a href="#cb29-311" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb29-312"><a href="#cb29-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-313"><a href="#cb29-313" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpretation</span></span>
-<span id="cb29-314"><a href="#cb29-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-315"><a href="#cb29-315" aria-hidden="true" tabindex="-1"></a>The above results hint at a null effect of the reforms on labour productivity after training cutoff date (black vertical line). If anything, the effect squarely close to zero throughout the years following the reform (red vertical line), even as the productivity for the majority of control countries actually went up in the years before the pandemic.</span>
-<span id="cb29-316"><a href="#cb29-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-317"><a href="#cb29-317" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<div class="sourceCode" id="cb26" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Machine controls</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> 'Effects of labour reform on productivity with synthetic controls [@abadie2021using] using machine learning'</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="an">output-file:</span><span class="co"> machine_controls.html</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> Douglas K. G. Araujo</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="an">code-fold:</span><span class="co"> show</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="an">code-tools:</span><span class="co"> true</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="an">warning:</span><span class="co"> false</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>This notebook illustrates the use of <span class="in">`MachineControl`</span>, the <span class="in">`gingado`</span> estimator that calculates a synthetic control model with machine learning techniques.</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setting</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>Use of the <span class="in">`MachineControl`</span> estimator is illustrated with an admittedly simplistic estimation of the impact of softening labour regulation on output per worker, measured in constant 2017 international US dollars PPP.</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>More specifically, the example below focuses on Brazil's 2017 labour reforms (Law No 13,467/2017). The reform markedly deregulated labour markets, with the purpose of increasing productivity and thereby unlocking growth. Some of its main points are:</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>prominence of collective bargaining between firms and employees over statutory "blanket" provisions</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>lower costs for employers of employment termination without just cause</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>discouraging of labour litigation by employees, previously diagnosed as being excessive and contributing to clogging the judicial system </span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>The reform was enacted in July 2017 and went into effect in November of the same year.</span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using machine learning</span></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a><span class="in">`MachineControl`</span> does the following:</span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>automatically select a group of countries from a global list to form a smaller set of control countries</span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>estimate a GDP value for "synthetic Brazil" using pre-enactment data on the outcome of interest</span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>check the statistical quality of the synthetic control</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>calculates the difference between post-reforms actual Brazilian GDP growth to synthetic Brazil's to measure the effect of the labour reform.</span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Note: There are many other variables that would be interesting for this study as well, such as various labour market indicators.</span></span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> list_all_dataflows, load_SDMX_data</span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.estimators <span class="im">import</span> MachineControl</span>
+<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> AffinityPropagation</span>
+<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
+<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.manifold <span class="im">import</span> TSNE</span>
+<span id="cb26-53"><a href="#cb26-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-54"><a href="#cb26-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-55"><a href="#cb26-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## Downloading the data</span></span>
+<span id="cb26-56"><a href="#cb26-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-57"><a href="#cb26-57" aria-hidden="true" tabindex="-1"></a>First, we list all dataflows obtainable with SDMX.</span>
+<span id="cb26-58"><a href="#cb26-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-61"><a href="#cb26-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-62"><a href="#cb26-62" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows(return_pandas<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb26-63"><a href="#cb26-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-64"><a href="#cb26-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-67"><a href="#cb26-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-68"><a href="#cb26-68" aria-hidden="true" tabindex="-1"></a>dflows[dflows.<span class="bu">str</span>.contains(<span class="st">'per worker'</span>, case<span class="op">=</span><span class="va">False</span>)]</span>
+<span id="cb26-69"><a href="#cb26-69" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-70"><a href="#cb26-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-71"><a href="#cb26-71" aria-hidden="true" tabindex="-1"></a>Let's get the data on output per worker provided by the International Labour Organisation (ILO):</span>
+<span id="cb26-72"><a href="#cb26-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-75"><a href="#cb26-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-76"><a href="#cb26-76" aria-hidden="true" tabindex="-1"></a>outcome_var <span class="op">=</span> load_SDMX_data(</span>
+<span id="cb26-77"><a href="#cb26-77" aria-hidden="true" tabindex="-1"></a>    sources<span class="op">=</span>{<span class="st">'ILO'</span>: <span class="st">'DF_GDP_211P_NOC_NB'</span>}, </span>
+<span id="cb26-78"><a href="#cb26-78" aria-hidden="true" tabindex="-1"></a>    keys<span class="op">=</span>{<span class="st">'FREQ'</span>: <span class="st">'A'</span>}, </span>
+<span id="cb26-79"><a href="#cb26-79" aria-hidden="true" tabindex="-1"></a>    params<span class="op">=</span>{<span class="st">'startPeriod'</span>: <span class="dv">2000</span>, <span class="st">'endPeriod'</span>: <span class="dv">2022</span>}</span>
+<span id="cb26-80"><a href="#cb26-80" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-81"><a href="#cb26-81" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-82"><a href="#cb26-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-83"><a href="#cb26-83" aria-hidden="true" tabindex="-1"></a>This dataflow provides one series for each country, as seen below.</span>
+<span id="cb26-84"><a href="#cb26-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-87"><a href="#cb26-87" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-88"><a href="#cb26-88" aria-hidden="true" tabindex="-1"></a>col_fields <span class="op">=</span> pd.DataFrame([c.split(<span class="st">"__"</span>) <span class="cf">for</span> c <span class="kw">in</span> outcome_var.columns])</span>
+<span id="cb26-89"><a href="#cb26-89" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> col_fields.columns:</span>
+<span id="cb26-90"><a href="#cb26-90" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"No of unique values for column No"</span>, col, <span class="st">": "</span>, col_fields[col].nunique())</span>
+<span id="cb26-91"><a href="#cb26-91" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">First five rows:"</span>)</span>
+<span id="cb26-92"><a href="#cb26-92" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(col_fields.head())</span>
+<span id="cb26-93"><a href="#cb26-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-94"><a href="#cb26-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-95"><a href="#cb26-95" aria-hidden="true" tabindex="-1"></a>Because 271 is much higher than the number of countries that usually report international statistics (close to 200), it is likely some 70 columns or more correspond to aggregations, typically used in statistics for convenience (eg, one code that encompasses all countries in the European Union, etc). We need to take them out, in case Brazil is a constituent of any of those aggregations.</span>
+<span id="cb26-96"><a href="#cb26-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-97"><a href="#cb26-97" aria-hidden="true" tabindex="-1"></a>One common way of spotting these aggregations in international statistics is  finding the country codes that begin with "X".</span>
+<span id="cb26-98"><a href="#cb26-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-101"><a href="#cb26-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-102"><a href="#cb26-102" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>([c <span class="cf">for</span> c <span class="kw">in</span> outcome_var.columns <span class="cf">if</span> <span class="st">"DF_GDP_211P_NOC_NB_X"</span> <span class="kw">in</span> c])</span>
+<span id="cb26-103"><a href="#cb26-103" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-104"><a href="#cb26-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-105"><a href="#cb26-105" aria-hidden="true" tabindex="-1"></a>Also, we will take out other countries that have undergone labour reforms more or less around the same time. From @serra2022reforma, I am aware of Argentina 🇦🇷, Costa Rica 🇨🇷, Paraguay 🇵🇾, and Uruguay 🇺🇾. </span>
+<span id="cb26-106"><a href="#cb26-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-107"><a href="#cb26-107" aria-hidden="true" tabindex="-1"></a>It is important to note, though, that these countries above were named by @serra2022reforma because their synthetic control donor pool consistent of geographically close countries. Other countries might have also enacted labour reforms in that period. For expositional purposes, we can assume no further country needs to be taken out of the same.</span>
+<span id="cb26-108"><a href="#cb26-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-111"><a href="#cb26-111" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-112"><a href="#cb26-112" aria-hidden="true" tabindex="-1"></a>col_filter <span class="op">=</span> [</span>
+<span id="cb26-113"><a href="#cb26-113" aria-hidden="true" tabindex="-1"></a>    c <span class="cf">for</span> c <span class="kw">in</span> outcome_var.columns</span>
+<span id="cb26-114"><a href="#cb26-114" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">"DF_GDP_211P_NOC_NB_X"</span> <span class="kw">not</span> <span class="kw">in</span> c</span>
+<span id="cb26-115"><a href="#cb26-115" aria-hidden="true" tabindex="-1"></a>    <span class="kw">and</span> <span class="st">"DF_GDP_211P_NOC_NB_ARG"</span> <span class="kw">not</span> <span class="kw">in</span> c</span>
+<span id="cb26-116"><a href="#cb26-116" aria-hidden="true" tabindex="-1"></a>    <span class="kw">and</span> <span class="st">"DF_GDP_211P_NOC_NB_CRI"</span> <span class="kw">not</span> <span class="kw">in</span> c</span>
+<span id="cb26-117"><a href="#cb26-117" aria-hidden="true" tabindex="-1"></a>    <span class="kw">and</span> <span class="st">"DF_GDP_211P_NOC_NB_PAR"</span> <span class="kw">not</span> <span class="kw">in</span> c</span>
+<span id="cb26-118"><a href="#cb26-118" aria-hidden="true" tabindex="-1"></a>    <span class="kw">and</span> <span class="st">"DF_GDP_211P_NOC_NB_URY"</span> <span class="kw">not</span> <span class="kw">in</span> c</span>
+<span id="cb26-119"><a href="#cb26-119" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb26-120"><a href="#cb26-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-121"><a href="#cb26-121" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> outcome_var[col_filter]</span>
+<span id="cb26-122"><a href="#cb26-122" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> X.dropna(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb26-123"><a href="#cb26-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-124"><a href="#cb26-124" aria-hidden="true" tabindex="-1"></a><span class="co"># cleaning out the name to remove the constant portions across all countries</span></span>
+<span id="cb26-125"><a href="#cb26-125" aria-hidden="true" tabindex="-1"></a>X.columns <span class="op">=</span> [c.replace(<span class="st">"ILO__DF_GDP_211P_NOC_NB_"</span>, <span class="st">""</span>) <span class="op">\</span></span>
+<span id="cb26-126"><a href="#cb26-126" aria-hidden="true" tabindex="-1"></a>    .replace(<span class="st">"__A__GDP_211P_NB"</span>, <span class="st">""</span>) <span class="cf">for</span> c <span class="kw">in</span> X.columns]</span>
+<span id="cb26-127"><a href="#cb26-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-128"><a href="#cb26-128" aria-hidden="true" tabindex="-1"></a>col_BRA <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> X.columns <span class="cf">if</span> c <span class="op">==</span> <span class="st">"BRA"</span>]</span>
+<span id="cb26-129"><a href="#cb26-129" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> X.pop(col_BRA[<span class="dv">0</span>])</span>
+<span id="cb26-130"><a href="#cb26-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-131"><a href="#cb26-131" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> X.shape[<span class="dv">0</span>] <span class="op">==</span> y.shape[<span class="dv">0</span>]</span>
+<span id="cb26-132"><a href="#cb26-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-133"><a href="#cb26-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-134"><a href="#cb26-134" aria-hidden="true" tabindex="-1"></a>This is what the series of annual output per worker in Brazil looks like. A vertical line marking November 2017, when the labour reforms entered into force.</span>
+<span id="cb26-135"><a href="#cb26-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-138"><a href="#cb26-138" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-139"><a href="#cb26-139" aria-hidden="true" tabindex="-1"></a>law_date <span class="op">=</span> <span class="st">'2017-11-11'</span></span>
+<span id="cb26-140"><a href="#cb26-140" aria-hidden="true" tabindex="-1"></a>ylabel <span class="op">=</span> <span class="st">'PPP 2017 US$ per worker'</span></span>
+<span id="cb26-141"><a href="#cb26-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-142"><a href="#cb26-142" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> y.plot(legend<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb26-143"><a href="#cb26-143" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span>law_date, color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb26-144"><a href="#cb26-144" aria-hidden="true" tabindex="-1"></a>plt.ylabel(ylabel)</span>
+<span id="cb26-145"><a href="#cb26-145" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">''</span>)</span>
+<span id="cb26-146"><a href="#cb26-146" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Labour productivity in Brazil'</span>)</span>
+<span id="cb26-147"><a href="#cb26-147" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-148"><a href="#cb26-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-149"><a href="#cb26-149" aria-hidden="true" tabindex="-1"></a>Before creating the <span class="in">`MachineControl`</span> object, a final comment on the intervention date.</span>
+<span id="cb26-150"><a href="#cb26-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-151"><a href="#cb26-151" aria-hidden="true" tabindex="-1"></a>Since the reforms were enacted and entered into force in the same year of 2017, we can be conservative and consider:</span>
+<span id="cb26-152"><a href="#cb26-152" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>pre-intervention data up to end-2016</span>
+<span id="cb26-153"><a href="#cb26-153" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>post-intervention data from 2018 onwards</span>
+<span id="cb26-154"><a href="#cb26-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-157"><a href="#cb26-157" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-158"><a href="#cb26-158" aria-hidden="true" tabindex="-1"></a>X_pre, y_pre <span class="op">=</span> X[:<span class="st">'2016-12-31'</span>], y[:<span class="st">'2016-12-31'</span>]</span>
+<span id="cb26-159"><a href="#cb26-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-160"><a href="#cb26-160" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> X_pre.shape[<span class="dv">0</span>] <span class="op">==</span> y_pre.shape[<span class="dv">0</span>]</span>
+<span id="cb26-161"><a href="#cb26-161" aria-hidden="true" tabindex="-1"></a>X_pre.shape, y_pre.shape</span>
+<span id="cb26-162"><a href="#cb26-162" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-163"><a href="#cb26-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-164"><a href="#cb26-164" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using the `MachineControl` object</span></span>
+<span id="cb26-165"><a href="#cb26-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-166"><a href="#cb26-166" aria-hidden="true" tabindex="-1"></a>The code chunk below shows how a <span class="in">`MachineControl`</span> object can be created.</span>
+<span id="cb26-167"><a href="#cb26-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-168"><a href="#cb26-168" aria-hidden="true" tabindex="-1"></a>As illustrated below, users can not only choose the clustering, estimator and manifold learning algorithms that best suit their needs, but also pass specific arguments to each of these elements.</span>
+<span id="cb26-169"><a href="#cb26-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-172"><a href="#cb26-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-173"><a href="#cb26-173" aria-hidden="true" tabindex="-1"></a>synth_BR <span class="op">=</span> MachineControl(</span>
+<span id="cb26-174"><a href="#cb26-174" aria-hidden="true" tabindex="-1"></a>    cluster_alg<span class="op">=</span>AffinityPropagation(max_iter<span class="op">=</span><span class="dv">10_000</span>),</span>
+<span id="cb26-175"><a href="#cb26-175" aria-hidden="true" tabindex="-1"></a>    estimator<span class="op">=</span>RandomForestRegressor(),</span>
+<span id="cb26-176"><a href="#cb26-176" aria-hidden="true" tabindex="-1"></a>    manifold<span class="op">=</span>TSNE(perplexity<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb26-177"><a href="#cb26-177" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-178"><a href="#cb26-178" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-179"><a href="#cb26-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-180"><a href="#cb26-180" aria-hidden="true" tabindex="-1"></a>Let's train and then inspect the <span class="in">`MachineControl`</span> object:</span>
+<span id="cb26-181"><a href="#cb26-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-184"><a href="#cb26-184" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-185"><a href="#cb26-185" aria-hidden="true" tabindex="-1"></a>synth_BR.fit(X_pre, y_pre)</span>
+<span id="cb26-186"><a href="#cb26-186" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-187"><a href="#cb26-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-188"><a href="#cb26-188" aria-hidden="true" tabindex="-1"></a>As shown above, the machine control estimator comprises:</span>
+<span id="cb26-189"><a href="#cb26-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-190"><a href="#cb26-190" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>A clustering algorithm that selects the donor pool from the larger population (affinity propagation)</span>
+<span id="cb26-191"><a href="#cb26-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-192"><a href="#cb26-192" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>A supervised learning algorithm that will use the donor pool to estimate contemporanous values for Brazil (random forest)</span>
+<span id="cb26-193"><a href="#cb26-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-194"><a href="#cb26-194" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>A manifold learning algorithm that summarises the different time series in a 2-dimensional embedding space, enabling easier comparison of Brazil with each other country and with the synthetic control (t-SNE)</span>
+<span id="cb26-195"><a href="#cb26-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-196"><a href="#cb26-196" aria-hidden="true" tabindex="-1"></a>At this stage, we can extract the list of donor countries, ie, those that will be used in the control.</span>
+<span id="cb26-197"><a href="#cb26-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-200"><a href="#cb26-200" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-201"><a href="#cb26-201" aria-hidden="true" tabindex="-1"></a><span class="co">" "</span>.join(synth_BR.donor_pool_)</span>
+<span id="cb26-202"><a href="#cb26-202" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-203"><a href="#cb26-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-204"><a href="#cb26-204" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Note: This list does not imply all countries contribute equally to estimating the synthetic version of Brazil. In fact, some might even end up not even contributing in the estimating equation. The selected list also does not imply a causal explanation from any of those countries into the Brazilian dynamics. They are merely closest to Brazilas a group in this clustering exercise, and as such, likely to be a good predictor at the same time period.</span></span>
+<span id="cb26-205"><a href="#cb26-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-206"><a href="#cb26-206" aria-hidden="true" tabindex="-1"></a>And here is how the outcome variable for these countries (grey) compares with Brazil's (red).</span>
+<span id="cb26-207"><a href="#cb26-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-210"><a href="#cb26-210" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-211"><a href="#cb26-211" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> X_pre[synth_BR.donor_pool_].plot(legend<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">"grey"</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb26-212"><a href="#cb26-212" aria-hidden="true" tabindex="-1"></a>y_pre.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"red"</span>, linewidth<span class="op">=</span><span class="fl">2.5</span>)</span>
+<span id="cb26-213"><a href="#cb26-213" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-214"><a href="#cb26-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-215"><a href="#cb26-215" aria-hidden="true" tabindex="-1"></a>Plotting the result of the manifold learning underscores whether the synthetic control seems indeed to come from a similar space in the data distribution as the entity of interest.</span>
+<span id="cb26-216"><a href="#cb26-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-219"><a href="#cb26-219" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-220"><a href="#cb26-220" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.35</span>)] <span class="op">*</span> X.shape[<span class="dv">1</span>] <span class="op">+</span> [<span class="st">'red'</span>, <span class="st">'blue'</span>]</span>
+<span id="cb26-221"><a href="#cb26-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-222"><a href="#cb26-222" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb26-223"><a href="#cb26-223" aria-hidden="true" tabindex="-1"></a>ax.scatter(</span>
+<span id="cb26-224"><a href="#cb26-224" aria-hidden="true" tabindex="-1"></a>    synth_BR.manifold_embed_[:, <span class="dv">0</span>], synth_BR.manifold_embed_[:, <span class="dv">1</span>],</span>
+<span id="cb26-225"><a href="#cb26-225" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>colors,</span>
+<span id="cb26-226"><a href="#cb26-226" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb26-227"><a href="#cb26-227" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb26-228"><a href="#cb26-228" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb26-229"><a href="#cb26-229" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-230"><a href="#cb26-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-231"><a href="#cb26-231" aria-hidden="true" tabindex="-1"></a>As can be seen in the graph above, the actual Brazil 🇧🇷 (blue) and the machine controls (red) are almost juxtaposed.</span>
+<span id="cb26-232"><a href="#cb26-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-233"><a href="#cb26-233" aria-hidden="true" tabindex="-1"></a>To confirm objectively that the control is good, the Euclidean distance between the embeddings for the control and the actual outcome is in a very low perceentile: </span>
+<span id="cb26-234"><a href="#cb26-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-237"><a href="#cb26-237" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-238"><a href="#cb26-238" aria-hidden="true" tabindex="-1"></a>synth_BR.control_quality_test_ <span class="op">/</span> <span class="dv">100</span></span>
+<span id="cb26-239"><a href="#cb26-239" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-240"><a href="#cb26-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-241"><a href="#cb26-241" aria-hidden="true" tabindex="-1"></a>Together, these results are a strong signal that the control managed to replicate the pre-intervention outcome.</span>
+<span id="cb26-242"><a href="#cb26-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-243"><a href="#cb26-243" aria-hidden="true" tabindex="-1"></a>So now it's time to look at the results in the years following the event.</span>
+<span id="cb26-244"><a href="#cb26-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-245"><a href="#cb26-245" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results</span></span>
+<span id="cb26-246"><a href="#cb26-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-249"><a href="#cb26-249" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-250"><a href="#cb26-250" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> synth_BR.predict(X, y).plot(legend<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb26-251"><a href="#cb26-251" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span><span class="st">'2017-11-11'</span>, color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb26-252"><a href="#cb26-252" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'PPP 2017 US$ per worker'</span>)</span>
+<span id="cb26-253"><a href="#cb26-253" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">''</span>)</span>
+<span id="cb26-254"><a href="#cb26-254" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Labour productivity in Brazil"</span>)</span>
+<span id="cb26-255"><a href="#cb26-255" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb26-256"><a href="#cb26-256" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-257"><a href="#cb26-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-258"><a href="#cb26-258" aria-hidden="true" tabindex="-1"></a><span class="fu">### Treatment effect</span></span>
+<span id="cb26-259"><a href="#cb26-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-260"><a href="#cb26-260" aria-hidden="true" tabindex="-1"></a>The main result is shown below, corresponding to the difference between actual and estimated value for the whole time series (from 2000). If the red line (Brazil) stays close to the other ones - placebo estimations.</span>
+<span id="cb26-261"><a href="#cb26-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-264"><a href="#cb26-264" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb26-265"><a href="#cb26-265" aria-hidden="true" tabindex="-1"></a>all_diffs <span class="op">=</span> pd.concat([</span>
+<span id="cb26-266"><a href="#cb26-266" aria-hidden="true" tabindex="-1"></a>    synth_BR.placebo_diff_,</span>
+<span id="cb26-267"><a href="#cb26-267" aria-hidden="true" tabindex="-1"></a>    synth_BR.diff_</span>
+<span id="cb26-268"><a href="#cb26-268" aria-hidden="true" tabindex="-1"></a>], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb26-269"><a href="#cb26-269" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'grey'</span>] <span class="op">*</span> synth_BR.placebo_diff_.shape[<span class="dv">1</span>] <span class="op">+</span> [<span class="st">'red'</span>]</span>
+<span id="cb26-270"><a href="#cb26-270" aria-hidden="true" tabindex="-1"></a>y_label <span class="op">=</span> <span class="st">'PPP 2017 US$ per worker'</span></span>
+<span id="cb26-271"><a href="#cb26-271" aria-hidden="true" tabindex="-1"></a>effect_title <span class="op">=</span> <span class="st">"Effect of deregulation on labour productivity in Brazil"</span></span>
+<span id="cb26-272"><a href="#cb26-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-273"><a href="#cb26-273" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> all_diffs.plot(legend<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span>colors)</span>
+<span id="cb26-274"><a href="#cb26-274" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span><span class="st">'2016-12-31'</span>, color<span class="op">=</span><span class="st">'black'</span>, linestyle<span class="op">=</span><span class="st">'solid'</span>)</span>
+<span id="cb26-275"><a href="#cb26-275" aria-hidden="true" tabindex="-1"></a>ax.axvline(x<span class="op">=</span><span class="st">'2017-11-11'</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb26-276"><a href="#cb26-276" aria-hidden="true" tabindex="-1"></a>ax.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'black'</span>, linewidth<span class="op">=</span><span class="fl">1.2</span>)</span>
+<span id="cb26-277"><a href="#cb26-277" aria-hidden="true" tabindex="-1"></a>plt.ylabel(y_label)</span>
+<span id="cb26-278"><a href="#cb26-278" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">''</span>)</span>
+<span id="cb26-279"><a href="#cb26-279" aria-hidden="true" tabindex="-1"></a>plt.title(effect_title)</span>
+<span id="cb26-280"><a href="#cb26-280" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb26-281"><a href="#cb26-281" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-282"><a href="#cb26-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-283"><a href="#cb26-283" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpretation</span></span>
+<span id="cb26-284"><a href="#cb26-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-285"><a href="#cb26-285" aria-hidden="true" tabindex="-1"></a>The above results hint at a null effect of the reforms on labour productivity after training cutoff date (black vertical line). If anything, the effect squarely close to zero throughout the years following the reform (red vertical line), even as the productivity for the majority of control countries actually went up in the years before the pandemic.</span>
+<span id="cb26-286"><a href="#cb26-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-287"><a href="#cb26-287" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

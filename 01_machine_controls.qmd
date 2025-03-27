@@ -189,8 +189,7 @@ At this stage, we can extract the list of donor countries, ie, those that will b
 " ".join(synth_BR.donor_pool_)
 ```
 
-
-> Note: This list does not imply all countries contribute equally to estimating the synthetic version of Brazil. In fact, some might even end up not even contributing in the estimating equation. The selected list also does not imply a causal explanation from any of those countries into the Brazilian dynamics. They are merely closest to Brazil in this clustering exercise, and as such, likely to be a good predictor at the same time period.
+> Note: This list does not imply all countries contribute equally to estimating the synthetic version of Brazil. In fact, some might even end up not even contributing in the estimating equation. The selected list also does not imply a causal explanation from any of those countries into the Brazilian dynamics. They are merely closest to Brazilas a group in this clustering exercise, and as such, likely to be a good predictor at the same time period.
 
 And here is how the outcome variable for these countries (grey) compares with Brazil's (red).
 
@@ -215,16 +214,16 @@ ax.legend()
 plt.show()
 ```
 
+As can be seen in the graph above, the actual Brazil 🇧🇷 (blue) and the machine controls (red) are almost juxtaposed.
+
+To confirm objectively that the control is good, the Euclidean distance between the embeddings for the control and the actual outcome is in a very low perceentile: 
+
 ```{python}
 
 synth_BR.control_quality_test_ / 100
 ```
 
-As can be seen in the graph above, the actual Brazil 🇧🇷 (blue) and the machine controls (red) are almost juxtaposed.
-
-To confirm objectively that the control is good, the Euclidean distance between the embeddings for the control and the actual outcome are one of the lowest, more specifically at the 2% percentile. 
-
-Together, both point to a strong signal that the control managed to replicate the pre-intervention outcome.
+Together, these results are a strong signal that the control managed to replicate the pre-intervention outcome.
 
 So now it's time to look at the results in the years following the event.
 
@@ -242,9 +241,7 @@ plt.show()
 
 ### Treatment effect
 
-The main result is shown below, corresponding to the difference between actual and estimated value for the whole time series (from 2000). If the red line (Brazil) stays close to the other ones - placebo estimations - then one can conclude that there was no effect from this intervention.
-
-In fact, this seems to be the case with Brazil's labour market deregulation.
+The main result is shown below, corresponding to the difference between actual and estimated value for the whole time series (from 2000). If the red line (Brazil) stays close to the other ones - placebo estimations.
 
 ```{python}
 
@@ -265,7 +262,6 @@ plt.xlabel('')
 plt.title(effect_title)
 plt.show()
 ```
-
 
 ## Interpretation
 

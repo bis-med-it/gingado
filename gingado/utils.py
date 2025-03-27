@@ -2,10 +2,9 @@ import sdmx
 import datetime
 import numpy as np
 import pandas as pd
-
 from gingado.internals import DayFeatures, WeekFeatures, MonthFeatures, QuarterFeatures, DateTimeLike, Frequency, FrequencyLike, validate_and_get_freq, _check_valid_features, _get_day_features, _get_week_features, _get_month_features, _get_quarter_features
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.utils.validation import check_is_fitted
+from sklearn.utils.validation import check_is_fitted, validate_data
 
 __all__ = ['get_datetime', 'read_attr', 'Lag', 'list_SDMX_sources', 'list_all_dataflows', 'load_SDMX_data', 'codelists']
 
@@ -66,7 +65,7 @@ class Lag(BaseEstimator, TransformerMixin):
         else:
             if y is not None and hasattr(y, "index"):
                 self.index = y.index
-        X = self._validate_data(X)
+        X = validate_data(self, X)
 
         self.effective_lags_ = self.lags + self.jump
         return self
@@ -86,7 +85,7 @@ class Lag(BaseEstimator, TransformerMixin):
         """
         X_forlag = X
         
-        X = self._validate_data(X)
+        X = validate_data(self, X)
         check_is_fitted(self)
         X_lags = []
         X_colnames = list(self.feature_names_in_) if self.keep_contemporaneous_X else []
@@ -209,6 +208,7 @@ def codelists(dflow):
         else:  # If v is a single dataflow
             codelists[k] = sdmx.to_pandas(sdmx.Client(k).dataflow(v).codelist)
     return codelists
+
 
 def get_timefeat(
     df: pd.DataFrame | pd.Series,

@@ -401,10 +401,10 @@ Args:
 
 Returns:
     ClassificationBenchmark: The instance of the model after fitting.</pre>
-<div id="a26db693" class="cell" data-execution_count="17">
+<div id="761c63b5" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_classification</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="9e119156" class="cell" data-execution_count="18">
+<div id="776e764b" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># some mock up data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_classification()</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -466,39 +466,39 @@ Returns:
 [CV] END ................max_features=None, n_estimators=100; total time=   0.0s
 [CV] END ................max_features=None, n_estimators=100; total time=   0.0s
 [CV] END ................max_features=None, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.2s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.1s
+[CV] END ................max_features=None, n_estimators=250; total time=   0.1s
 [CV] END ................max_features=None, n_estimators=250; total time=   0.1s
 [CV] END ................max_features=None, n_estimators=250; total time=   0.2s
 [CV] END ................max_features=None, n_estimators=250; total time=   0.1s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.2s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.2s
 [CV] END ................max_features=None, n_estimators=250; total time=   0.1s
-[CV] END ................max_features=None, n_estimators=250; total time=   0.2s
 [CV] END ................max_features=None, n_estimators=250; total time=   0.1s
 [CV] END ................max_features=None, n_estimators=250; total time=   0.1s</code></pre>
 </div>
 </div>
 <p>Importantly, <code>gingado</code> automatically provides some information to help the user documentat the benchmark model. More specifically, <code>ggdBenchmark</code> objects collect model information and pass it to a dictionary with key <code>info</code> in a field called <code>model_details</code>.</p>
-<div id="814386ba" class="cell" data-execution_count="19">
+<div id="db38e681" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bm.model_documentation.show_json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>{'model_details': {'developer': 'Person or organisation developing the model',
-  'datetime': '2025-03-06 11:27:11 ',
+  'datetime': '2025-03-10 15:25:42 ',
   'version': 'Model version',
   'type': 'Model type',
   'info': {'_estimator_type': 'classifier',
    'best_estimator_': RandomForestClassifier(oob_score=True),
    'best_index_': np.int64(0),
    'best_params_': {'max_features': 'sqrt', 'n_estimators': 100},
-   'best_score_': np.float64(0.8700000000000001),
+   'best_score_': np.float64(0.93),
    'classes_': array([0, 1]),
-   'cv_results_': {'mean_fit_time': array([0.07563272, 0.19261141, 0.07531297, 0.18580649, 0.0973614 ,
-           0.2443171 ]),
-    'std_fit_time': array([0.00111906, 0.00755508, 0.00115744, 0.00227954, 0.00235861,
-           0.00769896]),
-    'mean_score_time': array([0.00199919, 0.00450222, 0.00209973, 0.00440218, 0.00189893,
-           0.00440276]),
-    'std_score_time': array([2.70118886e-06, 1.02647332e-03, 2.98671389e-04, 4.36979468e-04,
-           2.99277300e-04, 5.36126174e-04]),
+   'cv_results_': {'mean_fit_time': array([0.08137186, 0.19892728, 0.08025815, 0.19829376, 0.09665287,
+           0.23911378]),
+    'std_fit_time': array([0.00134808, 0.00263441, 0.00292575, 0.00140519, 0.00466968,
+           0.00702469]),
+    'mean_score_time': array([0.00305088, 0.00765185, 0.00306253, 0.00781262, 0.00335233,
+           0.00723748]),
+    'std_score_time': array([0.00015249, 0.00122778, 0.00045129, 0.00126342, 0.00045032,
+           0.00069368]),
     'param_max_features': masked_array(data=['sqrt', 'sqrt', 'log2', 'log2', None, None],
                  mask=[False, False, False, False, False, False],
            fill_value=np.str_('?'),
@@ -512,24 +512,24 @@ Returns:
      {'max_features': 'log2', 'n_estimators': 250},
      {'max_features': None, 'n_estimators': 100},
      {'max_features': None, 'n_estimators': 250}],
-    'split0_test_score': array([0.8, 0.8, 0.8, 0.8, 0.8, 0.8]),
+    'split0_test_score': array([1., 1., 1., 1., 1., 1.]),
     'split1_test_score': array([0.8, 0.8, 0.8, 0.8, 0.8, 0.8]),
-    'split2_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
+    'split2_test_score': array([0.8, 0.8, 0.8, 0.8, 0.8, 0.8]),
     'split3_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
-    'split4_test_score': array([0.9, 0.9, 0.9, 1. , 0.9, 1. ]),
-    'split5_test_score': array([0.9, 0.9, 0.8, 0.8, 0.9, 0.9]),
+    'split4_test_score': array([0.9, 0.9, 0.9, 0.9, 0.8, 0.9]),
+    'split5_test_score': array([1., 1., 1., 1., 1., 1.]),
     'split6_test_score': array([0.9, 0.9, 0.9, 0.9, 0.9, 0.9]),
-    'split7_test_score': array([1., 1., 1., 1., 1., 1.]),
-    'split8_test_score': array([0.7, 0.7, 0.7, 0.7, 0.7, 0.7]),
-    'split9_test_score': array([0.9, 0.9, 0.9, 0.9, 0.7, 0.7]),
-    'mean_test_score': array([0.87, 0.87, 0.86, 0.87, 0.85, 0.86]),
-    'std_test_score': array([0.0781025 , 0.0781025 , 0.08      , 0.09      , 0.09219544,
-           0.10198039]),
-    'rank_test_score': array([1, 1, 4, 1, 6, 4], dtype=int32)},
+    'split7_test_score': array([1. , 0.9, 1. , 1. , 1. , 1. ]),
+    'split8_test_score': array([1., 1., 1., 1., 1., 1.]),
+    'split9_test_score': array([1., 1., 1., 1., 1., 1.]),
+    'mean_test_score': array([0.93, 0.92, 0.93, 0.93, 0.92, 0.93]),
+    'std_test_score': array([0.0781025 , 0.07483315, 0.0781025 , 0.0781025 , 0.08717798,
+           0.0781025 ]),
+    'rank_test_score': array([1, 5, 1, 1, 5, 1], dtype=int32)},
    'multimetric_': False,
    'n_features_in_': 20,
    'n_splits_': 10,
-   'refit_time_': 0.07747077941894531,
+   'refit_time_': 0.0833120346069336,
    'scorer_': &lt;class 'sklearn.ensemble._forest.RandomForestClassifier'&gt;.score},
   'paper': 'Paper or other resource for more information',
   'citation': 'Citation details',
@@ -560,10 +560,10 @@ Returns:
 </div>
 </div>
 <p>It is also simple to define as benchmark a model that you already fitted and still benefit from the other functionalities provided by <code>Benchmark</code> class. This can also be done in case you are using a saved version of a fitted model (eg, the model you are using in production) and want to have that as the benchmark.</p>
-<div id="177d3b62" class="cell" data-execution_count="20">
+<div id="0176e3c2" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="554c6c6b" class="cell" data-execution_count="21">
+<div id="f75857ae" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>forest <span class="op">=</span> RandomForestClassifier().fit(X, y)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>bm.set_benchmark(estimator<span class="op">=</span>forest)</span>
@@ -597,11 +597,11 @@ Args:
 
 Returns:
     RegressionBenchmark: The instance of the model.</pre>
-<div id="574dccd6" class="cell" data-execution_count="24">
+<div id="7debf51b" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_regression</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> AdaBoostRegressor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="9b133758" class="cell" data-execution_count="25">
+<div id="25404244" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># some mock up data</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_regression()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -620,11 +620,11 @@ Returns:
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bm.predict(X).shape <span class="op">==</span> y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below we compare the benchmark (set above manually to be the adaboost algorithm) with two other candidate models: a Gaussian process and a linear Support Vector Machine (SVM).</p>
-<div id="c581d92e" class="cell" data-execution_count="26">
+<div id="d8766c1c" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.gaussian_process <span class="im">import</span> GaussianProcessRegressor</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> LinearSVR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="82dbf8c8" class="cell" data-execution_count="27">
+<div id="effccaae" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>gauss_reg <span class="op">=</span> GaussianProcessRegressor().fit(X, y)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>svm_reg <span class="op">=</span> LinearSVR().fit(X, y)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -632,12 +632,12 @@ Returns:
 <div class="cell-output cell-output-stdout">
 <pre><code>Benchmark updated!
 New benchmark:
-Pipeline(steps=[('candidate_estimator', AdaBoostRegressor())])</code></pre>
+Pipeline(steps=[('candidate_estimator', LinearSVR())])</code></pre>
 </div>
 </div>
 <p>Note that when the benchmark object finds a model that performs better than it does, the user is informed that the benchmark is updated and the new benchmark model is shown. This only happens when the argument <code>update_benchmark</code> is set to True (as default).</p>
 <p>Below we can see by how much it outperformed the other candidates, including the previous benchmark model and an ensemble of the previous benchmark and all the candidates. It is also a good opportunity to see how stable the performance of each model was, as judged by the standard deviation of the scores across the validation folds.</p>
-<div id="ee608234" class="cell" data-execution_count="28">
+<div id="a14c4e88" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(bm.benchmark.cv_results_)[[<span class="st">'params'</span>, <span class="st">'mean_test_score'</span>, <span class="st">'std_test_score'</span>, <span class="st">'rank_test_score'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
 <div>
@@ -657,30 +657,30 @@ Pipeline(steps=[('candidate_estimator', AdaBoostRegressor())])</code></pre>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>{'candidate_estimator': (DecisionTreeRegressor...</td>
-<td>0.409554</td>
-<td>0.135436</td>
-<td>1</td>
+<td>0.287485</td>
+<td>0.166474</td>
+<td>2</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>{'candidate_estimator': GaussianProcessRegress...</td>
-<td>-0.101298</td>
-<td>0.141484</td>
+<td>-0.150231</td>
+<td>0.151002</td>
 <td>4</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>{'candidate_estimator': LinearSVR(), 'candidat...</td>
-<td>0.225813</td>
-<td>0.144780</td>
-<td>3</td>
+<td>0.363217</td>
+<td>0.179497</td>
+<td>1</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>{'candidate_estimator': VotingRegressor(estima...</td>
-<td>0.237166</td>
-<td>0.076578</td>
-<td>2</td>
+<td>0.236340</td>
+<td>0.105371</td>
+<td>3</td>
 </tr>
 </tbody>
 </table>
@@ -701,7 +701,7 @@ Pipeline(steps=[('candidate_estimator', AdaBoostRegressor())])</code></pre>
 <h2 class="anchored" data-anchor-id="data-split">Data split</h2>
 <p><code>gingado</code> benchmarks rely on hyperparameter tuning to discover the benchmark specification that is most likely to perform better with the user data. This tuning in turn depends on a data splitting strategy for the cross-validation. By default, <code>gingado</code> uses <code>StratifiedShuffleSplit</code> (in classification problems) or <code>ShuffleSplit</code> (in regression problems) if the data is not time series and <code>TimeSeriesSplit</code> otherwise.</p>
 <p>The user may overrun these defaults either by directly setting the parameter <code>cv</code> or <code>default_cv</code> when instanciating the <code>gingado</code> benchmark class. The difference is that <code>default_cv</code> is only used after <code>gingado</code> checks that the data is not a time series (if a time dimension exists, then <code>TimeSeriesSplit</code> is used).</p>
-<div id="56dc6493" class="cell" data-execution_count="29">
+<div id="c3cc5543" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_classification()</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>bm_cls <span class="op">=</span> ClassificationBenchmark(cv<span class="op">=</span>TimeSeriesSplit(n_splits<span class="op">=</span><span class="dv">3</span>)).fit(X, y)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> bm_cls.benchmark.n_splits_ <span class="op">==</span> <span class="dv">3</span></span>

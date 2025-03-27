@@ -273,7 +273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>For example, the code below is a simple illustration of <code>AugmentSDMX</code> augmentation under two scenarios: without a variance threshold (ie, including all data regardless if they are constants) or with a relatively high variance threshold (such that no data is actually added).</p>
 <p>In both cases, the object is using the default data flow, which is the daily series of monetary policy rates set by central banks.</p>
 <p>These <code>AugmentSDMX</code> objects are used to augment a data frame with simulated data for illustrative purposes. In real life, this data would be the user’s original data.</p>
-<div id="e4bd8d3f" class="cell" data-execution_count="3">
+<div id="6a78d479" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span><span class="dv">42</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>periods <span class="op">=</span> <span class="dv">15</span></span>
@@ -318,7 +318,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="de403ce9" class="cell" data-execution_count="4">
+<div id="51ffc72d" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.augmentation <span class="im">import</span> AugmentSDMX</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>aug_NoVarThresh <span class="op">=</span> AugmentSDMX(variance_threshold<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>aug_data <span class="op">=</span> aug_NoVarThresh.fit_transform(orig_data)</span>
@@ -725,7 +725,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="7cdb210c" class="cell" data-execution_count="5">
+<div id="feb68494" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>aug_StrictVarThresh <span class="op">=</span> AugmentSDMX(variance_threshold<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>aug_data <span class="op">=</span> aug_StrictVarThresh.fit_transform(orig_data)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>aug_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -872,11 +872,11 @@ Returns:
 <h2 class="anchored" data-anchor-id="compatibility-with-scikit-learn">Compatibility with <code>scikit-learn</code></h2>
 <p>As mentioned above, <code>gingado</code>’s transformers are built to be compatible with <code>scikit-learn</code>. The code below demonstrates this compatibility.</p>
 <p>First, we create the example dataset. In this case, it comprises the daily foreign exchange rate of selected currencies to the Euro. The Brazilian Real (BRL) is chosen for this example as the dependent variable.</p>
-<div id="acc9b0af" class="cell" data-execution_count="10">
+<div id="7b060c20" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> load_SDMX_data, Lag</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> TimeSeriesSplit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="87016abc" class="cell" data-execution_count="11">
+<div id="0505c43d" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> load_SDMX_data(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    sources<span class="op">=</span>{<span class="st">'ECB'</span>: <span class="st">'EXR'</span>}, </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    keys<span class="op">=</span>{<span class="st">'FREQ'</span>: <span class="st">'D'</span>, <span class="st">'CURRENCY'</span>: [<span class="st">'EUR'</span>, <span class="st">'AUD'</span>, <span class="st">'BRL'</span>, <span class="st">'CAD'</span>, <span class="st">'CHF'</span>, <span class="st">'GBP'</span>, <span class="st">'JPY'</span>, <span class="st">'SGD'</span>, <span class="st">'USD'</span>]},</span>
@@ -895,17 +895,17 @@ Returns:
 <pre><code>Querying data from ECB's dataflow 'EXR' - Exchange Rates...</code></pre>
 </div>
 </div>
-<div id="eceaa5ab" class="cell" data-execution_count="12">
+<div id="85ad2569" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>X_train, X_test <span class="op">=</span> X.iloc[:<span class="op">-</span><span class="dv">1</span>], X.tail(<span class="dv">1</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>y_train, y_test <span class="op">=</span> y.iloc[:<span class="op">-</span><span class="dv">1</span>], y.tail(<span class="dv">1</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>X_train.shape, y_train.shape, X_test.shape, y_test.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
-<pre><code>((5678, 8), (5678,), (1, 8), (1,))</code></pre>
+<pre><code>((5680, 8), (5680,), (1, 8), (1,))</code></pre>
 </div>
 </div>
 <p>Next, the data augmentation object provided by <code>gingado</code> adds more data. In this case, for brevity only one dataflow from one source is listed. If users want to add more SDMX sources, simply add more keys to the dictionary. And if users want data from all dataflows from a given source provided the keys and parameters such as frequency and dates match, the value should be set to <code>'all'</code>, as in <code>{'ECB': ['CISS'], 'BIS': 'all'}</code>.</p>
-<div id="6767dd7a" class="cell" data-execution_count="13">
+<div id="4b1c5f90" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>test_src <span class="op">=</span> {<span class="st">'ECB'</span>: [<span class="st">'CISS'</span>], <span class="st">'BIS'</span>: [<span class="st">'WS_CBPOL_D'</span>]}</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>X_train__fit_transform <span class="op">=</span> AugmentSDMX(sources<span class="op">=</span>test_src).fit_transform(X<span class="op">=</span>X_train)</span>
@@ -918,7 +918,7 @@ Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stres
 </div>
 </div>
 <p>This is the dataset now after this particular augmentation:</p>
-<div id="edf52496" class="cell" data-execution_count="14">
+<div id="25a0b662" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"No of columns: </span><span class="sc">{</span><span class="bu">len</span>(X_train__fit_transform.columns)<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>X_train__fit_transform<span class="sc">.</span>columns<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>X_train__fit_transform</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1149,54 +1149,6 @@ Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stres
 <td>...</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2025-02-26</td>
-<td>1.6538</td>
-<td>6.0839</td>
-<td>1.4969</td>
-<td>0.9386</td>
-<td>0.82908</td>
-<td>157.19</td>
-<td>1.4047</td>
-<td>1.0497</td>
-<td>0.052334</td>
-<td>0.040623</td>
-<td>...</td>
-<td>0.022499</td>
-<td>0.069443</td>
-<td>0.003894</td>
-<td>-0.115521</td>
-<td>0.047985</td>
-<td>0.064308</td>
-<td>0.030268</td>
-<td>0.019904</td>
-<td>0.048344</td>
-<td>0.007904</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">2025-02-27</td>
-<td>1.6622</td>
-<td>6.0329</td>
-<td>1.5054</td>
-<td>0.9392</td>
-<td>0.82868</td>
-<td>156.70</td>
-<td>1.4035</td>
-<td>1.0487</td>
-<td>0.050800</td>
-<td>0.038099</td>
-<td>...</td>
-<td>0.022499</td>
-<td>0.069443</td>
-<td>0.003472</td>
-<td>-0.115521</td>
-<td>0.047985</td>
-<td>0.064308</td>
-<td>0.030268</td>
-<td>0.019904</td>
-<td>0.048344</td>
-<td>0.009505</td>
-</tr>
-<tr class="odd">
 <td data-quarto-table-cell-role="th">2025-02-28</td>
 <td>1.6638</td>
 <td>6.0825</td>
@@ -1211,14 +1163,14 @@ Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stres
 <td>...</td>
 <td>0.022499</td>
 <td>0.069443</td>
-<td>0.003340</td>
+<td>0.003183</td>
 <td>-0.115521</td>
 <td>0.047985</td>
 <td>0.064308</td>
 <td>0.030268</td>
 <td>0.019904</td>
 <td>0.048344</td>
-<td>0.011010</td>
+<td>0.011011</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2025-03-03</td>
@@ -1235,14 +1187,14 @@ Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stres
 <td>...</td>
 <td>0.022499</td>
 <td>0.069443</td>
-<td>0.004810</td>
+<td>0.003482</td>
 <td>-0.115521</td>
 <td>0.047985</td>
 <td>0.064308</td>
 <td>0.030268</td>
 <td>0.019904</td>
 <td>0.048344</td>
-<td>0.014406</td>
+<td>0.014394</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2025-03-04</td>
@@ -1254,38 +1206,86 @@ Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stres
 <td>158.33</td>
 <td>1.4106</td>
 <td>1.0465</td>
-<td>0.048034</td>
-<td>0.037239</td>
+<td>0.053010</td>
+<td>0.041163</td>
 <td>...</td>
 <td>0.022499</td>
 <td>0.069443</td>
-<td>0.035906</td>
+<td>0.028377</td>
 <td>-0.115521</td>
 <td>0.047985</td>
 <td>0.064308</td>
 <td>0.030268</td>
 <td>0.019904</td>
 <td>0.048344</td>
-<td>0.017931</td>
+<td>0.017977</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2025-03-05</td>
+<td>1.6919</td>
+<td>6.2132</td>
+<td>1.5224</td>
+<td>0.9371</td>
+<td>0.82788</td>
+<td>156.50</td>
+<td>1.4151</td>
+<td>1.0557</td>
+<td>0.101307</td>
+<td>0.079051</td>
+<td>...</td>
+<td>0.022499</td>
+<td>0.069443</td>
+<td>0.042314</td>
+<td>-0.115521</td>
+<td>0.047985</td>
+<td>0.064308</td>
+<td>0.030268</td>
+<td>0.019904</td>
+<td>0.048344</td>
+<td>0.026615</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2025-03-06</td>
+<td>1.7030</td>
+<td>6.2938</td>
+<td>1.5398</td>
+<td>0.9514</td>
+<td>0.83500</td>
+<td>160.09</td>
+<td>1.4301</td>
+<td>1.0694</td>
+<td>0.129057</td>
+<td>0.098441</td>
+<td>...</td>
+<td>0.022499</td>
+<td>0.069443</td>
+<td>0.044143</td>
+<td>-0.115521</td>
+<td>0.047985</td>
+<td>0.064308</td>
+<td>0.030268</td>
+<td>0.019904</td>
+<td>0.048344</td>
+<td>0.030547</td>
 </tr>
 </tbody>
 </table>
 
-<p>5678 rows × 30 columns</p>
+<p>5680 rows × 30 columns</p>
 </div>
 </div>
 </div>
 <section id="pipeline" class="level3">
 <h3 class="anchored" data-anchor-id="pipeline">Pipeline</h3>
 <p><code>AugmentSDMX</code> can also be part of a <code>Pipeline</code> object, which minimises operational errors during modelling and avoids using testing data during training:</p>
-<div id="8217c8c6" class="cell" data-execution_count="15">
+<div id="f1034f67" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.experimental <span class="im">import</span> enable_iterative_imputer</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> IterativeImputer</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="9348cb5f" class="cell" data-execution_count="16">
+<div id="73da16d1" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> Pipeline([</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'augmentation'</span>, AugmentSDMX(sources<span class="op">=</span>{<span class="st">'BIS'</span>: <span class="st">'WS_CBPOL_D'</span>})),</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'imp'</span>, IterativeImputer(max_iter<span class="op">=</span><span class="dv">10</span>)),</span>
@@ -1309,7 +1309,7 @@ Tip
 <p>Users can cache the data augmentation step to avoid repeating potentially lengthy data downloads. See the <code>memory</code> argument in the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html"><code>sklearn.pipeline.Pipeline</code> documentation</a>.</p>
 </div>
 </div>
-<div id="b241dd93" class="cell" data-execution_count="17">
+<div id="4361616d" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>grid <span class="op">=</span> GridSearchCV(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    estimator<span class="op">=</span>pipeline,</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    param_grid<span class="op">=</span>{</span>
@@ -1325,44 +1325,44 @@ Tip
 [Pipeline] ...... (step 1 of 3) Processing augmentation, total=   0.0s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.0s
 [Pipeline] ............ (step 3 of 3) Processing forest, total=   1.0s
-[CV] END ...........................augmentation=passthrough; total time=   0.9s
+[CV] END ...........................augmentation=passthrough; total time=   1.0s
 [Pipeline] ...... (step 1 of 3) Processing augmentation, total=   0.0s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.0s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=   2.1s
+[Pipeline] ............ (step 3 of 3) Processing forest, total=   2.2s
 [CV] END ...........................augmentation=passthrough; total time=   2.1s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[Pipeline] ...... (step 1 of 3) Processing augmentation, total=  19.8s
+[Pipeline] ...... (step 1 of 3) Processing augmentation, total=  10.9s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.4s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=   3.1s
+[Pipeline] ............ (step 3 of 3) Processing forest, total=   3.2s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time=  43.7s
+[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time=  24.1s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[Pipeline] ...... (step 1 of 3) Processing augmentation, total=  28.1s
+[Pipeline] ...... (step 1 of 3) Processing augmentation, total=  15.4s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.6s
-[Pipeline] ............ (step 3 of 3) Processing forest, total=   8.4s
+[Pipeline] ............ (step 3 of 3) Processing forest, total=   7.0s
 Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stress...
-[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time= 1.1min
+[CV] END ..augmentation=AugmentSDMX(sources={'ECB': 'CISS'}); total time=  36.9s
 [Pipeline] ...... (step 1 of 3) Processing augmentation, total=   0.0s
 [Pipeline] ............... (step 2 of 3) Processing imp, total=   0.0s
 [Pipeline] ............ (step 3 of 3) Processing forest, total=   3.3s</code></pre>
 </div>
 </div>
-<div id="08399822" class="cell" data-execution_count="18">
+<div id="119f22f9" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>grid.best_params_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>{'augmentation': 'passthrough'}</code></pre>
 </div>
 </div>
-<div id="01f0eafd" class="cell" data-execution_count="19">
+<div id="7c5b73e5" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"In this particular case, the best model was achieved by </span><span class="sc">{</span><span class="st">'not '</span> <span class="cf">if</span> grid<span class="sc">.</span>best_params_[<span class="st">'augmentation'</span>] <span class="op">==</span> <span class="st">'passthrough'</span> <span class="cf">else</span> <span class="st">''</span><span class="sc">}</span><span class="ss">using the data augmentation."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>In this particular case, the best model was achieved by not using the data augmentation.</code></pre>
 </div>
 </div>
-<div id="b6ea2f2d" class="cell" data-execution_count="20">
+<div id="14de4c57" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The last value in the training dataset was </span><span class="sc">{</span>y_train<span class="sc">.</span>tail(<span class="dv">1</span>)<span class="sc">.</span>to_numpy()<span class="sc">}</span><span class="ss">. The predicted value was </span><span class="sc">{</span>y_pred_grid<span class="sc">}</span><span class="ss">, and the actual value was </span><span class="sc">{</span>y_test<span class="sc">.</span>to_numpy()<span class="sc">}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The last value in the training dataset was [6.2132]. The predicted value was [6.202662], and the actual value was [6.2938].</code></pre>
+<pre><code>The last value in the training dataset was [6.2088]. The predicted value was [6.198532], and the actual value was [6.2617].</code></pre>
 </div>
 </div>
 </section>
@@ -1372,10 +1372,10 @@ Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stres
 <h1>Sources of data</h1>
 <p><code>gingado</code> seeks to only lists realiable data sources by choice, with a focus on official sources. This is meant to provide users with the trust that their dataset will be complemented by reliable sources. Unfortunately, it is not possible at this stage to include <em>all</em> official sources given the substantial manual and maintenance work. <code>gingado</code> leverages the existence of the <a href="https://sdmx.org">Statistical Data and Metadata eXchange (SDMX)</a>, an organisation of official data sources that establishes common data and metadata formats, to download data that is relevant (and hopefully also useful) to users.</p>
 <p>The function <code>list_SDMX_sources</code> returns a list of codes corresponding to the data sources available to provide <code>gingado</code> users with data through SDMX.</p>
-<div id="c53d5327" class="cell" data-execution_count="21">
+<div id="abd58ca3" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> list_SDMX_sources</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="50c5c4b9" class="cell" data-execution_count="22">
+<div id="d49989c2" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>list_SDMX_sources()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>['ABS',
@@ -1415,10 +1415,10 @@ Querying data from ECB's dataflow 'CISS' - Composite Indicator of Systemic Stres
 </div>
 </div>
 <p>You can also see what the available dataflows are. The code below returns a dictionary where each key is the code for an SDMX source, and the values associated with each key are the code and name for the respective dataflows.</p>
-<div id="943f38bb" class="cell" data-execution_count="23">
+<div id="212e2c13" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.utils <span class="im">import</span> list_all_dataflows</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ce6d11aa" class="cell" data-execution_count="24">
+<div id="1364c3e0" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>dflows <span class="op">=</span> list_all_dataflows()</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>dflows</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
@@ -1433,11 +1433,11 @@ WB     DF_WITS_Tariff_TRAINS                                WITS - UNCTAD TRAINS
        DF_WITS_TradeStats_Development                             WITS TradeStats Devlopment
        DF_WITS_TradeStats_Tariff                                      WITS TradeStats Tariff
        DF_WITS_TradeStats_Trade                                        WITS TradeStats Trade
-Name: dataflow, Length: 25244, dtype: object</code></pre>
+Name: dataflow, Length: 25246, dtype: object</code></pre>
 </div>
 </div>
 <p>For example, the dataflows from the World Bank are:</p>
-<div id="c59e3dd5" class="cell" data-execution_count="25">
+<div id="a078b6b8" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dflows[<span class="st">'WB'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>DF_WITS_Tariff_TRAINS             WITS - UNCTAD TRAINS Tariff Data

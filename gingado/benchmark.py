@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, Voti
 from sklearn.model_selection import GridSearchCV, ShuffleSplit, StratifiedShuffleSplit, TimeSeriesSplit
 from sklearn.pipeline import Pipeline
 from sklearn.utils.metaestimators import available_if
-from sklearn.utils.validation import check_is_fitted
+from sklearn.utils.validation import check_is_fitted, validate_data
 
 from .model_documentation import ModelCard, ggdModelDocumentation
 from .utils import read_attr
@@ -56,7 +56,7 @@ class ggdBenchmark(BaseEstimator):
     def _fit(self, X, y):
         self._check_is_time_series(X, y)
 
-        X, y = self._validate_data(X, y)
+        X, y = validate_data(self, X, y)
 
         if hasattr(self.estimator, "random_state"):
             self.estimator.random_state = self.random_state

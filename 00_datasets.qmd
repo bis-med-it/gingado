@@ -20,7 +20,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from utils import show_doc
-from gingado.datasets import load_BarroLee_1994, load_CB_speeches, load_monpol_statements, load_lr_tanzania_data
+from gingado.datasets import load_BarroLee_1994, load_CB_speeches, load_monpol_statements, load_lr_tanzania_data, load_inflation_regime_data
 ```
 
 ## Real datasets
@@ -148,6 +148,21 @@ If you use this data in your work, please cite the dataset, as follows:
 # Load liquidity risk data
 lr_data = load_lr_tanzania_data()
 lr_data["m"].head()
+```
+
+
+<!-- load_inflation_regime_data -->
+```{python}
+#| output: asis
+#| echo: false
+show_doc(load_inflation_regime_data)
+```
+
+This function provides the data for the Americo et al. (2025) Inflation Regime Indicator, which identifies periods of high and low inflation regimes in a time series based on deviations from a moving average (5Y).
+
+```{python}
+data = load_inflation_regime_data()
+data_DE = load_inflation_regime_data("DE")
 ```
 
 ## Simulated datasets

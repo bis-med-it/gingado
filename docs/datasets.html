@@ -346,7 +346,7 @@ url = {https://www.sciencedirect.com/science/article/pii/0167223194900027},
 author = {Robert J. Barro and Jong-Wha Lee},
 abstract = {For 116 countries from 1965 to 1985, the lowest quintile had an average growth rate of real per capita GDP of - 1.3pct, whereas the highest quintile had an average of 4.8pct. We isolate five influences that discriminate reasonably well between the slow-and fast-growers: a conditional convergence effect, whereby a country grows faster if it begins with lower real per-capita GDP relative to its initial level of human capital in the forms of educational attainment and health; a positive effect on growth from a high ratio of investment to GDP (although this effect is weaker than that reported in some previous studies); a negative effect from overly large government; a negative effect from government-induced distortions of markets; and a negative effect from political instability. Overall, the fitted growth rates for 85 countries for 1965–1985 had a correlation of 0.8 with the actual values. We also find that female educational attainment has a pronounced negative effect on fertility, whereas female and male attainment are each positively related to life expectancy and negatively related to infant mortality. Male attainment plays a positive role in primary-school enrollment ratios, and male and female attainment relate positively to enrollment at the secondary level.}
 }</code></pre>
-<div id="dc351b33" class="cell" data-execution_count="4">
+<div id="5896391f" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_BarroLee_1994()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="66">
@@ -508,7 +508,7 @@ abstract = {For 116 countries from 1965 to 1985, the lowest quintile had an aver
 </div>
 </div>
 </div>
-<div id="650dff4f" class="cell" data-execution_count="5">
+<div id="588b9d76" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>y.plot.hist(title<span class="op">=</span><span class="st">'GDP growth'</span>, bins<span class="op">=</span><span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -555,7 +555,7 @@ Usage:
     year = {2024},
     url = {https://www.bis.org/cbspeeches/download.htm}
 }</code></pre>
-<div id="695167f1" class="cell" data-execution_count="7">
+<div id="cd8eacf5" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load speeches for 2020</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>speeches <span class="op">=</span> load_CB_speeches(<span class="dv">2020</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>speeches.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -662,7 +662,7 @@ Usage:
     institution = {Peterson Institute for International Economics},
     url = {https://www.piie.com/publications/working-papers/central-banks-and-policy-communication-how-emerging-markets-have}
 }</code></pre>
-<div id="77ff3878" class="cell" data-execution_count="9">
+<div id="8f64a1fa" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load monpol statements for 2020</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>speeches <span class="op">=</span> load_monpol_statements(<span class="dv">2020</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>speeches.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -749,7 +749,7 @@ dict[str, pd.DataFrame]: A dictionary with keys 'w' for weekly data and 'm' for 
     doi = {https://doi.org/10.1016/j.mlwa.2023.100511},
     url = {https://www.sciencedirect.com/science/article/pii/S2666827023000646},
 }</code></pre>
-<div id="dc3a7c48" class="cell" data-execution_count="11">
+<div id="5a023fb1" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load liquidity risk data</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>lr_data <span class="op">=</span> load_lr_tanzania_data()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>lr_data[<span class="st">"m"</span>].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -927,16 +927,16 @@ Args:
 
 Returns:
     A DataFrame containing the inflation regime data for the specified country or all countries.</pre>
-<p>This function provides the data for the Americo et al.&nbsp;(2025) inflation cycle concepts:</p>
+<p>This function provides the data for the <span class="citation" data-cites="inflation_cycles">Americo et al. (<a href="#ref-inflation_cycles" role="doc-biblioref">2025</a>)</span> inflation cycle concepts:</p>
 <ol type="1">
 <li><p>cycles in inflation levels, reflecting mostly the low- and medium-frequency components of inflation;</p></li>
 <li><p>cycles in higher-frequency deviation of inflation from its trend; and</p></li>
 <li><p>a categorisation of inflation into high and low inflation regimes.</p></li>
 </ol>
 <p>The data also includes the original inflation series used to calculate those cycle measures. These series are also available at the <a href="https://data.bis.org">BIS Data Portal</a>.</p>
-<div id="5736993b" class="cell" data-execution_count="13">
+<div id="9b62ef08" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_infl <span class="op">=</span> load_inflation_cycles()</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df_infl.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df_infl.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="75">
 <div>
 
@@ -953,39 +953,39 @@ Returns:
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>1914-01-01</td>
-<td>US</td>
-<td>Levels</td>
-<td>-0.673333</td>
+<td data-quarto-table-cell-role="th">43913</td>
+<td>2025-01-01</td>
+<td>TR</td>
+<td>Regime</td>
+<td>1.000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>1914-04-01</td>
+<td data-quarto-table-cell-role="th">43914</td>
+<td>2025-01-01</td>
 <td>US</td>
-<td>Levels</td>
-<td>-0.137285</td>
+<td>CPI YoY</td>
+<td>2.736299</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>1914-07-01</td>
+<td data-quarto-table-cell-role="th">43915</td>
+<td>2025-01-01</td>
 <td>US</td>
-<td>Levels</td>
-<td>0.419102</td>
+<td>Regime</td>
+<td>0.000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>1914-10-01</td>
-<td>US</td>
-<td>Levels</td>
-<td>1.027814</td>
+<td data-quarto-table-cell-role="th">43916</td>
+<td>2025-01-01</td>
+<td>ZA</td>
+<td>CPI YoY</td>
+<td>2.756116</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>1915-01-01</td>
-<td>CA</td>
-<td>Levels</td>
-<td>0.531872</td>
+<td data-quarto-table-cell-role="th">43917</td>
+<td>2025-01-01</td>
+<td>ZA</td>
+<td>Regime</td>
+<td>0.000000</td>
 </tr>
 </tbody>
 </table>
@@ -993,48 +993,55 @@ Returns:
 </div>
 </div>
 </div>
-<p>For example, the inflation cycles for the US after World War II are shown below. The shaded periods correspond to the high inflation regime.</p>
-<div id="cba1d7bd" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_infl_country <span class="op">=</span> load_inflation_cycles(<span class="st">"US"</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>pivot_df <span class="op">=</span> df_infl_country.pivot(index<span class="op">=</span><span class="st">'Date'</span>, columns<span class="op">=</span><span class="st">'Series'</span>, values<span class="op">=</span><span class="st">'Value'</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>pivot_df <span class="op">=</span> pivot_df[<span class="st">'1946-01-01'</span>:]</span>
+<p>The graph below illustrates the different cycles concepts with US data. The shaded areas are the high inflation periods according to the rule of thumb in <span class="citation" data-cites="inflation_cycles">Americo et al. (<a href="#ref-inflation_cycles" role="doc-biblioref">2025</a>)</span>.</p>
+<div id="da998a1c" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and prepare data</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df_infl_country <span class="op">=</span> load_inflation_cycles(<span class="st">"US"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>pivot_df <span class="op">=</span> df_infl_country.pivot(index<span class="op">=</span><span class="st">'Date'</span>, columns<span class="op">=</span><span class="st">'Series'</span>, values<span class="op">=</span><span class="st">'Value'</span>)</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"Detrended"</span> <span class="kw">in</span> pivot_df.columns:</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    pivot_df[<span class="st">"Detrended"</span>] <span class="op">*=</span> <span class="dv">100</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">8</span>))</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Example: US post-war inflation cycles"</span>)</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> pivot_df.columns:</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="op">!=</span> <span class="st">'Regime'</span>:</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        ax.plot(pivot_df.index, pivot_df[col], label<span class="op">=</span>col)</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'black'</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">8</span>))</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"Example: US inflation cycles"</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot main series</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> pivot_df.columns:</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">not</span> <span class="kw">in</span> [<span class="st">'Regime'</span>]:</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        ax.plot(pivot_df.index, pivot_df[col], label<span class="op">=</span>col)</span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">'Regime'</span> <span class="kw">in</span> pivot_df.columns:</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    regimes <span class="op">=</span> pivot_df[<span class="st">'Regime'</span>]</span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    in_regime <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    start_date <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> date, val <span class="kw">in</span> <span class="bu">zip</span>(regimes.index, regimes):</span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> val <span class="op">==</span> <span class="dv">1</span> <span class="kw">and</span> <span class="kw">not</span> in_regime:</span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Start of a regime</span></span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>            start_date <span class="op">=</span> date</span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>            in_regime <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> val <span class="op">==</span> <span class="dv">0</span> <span class="kw">and</span> in_regime:</span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>            <span class="co"># End of a regime</span></span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>            ax.axvspan(start_date, date, color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>            in_regime <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> in_regime:</span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>        ax.axvspan(start_date, regimes.index[<span class="op">-</span><span class="dv">1</span>], color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Percentage points"</span>)</span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot zero-line intercept</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'black'</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Regime shading using axvspan</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">'Regime'</span> <span class="kw">in</span> pivot_df.columns:</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    regimes <span class="op">=</span> pivot_df[<span class="st">'Regime'</span>]</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    in_regime <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    start_date <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Iterate through the dates and values in the regimes series</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> date, val <span class="kw">in</span> <span class="bu">zip</span>(regimes.index, regimes):</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> val <span class="op">==</span> <span class="dv">1</span> <span class="kw">and</span> <span class="kw">not</span> in_regime:</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Start of a regime</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>            start_date <span class="op">=</span> date</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>            in_regime <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> val <span class="op">==</span> <span class="dv">0</span> <span class="kw">and</span> in_regime:</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>            <span class="co"># End of a regime</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>            ax.axvspan(start_date, date, color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>            in_regime <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If a regime is still active at the end of the data, close it</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> in_regime:</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>        ax.axvspan(start_date, regimes.index[<span class="op">-</span><span class="dv">1</span>], color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Styling</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'upper left'</span>)</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Percentage points"</span>)</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1070,13 +1077,13 @@ Note
 <p>All of the functions creating simulated datasets have a parameter <code>random_state</code> that allow for reproducible random numbers.</p>
 </div>
 </div>
-<div id="9e8b2cb9" class="cell" data-execution_count="15">
+<div id="3dc06829" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gingado.datasets <span class="im">import</span> make_causal_effect</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="make_causal_effect" class="level3">
 <h3 class="anchored" data-anchor-id="make_causal_effect"><a id="make_causal_effect">make_causal_effect</a></h3>
 <blockquote class="blockquote">
-<p>make_causal_effect <code>(n_samples: 'int' = 100, n_features: 'int' = 100, pretreatment_outcome=&lt;function &lt;lambda&gt; at 0x000001E68118C0E0&gt;, treatment_propensity=&lt;function &lt;lambda&gt; at 0x000001E68118C180&gt;, treatment_assignment=&lt;function &lt;lambda&gt; at 0x000001E68118C220&gt;, treatment=&lt;function &lt;lambda&gt; at 0x000001E68118C2C0&gt;, treatment_effect=&lt;function &lt;lambda&gt; at 0x000001E68118C360&gt;, bias: 'float' = 0, noise: 'float' = 0, random_state=None, return_propensity: 'bool' = False, return_assignment: 'bool' = False, return_treatment_value: 'bool' = False, return_treatment_effect: 'bool' = True, return_pretreatment_y: 'bool' = False, return_as_dict: 'bool' = False)</code></p>
+<p>make_causal_effect <code>(n_samples: 'int' = 100, n_features: 'int' = 100, pretreatment_outcome=&lt;function &lt;lambda&gt; at 0x00000237E211C0E0&gt;, treatment_propensity=&lt;function &lt;lambda&gt; at 0x00000237E211C180&gt;, treatment_assignment=&lt;function &lt;lambda&gt; at 0x00000237E211C220&gt;, treatment=&lt;function &lt;lambda&gt; at 0x00000237E211C2C0&gt;, treatment_effect=&lt;function &lt;lambda&gt; at 0x00000237E211C360&gt;, bias: 'float' = 0, noise: 'float' = 0, random_state=None, return_propensity: 'bool' = False, return_assignment: 'bool' = False, return_treatment_value: 'bool' = False, return_treatment_effect: 'bool' = True, return_pretreatment_y: 'bool' = False, return_as_dict: 'bool' = False)</code></p>
 </blockquote>
 <pre>Generates a simulated dataset to analyze causal effects of a treatment on an outcome variable.
 
@@ -1101,7 +1108,7 @@ Args:
 Returns:
     A dictionary or list containing the simulated dataset components specified by the return flags.</pre>
 <p><code>make_causal_effect</code> creates a dataset for when the question of interest is related to the causal effects of a treatment. For example, for a simulated dataset, we can check that <span class="math inline">\(Y_i\)</span> corresponds to the sum of the treatment effects plus the component that does not depend on the treatment:</p>
-<div id="f4cfbb41" class="cell" data-execution_count="17">
+<div id="fa4c939b" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a> causal_sim <span class="op">=</span> make_causal_effect(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">2000</span>,</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    n_features<span class="op">=</span><span class="dv">100</span>,</span>
@@ -1115,7 +1122,7 @@ Returns:
 <section id="pre-treatment-outcome" class="level4">
 <h4 class="anchored" data-anchor-id="pre-treatment-outcome">Pre-treatment outcome</h4>
 <p>The pre-treatment outcome <span class="math inline">\(Y_i|X_i\)</span> (the part of the outcome variable that is not dependent on the treatment) might be defined by the user. This corresponds to the value of the outcome for any untreated observations. The function should always take at least two arguments: <code>X</code> and <code>bias</code>, even if one of them is unused; <code>bias</code> is the constant. The argument is zero by default but can be set by the user to be another value.</p>
-<div id="182cde5c" class="cell" data-execution_count="18">
+<div id="a1ae0957" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>causal_sim <span class="op">=</span> make_causal_effect(</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    bias<span class="op">=</span><span class="fl">0.123</span>,</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    pretreatment_outcome<span class="op">=</span><span class="kw">lambda</span> X, bias: bias,</span>
@@ -1126,14 +1133,14 @@ Returns:
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(causal_sim[<span class="st">'y'</span>][causal_sim[<span class="st">'treatment_assignment'</span>] <span class="op">==</span> <span class="dv">0</span>] <span class="op">==</span> <span class="fl">0.123</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>If the outcome depends on specific columns of <span class="math inline">\(X\)</span>, this can be implemented as shown below.</p>
-<div id="3fb407cb" class="cell" data-execution_count="19">
+<div id="4f6ddbf2" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>causal_sim <span class="op">=</span> make_causal_effect(</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    pretreatment_outcome<span class="op">=</span><span class="kw">lambda</span> X, bias: X[:, <span class="dv">1</span>] <span class="op">+</span> np.maximum(X[:,<span class="dv">2</span>], <span class="dv">0</span>) <span class="op">+</span> X[:,<span class="dv">3</span>] <span class="op">*</span> X[:,<span class="dv">4</span>] <span class="op">+</span> bias</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And of course, the outcome might also have a random component.</p>
 <p>In these cases (and in other parts of this function), when the user wants to use the same random number generator as the other parts of the function, the function must have an argment <code>rng</code> for the NumPy random number generator used in other parts of the function.</p>
-<div id="089cd00d" class="cell" data-execution_count="20">
+<div id="6284da7e" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>causal_sim_1 <span class="op">=</span> make_causal_effect(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    pretreatment_outcome<span class="op">=</span><span class="kw">lambda</span> X, bias, rng: X[:, <span class="dv">1</span>] <span class="op">+</span> np.maximum(X[:,<span class="dv">2</span>], <span class="dv">0</span>) <span class="op">+</span> X[:,<span class="dv">3</span>] <span class="op">*</span> X[:,<span class="dv">4</span>] <span class="op">+</span> bias <span class="op">+</span> rng.standard_normal(size<span class="op">=</span>X.shape[<span class="dv">0</span>]),</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span>,</span>
@@ -1156,7 +1163,7 @@ Returns:
 <section id="treatment-propensity" class="level4">
 <h4 class="anchored" data-anchor-id="treatment-propensity">Treatment propensity</h4>
 <p>The treatment propensity of observations may all be the same, in which case <code>treatment_propensity</code> is a floating number between 0 and 1.</p>
-<div id="bbeb0fe6" class="cell" data-execution_count="21">
+<div id="1009f27e" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>same_propensity_sim <span class="op">=</span> make_causal_effect(</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">485</span>,</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    treatment_propensity<span class="op">=</span><span class="fl">0.3</span>,</span>
@@ -1168,7 +1175,7 @@ Returns:
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(same_propensity_sim[<span class="st">'propensity'</span>]) <span class="op">==</span> <span class="dv">485</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Or it might depend on the observation’s covariates, with the user passing a function with an argument ‘X’.</p>
-<div id="135ef79e" class="cell" data-execution_count="22">
+<div id="e0d7b353" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>heterogenous_propensities_sim <span class="op">=</span> make_causal_effect(</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">1000</span>,</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    treatment_propensity<span class="op">=</span><span class="kw">lambda</span> X: <span class="fl">0.3</span> <span class="op">+</span> (X[:, <span class="dv">0</span>] <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">*</span> <span class="fl">0.2</span>,</span>
@@ -1190,7 +1197,7 @@ Returns:
 </div>
 </div>
 <p>The propensity can also be randomly allocated, together with covariate dependence or not. Note that even if the propensity is completely random and does not depend on covariates, the function must still use the argument <code>X</code> to calculate a random vector with the appropriate size.</p>
-<div id="384ee974" class="cell" data-execution_count="23">
+<div id="247c3e81" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>random_propensities_sim <span class="op">=</span> make_causal_effect(</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">50000</span>,</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    treatment_propensity<span class="op">=</span><span class="kw">lambda</span> X: np.random.uniform(size<span class="op">=</span>X.shape[<span class="dv">0</span>]),</span>
@@ -1216,14 +1223,14 @@ Returns:
 <h4 class="anchored" data-anchor-id="treatment-assignment">Treatment assignment</h4>
 <p>As seen above, every observation has a given treatment propensity - the chance that they are treated. Users can define how this propensity translates into actual treatment with the argument <code>treatment_assignment</code>. This argument takes a function, which must have an argument called <code>propensity</code>.</p>
 <p>The default value for this argument is a function returning 1s with probability <code>propensity</code> and 0s otherwise. Any other function should always return either 0s or 1s for the data simulator to work as expected.</p>
-<div id="09c4cb9c" class="cell" data-execution_count="24">
+<div id="b1f63fd2" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>causal_sim <span class="op">=</span> make_causal_effect(</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    treatment_assignment<span class="op">=</span><span class="kw">lambda</span> propensity: np.random.binomial(<span class="dv">1</span>, propensity)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>While the case above is likely to be the most useful in practice, this argument accepts more complex relationships between an observation’s propensity and the actual treatment assignment.</p>
 <p>For example, if treatment is subject to rationing, then one could simulate data with 10 observations where only the samples with the highest (say, 3) propensity scores get treated, as below:</p>
-<div id="0ca5f468" class="cell" data-execution_count="25">
+<div id="03a9bedb" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rationed_treatment_sim <span class="op">=</span> make_causal_effect(</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">10</span>,</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    treatment_propensity<span class="op">=</span><span class="kw">lambda</span> X: np.random.uniform(size<span class="op">=</span>X.shape[<span class="dv">0</span>]),</span>
@@ -1233,13 +1240,13 @@ Returns:
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    return_as_dict<span class="op">=</span><span class="va">True</span></span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="a715e92c" class="cell" data-execution_count="26">
+<div id="48cb5544" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>rationed_treatment <span class="op">=</span> pd.DataFrame(</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    np.column_stack((rationed_treatment_sim[<span class="st">'propensity'</span>], rationed_treatment_sim[<span class="st">'treatment_assignment'</span>])),</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    columns <span class="op">=</span> [<span class="st">'propensity'</span>, <span class="st">'assignment'</span>]</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="e28867bb" class="cell" data-execution_count="27">
+<div id="5ed9c993" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>rationed_treatment.sort_values(<span class="st">'propensity'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="89">
 <div>
@@ -1255,53 +1262,53 @@ Returns:
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">9</td>
-<td>0.035433</td>
-<td>0.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">0</td>
-<td>0.057313</td>
-<td>0.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
-<td>0.192251</td>
-<td>0.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">4</td>
-<td>0.238099</td>
-<td>0.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>0.374045</td>
-<td>0.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>0.488323</td>
-<td>0.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>0.518389</td>
+<td data-quarto-table-cell-role="th">7</td>
+<td>0.265134</td>
 <td>0.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
-<td>0.569391</td>
-<td>1.0</td>
+<td>0.266862</td>
+<td>0.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">7</td>
-<td>0.644198</td>
-<td>1.0</td>
+<td data-quarto-table-cell-role="th">9</td>
+<td>0.284756</td>
+<td>0.0</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
-<td>0.933339</td>
+<td>0.310440</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0.431631</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0.511360</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0.532040</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0.567414</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>0.785744</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>0.854656</td>
 <td>1.0</td>
 </tr>
 </tbody>
@@ -1316,7 +1323,7 @@ Returns:
 <p>The <code>treatment</code> argument indicates the magnitude of the treatment for each observation assigned for treatment. Its value is always a function that must have an argument called <code>assignment</code>, as in the first example below.</p>
 <p>In the simplest case, the treatment is a binary variable indicating whether or not a variable was treated. In other words, the treatment is the same as the assignment, as in the default value.</p>
 <p>But users can also simulate data with heterogenous treatment, conditional on assignment. This is done by including a pararemeter <code>X</code> in the function, as shown in the second example below.</p>
-<div id="7e31fc6a" class="cell" data-execution_count="28">
+<div id="8fb4b6e2" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>binary_treatment_sim <span class="op">=</span> make_causal_effect(</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">15</span>,</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    treatment<span class="op">=</span><span class="kw">lambda</span> assignment: assignment,</span>
@@ -1332,7 +1339,7 @@ Returns:
 <li><p>the heterogenous treatment amount may or may not depend on covariates, but either way, if treatment values are heterogenous, then <code>X</code> needs to be an argument of the function passed to <code>treatment</code>, if nothing else to make sure the shapes match; and</p></li>
 <li><p>if treatments are heterogenous, then it is important to multiply the treatment value with the <code>assignment</code> argument to ensure that observations that are not assigned to be treated are indeed not treated (the function will return an <code>AssertionError</code> otherwise).</p></li>
 </ul>
-<div id="0498346d" class="cell" data-execution_count="29">
+<div id="9acfe829" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>hetereogenous_treatment_sim <span class="op">=</span> make_causal_effect(</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">15</span>,</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    treatment<span class="op">=</span><span class="kw">lambda</span> assignment, X: assignment <span class="op">*</span> np.random.uniform(size<span class="op">=</span>X.shape[<span class="dv">0</span>]),</span>
@@ -1342,7 +1349,7 @@ Returns:
 <span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In contrast to the function above, in the chunk below the function <code>make_causal_effect</code> fails because a treatment value is also assigned to observations that were not assigned for treatment.</p>
-<div id="0e11f5ac" class="cell" data-execution_count="30">
+<div id="5c95109b" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    make_causal_effect(</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>        treatment<span class="op">=</span><span class="kw">lambda</span> assignment, X: assignment <span class="op">+</span> np.random.uniform(size<span class="op">=</span>X.shape[<span class="dv">0</span>])</span>
@@ -1358,7 +1365,7 @@ One suggestion is to multiply the desired treatment value with `assignment`.</co
 <section id="treatment-effect" class="level4">
 <h4 class="anchored" data-anchor-id="treatment-effect">Treatment effect</h4>
 <p>The treatment effect can be homogenous, ie, is doesn’t depend on any other characteristic of the individual observations (in other words, does not depend on <span class="math inline">\(X_i\)</span>), or heterogenous (where the treatment effect on <span class="math inline">\(Y_i\)</span> does depend on each observation’s <span class="math inline">\(X_i\)</span>). This can be done by specifying the causal relationship through a lambda function, as below:</p>
-<div id="e9a5e754" class="cell" data-execution_count="31">
+<div id="2ac5ab9a" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>homogenous_effects_sim <span class="op">=</span> make_causal_effect(</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>        treatment_effect<span class="op">=</span><span class="kw">lambda</span> treatment_value: treatment_value,</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>        return_treatment_value<span class="op">=</span><span class="va">True</span>,</span>

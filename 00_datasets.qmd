@@ -18,9 +18,10 @@ warning: false
 #| output: false
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import pandas as pd
 from utils import show_doc
-from gingado.datasets import load_BarroLee_1994, load_CB_speeches, load_monpol_statements, load_lr_tanzania_data, load_inflation_regime_data
+from gingado.datasets import load_BarroLee_1994, load_CB_speeches, load_monpol_statements, load_lr_tanzania_data, load_inflation_cycles
 ```
 
 ## Real datasets
@@ -151,21 +152,78 @@ lr_data["m"].head()
 ```
 
 
-<!-- load_inflation_regime_data -->
+<!-- load_inflation_cycles -->
 ```{python}
 #| output: asis
 #| echo: false
-show_doc(load_inflation_regime_data)
+show_doc(load_inflation_cycles)
 ```
 
-This function provides the data for the Americo et al. (2025) inflation cycle concepts.
-It contains data for three complementary inflation cycle concepts: (1) cycles in inflation levels, reflecting mostly the low- and medium-frequency components of inflation; (2) cycles in higher-frequency deviation of inflation from its trend; and (3) a categorisation of inflation into high and low inflation regimes.
+This function provides the data for the Americo et al. (2025) inflation cycle concepts:
+
+1. cycles in inflation levels, reflecting mostly the low- and medium-frequency components of inflation; 
+
+2. cycles in higher-frequency deviation of inflation from its trend; and 
+
+3. a categorisation of inflation into high and low inflation regimes.
+
+The data also includes the original inflation series used to calculate those cycle measures. These series are also available at the [BIS Data Portal](https://data.bis.org).
 
 ```{python}
-data = load_inflation_regime_data()
-data_DE = load_inflation_regime_data("DE")
-data.head()
+df_infl = load_inflation_cycles()
+df_infl.head()
 ```
+
+```{python}
+# Load and prepare data
+df_infl_country = load_inflation_cycles("US")
+
+pivot_df = df_infl_country.pivot(index='Date', columns='Series', values='Value')
+
+if "Detrended" in pivot_df.columns:
+    pivot_df["Detrended"] *= 100
+
+# Plot
+fig, ax = plt.subplots(figsize=(14, 8))
+ax.set_title(f"Example: Germany inflation cycles")
+
+# Plot main series
+for col in pivot_df.columns:
+    if col not in ['Regime']:
+        ax.plot(pivot_df.index, pivot_df[col], label=col)
+
+# Plot zero-line intercept
+ax.axhline(0, color='black', linewidth=0.8, linestyle='--', alpha=0.6)
+
+# Regime shading using axvspan
+if 'Regime' in pivot_df.columns:
+    regimes = pivot_df['Regime']
+    in_regime = False
+    start_date = None
+
+    # Iterate through the dates and values in the regimes series
+    for date, val in zip(regimes.index, regimes):
+        if val == 1 and not in_regime:
+            # Start of a regime
+            start_date = date
+            in_regime = True
+        elif val == 0 and in_regime:
+            # End of a regime
+            ax.axvspan(start_date, date, color='gray', alpha=0.3)
+            in_regime = False
+
+    # If a regime is still active at the end of the data, close it
+    if in_regime:
+        ax.axvspan(start_date, regimes.index[-1], color='gray', alpha=0.3)
+
+# Styling
+ax.legend(loc='upper left')
+ax.set_ylabel("Percentage points")
+
+plt.tight_layout()
+plt.show()
+```
+
 
 If you use this data in your work, please cite @inflation_cycles. A BibTeX code for convenience is below:
  

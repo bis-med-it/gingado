@@ -15,14 +15,13 @@ from gingado.settings import (
     CB_SPEECHES_BASE_URL,
     CB_SPEECHES_ZIP_BASE_FILENAME,
     MONPOL_STATEMENTS_BASE_URL,
-    MONPOL_STATEMENTS_CSV_BASE_FILENAME
+    MONPOL_STATEMENTS_CSV_BASE_FILENAME,
 )
 
-__all__ = ['load_BarroLee_1994', 'make_causal_effect']
+__all__ = ["load_BarroLee_1994", "make_causal_effect"]
 
-def load_BarroLee_1994(
-    return_tuple:bool=True
-):
+
+def load_BarroLee_1994(return_tuple: bool = True):
     """Loads the dataset used in R. Barro and J.-W. Lee's "Sources of Economic Growth" (1994).
 
     Args:
@@ -35,10 +34,12 @@ def load_BarroLee_1994(
         returns a single DataFrame with both independent and dependent variables.
 
     """
-    file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'dataset_BarroLee_1994.csv')
+    file_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "data", "dataset_BarroLee_1994.csv"
+    )
     df = pd.read_csv(file_path)
     if return_tuple:
-        y = df.pop('Outcome')
+        y = df.pop("Outcome")
         X = df
         return X, y
     else:
@@ -46,12 +47,9 @@ def load_BarroLee_1994(
 
 
 def load_CB_speeches(
-    year: str | int | list = 'all',
-    cache: bool = True,
-    timeout: float | None = 120,
-    **kwargs
+    year: str | int | list = "all", cache: bool = True, timeout: float | None = 120, **kwargs
 ) -> pd.DataFrame:
-    """Load Central Bankers speeches dataset from 
+    """Load Central Bankers speeches dataset from
     Bank for International Settlements (2024). Central bank speeches, all years,
     https://www.bis.org/cbspeeches/download.htm.
 
@@ -83,7 +81,9 @@ def load_CB_speeches(
     cb_speeches_dfs = []
     for y in year:
         # Get expected filename (without extension) for speeches file
-        filename_csv = (CB_SPEECHES_CSV_BASE_FILENAME if y == 'all' else f'{CB_SPEECHES_CSV_BASE_FILENAME}_{y}') + '.csv'
+        filename_csv = (
+            CB_SPEECHES_CSV_BASE_FILENAME if y == "all" else f"{CB_SPEECHES_CSV_BASE_FILENAME}_{y}"
+        ) + ".csv"
 
         # Get the file path of the CSV
         cb_speeches_file_path = str(Path(CACHE_DIRECTORY) / filename_csv)
@@ -97,17 +97,19 @@ def load_CB_speeches(
         if cb_speeches_year_df is None:
             # Get zip file URL
             filename_no_extension = (
-                CB_SPEECHES_ZIP_BASE_FILENAME if y == 'all' else f'{CB_SPEECHES_ZIP_BASE_FILENAME}_{y}'
+                CB_SPEECHES_ZIP_BASE_FILENAME
+                if y == "all"
+                else f"{CB_SPEECHES_ZIP_BASE_FILENAME}_{y}"
             )
-            zip_url = CB_SPEECHES_BASE_URL + filename_no_extension + '.zip'
+            zip_url = CB_SPEECHES_BASE_URL + filename_no_extension + ".zip"
 
             # Download the zip file, unzip it and parse the CSV file
             cb_speeches_year_df = download_csv(
                 zip_url,
-                zipped_filename=filename_no_extension + '.csv',
+                zipped_filename=filename_no_extension + ".csv",
                 cache_filename=cb_speeches_file_path,
                 timeout=timeout,
-                **kwargs
+                **kwargs,
             )
 
         # Verify that the file in the cache is valid
@@ -118,6 +120,7 @@ def load_CB_speeches(
 
     # Concat all dataframes into single dataframe and return
     return pd.concat(cb_speeches_dfs)
+
 
 def load_lr_tanzania_data(wide_format: bool = False) -> dict[str, pd.DataFrame]:
     """
@@ -145,30 +148,28 @@ def load_lr_tanzania_data(wide_format: bool = False) -> dict[str, pd.DataFrame]:
         date_format="%d/%m/%Y",
     )
     df_weekly = pd.read_csv(
-        f"{data_dir}/dataset_lr_weekly.csv",
-        index_col=0,
-        parse_dates=["REPORTINGDATE"]
+        f"{data_dir}/dataset_lr_weekly.csv", index_col=0, parse_dates=["REPORTINGDATE"]
     )
 
     # Rename the column to match the naming of the weekly dataframe
     df_monthly.rename(columns={"BSH_REPORTINGDATE": "REPORTINGDATE"}, inplace=True)
 
     if wide_format:
+
         def pivot_lr(df):
             df_pivot = df.pivot(index="REPORTINGDATE", columns="INSTITUTIONCODE")
             # flatten the column headers to a format of INSTITUTIONCODE__VAR_NAME
             df_pivot.columns = [f"{col[1]}__{col[0]}" for col in df_pivot.columns]
             return df_pivot
+
         df_monthly = pivot_lr(df_monthly)
         df_weekly = pivot_lr(df_weekly)
 
     return {"w": df_weekly, "m": df_monthly}
 
+
 def load_monpol_statements(
-    year: str | int | list = 'all',
-    cache: bool = True,
-    timeout: float | None = 120,
-    **kwargs
+    year: str | int | list = "all", cache: bool = True, timeout: float | None = 120, **kwargs
 ) -> pd.DataFrame:
     """Load monetary policy statements from multiple central banks.
 
@@ -180,7 +181,7 @@ def load_monpol_statements(
         timeout: The timeout to for downloading each speeches file. Set to `None` to disable
             timeout. Defaults to 120.
         **kwargs. Additional keyword arguments which will be passed to pandas `read_csv` function.
-        
+
     Returns:
         A pandas DataFrame containing the dataset.
 
@@ -200,10 +201,10 @@ def load_monpol_statements(
     monpol_statements_dfs = []
     for y in year:
         # Get expected filename
-        if y == 'all':
-            filename_csv = MONPOL_STATEMENTS_CSV_BASE_FILENAME + '_all' + '.csv'
+        if y == "all":
+            filename_csv = MONPOL_STATEMENTS_CSV_BASE_FILENAME + "_all" + ".csv"
         else:
-            filename_csv = MONPOL_STATEMENTS_CSV_BASE_FILENAME + f'_{y}' + '.csv'
+            filename_csv = MONPOL_STATEMENTS_CSV_BASE_FILENAME + f"_{y}" + ".csv"
 
         # Get the file path of the CSV
         monpol_statements_file_path = str(Path(CACHE_DIRECTORY) / filename_csv)
@@ -220,10 +221,7 @@ def load_monpol_statements(
 
             # Download CSV
             monpol_statements_year_df = download_csv(
-                file_url,
-                cache_filename=monpol_statements_file_path,
-                timeout=timeout,
-                **kwargs
+                file_url, cache_filename=monpol_statements_file_path, timeout=timeout, **kwargs
             )
 
         # Verify that the file in the cache is valid
@@ -237,22 +235,25 @@ def load_monpol_statements(
 
 
 def make_causal_effect(
-    n_samples:int=100,
-    n_features:int=100,
-    pretreatment_outcome=lambda X, bias, rng: X[:, 1] + np.maximum(X[:, 2], 0) + bias + rng.standard_normal(size=X.shape[0]), 
+    n_samples: int = 100,
+    n_features: int = 100,
+    pretreatment_outcome=lambda X, bias, rng: X[:, 1]
+    + np.maximum(X[:, 2], 0)
+    + bias
+    + rng.standard_normal(size=X.shape[0]),
     treatment_propensity=lambda X: 0.4 + 0.2 * (X[:, 0] > 0),
     treatment_assignment=lambda propensity, rng: rng.binomial(1, propensity),
     treatment=lambda assignment: assignment,
     treatment_effect=lambda treatment_value, X: np.maximum(X[:, 0], 0) * treatment_value,
-    bias:float=0,
-    noise:float=0,
+    bias: float = 0,
+    noise: float = 0,
     random_state=None,
-    return_propensity:bool=False,
-    return_assignment:bool=False,
-    return_treatment_value:bool=False,
-    return_treatment_effect:bool=True,
-    return_pretreatment_y:bool=False,
-    return_as_dict:bool=False 
+    return_propensity: bool = False,
+    return_assignment: bool = False,
+    return_treatment_value: bool = False,
+    return_treatment_effect: bool = True,
+    return_pretreatment_y: bool = False,
+    return_as_dict: bool = False,
 ):
     """Generates a simulated dataset to analyze causal effects of a treatment on an outcome variable.
 
@@ -273,7 +274,7 @@ def make_causal_effect(
         return_treatment_effect (bool): If True, returns the treatment effect for each observation.
         return_pretreatment_y (bool): If True, returns the outcome variable of each observation before treatment effect.
         return_as_dict (bool): If True, returns the results as a dictionary; otherwise, returns as a list.
-        
+
     Returns:
         A dictionary or list containing the simulated dataset components specified by the return flags.
     """
@@ -281,7 +282,7 @@ def make_causal_effect(
 
     X = generator.standard_normal(size=(n_samples, n_features))
 
-    if 'rng' in signature(pretreatment_outcome).parameters.keys():
+    if "rng" in signature(pretreatment_outcome).parameters.keys():
         pretreatment_y = pretreatment_outcome(X=X, bias=bias, rng=generator)
     else:
         pretreatment_y = pretreatment_outcome(X=X, bias=bias)
@@ -296,42 +297,50 @@ def make_causal_effect(
     else:
         propensity = np.broadcast_to(treatment_propensity, pretreatment_y.shape)
 
-    if 'rng' in signature(treatment_assignment).parameters.keys():
+    if "rng" in signature(treatment_assignment).parameters.keys():
         assignment = treatment_assignment(propensity=propensity, rng=generator)
     else:
         assignment = treatment_assignment(propensity=propensity)
 
     # In case treatment is heterogenous amongst the treated observations,
     # the treatment function depends on `X`; otherwise only on `assignment`
-    if 'X' in signature(treatment).parameters.keys():
+    if "X" in signature(treatment).parameters.keys():
         treatment_value = treatment(assignment=assignment, X=X)
     else:
         treatment_value = treatment(assignment=assignment)
 
-    if len(treatment_value) == 1: treatment_value = treatment_value[0]
+    if len(treatment_value) == 1:
+        treatment_value = treatment_value[0]
 
     # check that the treatment value is 0 for all observations that
     # are not assigned for treatment
     treatment_check = np.column_stack((assignment, treatment_value))
     if all(treatment_check[treatment_check[:, 0] == 0, 1] == 0) is False:
-        raise ValueError("Argument `treatment` must be a function that returns 0 for observations with `assignment` == 0.\nOne suggestion is to multiply the desired treatment value with `assignment`.")
+        raise ValueError(
+            "Argument `treatment` must be a function that returns 0 for observations with `assignment` == 0.\nOne suggestion is to multiply the desired treatment value with `assignment`."
+        )
 
     # the code below checks whether the treatment effect responds to each unit's covariates
     # if not, then it just passes the treatment variable to `treatment_effect`
-    if 'X' in signature(treatment_effect).parameters.keys(): 
+    if "X" in signature(treatment_effect).parameters.keys():
         treat = treatment_effect(treatment_value=treatment_value, X=X)
     else:
         treat = treatment_effect(treatment_value=treatment_value)
 
     y = pretreatment_y + treat
 
-    return_items = {'X': X, 'y': y}
+    return_items = {"X": X, "y": y}
 
-    if return_propensity: return_items['propensity'] = propensity
-    if return_assignment: return_items['treatment_assignment'] = assignment
-    if return_treatment_value: return_items['treatment_value'] = treatment_value,
-    if return_treatment_effect: return_items['treatment_effect'] = treat
-    if return_pretreatment_y: return_items['pretreatment_y'] = pretreatment_y
+    if return_propensity:
+        return_items["propensity"] = propensity
+    if return_assignment:
+        return_items["treatment_assignment"] = assignment
+    if return_treatment_value:
+        return_items["treatment_value"] = (treatment_value,)
+    if return_treatment_effect:
+        return_items["treatment_effect"] = treat
+    if return_pretreatment_y:
+        return_items["pretreatment_y"] = pretreatment_y
 
     if return_as_dict == False:
         return_items = [v for k, v in return_items.items()]
@@ -339,22 +348,23 @@ def make_causal_effect(
     return return_items
 
 
-def load_inflation_regime_data(country: str|None = None):
+def load_inflation_cycles(country: str | None = None):
     """Load inflation regime data for a given country.
 
     Args:
-        country (str|None): The country code (e.g., 'US', 'DE', 'JP'). 
+        country (str|None): The country code (e.g., 'US', 'DE', 'JP').
             If None, loads data for all countries.
 
     Returns:
         A DataFrame containing the inflation regime data for the specified country or all countries.
     """
     # Load the dataset from the CSV file
-    df = pd.read_csv(os.path.join(os.path.dirname(__file__), 'data', 'inflation_data.csv'))
+    df = pd.read_csv(os.path.join(os.path.dirname(__file__), "data", "inflation_data.csv"))
 
     # Filter the DataFrame based on the provided country code
     if country is not None:
-        df = df[df['Country'] == country]
+        df = df[df["Country"] == country]
+
+    df["Date"] = pd.to_datetime(df["Date"])
 
     return df.reset_index(drop=True)
-    

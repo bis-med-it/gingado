@@ -158,7 +158,8 @@ lr_data["m"].head()
 show_doc(load_inflation_regime_data)
 ```
 
-This function provides the data for the Americo et al. (2025) Inflation Regime Indicator, which identifies periods of high and low inflation regimes in a time series based on deviations from a moving average (5Y).
+This function provides the data for the Americo et al. (2025) inflation cycle concepts.
+It contains data for three complementary inflation cycle concepts: (1) cycles in inflation levels, reflecting mostly the low- and medium-frequency components of inflation; (2) cycles in higher-frequency deviation of inflation from its trend; and (3) a categorisation of inflation into high and low inflation regimes.
 
 ```{python}
 data = load_inflation_regime_data()

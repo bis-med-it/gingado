@@ -350,11 +350,11 @@ def load_inflation_regime_data(country: str|None = None):
         A DataFrame containing the inflation regime data for the specified country or all countries.
     """
     # Load the dataset from the CSV file
-    df = pd.read_csv(os.path.join(os.path.dirname(__file__), 'data', 'inflation_regime_data.csv'))
+    df = pd.read_csv(os.path.join(os.path.dirname(__file__), 'data', 'inflation_data.csv'))
 
     # Filter the DataFrame based on the provided country code
     if country is not None:
-        df = df[df['country'] == country]
+        df = df[df['Country'] == country]
 
     return df.reset_index(drop=True)
     

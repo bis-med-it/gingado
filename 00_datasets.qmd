@@ -174,34 +174,31 @@ df_infl = load_inflation_cycles()
 df_infl.head()
 ```
 
+For example, the inflation cycles for the US after World War II are shown below. The shaded periods correspond to the high inflation regime.
+
 ```{python}
-# Load and prepare data
 df_infl_country = load_inflation_cycles("US")
 
 pivot_df = df_infl_country.pivot(index='Date', columns='Series', values='Value')
+pivot_df = pivot_df['1946-01-01':]
 
 if "Detrended" in pivot_df.columns:
     pivot_df["Detrended"] *= 100
 
-# Plot
 fig, ax = plt.subplots(figsize=(14, 8))
-ax.set_title(f"Example: Germany inflation cycles")
+ax.set_title("Example: US post-war inflation cycles")
 
-# Plot main series
 for col in pivot_df.columns:
-    if col not in ['Regime']:
+    if col != 'Regime':
         ax.plot(pivot_df.index, pivot_df[col], label=col)
 
-# Plot zero-line intercept
 ax.axhline(0, color='black', linewidth=0.8, linestyle='--', alpha=0.6)
 
-# Regime shading using axvspan
 if 'Regime' in pivot_df.columns:
     regimes = pivot_df['Regime']
     in_regime = False
     start_date = None
 
-    # Iterate through the dates and values in the regimes series
     for date, val in zip(regimes.index, regimes):
         if val == 1 and not in_regime:
             # Start of a regime
@@ -212,12 +209,10 @@ if 'Regime' in pivot_df.columns:
             ax.axvspan(start_date, date, color='gray', alpha=0.3)
             in_regime = False
 
-    # If a regime is still active at the end of the data, close it
     if in_regime:
         ax.axvspan(start_date, regimes.index[-1], color='gray', alpha=0.3)
 
-# Styling
-ax.legend(loc='upper left')
+ax.legend()
 ax.set_ylabel("Percentage points")
 
 plt.tight_layout()

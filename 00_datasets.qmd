@@ -163,6 +163,21 @@ This function provides the data for the Americo et al. (2025) Inflation Regime I
 ```{python}
 data = load_inflation_regime_data()
 data_DE = load_inflation_regime_data("DE")
+data.head()
+```
+
+If you use this data in your work, please cite @inflation_cycles. A BibTeX code for convenience is below:
+ 
+ ```
+@techreport{inflation_cycles,
+    author = {Americo, Alberto and Araujo, Douglas KG and Damp, Johannes and Nilsen, Sjur and Rees, Daniel and Schmidt, Rafael and Schmieder, Christian},
+    title = {Inflation cycles: evidence from international data},
+    series = {BIS Working Paper},
+    type = {Working Paper},
+    institution = {Bank for International Settlements},
+    year = {2025},
+    number = {1264}
+}
 ```
 
 ## Simulated datasets

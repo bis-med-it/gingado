@@ -12,6 +12,8 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
 
+    environment: pypi
+
     steps:
       - uses: actions/checkout@v4
 
@@ -30,6 +32,6 @@ jobs:
 
       - name: Publish
         env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         run: twine upload dist/*

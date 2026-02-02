@@ -4,6 +4,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   release:
     name: Release
@@ -20,7 +23,7 @@ jobs:
         run: pip install twine
 
       - name: Build
-        run: python .\setup.py sdist bdist_wheel
+        run: python setup.py sdist bdist_wheel
 
       - name: Check
         run: python -m twine check dist/*

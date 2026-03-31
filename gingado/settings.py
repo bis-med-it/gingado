@@ -1,9 +1,16 @@
 """Settings for the gingado library."""
 
+from pathlib import Path
 ## GENERAL SETTINGS
 
 # Path to the directory cached datasets are stored in
 CACHE_DIRECTORY = './gingado'
+
+# Path to the on-disk cache used for SDMX HTTP responses
+SDMX_HTTP_CACHE_PATH = Path(CACHE_DIRECTORY) / "sdmx_http_cache"
+
+# Default time-to-live for cached SDMX HTTP responses, in seconds
+SDMX_HTTP_CACHE_EXPIRE_AFTER = 24 * 60 * 60
 
 ## CB SPEECHES SETTINGS
 

@@ -116,6 +116,10 @@ ENV/
 # mypy
 .mypy_cache/
 
+# jupyter
+.jupyter_cache/
+
+
 .vscode
 *.swp
 
@@ -164,3 +168,4 @@ scratchpad.py
 # data downloaded as part of rendering 00_datasets.qmd
 gingado/cb_speeches_*.csv
 gingado/monpol_statements_*.csv
+gingado/sdmx_http_cache*

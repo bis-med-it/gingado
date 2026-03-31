@@ -4,6 +4,9 @@ project:
   post-render: 
     - move_readme_to_root.py
 
+execute:
+  cache: true
+  freeze: auto
 format:
   html:
     theme:

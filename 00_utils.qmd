@@ -172,43 +172,20 @@ assert sum([isinstance(src, str) for src in sources]) == len(sources)
 show_doc(list_all_dataflows)
 ```
 
-```{python}
-
-dflows = list_all_dataflows(return_pandas=False)
-
-assert isinstance(dflows, dict)
-all_sources = list_SDMX_sources()
-assert len([s for s in dflows.keys() if s in all_sources]) == len(dflows.keys())
-```
-
-`list_all_dataflows` returns by default a pandas Series, facilitating data discovery by users like so:
+`list_all_dataflows` returns a pandas Series by default, which makes it easier to inspect a subset of the catalog instead of printing the entire result:
 
 ```{python}
 
 dflows = list_all_dataflows(return_pandas=True)
-assert type(dflows) == pd.core.series.Series
+assert isinstance(dflows, pd.Series)
+assert len(dflows) > 0
 
-dflows
+display(dflows.loc["BIS"].head())
+display(dflows[dflows.str.contains("Interest rate", case=False)].head())
 ```
 
-This format allows for more easily searching `dflows` by source:
+This format allows users to search `dflows` by source or by the human-readable dataflow name (such as "Interest rate" above). If you only need the dataflow codes, use `list_all_dataflows(codes_only=True, return_pandas=True)`.
 
-```{python}
-
-list_all_dataflows(codes_only=True, return_pandas=True)
-```
-
-```{python}
-
-dflows['BIS']
-```
-
-Or the user can search dataflows by their human-readable name instead of their code. For example, this is one way to see if any dataflow has information on interest rates:
-
-```{python}
-
-dflows[dflows.str.contains('Interest rate', case=False)]
-```
 
 
 ```{python}

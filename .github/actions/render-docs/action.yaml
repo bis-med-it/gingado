@@ -1,0 +1,32 @@
+name: Render docs
+description: Install Python dependencies, install Quarto, and render documentation
+
+inputs:
+  token:
+    description: GitHub token used to download the Quarto release
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install Python dependencies
+      shell: bash
+      run: |
+        pip install -r requirements.txt
+        pip install -r dev_requirements.txt
+
+    - name: Install quarto
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+      run: |
+        version=$(curl https://quarto.org/docs/download/_download.json | jq -r '.version')
+        echo "Installing quarto version $version"
+        gh release download -R github.com/quarto-dev/quarto-cli v$version --pattern "*linux-amd64.deb"
+        sudo dpkg -i quarto-${version}-linux-amd64.deb
+
+    - name: Render
+      shell: bash
+      run: |
+        quarto render
+

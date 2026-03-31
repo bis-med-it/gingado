@@ -8,28 +8,34 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
-      - run: |
-          pip install -r requirements.txt
-          pip install -r dev_requirements.txt
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            dev_requirements.txt
 
-      - name: Install quarto
-        run: |
-          # download the latest stable release of quarto
-          version=$(curl https://quarto.org/docs/download/_download.json | jq -r '.version')
-          echo "Installing quarto version $version"
-          gh release download -R github.com/quarto-dev/quarto-cli v$version --pattern "*linux-amd64.deb"
-          sudo dpkg -i quarto-${version}-linux-amd64.deb
+      - name: Restore docs execution cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            _freeze
+            .jupyter_cache
+            gingado/sdmx_http_cache*
+          key: ${{ runner.os }}-docs-${{ hashFiles('_quarto.yml', '*.qmd', 'gingado/**/*.py', 'requirements.txt', 'dev_requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-docs-
 
-      - name: Render
-        run: |
-          quarto render
+      - uses: ./.github/actions/render-docs
+        with:
+          token: ${{ github.token }}
+

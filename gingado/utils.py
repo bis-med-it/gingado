@@ -1,12 +1,29 @@
 import sdmx
 import datetime
 import numpy as np
+from pathlib import Path
 import pandas as pd
 from gingado.internals import DayFeatures, WeekFeatures, MonthFeatures, QuarterFeatures, DateTimeLike, Frequency, FrequencyLike, validate_and_get_freq, _check_valid_features, _get_day_features, _get_week_features, _get_month_features, _get_quarter_features
+from gingado.settings import SDMX_HTTP_CACHE_EXPIRE_AFTER, SDMX_HTTP_CACHE_PATH
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_is_fitted, validate_data
 
 __all__ = ['get_datetime', 'read_attr', 'Lag', 'list_SDMX_sources', 'list_all_dataflows', 'load_SDMX_data', 'codelists']
+
+
+def _get_sdmx_client(source: str):
+    cache_path = Path(SDMX_HTTP_CACHE_PATH)
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+
+    try:
+        return sdmx.Client(
+            source,
+            backend="sqlite",
+            cache_name=str(cache_path),
+            expire_after=SDMX_HTTP_CACHE_EXPIRE_AFTER,
+        )
+    except TypeError:
+        return sdmx.Client(source)
 
 def get_datetime():
     "Returns the time now"
@@ -136,7 +153,7 @@ def list_all_dataflows(
     dflows = {}
     for src in sources:
         try:
-            dflows[src] = sdmx.to_pandas(sdmx.Client(src).dataflow().dataflow)
+            dflows[src] = sdmx.to_pandas(_get_sdmx_client(src).dataflow().dataflow)
             dflows[src] = dflows[src].index if codes_only else dflows[src].index.reset_index()
         except:
             pass
@@ -167,7 +184,7 @@ def load_SDMX_data(
     """
     data_sdmx = {}
     for source in list(sources.keys()):
-        src_conn = sdmx.Client(source)
+        src_conn = _get_sdmx_client(source)
         src_dflows = src_conn.dataflow()
         if sources[source] == 'all':
             dflows = {k: v for k, v in src_dflows.dataflow.items()}
@@ -204,9 +221,9 @@ def codelists(dflow):
     codelists = {}
     for k, v in dflow.items():
         if isinstance(v, list):  # If v is a list of dataflows
-            codelists[k] = {dataflow: sdmx.to_pandas(sdmx.Client(k).dataflow(dataflow).codelist) for dataflow in v}
+            codelists[k] = {dataflow: sdmx.to_pandas(_get_sdmx_client(k).dataflow(dataflow).codelist) for dataflow in v}
         else:  # If v is a single dataflow
-            codelists[k] = sdmx.to_pandas(sdmx.Client(k).dataflow(v).codelist)
+            codelists[k] = sdmx.to_pandas(_get_sdmx_client(k).dataflow(v).codelist)
     return codelists
 
 

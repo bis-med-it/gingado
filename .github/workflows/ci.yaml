@@ -19,6 +19,22 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            dev_requirements.txt
+
+      - name: Restore docs execution cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            _freeze
+            .jupyter_cache
+            gingado/sdmx_http_cache*
+          key: ${{ runner.os }}-docs-${{ hashFiles('_quarto.yml', '*.qmd', 'gingado/**/*.py', 'requirements.txt', 'dev_requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-docs-
+
       - uses: ./.github/actions/render-docs
         with:
           token: ${{ github.token }}

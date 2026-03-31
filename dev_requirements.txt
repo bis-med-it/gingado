@@ -7,3 +7,4 @@ pandas-stubs
 pre-commit
 pytest
 jupyter
+jupyter-cache

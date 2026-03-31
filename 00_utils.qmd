@@ -184,7 +184,7 @@ display(dflows.loc["BIS"].head())
 display(dflows[dflows.str.contains("Interest rate", case=False)].head())
 ```
 
-This format allows users to search `dflows` by source or by the human-readable dataflow name. If you only need the dataflow codes, use `list_all_dataflows(codes_only=True, return_pandas=True)`.
+This format allows users to search `dflows` by source or by the human-readable dataflow name (such as "Interest rate" above). If you only need the dataflow codes, use `list_all_dataflows(codes_only=True, return_pandas=True)`.
 
 
 

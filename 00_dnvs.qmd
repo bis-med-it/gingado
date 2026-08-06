@@ -23,14 +23,14 @@ from utils import show_doc
 import numpy as np
 import keras
 
-from gingado.dnvs import DNVS, DNVS_Q, TemperatureScaledSoftmax, prepare_Xy, quantile_loss
+from gingado.estimators import DNVS, DNVS_Q, TemperatureScaledSoftmax, prepare_Xy, quantile_loss
 ```
 
 # Deep Neural Variable Selection
 
 The Deep Neural Variable Selection (DNVS) architecture, introduced in [Aquilina et al. (2025)](https://www.bis.org/publ/work1291.htm), simultaneously predicts a target variable and exposes the **time-varying importance** of each input variable. This is achieved through a competitive variable selection mechanism that uses LSTM-encoded weights passed through a temperature-scaled softmax layer.
 
-The `gingado.dnvs` module provides two estimator classes:
+The `gingado.estimators` package provides two DNVS estimator classes:
 
 - **`DNVS`**: Mean prediction with variable selection
 - **`DNVS_Q`**: Quantile prediction with per-quantile variable selection

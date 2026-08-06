@@ -1,5 +1,3 @@
-from __future__ import annotations  # Allows forward annotations in Python < 3.10
-
 import numpy as np
 import pandas as pd
 from scipy.spatial.distance import pdist, squareform
@@ -10,10 +8,9 @@ from sklearn.metrics import root_mean_squared_error
 from sklearn.pipeline import Pipeline
 from sklearn.utils.validation import validate_data
 
-from .benchmark import ggdBenchmark, RegressionBenchmark
-from .model_documentation import ModelCard, ggdModelDocumentation
-from .utils import read_attr
-
+from gingado.benchmark import ggdBenchmark, RegressionBenchmark
+from gingado.model_documentation import ModelCard, ggdModelDocumentation
+from gingado.utils import read_attr
 
 
 __all__ = ['FindCluster', 'MachineControl']
@@ -199,7 +196,7 @@ class MachineControl(BaseEstimator):
     def _fit_placebo_models(
         self, 
         X:pd.DataFrame, # A pandas DataFrame with pre-intervention data of shape (n_samples, n_control_entites)
-        y:pd.DataFrame|pd.Series # A pandas DataFrame or Series with pre-intervention data of shape (n_samples,)
+        y:pd.DataFrame|pd.Series # A pandas DataFrame or Series with data of shape (n_samples,)
     ):
         self.placebo_models_ = {}
         self.placebo_score_pre_ = {}
@@ -215,7 +212,7 @@ class MachineControl(BaseEstimator):
     def _select_controls(
         self,
         X:pd.DataFrame, # A pandas DataFrame with pre-intervention data of shape (n_samples, n_control_entites)
-        y:pd.DataFrame|pd.Series # A pandas DataFrame or Series with pre-intervention data of shape (n_samples,)
+        y:pd.DataFrame|pd.Series # A pandas DataFrame or Series with data of shape (n_samples,)
     ): # 
         "Identifies which columns of `X` should be used as controls"
         if self.cluster_alg is None:
@@ -261,7 +258,7 @@ class MachineControl(BaseEstimator):
 
         Args:
             X (pd.DataFrame): A pandas DataFrame with pre-intervention data of shape (n_samples, n_control_entities).
-            y (pd.DataFrame | pd.Series): A pandas DataFrame or Series with pre-intervention data of shape (n_samples,).
+            y (pd.DataFrame | pd.Series): A pandas DataFrame or Series with data of shape (n_samples,).
         """
         
         self.target_name_ = y.columns if hasattr(y, "columns") else y.name

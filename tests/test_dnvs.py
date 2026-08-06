@@ -1,4 +1,4 @@
-"""Tests for gingado.dnvs module."""
+"""Tests for the public DNVS estimator API."""
 
 import os
 import tempfile
@@ -11,7 +11,7 @@ os.environ["KERAS_BACKEND"] = "torch"
 import keras
 import keras.layers as L
 
-from gingado.dnvs import (
+from gingado.estimators import (
     DNVS,
     DNVS_Q,
     TemperatureScaledSoftmax,

@@ -4,8 +4,6 @@ Implements the DNVS architecture from Aquilina et al. (BIS Working Paper 1291, 2
 for simultaneous prediction and time-varying variable importance estimation.
 """
 
-from __future__ import annotations
-
 import keras
 import keras.layers as L
 import numpy as np
@@ -432,7 +430,7 @@ class DNVS_Q(BaseEstimator):
         return varsel_model.predict(X)
 
     def get_learned_temperature(self, quantile: float | None = None) -> np.ndarray:
-        """Get the learned temperature parameter value for a quantile branch.
+        """Get the learned temperature parameter for a quantile branch.
 
         Args:
             quantile: Which quantile branch. If None, uses the first quantile.

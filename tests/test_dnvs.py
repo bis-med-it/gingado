@@ -123,6 +123,16 @@ class TestPrepareXy:
         assert X_out.shape == (N - context, context, F)
         assert y_out.shape == (N - context, context, 1)
 
+    @pytest.mark.parametrize("context", [10, 11, 0, -1])
+    def test_invalid_context(self, context):
+        """Should reject contexts that cannot create a valid window."""
+        N, F = 10, 3
+        X = np.random.randn(N, F).astype(np.float32)
+        y = np.random.randn(N, 1).astype(np.float32)
+
+        with pytest.raises(ValueError, match="context must be greater than 0"):
+            prepare_Xy(X, y, context=context)
+
 
 class TestDNVS:
     def test_fit_predict(self, synthetic_3d_data, fit_args_fast):

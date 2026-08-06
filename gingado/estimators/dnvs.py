@@ -31,7 +31,15 @@ def prepare_Xy(
     Returns:
         Tuple of (X_out, y_out) with shapes (N - context, context, F) and
         (N - context, context, 1).
+
+    Raises:
+        ValueError: If context is not greater than 0 and less than the number
+            of samples.
     """
+    if context <= 0 or context >= X.shape[0]:
+        raise ValueError(
+            "context must be greater than 0 and less than the number of samples"
+        )
     if y.ndim == 1:
         y = y.reshape(-1, 1)
     num_samples = X.shape[0] - context

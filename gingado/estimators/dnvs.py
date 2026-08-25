@@ -1,6 +1,7 @@
 """Deep Neural Variable Selection (DNVS) estimators.
 
-Implements the DNVS architecture from Aquilina et al. (BIS Working Paper 1291, 2025)
+Implements the DNVS architecture from Aquilina et al. (2025) and Araujo
+(forthcoming)
 for simultaneous prediction and time-varying variable importance estimation.
 """
 
@@ -111,7 +112,7 @@ class DNVS(BaseEstimator):
     Uses LSTM-based competitive variable selection to simultaneously predict
     a target variable and expose time-varying input variable importance.
 
-    Reference: Aquilina et al. (BIS Working Paper 1291, 2025).
+    Reference: Aquilina et al. (2025) and Araujo (forthcoming).
 
     Args:
         latent_dim: Number of units in the main LSTM layer.
@@ -266,7 +267,7 @@ class DNVS_Q(BaseEstimator):
     Produces multi-quantile forecasts with separate variable selection
     branches per quantile, allowing quantile-specific feature importance.
 
-    Reference: Aquilina et al. (BIS Working Paper 1291, 2025).
+    Reference: Aquilina et al. (2025) and Araujo (forthcoming).
 
     Args:
         quantiles: List of quantiles to predict (e.g., [0.1, 0.5, 0.9]).

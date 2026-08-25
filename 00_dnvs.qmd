@@ -28,7 +28,7 @@ from gingado.estimators import DNVS, DNVS_Q, TemperatureScaledSoftmax, prepare_X
 
 # Deep Neural Variable Selection
 
-The Deep Neural Variable Selection (DNVS) architecture, introduced in [Aquilina et al. (2025)](https://www.bis.org/publ/work1291.htm), simultaneously predicts a target variable and exposes the **time-varying importance** of each input variable. This is achieved through a competitive variable selection mechanism that uses LSTM-encoded weights passed through a temperature-scaled softmax layer.
+The Deep Neural Variable Selection (DNVS) architecture, introduced in [Aquilina et al. (2025)](https://www.bis.org/publ/work1291.htm) and Araujo (forthcoming), simultaneously predicts a target variable and exposes the **time-varying importance** of each input variable. This is achieved through a competitive variable selection mechanism that uses LSTM-encoded weights passed through a temperature-scaled softmax layer.
 
 The `gingado.estimators` package provides two DNVS estimator classes:
 
@@ -212,3 +212,4 @@ for q in [0.1, 0.5, 0.9]:
 ## References
 
 - Aquilina, M., Cenedese, G., Elard, A. and Schrimpf, A. (2025). "Deep Neural Variable Selection for Forecasting Across Markets." BIS Working Papers No 1291. <https://www.bis.org/publ/work1291.htm>
+- Araujo, D. K. G. (forthcoming).

@@ -27,7 +27,7 @@ class FindCluster(BaseEstimator):
 
     def __init__(
         self,
-        cluster_alg:[BaseEstimator,ClusterMixin]=AffinityPropagation(),
+        cluster_alg: BaseEstimator | ClusterMixin = AffinityPropagation(),
         auto_document:ggdModelDocumentation=ModelCard,
         random_state:int|None=None,
     ):
@@ -134,7 +134,7 @@ class MachineControl(BaseEstimator):
     """
     def __init__(
         self,
-        cluster_alg:[BaseEstimator,ClusterMixin]|None=AffinityPropagation(),
+        cluster_alg: BaseEstimator | ClusterMixin | None = AffinityPropagation(),
         estimator:BaseEstimator=RegressionBenchmark(), 
         manifold:BaseEstimator=TSNE(),
         with_placebo:bool=True,

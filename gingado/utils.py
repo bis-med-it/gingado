@@ -3,7 +3,7 @@ import datetime
 import numpy as np
 from pathlib import Path
 import pandas as pd
-from gingado.internals import DayFeatures, WeekFeatures, MonthFeatures, QuarterFeatures, DateTimeLike, Frequency, FrequencyLike, validate_and_get_freq, _check_valid_features, _get_day_features, _get_week_features, _get_month_features, _get_quarter_features
+from gingado.internals import DayFeatures, WeekFeatures, MonthFeatures, QuarterFeatures, DateTimeLike, Frequency, FrequencyLike, validate_and_get_freq, _check_valid_features, _get_day_features, _get_week_features, _get_month_features, _get_quarter_features, _get_filtered_data
 from gingado.settings import SDMX_HTTP_CACHE_EXPIRE_AFTER, SDMX_HTTP_CACHE_PATH
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_is_fitted, validate_data

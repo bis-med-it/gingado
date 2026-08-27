@@ -350,14 +350,14 @@ model_doc_keras.show_json()['model_details']['info']
 Native support for automatic documentation of other model types, such as from `fastai`, `pytorch` is expected to be available in future versions. Until then, any models coded form scratch by the user as well as any other model can be documented by passing the information as an argument to the Documenter's `fill_model_info` method. This can be done with a string or dictionary. For example:
 
 ```{python}
-
+#| eval: false
 import numpy as np
 import torch
 import torch.nn.functional as F
 ```
 
 ```{python}
-
+#| eval: false
 class MockDataset(torch.utils.data.Dataset):
     def __init__(self, X, y):
         self.X = torch.from_numpy(X.astype(np.float32))

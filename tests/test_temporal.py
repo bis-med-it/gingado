@@ -379,7 +379,13 @@ def test_dates_Xy_empty_X(sample_data):
     date_list = [datetime(2023, 3, 1)]
     expected = pd.DataFrame(
         index=pd.date_range(start="2023-03-01", end="2023-03-01", freq="D"),
-        data={"month_of_quarter": 3, "month_of_year": 3},
+        data={
+            "month_of_quarter": 3,
+            "month_of_year": 3,
+            "quarter_of_year": 1,
+            "quarter_end": 0,
+            "year_end": 0,
+        },
     )
     result = dates_Xy(X, y, date_list)
 

@@ -44,6 +44,8 @@ website:
             file: 00_datasets.qmd
           - text: "gingado.benchmark"
             file: 00_benchmark.qmd
+          - text: "gingado.estimators.dnvs"
+            file: 00_dnvs.qmd
           - text: "gingado.estimators"
             file: 00_estimators.qmd
           - text: "gingado.model_documentation"

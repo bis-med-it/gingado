@@ -3,7 +3,7 @@ import datetime
 import numpy as np
 from pathlib import Path
 import pandas as pd
-from gingado.internals import DayFeatures, WeekFeatures, MonthFeatures, QuarterFeatures, DateTimeLike, Frequency, FrequencyLike, validate_and_get_freq, _check_valid_features, _get_day_features, _get_week_features, _get_month_features, _get_quarter_features
+from gingado.internals import DayFeatures, WeekFeatures, MonthFeatures, QuarterFeatures, DateTimeLike, Frequency, FrequencyLike, validate_and_get_freq, _check_valid_features, _get_day_features, _get_week_features, _get_month_features, _get_quarter_features, _get_filtered_data
 from gingado.settings import SDMX_HTTP_CACHE_EXPIRE_AFTER, SDMX_HTTP_CACHE_PATH
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_is_fitted, validate_data
@@ -189,19 +189,25 @@ def load_SDMX_data(
         if sources[source] == 'all':
             dflows = {k: v for k, v in src_dflows.dataflow.items()}
         else:
-            dflows = {k: v for k, v in src_dflows.dataflow.items() if k in sources[source]}
+            requested_dflows = sources[source]
+            # `requested_dflows` may be a single str or a list of flow codes.
+            # Normalize a str before membership testing; otherwise `k in requested_dflows` would
+            # perform a substring match.
+            if isinstance(requested_dflows, str):
+                requested_dflows = [requested_dflows]
+            dflows = {
+                k: v for k, v in src_dflows.dataflow.items() if k in requested_dflows
+            }
         for dflow in list(dflows.keys()):
             if verbose: print(f"Querying data from {source}'s dataflow '{dflow}' - {dflows[dflow]._name}...")
-            try:
-                data = sdmx.to_pandas(src_conn.data(dflow, key=keys, params=params), datetime='TIME_PERIOD')
-            except:
-                if verbose: print("this dataflow does not have data in the desired frequency and time period.")
+            data = sdmx.to_pandas(src_conn.data(dflow, key=keys, params=params), datetime='TIME_PERIOD')
+            if data.empty:
                 continue
             data.columns = ['__'.join(col) for col in data.columns.to_flat_index()]
             data_sdmx[source+"__"+dflow] = data
 
-    if len(data_sdmx.keys()) is None:
-        return
+    if not data_sdmx:
+        return None
 
     df = pd.concat(data_sdmx, axis=1)
     df.columns = ['_'.join(col) for col in df.columns.to_flat_index()]

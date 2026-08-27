@@ -1,0 +1,215 @@
+---
+description: Deep Neural Variable Selection (DNVS) estimators
+output-file: dnvs.html
+title: DNVS
+jupyter: python3
+warning: false
+---
+
+```{python}
+#| echo: false
+#| output: false
+%load_ext autoreload
+%autoreload 2
+```
+
+```{python}
+#| echo: false
+#| output: false
+import os
+os.environ["KERAS_BACKEND"] = "torch"
+
+from utils import show_doc
+import numpy as np
+import keras
+
+from gingado.estimators import DNVS, DNVS_Q, TemperatureScaledSoftmax, prepare_Xy, quantile_loss
+```
+
+# Deep Neural Variable Selection
+
+The Deep Neural Variable Selection (DNVS) architecture, introduced in [Aquilina et al. (2025)](https://www.bis.org/publ/work1291.htm) and Araujo (forthcoming), simultaneously predicts a target variable and exposes the **time-varying importance** of each input variable. This is achieved through a competitive variable selection mechanism that uses LSTM-encoded weights passed through a temperature-scaled softmax layer.
+
+The `gingado.estimators` package provides two DNVS estimator classes:
+
+- **`DNVS`**: Mean prediction with variable selection
+- **`DNVS_Q`**: Quantile prediction with per-quantile variable selection
+
+Both follow scikit-learn's estimator API conventions (`fit`, `predict`, `get_params`, `set_params`).
+
+## Data Preparation
+
+DNVS operates on 3D arrays of shape `(samples, timesteps, features)`. The `prepare_Xy` utility converts standard 2D tabular data into sliding-window sequences:
+
+```{python}
+show_doc(prepare_Xy)
+```
+
+```{python}
+# Example: convert tabular data to RNN format
+np.random.seed(42)
+N, F = 200, 5
+X_2d = np.random.randn(N, F).astype(np.float32)
+y_2d = np.random.randn(N, 1).astype(np.float32)
+
+X_3d, y_3d = prepare_Xy(X_2d, y_2d, context=36)
+print(f"Input shapes: X={X_2d.shape}, y={y_2d.shape}")
+print(f"Output shapes: X={X_3d.shape}, y={y_3d.shape}")
+```
+
+## Custom Layer: TemperatureScaledSoftmax
+
+The core of the variable selection mechanism is a softmax layer with a **learnable temperature** parameter. A higher temperature produces a more uniform distribution (all variables contribute equally); as training progresses, the temperature typically decreases, sharpening the selection.
+
+```{python}
+show_doc(TemperatureScaledSoftmax)
+```
+
+## DNVS Estimator
+
+The `DNVS` class wraps the full architecture for mean prediction:
+
+```{python}
+show_doc(DNVS)
+```
+
+### Example Usage
+
+```{python}
+#| output: false
+# Create synthetic data
+np.random.seed(42)
+n_samples, n_timesteps, n_features = 50, 20, 4
+X = np.random.randn(n_samples, n_timesteps, n_features).astype(np.float32)
+y = np.random.randn(n_samples, n_timesteps, 1).astype(np.float32)
+
+# Split into train/validation
+split = 40
+X_train, X_val = X[:split], X[split:]
+y_train, y_val = y[:split], y[split:]
+
+# Fit the model
+model = DNVS(latent_dim=16, varsel_dim=8, dropout=0.0, gauss_noise=0.01)
+model.fit(
+    X_train, y_train,
+    validation_data=(X_val, y_val),
+    fit_args={"epochs": 20, "batch_size": 10, "verbose": 0}
+)
+```
+
+### Variable Importance Weights
+
+After fitting, extract the time-varying variable weights:
+
+```{python}
+weights = model.get_variable_weights(X_val)
+print(f"Weights shape: {weights.shape}")
+print(f"Weights sum along features axis (should be ~1.0): {weights[0, 0, :].sum():.4f}")
+```
+
+```{python}
+# Learned temperature value
+temp = model.get_learned_temperature()
+print(f"Learned temperature: {float(temp):.4f}")
+```
+
+### Methods
+
+```{python}
+show_doc(DNVS.fit)
+```
+
+```{python}
+show_doc(DNVS.predict)
+```
+
+```{python}
+show_doc(DNVS.get_variable_weights)
+```
+
+```{python}
+show_doc(DNVS.get_learned_temperature)
+```
+
+## DNVS_Q: Quantile Variant
+
+The `DNVS_Q` class produces multi-quantile forecasts with separate variable selection branches per quantile. This enables analysis of how variable importance differs across the distribution:
+
+```{python}
+show_doc(DNVS_Q)
+```
+
+### Example Usage
+
+```{python}
+#| output: false
+model_q = DNVS_Q(
+    quantiles=[0.1, 0.5, 0.9],
+    latent_dim=16,
+    varsel_dim=8,
+    dropout=0.0,
+    gauss_noise=0.01,
+)
+model_q.fit(
+    X_train, y_train,
+    validation_data=(X_val, y_val),
+    fit_args={"epochs": 20, "batch_size": 10, "verbose": 0}
+)
+```
+
+```{python}
+# Multi-quantile predictions
+preds = model_q.predict(X_val)
+print(f"Number of quantile outputs: {len(preds)}")
+for i, q in enumerate([0.1, 0.5, 0.9]):
+    print(f"  q={q}: shape={preds[i].shape}")
+```
+
+```{python}
+# Quantile-specific variable weights
+weights_median = model_q.get_variable_weights(X_val, quantile=0.5)
+weights_upper = model_q.get_variable_weights(X_val, quantile=0.9)
+print(f"Median weights shape: {weights_median.shape}")
+print(f"Upper tail weights shape: {weights_upper.shape}")
+```
+
+### Methods
+
+```{python}
+show_doc(DNVS_Q.fit)
+```
+
+```{python}
+show_doc(DNVS_Q.predict)
+```
+
+```{python}
+show_doc(DNVS_Q.get_variable_weights)
+```
+
+```{python}
+show_doc(DNVS_Q.get_learned_temperature)
+```
+
+## Quantile Loss Function
+
+The `quantile_loss` factory produces Keras-compatible pinball loss functions:
+
+```{python}
+show_doc(quantile_loss)
+```
+
+```{python}
+# Demonstrate asymmetry
+y_true = keras.ops.array([1.0, 2.0, 3.0, 4.0])
+y_pred = keras.ops.array([1.5, 2.5, 2.0, 5.0])
+
+for q in [0.1, 0.5, 0.9]:
+    loss_fn = quantile_loss(q)
+    print(f"  q={q}: loss={float(loss_fn(y_true, y_pred)):.4f}")
+```
+
+## References
+
+- Aquilina, M., Cenedese, G., Elard, A. and Schrimpf, A. (2025). "Deep Neural Variable Selection for Forecasting Across Markets." BIS Working Papers No 1291. <https://www.bis.org/publ/work1291.htm>
+- Araujo, D. K. G. (forthcoming).

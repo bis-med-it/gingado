@@ -133,7 +133,7 @@ X_train.shape, y_train.shape, X_test.shape, y_test.shape
 Next, the data augmentation object provided by `gingado` adds more data. In this case, for brevity only one dataflow from one source is listed. If users want to add more SDMX sources, simply add more keys to the dictionary. And if users want data from all dataflows from a given source provided the keys and parameters such as frequency and dates match, the value should be set to `'all'`, as in `{'ECB': ['CISS'], 'BIS': 'all'}`.
 
 ```{python}
-test_src = {'ECB': ['CISS'], 'BIS': ['WS_CBPOL_D']}
+test_src = {'ECB': ['CISS'], 'BIS': ['WS_CBPOL']}
 
 X_train__fit_transform = AugmentSDMX(sources=test_src).fit_transform(X=X_train)
 X_train__fit_then_transform = AugmentSDMX(sources=test_src).fit(X=X_train).transform(X=X_train, training=True)
@@ -162,7 +162,7 @@ from sklearn.model_selection import GridSearchCV
 
 ```{python}
 pipeline = Pipeline([
-    ('augmentation', AugmentSDMX(sources={'BIS': 'WS_CBPOL_D'})),
+    ('augmentation', AugmentSDMX(sources={'BIS': 'WS_CBPOL'})),
     ('imp', IterativeImputer(max_iter=10)),
     ('forest', RandomForestRegressor())
 ], verbose=True)

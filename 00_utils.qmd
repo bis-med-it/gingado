@@ -250,7 +250,7 @@ show_doc(load_SDMX_data)
 
 ```{python}
 
-df = load_SDMX_data(sources={'ECB': 'CISS', 'BIS': 'WS_CBPOL_D'}, keys={'FREQ': 'D'}, params={'startPeriod': 2003})
+df = load_SDMX_data(sources={'ECB': 'CISS', 'BIS': 'WS_CBPOL'}, keys={'FREQ': 'D'}, params={'startPeriod': 2003})
 
 assert type(df) == pd.DataFrame
 assert df.shape[0] > 0

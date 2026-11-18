@@ -84,7 +84,7 @@ class AugmentSDMX(BaseEstimator, TransformerMixin):
 
     def __init__(
         self,
-        sources:dict={'BIS': 'WS_CBPOL_D'},
+        sources:dict={'BIS': 'WS_CBPOL'},
         variance_threshold:float|None=None,
         propagate_last_known_value:bool=True,
         fillna:float|int = 0,

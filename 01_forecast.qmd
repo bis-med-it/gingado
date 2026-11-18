@@ -53,7 +53,7 @@ from gingado.utils import load_SDMX_data
 ```{python}
 
 df = load_SDMX_data(
-    sources={'BIS': 'WS_XRU_D'},
+    sources={'BIS': 'WS_XRU'},
     keys={
         'FREQ': 'D', 
         'CURRENCY': ['BRL', 'CAD', 'CHF', 'EUR', 'GBP', 'JPY', 'MXN'],
@@ -111,7 +111,7 @@ from gingado.augmentation import AugmentSDMX
 
 ```{python}
 
-X = AugmentSDMX(sources={'BIS': 'WS_CBPOL_D', 'ECB': 'CISS'}).fit_transform(FX_rate_changes)
+X = AugmentSDMX(sources={'BIS': 'WS_CBPOL', 'ECB': 'CISS'}).fit_transform(FX_rate_changes)
 ```
 
 :::{.callout-note}
@@ -136,7 +136,7 @@ import pandas as pd
 
 ```{python}
 
-X_diff = X.loc[:, X.columns.str.contains("BIS__WS_CBPOL_D", case=False)].diff()
+X_diff = X.loc[:, X.columns.str.contains("BIS__WS_CBPOL", case=False)].diff()
 X_diff.columns = [col + "_diff" for col in X_diff.columns]
 X = pd.concat([X, X_diff], axis=1)
 ```

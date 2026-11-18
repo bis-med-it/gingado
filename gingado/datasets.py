@@ -51,7 +51,7 @@ def load_CB_speeches(
 ) -> pd.DataFrame:
     """Load Central Bankers speeches dataset from
     Bank for International Settlements (2024). Central bank speeches, all years,
-    https://www.bis.org/cbspeeches/download.htm.
+    https://www.bis.org/speeches/central-bank/download.
 
     Args:
         year: Either 'all' to download all available central bank speeches or the year(s)
@@ -99,14 +99,19 @@ def load_CB_speeches(
             filename_no_extension = (
                 CB_SPEECHES_ZIP_BASE_FILENAME
                 if y == "all"
-                else f"{CB_SPEECHES_ZIP_BASE_FILENAME}_{y}"
+                else f"{CB_SPEECHES_ZIP_BASE_FILENAME}-{y}"
             )
             zip_url = CB_SPEECHES_BASE_URL + filename_no_extension + ".zip"
+            zipped_filename = (
+                CB_SPEECHES_ZIP_BASE_FILENAME
+                if y == "all"
+                else f"{CB_SPEECHES_ZIP_BASE_FILENAME}_{y}"
+            ) + ".csv"
 
             # Download the zip file, unzip it and parse the CSV file
             cb_speeches_year_df = download_csv(
                 zip_url,
-                zipped_filename=filename_no_extension + ".csv",
+                zipped_filename=zipped_filename,
                 cache_filename=cb_speeches_file_path,
                 timeout=timeout,
                 **kwargs,

@@ -74,7 +74,7 @@ show_doc(load_CB_speeches)
 
 This function downloads the Central bankers speeches dataset [-@biscbspeeches] from the
 BIS website (www.bis.org). More information on the dataset can be found
-on the [BIS website](https://www.bis.org/cbspeeches/download.htm).
+on the [BIS website](https://www.bis.org/speeches/central-bank/download).
 
 If you use this data in your work, please cite the BIS central bank speeches
 dataset, as follows (Please substitute YYYY for the relevant years):
@@ -84,7 +84,7 @@ dataset, as follows (Please substitute YYYY for the relevant years):
     author = {{Bank for International Settlements}},
     title = {Central bank speeches, YYYY-YYYY},
     year = {2024},
-    url = {https://www.bis.org/cbspeeches/download.htm}
+    url = {https://www.bis.org/speeches/central-bank/download}
 }
 ```
 

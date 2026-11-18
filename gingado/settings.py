@@ -15,7 +15,7 @@ SDMX_HTTP_CACHE_EXPIRE_AFTER = 24 * 60 * 60
 ## CB SPEECHES SETTINGS
 
 # Base URL of CB speeches files (should end in a slash)
-CB_SPEECHES_BASE_URL = 'https://www.bis.org/speeches/'
+CB_SPEECHES_BASE_URL = 'https://www.bis.org/pages/download-central-bankers-speeches/'
 
 # Base name of the zip files on the website, used to create the full URL for downloading the file
 CB_SPEECHES_ZIP_BASE_FILENAME = 'speeches'
